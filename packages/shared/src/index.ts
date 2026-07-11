@@ -1,0 +1,87 @@
+/**
+ * Public API for @continuum/shared.
+ *
+ * Import from "@continuum/shared" — do not import from deep module paths.
+ */
+
+// Agent adapter interfaces
+export type {
+  AgentAdapter,
+  AgentAvailability,
+  AgentCapabilities,
+  AgentRunInput,
+} from "./agent-adapter.js";
+
+// Normalised event union and all event types
+export type {
+  AgentEvent,
+  AgentEventType,
+  EventHeader,
+  EventSource,
+  ParseStatus,
+  RunStartedEvent,
+  AgentInitEvent,
+  AgentMessageEvent,
+  ToolCallEvent,
+  ToolResultEvent,
+  TokenUsageEvent,
+  StdoutEvent,
+  StderrEvent,
+  UnknownAgentEvent,
+  RunCompletedEvent,
+  RunFailedEvent,
+} from "./agent-events.js";
+
+// Configuration
+export {
+  ContinuumConfigSchema,
+  DEFAULT_CONFIG,
+} from "./config.js";
+export type {
+  ContinuumConfig,
+  AttributionConfidence,
+  RunPhase,
+  ChangeType,
+  RunStatus,
+  OutcomeStatus,
+  MetricQuality,
+  OutputMode,
+  TestPhase,
+} from "./config.js";
+
+// Error classes
+export {
+  ContinuumError,
+  ConfigError,
+  AgentNotFoundError,
+  AgentRunError,
+  GitError,
+  NotARepositoryError,
+  DatabaseError,
+  RunNotFoundError,
+  TestTimeoutError,
+  NotInitialisedError,
+} from "./errors.js";
+
+// Redaction
+export {
+  redactString,
+  redactObject,
+  redactJsonString,
+} from "./redaction.js";
+
+// Logger
+export { createLogger } from "./logger.js";
+export type { Logger, LogLevel } from "./logger.js";
+
+// Utilities
+export {
+  normalisePath,
+  resolveNormalised,
+  generateRunId,
+  generateEventId,
+  now,
+  parseDurationMs,
+  formatDuration,
+  truncate,
+} from "./utils.js";

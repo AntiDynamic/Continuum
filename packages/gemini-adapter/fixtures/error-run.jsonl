@@ -1,0 +1,3 @@
+{"type":"init","sessionId":"test-session-002","model":"gemini-2.5-flash"}
+{"type":"content","text":"Starting task analysis."}
+{"type":"error","message":"Model quota exceeded. Please try again later."}

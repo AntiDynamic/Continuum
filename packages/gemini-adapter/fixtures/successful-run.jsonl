@@ -1,0 +1,10 @@
+{"type":"init","sessionId":"test-session-001","model":"gemini-2.5-pro"}
+{"type":"content","text":"I'll analyze the failing test and fix the bug.","role":"assistant"}
+{"type":"tool_call","name":"read_file","id":"tc-001","input":{"path":"src/calculator.ts"}}
+{"type":"tool_result","id":"tc-001","name":"read_file","output":"export function factorial(n: number): number { if (n === 0) { return 0; } ... }","exitCode":0}
+{"type":"content","text":"Found the bug: factorial(0) should return 1, not 0. Fixing now.","role":"assistant"}
+{"type":"tool_call","name":"write_file","id":"tc-002","input":{"path":"src/calculator.ts","content":"export function factorial(n: number): number { if (n === 0) { return 1; } ... }"}}
+{"type":"tool_result","id":"tc-002","name":"write_file","output":"File written successfully","exitCode":0}
+{"type":"content","text":"Fixed the factorial function. The base case now returns 1 instead of 0.","role":"assistant"}
+{"type":"usage","inputTokens":450,"outputTokens":120,"cachedInputTokens":0,"totalTokens":570}
+{"type":"result","exitCode":0}

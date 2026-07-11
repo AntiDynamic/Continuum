@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Continuum runtime data
+.continuum/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage/

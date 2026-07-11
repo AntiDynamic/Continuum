@@ -1,0 +1,6 @@
+{"type":"init","sessionId":"test-session-003","model":"gemini-2.5-pro"}
+{"type":"content","text":"Starting..."}
+this line is not json at all
+{"type":"tool_call","name":"run_shell","id":"tc-bad-1","input":{"command":"npm test"}}
+{"totally":"invalid","no_type_field":true}
+{"type":"result","exitCode":0}

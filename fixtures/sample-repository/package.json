@@ -1,0 +1,14 @@
+{
+  "name": "sample-repository",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4",
+    "typescript": "^5.8.3",
+    "@types/node": "^24.0.10"
+  }
+}

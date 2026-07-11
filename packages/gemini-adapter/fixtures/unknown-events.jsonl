@@ -1,0 +1,5 @@
+{"type":"init","sessionId":"test-session-004","model":"gemini-2.5-pro"}
+{"type":"content","text":"Working on the task..."}
+{"type":"future_event_type_v2","someNewField":"value","anotherField":42}
+{"type":"content","text":"Continuing..."}
+{"type":"result","exitCode":0}
