@@ -41,8 +41,8 @@ import type {
   StdoutEvent,
   StderrEvent,
   UnknownAgentEvent,
-  RunCompletedEvent,
-  RunFailedEvent,
+  AgentResultEvent,
+  AgentErrorEvent,
   EventSource,
 } from "@continuum/shared";
 
@@ -290,26 +290,24 @@ export function parseGeminiLine(
     }
 
     case "result": {
-      const evt: RunCompletedEvent = {
+      const evt: AgentResultEvent = {
         ...makeHeader(ctx, "stdout", wasRedacted),
-        eventType: "run_completed",
+        eventType: "agent_result",
         payload: {
           exitCode: data.exitCode ?? 0,
-          durationMs: 0, // Will be updated by the adapter after process exit
+          raw: lineToStore,
         },
       };
       return evt;
     }
 
     case "error": {
-      const evt: RunFailedEvent = {
+      const evt: AgentErrorEvent = {
         ...makeHeader(ctx, "stdout", wasRedacted),
-        eventType: "run_failed",
+        eventType: "agent_error",
         payload: {
           reason: data.message ?? "Unknown Gemini error",
-          durationMs: 0,
-          timedOut: false,
-          cancelled: false,
+          raw: lineToStore,
         },
       };
       return evt;

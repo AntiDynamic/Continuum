@@ -87,6 +87,7 @@ export interface RunCommandOptions {
   skipBaselineTests?: boolean;
   skipFinalTests?: boolean;
   nonInteractive?: boolean;
+  unsafeAutoApprove?: boolean;
   cwd?: string;
   additionalArgs?: string[];
 }
@@ -179,6 +180,7 @@ export async function runRunCommand(
       skipBaselineTests: options.skipBaselineTests,
       skipFinalTests: options.skipFinalTests,
       signal: controller.signal,
+      unsafeAutoApprove: options.unsafeAutoApprove,
       onEvent: formatEventForTerminal,
     });
 

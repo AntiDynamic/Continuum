@@ -100,7 +100,7 @@ PASS  Node.js v24.13.0
 PASS  Git 2.48.1
 PASS  Gemini CLI 0.50.0
 PASS  Gemini stream-json output — supported
-PASS  SQLite (better-sqlite3)
+PASS  Node SQLite (node:sqlite)
 ```
 
 ### `continuum init`
@@ -120,6 +120,7 @@ Execute a coding agent task and record all observable evidence.
 continuum run "Fix the failing factorial test"
 continuum run --agent gemini --timeout 5m "Refactor the authentication module"
 continuum run --skip-baseline-tests "Add type annotations to calculator.ts"
+continuum run --unsafe-auto-approve "Fix the bug in the authentication controller"
 ```
 
 **Flags:**

@@ -54,6 +54,13 @@ export interface AgentCapabilities {
   cancellation: boolean;
 }
 
+export interface AgentExecutionPolicy {
+  captureRawOutput: boolean;
+  redactPatterns: string[];
+  unsafeAutoApprove: boolean;
+  initializationTimeoutMs: number;
+}
+
 export interface AgentRunInput {
   runId: string;
   task: string;
@@ -63,4 +70,5 @@ export interface AgentRunInput {
   additionalArgs?: string[] | undefined;
   /** AbortSignal for cancellation. */
   signal?: AbortSignal | undefined;
+  policy: AgentExecutionPolicy;
 }

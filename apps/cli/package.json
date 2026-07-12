@@ -12,7 +12,8 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src",
     "clean": "rimraf dist",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@continuum/agent-core": "workspace:*",

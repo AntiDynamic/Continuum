@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Build & Test (Node ${{ matrix.node-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [22, 24]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Enable Corepack
+      run: corepack enable
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Lint
+      run: pnpm lint
+
+    - name: Typecheck
+      run: pnpm typecheck
+
+    - name: Build
+      run: pnpm build
+
+    - name: Test
+      run: pnpm test

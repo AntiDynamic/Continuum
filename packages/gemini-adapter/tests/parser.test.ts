@@ -103,25 +103,25 @@ describe("parseGeminiLine — usage event", () => {
 });
 
 describe("parseGeminiLine — result event", () => {
-  it("parses successful result", () => {
+  it("result event > parses successful result", () => {
     const ctx = makeCtx();
     const event = parseGeminiLine('{"type":"result","exitCode":0}', ctx);
-    expect(event.eventType).toBe("run_completed");
-    if (event.eventType === "run_completed") {
+    expect(event.eventType).toBe("agent_result");
+    if (event.eventType === "agent_result") {
       expect(event.payload.exitCode).toBe(0);
     }
   });
 });
 
 describe("parseGeminiLine — error event", () => {
-  it("parses error event", () => {
+  it("error event > parses error event", () => {
     const ctx = makeCtx();
     const event = parseGeminiLine(
       '{"type":"error","message":"Quota exceeded"}',
       ctx,
     );
-    expect(event.eventType).toBe("run_failed");
-    if (event.eventType === "run_failed") {
+    expect(event.eventType).toBe("agent_error");
+    if (event.eventType === "agent_error") {
       expect(event.payload.reason).toBe("Quota exceeded");
     }
   });
@@ -181,18 +181,18 @@ describe("parseGeminiLine — redaction", () => {
 
 describe("fixture: successful-run.jsonl", () => {
   it("parses all lines without throwing", () => {
-    const events = parseFixture("successful-run.jsonl");
-    expect(events.length).toBeGreaterThan(5);
+    expect(() => parseFixture("successful-run.jsonl")).not.toThrow();
   });
 
-  it("contains init, tool_call, tool_result, token_usage, and run_completed", () => {
+  it("contains init, tool_call, tool_result, token_usage, and agent_result", () => {
     const events = parseFixture("successful-run.jsonl");
     const types = new Set(events.map((e) => e.eventType));
+
     expect(types.has("agent_init")).toBe(true);
     expect(types.has("tool_call")).toBe(true);
     expect(types.has("tool_result")).toBe(true);
     expect(types.has("token_usage")).toBe(true);
-    expect(types.has("run_completed")).toBe(true);
+    expect(types.has("agent_result")).toBe(true);
   });
 });
 
@@ -203,39 +203,34 @@ describe("fixture: malformed-lines.jsonl", () => {
 
   it("emits stdout events for non-JSON lines", () => {
     const events = parseFixture("malformed-lines.jsonl");
-    const stdoutEvents = events.filter((e) => e.eventType === "stdout");
-    expect(stdoutEvents.length).toBeGreaterThanOrEqual(1);
+    expect(events.some((e) => e.eventType === "stdout")).toBe(true);
   });
 
   it("emits unknown_agent_event for JSON with no type", () => {
     const events = parseFixture("malformed-lines.jsonl");
-    const unknownEvents = events.filter(
-      (e) => e.eventType === "unknown_agent_event",
-    );
-    expect(unknownEvents.length).toBeGreaterThanOrEqual(1);
+    expect(events.some((e) => e.eventType === "unknown_agent_event")).toBe(true);
   });
 });
 
 describe("fixture: unknown-events.jsonl", () => {
   it("preserves unknown event type without discarding", () => {
     const events = parseFixture("unknown-events.jsonl");
-    const unknown = events.filter(
+    const unknownEvent = events.find(
       (e) => e.eventType === "unknown_agent_event",
     );
-    expect(unknown.length).toBeGreaterThanOrEqual(1);
-    const first = unknown[0];
-    if (first?.eventType === "unknown_agent_event") {
-      expect(first.payload.originalType).toBe("future_event_type_v2");
+    expect(unknownEvent).toBeDefined();
+    if (unknownEvent?.eventType === "unknown_agent_event") {
+      expect(unknownEvent.payload.originalType).toBe("future_event_type_v2");
     }
   });
 });
 
 describe("fixture: error-run.jsonl", () => {
-  it("parses error event as run_failed", () => {
+  it("parses error event as agent_error", () => {
     const events = parseFixture("error-run.jsonl");
-    const failed = events.find((e) => e.eventType === "run_failed");
+    const failed = events.find((e) => e.eventType === "agent_error");
     expect(failed).toBeDefined();
-    if (failed?.eventType === "run_failed") {
+    if (failed?.eventType === "agent_error") {
       expect(failed.payload.reason).toContain("quota");
     }
   });

@@ -9,6 +9,7 @@ export type {
   AgentAdapter,
   AgentAvailability,
   AgentCapabilities,
+  AgentExecutionPolicy,
   AgentRunInput,
 } from "./agent-adapter.js";
 
@@ -30,6 +31,9 @@ export type {
   UnknownAgentEvent,
   RunCompletedEvent,
   RunFailedEvent,
+  AgentResultEvent,
+  AgentErrorEvent,
+  AgentFailureKind,
 } from "./agent-events.js";
 
 // Configuration

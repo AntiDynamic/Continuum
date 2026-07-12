@@ -60,7 +60,16 @@ async function checkGemini(): Promise<{ ok: boolean; structured: boolean }> {
   }
   pass(`Gemini CLI ${availability.version ?? "(version unknown)"}`, availability.executablePath);
 
-  const caps = await adapter.getCapabilities();
+  info(`Gemini version: ${availability.version ?? "unknown"}`);
+  if (availability.executablePath) {
+    info(`Gemini path: ${availability.executablePath}`);
+  }
+  
+  // Explicitly note trust behaviour
+  info("Gemini folder trust is verified only when an actual run begins.");
+
+  let caps: import("@continuum/shared").AgentCapabilities | undefined;
+  caps = await adapter.getCapabilities();
   if (caps.streamingOutput) {
     pass("Gemini stream-json output", "supported");
   } else if (caps.structuredOutput) {

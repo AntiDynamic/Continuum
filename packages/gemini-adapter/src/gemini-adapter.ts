@@ -115,6 +115,7 @@ export class GeminiAdapter implements AgentAdapter {
     };
   }
 
+  
   async *run(input: AgentRunInput): AsyncIterable<AgentEvent> {
     const availability = await this.detectAvailability();
     if (!availability.available) {
@@ -139,17 +140,21 @@ export class GeminiAdapter implements AgentAdapter {
       input.task,
       "--output-format",
       outputMode,
-      // Auto-approve tool executions so the agent can complete unattended
-      "--yolo",
-      // Trust the repository workspace
-      "--skip-trust",
       ...(input.additionalArgs ?? []),
     ];
 
-    const exactCommand = `${GEMINI_EXECUTABLE} ${args.map((a) => JSON.stringify(a)).join(" ")}`;
+    if (input.policy.unsafeAutoApprove) {
+      console.warn("WARNING: Unsafe auto-approval is enabled.\nGemini may execute commands and modify files without interactive confirmation.\nUse this only inside a disposable or trusted repository.");
+      args.push("--yolo");
+    }
 
-    const ctx = createParseContext(input.runId);
+    const exactCommand = `${GEMINI_EXECUTABLE} ${args.map((a) => JSON.stringify(a)).join(" ")}`;
+    const redactedCommand = (await import("@continuum/shared")).redactString(exactCommand, input.policy.redactPatterns);
+
+    const ctx = createParseContext(input.runId, input.policy.redactPatterns, input.policy.captureRawOutput);
     const startTime = Date.now();
+    let initReceived = false;
+    let agentEventReceived = false;
 
     // Emit run_started event
     const startedEvent: RunStartedEvent = {
@@ -158,18 +163,25 @@ export class GeminiAdapter implements AgentAdapter {
       sequenceNumber: 0,
       timestamp: now(),
       source: "system",
-      redactionApplied: false,
+      redactionApplied: redactedCommand !== exactCommand,
       eventType: "run_started",
       payload: {
-        command: exactCommand,
+        command: redactedCommand,
         args,
         outputMode,
       },
     };
     yield startedEvent;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let child: any;
+    let trustFailed = false;
+    let approvalRequired = false;
+    let authRequired = false;
+
+    // Trust output classifier
+    const isTrustPrompt = (text: string) => /do you trust the files in this folder|untrusted folder|project agents due to untrusted folder|folder is not trusted|workspace is not trusted/i.test(text);
+    const isApprovalPrompt = (text: string) => /approval required/i.test(text);
+    const isAuthPrompt = (text: string) => /authentication required/i.test(text);
 
     try {
       const execaOptions: Record<string, any> = {
@@ -178,6 +190,7 @@ export class GeminiAdapter implements AgentAdapter {
         all: false,
         stdout: "pipe",
         stderr: "pipe",
+        stdin: "ignore", // Prevent hanging on interactive prompts
       };
       if (input.timeoutMs !== undefined) {
         execaOptions["timeout"] = input.timeoutMs;
@@ -185,51 +198,113 @@ export class GeminiAdapter implements AgentAdapter {
 
       child = execa(GEMINI_EXECUTABLE, args, execaOptions);
 
-      // Register cancellation callback
       if (child.pid !== undefined) {
         this.pendingCancellations.set(input.runId, () => {
           child?.kill("SIGTERM");
         });
       }
 
-      // Propagate external AbortSignal
       if (input.signal) {
         input.signal.addEventListener("abort", () => {
           child?.kill("SIGTERM");
         });
       }
 
-      const events: AgentEvent[] = [];
+      // Concurrently consume stdout and stderr using an async generator queue
+      const queue: AgentEvent[] = [];
+      let resolveQueue: (() => void) | null = null;
+      let stdoutDone = false;
+      let stderrDone = false;
 
-      // Process stdout line by line
-      if (child.stdout) {
+      const pushEvent = (evt: AgentEvent) => {
+        queue.push(evt);
+        if (resolveQueue) resolveQueue();
+      };
+
+      const processStdout = async () => {
+        if (!child.stdout) return;
         const stdoutRl = createReadlineInterface(child.stdout);
         for await (const line of stdoutRl) {
           if (!line.trim()) continue;
+          if (isTrustPrompt(line)) trustFailed = true;
+          if (isApprovalPrompt(line)) approvalRequired = true;
+          if (isAuthPrompt(line)) authRequired = true;
           const event = parseGeminiLine(line, ctx);
-          events.push(event);
-          yield event;
+          if (event.eventType === "agent_init") initReceived = true;
+          if (event.eventType !== "stdout" && event.eventType !== "stderr" && event.eventType !== "unknown_agent_event") agentEventReceived = true;
+          pushEvent(event);
         }
-      }
+      };
 
-      // Collect stderr
-      if (child.stderr) {
+      const processStderr = async () => {
+        if (!child.stderr) return;
         const stderrRl = createReadlineInterface(child.stderr);
         for await (const line of stderrRl) {
           if (!line.trim()) continue;
+          if (isTrustPrompt(line)) trustFailed = true;
+          if (isApprovalPrompt(line)) approvalRequired = true;
+          if (isAuthPrompt(line)) authRequired = true;
           const event = parseStderrLine(line, ctx);
-          events.push(event);
-          yield event;
+          pushEvent(event);
+        }
+      };
+
+      processStdout().then(() => { stdoutDone = true; if (resolveQueue) resolveQueue(); }).catch(() => { stdoutDone = true; if (resolveQueue) resolveQueue(); });
+      processStderr().then(() => { stderrDone = true; if (resolveQueue) resolveQueue(); }).catch(() => { stderrDone = true; if (resolveQueue) resolveQueue(); });
+
+      // Initialization timeout timer
+      let initTimeoutFired = false;
+      const initTimer = setTimeout(() => {
+        if (!initReceived && !agentEventReceived) {
+          initTimeoutFired = true;
+          child?.kill("SIGTERM");
+        }
+      }, input.policy.initializationTimeoutMs);
+
+      // Yield events as they arrive
+      while (!stdoutDone || !stderrDone || queue.length > 0) {
+        if (queue.length > 0) {
+          yield queue.shift()!;
+        } else {
+          await new Promise<void>((r) => { resolveQueue = r; });
+          resolveQueue = null;
         }
       }
 
-      // Wait for process exit
+      clearTimeout(initTimer);
+
       const result = await child;
       const durationMs = Date.now() - startTime;
-
       this.pendingCancellations.delete(input.runId);
 
-      if (result.timedOut) {
+      // Determine failure kind
+      let failureKind: string | undefined;
+      let failureReason: string | undefined;
+
+      if (trustFailed) {
+        failureKind = "untrusted_workspace";
+        failureReason = "Gemini did not run because this repository is not trusted.\n\nOpen Gemini manually in this repository and approve folder trust:\n\n  cd \"<repository-path>\"\n  gemini\n\nChoose “Trust folder” for this repository only, then rerun Continuum.\n\nContinuum did not bypass or modify Gemini’s trust settings.";
+      } else if (approvalRequired) {
+        failureKind = "approval_required";
+        failureReason = "Gemini requires interactive approval for this task.\n\nRun Gemini manually for this task, or rerun Continuum with the explicitly unsafe\n--unsafe-auto-approve option inside a disposable or fully trusted repository.";
+      } else if (authRequired) {
+        failureKind = "authentication_required";
+        failureReason = "Authentication is required to use Gemini.";
+      } else if (initTimeoutFired) {
+        failureKind = "timed_out";
+        failureReason = "Gemini initialization timed out. It may be waiting for trust, authentication, or approval.";
+      } else if (result.timedOut) {
+        failureKind = "timed_out";
+        failureReason = `Gemini CLI timed out after ${String(input.timeoutMs ?? "unknown")}ms`;
+      } else if (result.isCanceled) {
+        failureKind = "cancelled";
+        failureReason = "Cancelled by user";
+      } else if (result.exitCode !== 0) {
+        failureKind = "non_zero_exit";
+        failureReason = `Gemini CLI exited with code ${result.exitCode}`;
+      }
+
+      if (failureKind) {
         const failedEvent: RunFailedEvent = {
           eventId: generateEventId(),
           runId: input.runId,
@@ -240,53 +315,35 @@ export class GeminiAdapter implements AgentAdapter {
           eventType: "run_failed",
           payload: {
             exitCode: result.exitCode ?? undefined,
-            reason: `Gemini CLI timed out after ${String(input.timeoutMs ?? "unknown")}ms`,
+            reason: failureReason!,
             durationMs,
-            timedOut: true,
-            cancelled: false,
+            timedOut: failureKind === "timed_out",
+            cancelled: failureKind === "cancelled",
+            failureKind: failureKind as any,
           },
         };
         yield failedEvent;
-        return;
-      }
-
-      if (result.isCanceled) {
-        const failedEvent: RunFailedEvent = {
+      } else {
+        const completedEvent: RunCompletedEvent = {
           eventId: generateEventId(),
           runId: input.runId,
           sequenceNumber: ctx.sequenceCounter.value + 1,
           timestamp: now(),
           source: "system",
           redactionApplied: false,
-          eventType: "run_failed",
+          eventType: "run_completed",
           payload: {
-            reason: "Cancelled by user",
+            exitCode: result.exitCode ?? 0,
             durationMs,
-            timedOut: false,
-            cancelled: true,
           },
         };
-        yield failedEvent;
-        return;
+        yield completedEvent;
       }
 
-      const completedEvent: RunCompletedEvent = {
-        eventId: generateEventId(),
-        runId: input.runId,
-        sequenceNumber: ctx.sequenceCounter.value + 1,
-        timestamp: now(),
-        source: "system",
-        redactionApplied: false,
-        eventType: "run_completed",
-        payload: {
-          exitCode: result.exitCode ?? 0,
-          durationMs,
-        },
-      };
-      yield completedEvent;
     } catch (err) {
       this.pendingCancellations.delete(input.runId);
       const durationMs = Date.now() - startTime;
+      
       const failedEvent: RunFailedEvent = {
         eventId: generateEventId(),
         runId: input.runId,
@@ -300,6 +357,7 @@ export class GeminiAdapter implements AgentAdapter {
           durationMs,
           timedOut: false,
           cancelled: false,
+          failureKind: "unknown",
         },
       };
       yield failedEvent;
@@ -307,6 +365,7 @@ export class GeminiAdapter implements AgentAdapter {
   }
 
   async cancel(runId: string): Promise<void> {
+
     const cancel = this.pendingCancellations.get(runId);
     if (cancel) {
       cancel();

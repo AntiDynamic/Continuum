@@ -129,6 +129,16 @@ export interface UnknownAgentEvent extends EventHeader {
   };
 }
 
+export type AgentFailureKind =
+  | "untrusted_workspace"
+  | "approval_required"
+  | "authentication_required"
+  | "agent_not_found"
+  | "timed_out"
+  | "cancelled"
+  | "non_zero_exit"
+  | "unknown";
+
 /** The agent process exited normally. */
 export interface RunCompletedEvent extends EventHeader {
   eventType: "run_completed";
@@ -147,6 +157,25 @@ export interface RunFailedEvent extends EventHeader {
     durationMs: number;
     timedOut: boolean;
     cancelled: boolean;
+    failureKind?: AgentFailureKind;
+  };
+}
+
+/** An agent internal result event (e.g. Gemini JSON result). */
+export interface AgentResultEvent extends EventHeader {
+  eventType: "agent_result";
+  payload: {
+    exitCode?: number | undefined;
+    raw: string;
+  };
+}
+
+/** An agent internal error event (e.g. Gemini JSON error). */
+export interface AgentErrorEvent extends EventHeader {
+  eventType: "agent_error";
+  payload: {
+    reason: string;
+    raw: string;
   };
 }
 
@@ -161,6 +190,8 @@ export type AgentEvent =
   | StderrEvent
   | UnknownAgentEvent
   | RunCompletedEvent
-  | RunFailedEvent;
+  | RunFailedEvent
+  | AgentResultEvent
+  | AgentErrorEvent;
 
 export type AgentEventType = AgentEvent["eventType"];

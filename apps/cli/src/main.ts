@@ -51,6 +51,7 @@ program
   .option("--skip-baseline-tests", "Skip running baseline tests before the agent.")
   .option("--skip-final-tests", "Skip running tests after the agent.")
   .option("--non-interactive", "Disable interactive prompts.")
+  .option("--unsafe-auto-approve", "Enable unsafe auto-approval of all tools. Warning: use only in trusted/disposable repositories!")
   .allowUnknownOption(true)
   .action(async (task: string, options: {
     agent?: string;
@@ -59,6 +60,7 @@ program
     skipBaselineTests?: boolean;
     skipFinalTests?: boolean;
     nonInteractive?: boolean;
+    unsafeAutoApprove?: boolean;
   }, cmd: Command) => {
     // Collect any arguments after -- as additional agent args
     const rawArgs = cmd.args ?? [];

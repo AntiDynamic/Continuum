@@ -67,6 +67,8 @@ export interface OrchestratorRunOptions {
   skipBaselineTests?: boolean;
   skipFinalTests?: boolean;
   signal?: AbortSignal;
+  unsafeAutoApprove?: boolean;
+  initializationTimeoutMs?: number;
   /** Callback to stream events to the terminal. */
   onEvent?: (event: AgentEvent) => void;
 }
@@ -167,6 +169,12 @@ export async function orchestrateRun(
     timeoutMs: opts.timeoutMs,
     additionalArgs: opts.additionalArgs,
     signal: opts.signal,
+    policy: {
+      captureRawOutput: opts.config.captureRawOutput ?? true,
+      redactPatterns: opts.config.redactPatterns ?? [],
+      unsafeAutoApprove: opts.unsafeAutoApprove ?? false,
+      initializationTimeoutMs: opts.initializationTimeoutMs ?? 15000,
+    }
   };
 
   let finalStatus: RunStatus = "running";
@@ -177,8 +185,15 @@ export async function orchestrateRun(
   let toolCallCount = 0;
   let hasTokenUsage = false;
 
+  let terminalEventReceived = false;
+
   try {
     for await (const event of opts.adapter.run(agentInput)) {
+      if (terminalEventReceived) {
+        log.warn("Received event after terminal event, ignoring", { runId, eventType: event.eventType });
+        continue;
+      }
+
       // Persist event
       eventRepo.insert(event, event.redactionApplied);
 
@@ -238,6 +253,7 @@ export async function orchestrateRun(
       if (event.eventType === "run_completed") {
         finalStatus = "completed";
         exitCode = event.payload.exitCode;
+        terminalEventReceived = true;
       }
 
       if (event.eventType === "run_failed") {
@@ -248,7 +264,13 @@ export async function orchestrateRun(
             : "failed";
         exitCode = event.payload.exitCode;
         errorSummary = event.payload.reason;
+        terminalEventReceived = true;
       }
+    }
+    
+    if (!terminalEventReceived) {
+      finalStatus = "failed";
+      errorSummary = "Adapter ended without emitting a terminal event";
     }
   } catch (err) {
     finalStatus = "failed";
