@@ -21,6 +21,8 @@
     "@continuum/evaluator": "workspace:*",
     "@continuum/gemini-adapter": "workspace:*",
     "@continuum/git-analyzer": "workspace:*",
+    "@continuum/mcp-server": "workspace:*",
+    "@continuum/repository-indexer": "workspace:*",
     "@continuum/shared": "workspace:*",
     "commander": "^13.1.0",
     "execa": "^9.5.2"

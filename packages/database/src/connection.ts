@@ -65,7 +65,12 @@ export function migrate(db: Db): void {
     // so we use BEGIN/COMMIT explicitly.
     db.exec("BEGIN");
     try {
-      db.exec(migration.sql);
+      if (migration.sql) {
+        db.exec(migration.sql);
+      }
+      if (migration.up) {
+        migration.up(db);
+      }
       db
         .prepare(
           "INSERT INTO schema_migrations (version, description, applied_at) VALUES (?, ?, ?)",
@@ -86,3 +91,19 @@ export function getSchemaVersion(db: Db): number {
     .get() as { v: number | null } | undefined;
   return row?.v ?? 0;
 }
+
+import { SearchBackend } from "@continuum/shared";
+
+/** 
+ * Probe the SQLite connection for FTS5 capability.
+ */
+export function probeSearchCapability(db: Db): SearchBackend {
+  try {
+    db.exec("CREATE VIRTUAL TABLE temp.continuum_fts_probe USING fts5(content);");
+    db.exec("DROP TABLE temp.continuum_fts_probe;");
+    return "fts5";
+  } catch (err) {
+    return "fallback_lexical";
+  }
+}
+

@@ -83,16 +83,22 @@ async function checkGemini(): Promise<{ ok: boolean; structured: boolean }> {
 async function checkSqlite(cwd: string): Promise<boolean> {
   try {
     // Try importing the database module — this exercises the native module load
-    const { openDatabase, migrate } = await import("@continuum/database");
+    const { openDatabase, migrate, probeSearchCapability } = await import("@continuum/database");
     const os = await import("node:os");
     const path = await import("node:path");
     const tmpPath = path.join(os.tmpdir(), `continuum-doctor-${Date.now().toString()}.db`);
     const db = openDatabase(tmpPath);
     migrate(db);
+    const searchBackend = probeSearchCapability(db);
     db.close();
     const fs = await import("node:fs");
     fs.unlinkSync(tmpPath);
-    pass("SQLite (better-sqlite3)", "database open/migrate/close successful");
+    pass("SQLite (node:sqlite)", "database open/migrate/close successful");
+    if (searchBackend === "fts5") {
+      pass("SQLite FTS5", "available");
+    } else {
+      warn("SQLite FTS5", "unavailable; using fallback lexical search");
+    }
     return true;
   } catch (err) {
     fail(

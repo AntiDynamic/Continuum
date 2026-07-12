@@ -75,6 +75,9 @@ export {
   redactJsonString,
 } from "./redaction.js";
 export type { RedactedCommand, RedactionResult } from "./redaction.js";
+export * from "./context-domain.js";
+export * from "./ranking.js";
+export * from "./packing.js";
 
 // Logger
 export { createLogger } from "./logger.js";

@@ -1,0 +1,27 @@
+{
+  "name": "@continuum/mcp-server",
+  "version": "0.1.0",
+  "description": "Continuum MCP server.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@continuum/database": "workspace:*",
+    "@continuum/git-analyzer": "workspace:*",
+    "@continuum/repository-indexer": "workspace:*",
+    "@continuum/shared": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}

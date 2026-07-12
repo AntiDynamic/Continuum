@@ -34,9 +34,9 @@ V1 is the observation and evidence foundation.  It collects trustworthy raw data
 
 ---
 
-## Current Milestone: Observer V1
+### Current Milestone: Observer V1 + V2 Context Indexing (Preview)
 
-Observer V1 supports:
+Observer V1 + V2 Context supports:
 
 ```bash
 continuum doctor
@@ -45,6 +45,11 @@ continuum run "Fix the failing factorial test"
 continuum report latest
 continuum outcome latest
 continuum compare <run-a> <run-b>
+
+# V2 Context Features
+continuum index .
+continuum context "query"
+continuum mcp
 ```
 
 ---
@@ -176,6 +181,30 @@ Efficiency
   Duration             1m 23s       2m 45s
 
 Summary: Run A has stronger correctness evidence. No overall winner can be determined.
+```
+
+### `continuum index [dir]`
+
+Index the repository into the local SQLite database. Extracts functions, classes, interfaces, markdown blocks, and queries. Respects `.continuumignore` and `.gitignore`.
+
+```bash
+continuum index .
+```
+
+### `continuum context "<query>"`
+
+Search the indexed codebase and retrieve packed, optimized context snippets ranked using BM25 and our custom relevance weights.
+
+```bash
+continuum context "ranking algorithm"
+```
+
+### `continuum mcp`
+
+Start the Continuum MCP stdio server. Allows compatible AI clients (like Claude Code or Gemini) to dynamically retrieve repository context via the `retrieve_context` tool.
+
+```bash
+continuum mcp
 ```
 
 ---

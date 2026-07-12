@@ -1,0 +1,28 @@
+{
+  "name": "@continuum/repository-indexer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "clean": "rimraf dist",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@continuum/database": "workspace:*",
+    "@continuum/git-analyzer": "workspace:*",
+    "@continuum/shared": "workspace:*",
+    "execa": "^9.6.1",
+    "ignore": "^7.0.6",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}

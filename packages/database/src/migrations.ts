@@ -17,7 +17,8 @@
 export interface Migration {
   version: number;
   description: string;
-  sql: string;
+  sql?: string;
+  up?: (db: any) => void;
 }
 
 export const MIGRATIONS: Migration[] = [
@@ -169,4 +170,118 @@ export const MIGRATIONS: Migration[] = [
       CREATE INDEX IF NOT EXISTS idx_file_baselines_run_id  ON file_baselines(run_id);
     `,
   },
+  {
+    version: 2,
+    description: "Continuum V2 Repository Indexing and Context",
+    sql: `
+      -- Track indexing runs
+      CREATE TABLE IF NOT EXISTS repository_index_runs (
+        id               TEXT    PRIMARY KEY,
+        repository_id    INTEGER NOT NULL REFERENCES repositories(id),
+        snapshot_kind    TEXT    NOT NULL,
+        base_commit_hash TEXT    NOT NULL,
+        worktree_hash    TEXT,
+        dirty            INTEGER NOT NULL DEFAULT 0,
+        started_at       TEXT    NOT NULL,
+        finished_at      TEXT,
+        duration_ms      INTEGER,
+        status           TEXT    NOT NULL
+      );
+
+      -- Files processed during an indexing run
+      CREATE TABLE IF NOT EXISTS indexed_files (
+        id               INTEGER PRIMARY KEY AUTOINCREMENT,
+        index_run_id     TEXT    NOT NULL REFERENCES repository_index_runs(id),
+        path             TEXT    NOT NULL,
+        skip_reason      TEXT,
+        size_bytes       INTEGER,
+        detected_type    TEXT
+      );
+
+      -- Stable logical identity for context items
+      CREATE TABLE IF NOT EXISTS context_items (
+        id            TEXT    PRIMARY KEY,
+        repository_id INTEGER NOT NULL REFERENCES repositories(id),
+        kind          TEXT    NOT NULL,
+        logical_key   TEXT    NOT NULL,
+        created_at    TEXT    NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS idx_context_items_repo_logical ON context_items(repository_id, logical_key);
+
+      -- Immutable content versions for context items
+      CREATE TABLE IF NOT EXISTS context_item_versions (
+        id                        TEXT    PRIMARY KEY,
+        context_item_id           TEXT    NOT NULL REFERENCES context_items(id),
+        content                   TEXT    NOT NULL,
+        title                     TEXT,
+        source_path               TEXT    NOT NULL,
+        source_start_line         INTEGER NOT NULL,
+        source_end_line           INTEGER NOT NULL,
+        symbol_name               TEXT,
+        language                  TEXT    NOT NULL,
+        content_hash              TEXT    NOT NULL,
+        source_blob_hash          TEXT    NOT NULL,
+        valid_from_commit         TEXT    NOT NULL,
+        valid_to_commit_exclusive TEXT,
+        indexed_at                TEXT    NOT NULL,
+        provenance_json           TEXT,
+        staleness_status          TEXT    NOT NULL,
+        staleness_reason          TEXT,
+        metadata_json             TEXT
+      );
+      CREATE INDEX IF NOT EXISTS idx_context_item_versions_item_id ON context_item_versions(context_item_id);
+
+      -- Relationships between context items
+      CREATE TABLE IF NOT EXISTS context_item_links (
+        id             TEXT    PRIMARY KEY,
+        source_item_id TEXT    NOT NULL REFERENCES context_items(id),
+        target_item_id TEXT    NOT NULL REFERENCES context_items(id),
+        relationship   TEXT    NOT NULL,
+        created_at     TEXT    NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS idx_context_item_links_source ON context_item_links(source_item_id);
+      CREATE INDEX IF NOT EXISTS idx_context_item_links_target ON context_item_links(target_item_id);
+
+      -- Track context retrieval requests
+      CREATE TABLE IF NOT EXISTS context_retrievals (
+        id           TEXT    PRIMARY KEY,
+        run_id       TEXT    REFERENCES agent_runs(id),
+        query        TEXT    NOT NULL,
+        strategy     TEXT    NOT NULL,
+        timestamp    TEXT    NOT NULL,
+        budget_json  TEXT,
+        packet_json  TEXT
+      );
+
+      -- Record exact items returned for observability
+      CREATE TABLE IF NOT EXISTS context_retrieval_items (
+        id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+        retrieval_id          TEXT    NOT NULL REFERENCES context_retrievals(id),
+        item_version_id       TEXT    NOT NULL REFERENCES context_item_versions(id),
+        score                 REAL    NOT NULL,
+        score_components_json TEXT    NOT NULL,
+        rank                  INTEGER NOT NULL
+      );
+    `,
+    up: (db: any) => {
+      let hasFts5 = false;
+      try {
+        db.exec("CREATE VIRTUAL TABLE temp.continuum_fts_probe USING fts5(content);");
+        db.exec("DROP TABLE temp.continuum_fts_probe;");
+        hasFts5 = true;
+      } catch (err) {
+        // FTS5 unavailable
+      }
+
+      if (hasFts5) {
+        db.exec(`
+          CREATE VIRTUAL TABLE IF NOT EXISTS context_items_fts USING fts5(
+            content,
+            title,
+            symbol_name
+          );
+        `);
+      }
+    }
+  }
 ];

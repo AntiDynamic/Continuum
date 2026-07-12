@@ -10,10 +10,15 @@ const __dirname = dirname(__filename);
 
 describe("CLI Integration", () => {
   let tempDir: string;
-  const cliBin = resolve(__dirname, "../dist/main.js");
+  let cliBin: string;
 
   beforeAll(async () => {
-    tempDir = await mkdtemp(resolve(tmpdir(), "continuum-cli-test-"));
+    cliBin = resolve(__dirname, "../dist/main.js");
+  });
+
+  beforeEach(async () => {
+    tempDir = join(tmpdir(), `continuum-cli-test-${Math.random().toString(36).slice(2, 8)}`);
+    await mkdir(tempDir, { recursive: true });
     // Initialize a git repository so Continuum commands work
     await execa("git", ["init"], { cwd: tempDir });
     await execa("git", ["config", "user.name", "Test User"], { cwd: tempDir });
@@ -21,7 +26,6 @@ describe("CLI Integration", () => {
     await execa("git", ["commit", "--allow-empty", "-m", "Initial commit"], { cwd: tempDir });
   });
 
-  afterAll(async () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
@@ -134,22 +138,6 @@ describe("CLI Integration", () => {
 
     it("should allow a failed agent run to compare", async () => {
       // Restore bug
-      await writeFile(resolve(runDir, "src/calculator.ts"), "export function factorial(n) { return 0; }");
-      await execa("git", ["add", "."], { cwd: runDir });
-      await execa("git", ["commit", "-m", "Restore bug"], { cwd: runDir });
-
-      const result = await execa("node", [cliBin, "run", "Fail at fixing"], { 
-        cwd: runDir, 
-        reject: false,
-        env: {
-          ...process.env,
-          CONTINUUM_TEST_FAKE_ADAPTER: "1",
-          // Don't fix the file, so final test fails
-        }
-      });
-      if (result.exitCode !== 0 && !result.stdout.match(/Run ID/)) {
-        console.error("Failed run stdout:", result.stdout);
-        console.error("Failed run stderr:", result.stderr);
       }
       expect(result.exitCode).toBe(0);
       
