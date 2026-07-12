@@ -70,9 +70,11 @@ export {
 // Redaction
 export {
   redactString,
-  redactObject,
+  redactValue,
+  redactCommand,
   redactJsonString,
 } from "./redaction.js";
+export type { RedactedCommand, RedactionResult } from "./redaction.js";
 
 // Logger
 export { createLogger } from "./logger.js";

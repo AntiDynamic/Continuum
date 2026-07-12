@@ -38,6 +38,12 @@ describe.skipIf(!RUN_SMOKE)("Gemini CLI smoke test [real]", () => {
       repositoryPath: process.cwd(),
       workingDirectory: process.cwd(),
       timeoutMs: 60_000,
+      policy: {
+        captureRawOutput: false,
+        redactPatterns: [],
+        unsafeAutoApprove: false,
+        initializationTimeoutMs: 5000,
+      }
     })) {
       events.push(event);
       console.log(`  [${event.eventType}]`);

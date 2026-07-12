@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { redactString, redactObject, redactJsonString } from "../src/redaction.js";
+import { redactString, redactValue, redactJsonString } from "../src/redaction.js";
 
 describe("redactString", () => {
   it("redacts a Gemini API key", () => {
@@ -47,23 +47,23 @@ describe("redactString", () => {
   });
 });
 
-describe("redactObject", () => {
+describe("redactValue", () => {
   it("redacts string values inside an object", () => {
     const obj = { key: "AIzaSyAbcdefghijklmnopqrstuvwxyz01234567", safe: "hello" };
-    const result = redactObject(obj) as typeof obj;
+    const result = redactValue(obj).value as typeof obj;
     expect(result["key"]).toContain("[REDACTED:GEMINI_KEY]");
     expect(result["safe"]).toBe("hello");
   });
 
   it("handles nested arrays and objects", () => {
     const obj = { items: [{ val: "sk-abcdefghijklmnopqrstu12345678" }] };
-    const result = redactObject(obj) as typeof obj;
+    const result = redactValue(obj).value as typeof obj;
     expect((result["items"][0] as { val: string })["val"]).toContain("[REDACTED:OPENAI_KEY]");
   });
 
   it("passes through numbers and booleans unchanged", () => {
     const obj = { count: 42, flag: true };
-    const result = redactObject(obj) as typeof obj;
+    const result = redactValue(obj).value as typeof obj;
     expect(result["count"]).toBe(42);
     expect(result["flag"]).toBe(true);
   });

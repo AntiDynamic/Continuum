@@ -5,5 +5,18 @@ packages:
 allowBuild: better-sqlite3,esbuild
 
 onlyBuiltDependencies:
+  - '-'
+  - ','
+  - '3'
+  - b
   - better-sqlite3
+  - d
+  - e
   - esbuild
+  - i
+  - l
+  - q
+  - r
+  - s
+  - t
+  - u

@@ -28,8 +28,9 @@
 import { z } from "zod";
 import {
   generateEventId,
-  redactString,
   now,
+  redactString,
+  redactValue,
 } from "@continuum/shared";
 import type {
   AgentEvent,
@@ -156,6 +157,7 @@ function makeHeader(
 export function parseGeminiLine(
   rawLine: string,
   ctx: ParseContext,
+  isStderr: boolean = false,
 ): AgentEvent {
   const redactedLine = redactString(rawLine, ctx.redactPatterns);
   const wasRedacted = redactedLine !== rawLine;
@@ -166,13 +168,26 @@ export function parseGeminiLine(
   try {
     parsed = JSON.parse(redactedLine);
   } catch (jsonErr) {
-    // Not JSON — emit as raw stdout
-    const evt: StdoutEvent = {
-      ...makeHeader(ctx, "stdout", wasRedacted),
-      eventType: "stdout",
+    // Not JSON — emit as raw stdout or stderr
+    const evt: any = {
+      ...makeHeader(ctx, isStderr ? "stderr" : "stdout", wasRedacted),
+      eventType: isStderr ? "stderr" : "stdout",
       payload: {
-        line: redactedLine,
+        line: ctx.captureRaw ? redactedLine : undefined,
         parseError: jsonErr instanceof Error ? jsonErr.message : "JSON parse error",
+      },
+    };
+    return evt;
+  }
+
+  // Not an object — treat as stdout/stderr
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    const evt: any = {
+      ...makeHeader(ctx, isStderr ? "stderr" : "stdout", wasRedacted),
+      eventType: isStderr ? "stderr" : "stdout",
+      payload: {
+        line: ctx.captureRaw ? redactedLine : undefined,
+        parseError: "Root JSON is not an object",
       },
     };
     return evt;
@@ -192,11 +207,11 @@ export function parseGeminiLine(
         : undefined;
 
     const evt: UnknownAgentEvent = {
-      ...makeHeader(ctx, "stdout", wasRedacted),
+      ...makeHeader(ctx, isStderr ? "stderr" : "stdout", wasRedacted),
       eventType: "unknown_agent_event",
       payload: {
         originalType,
-        raw: lineToStore,
+        raw: ctx.captureRaw ? lineToStore : undefined,
         parseStatus: "partial",
       },
     };
@@ -213,7 +228,7 @@ export function parseGeminiLine(
         payload: {
           sessionId: data.sessionId,
           model: data.model,
-          raw: lineToStore,
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;
@@ -226,7 +241,7 @@ export function parseGeminiLine(
         payload: {
           text: data.text,
           role: data.role,
-          raw: lineToStore,
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;
@@ -239,8 +254,8 @@ export function parseGeminiLine(
         payload: {
           toolName: data.name,
           toolCallId: data.id,
-          input: (data.input as Record<string, unknown>) ?? {},
-          raw: lineToStore,
+          input: ctx.captureRaw ? redactValue(data.input ?? {}, ctx.redactPatterns).value as Record<string, unknown> : (data.input ?? {}),
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;
@@ -254,8 +269,8 @@ export function parseGeminiLine(
           toolCallId: data.id,
           toolName: data.name,
           exitCode: data.exitCode,
-          output: data.output,
-          raw: lineToStore,
+          output: ctx.captureRaw && data.output ? redactValue(data.output, ctx.redactPatterns).value as string : undefined,
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;
@@ -271,7 +286,7 @@ export function parseGeminiLine(
         const evt: UnknownAgentEvent = {
           ...makeHeader(ctx, "stdout", wasRedacted),
           eventType: "unknown_agent_event",
-          payload: { originalType: "usage", raw: lineToStore, parseStatus: "partial" },
+          payload: { originalType: "usage", raw: ctx.captureRaw ? lineToStore : undefined, parseStatus: "partial" },
         };
         return evt;
       }
@@ -283,7 +298,7 @@ export function parseGeminiLine(
           outputTokens: data.outputTokens,
           cachedTokens: data.cachedInputTokens,
           totalTokens: data.totalTokens,
-          raw: lineToStore,
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;
@@ -295,7 +310,7 @@ export function parseGeminiLine(
         eventType: "agent_result",
         payload: {
           exitCode: data.exitCode ?? 0,
-          raw: lineToStore,
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;
@@ -307,7 +322,7 @@ export function parseGeminiLine(
         eventType: "agent_error",
         payload: {
           reason: data.message ?? "Unknown Gemini error",
-          raw: lineToStore,
+          raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
       return evt;

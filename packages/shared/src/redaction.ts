@@ -110,31 +110,119 @@ export function redactString(
   return result;
 }
 
+export interface RedactionResult {
+  value: unknown;
+  redactionApplied: boolean;
+}
+
 /**
  * Recursively redact all string values inside a JSON-compatible object.
  * Preserves the structural shape so the caller can still access other fields.
  */
-export function redactObject(
-  // Object from parsed JSON — explicit any is unavoidable for a recursive utility.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  input: any,
+export function redactValue(
+  value: unknown,
   extraPatterns: string[] = [],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any {
-  if (typeof input === "string") {
-    return redactString(input, extraPatterns);
+  visited = new WeakSet(),
+): RedactionResult {
+  if (typeof value === "string") {
+    const redacted = redactString(value, extraPatterns);
+    return { value: redacted, redactionApplied: redacted !== value };
   }
-  if (Array.isArray(input)) {
-    return input.map((item) => redactObject(item, extraPatterns));
+  
+  if (value === null || typeof value !== "object") {
+    return { value, redactionApplied: false };
   }
-  if (input !== null && typeof input === "object") {
-    const result: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(input)) {
-      result[key] = redactObject(value, extraPatterns);
+
+  // Prevent circular references
+  if (visited.has(value)) {
+    return { value: "[CIRCULAR]", redactionApplied: true };
+  }
+  visited.add(value);
+
+  if (Array.isArray(value)) {
+    const result: unknown[] = [];
+    let applied = false;
+    for (const item of value) {
+      const res = redactValue(item, extraPatterns, visited);
+      result.push(res.value);
+      if (res.redactionApplied) applied = true;
     }
-    return result;
+    return { value: result, redactionApplied: applied };
   }
-  return input;
+
+  // Handle plain objects
+  if (Object.getPrototypeOf(value) === Object.prototype) {
+    const result: Record<string, unknown> = {};
+    let applied = false;
+    for (const [k, v] of Object.entries(value)) {
+      const res = redactValue(v, extraPatterns, visited);
+      result[k] = res.value;
+      if (res.redactionApplied) applied = true;
+    }
+    return { value: result, redactionApplied: applied };
+  }
+
+  // For non-plain objects, we do not mutate or recurse safely, just return a string representation redacted
+  const str = String(value);
+  const redacted = redactString(str, extraPatterns);
+  return { value: redacted, redactionApplied: true }; // Consider it applied since it's a non-plain object cast to string
+}
+
+export interface RedactedCommand {
+  displayCommand: string;
+  executable: string;
+  args: string[];
+  redactionApplied: boolean;
+}
+
+/**
+ * Redact arguments safely.
+ * Matches formats like `--flag=value`, `--flag value`, or standalone secrets.
+ */
+export function redactCommand(
+  executable: string,
+  args: string[],
+  customPatterns: string[] = [],
+): RedactedCommand {
+  const redactedArgs: string[] = [];
+  let redactionApplied = false;
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i]!;
+    
+    // Test if this argument itself contains a secret (e.g., --key=secret or ENV=secret)
+    const selfRedacted = redactString(arg, customPatterns);
+    if (selfRedacted !== arg) {
+      redactedArgs.push(selfRedacted);
+      redactionApplied = true;
+      continue;
+    }
+
+    // Check if it's a flag that takes a subsequent secret argument
+    const isSecretFlag = /^(?:--|-)?[A-Za-z0-9_]*(?:key|token|password|secret|auth)[A-Za-z0-9_]*$/i.test(arg);
+    const isAuthorizationHeader = /^Authorization:\s*$/i.test(arg); // If split by spaces
+    
+    redactedArgs.push(arg);
+    
+    if (isSecretFlag || isAuthorizationHeader) {
+      // The NEXT argument might be the secret value
+      if (i + 1 < args.length && !args[i + 1]!.startsWith("-")) {
+        i++;
+        redactedArgs.push("[REDACTED:FLAG_VALUE]");
+        redactionApplied = true;
+      }
+    }
+  }
+
+  const displayArgs = redactedArgs.map(a => (/\s/.test(a) ? JSON.stringify(a) : a));
+  const displayCommand = `${executable} ${displayArgs.join(" ")}`.trim();
+
+  return {
+    displayCommand,
+    executable,
+    args: redactedArgs,
+    redactionApplied,
+  };
 }
 
 /**
@@ -146,9 +234,9 @@ export function redactJsonString(
   extraPatterns: string[] = [],
 ): string {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const parsed = JSON.parse(input);
-    return JSON.stringify(redactObject(parsed, extraPatterns));
+    const result = redactValue(parsed, extraPatterns);
+    return JSON.stringify(result.value);
   } catch {
     return redactString(input, extraPatterns);
   }

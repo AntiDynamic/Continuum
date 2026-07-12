@@ -51,7 +51,7 @@ function formatEventForTerminal(event: AgentEvent): void {
     case "stdout":
       // Raw unparsed stdout — only show if it looks like useful text
       if (!event.payload.parseError) {
-        line(dim(event.payload.line));
+        line(dim(event.payload.line ?? ""));
       }
       break;
     case "token_usage":

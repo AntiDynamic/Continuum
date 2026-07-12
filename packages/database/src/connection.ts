@@ -15,8 +15,7 @@
  * when running in production mode.  Tests accept the warning.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { DatabaseSync } = require("node:sqlite") as typeof import("node:sqlite");
+import { DatabaseSync } from "node:sqlite";
 
 export type Db = InstanceType<typeof DatabaseSync>;
 

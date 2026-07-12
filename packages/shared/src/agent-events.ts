@@ -43,7 +43,7 @@ export interface AgentInitEvent extends EventHeader {
   payload: {
     sessionId?: string | undefined;
     model?: string | undefined;
-    raw: string;
+    raw?: string;
   };
 }
 
@@ -51,9 +51,9 @@ export interface AgentInitEvent extends EventHeader {
 export interface AgentMessageEvent extends EventHeader {
   eventType: "agent_message";
   payload: {
-    text: string;
+    text?: string;
     role?: string | undefined;
-    raw: string;
+    raw?: string;
   };
 }
 
@@ -66,7 +66,7 @@ export interface ToolCallEvent extends EventHeader {
     /** Tool input parameters — structure varies per tool. */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: Record<string, any>;
-    raw: string;
+    raw?: string;
   };
 }
 
@@ -78,7 +78,7 @@ export interface ToolResultEvent extends EventHeader {
     toolName?: string | undefined;
     exitCode?: number | undefined;
     output?: string | undefined;
-    raw: string;
+    raw?: string;
   };
 }
 
@@ -92,7 +92,7 @@ export interface TokenUsageEvent extends EventHeader {
     totalTokens?: number | undefined;
     /** Model identifier as reported by the agent. */
     model?: string | undefined;
-    raw: string;
+    raw?: string;
   };
 }
 
@@ -100,7 +100,7 @@ export interface TokenUsageEvent extends EventHeader {
 export interface StdoutEvent extends EventHeader {
   eventType: "stdout";
   payload: {
-    line: string;
+    line?: string;
     /** Present when JSON parsing was attempted but failed. */
     parseError?: string | undefined;
   };
@@ -110,7 +110,7 @@ export interface StdoutEvent extends EventHeader {
 export interface StderrEvent extends EventHeader {
   eventType: "stderr";
   payload: {
-    line: string;
+    line?: string;
   };
 }
 
@@ -124,7 +124,7 @@ export interface UnknownAgentEvent extends EventHeader {
   payload: {
     originalType?: string | undefined;
     /** The raw JSON string preserved verbatim. */
-    raw: string;
+    raw?: string;
     parseStatus: ParseStatus;
   };
 }
@@ -137,6 +137,7 @@ export type AgentFailureKind =
   | "timed_out"
   | "cancelled"
   | "non_zero_exit"
+  | "adapter_contract_violation"
   | "unknown";
 
 /** The agent process exited normally. */
@@ -148,11 +149,11 @@ export interface RunCompletedEvent extends EventHeader {
   };
 }
 
-/** The agent process exited with a non-zero code or timed out. */
+/** Terminal event emitted when a run fails or is cancelled */
 export interface RunFailedEvent extends EventHeader {
   eventType: "run_failed";
   payload: {
-    exitCode?: number | undefined;
+    exitCode?: number;
     reason: string;
     durationMs: number;
     timedOut: boolean;
@@ -166,7 +167,7 @@ export interface AgentResultEvent extends EventHeader {
   eventType: "agent_result";
   payload: {
     exitCode?: number | undefined;
-    raw: string;
+    raw?: string;
   };
 }
 
@@ -175,7 +176,7 @@ export interface AgentErrorEvent extends EventHeader {
   eventType: "agent_error";
   payload: {
     reason: string;
-    raw: string;
+    raw?: string;
   };
 }
 

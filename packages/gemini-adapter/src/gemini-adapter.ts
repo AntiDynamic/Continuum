@@ -11,9 +11,9 @@
  *   3. text        (plain stdout capture)
  */
 
-import { execa } from "execa";
+import { execa, type Options } from "execa";
 import { createReadlineInterface } from "./readline-helper.js";
-import { parseGeminiLine, parseStderrLine, createParseContext } from "./parser.js";
+import { parseGeminiLine, createParseContext } from "./parser.js";
 import {
   AgentNotFoundError,
   generateEventId,
@@ -33,7 +33,7 @@ import type {
 
 const log = createLogger("gemini-adapter");
 
-const GEMINI_EXECUTABLE = "gemini";
+const GEMINI_EXECUTABLE = process.env["CONTINUUM_GEMINI_EXECUTABLE"] ?? "gemini";
 
 export class GeminiAdapter implements AgentAdapter {
   readonly id = "gemini";
@@ -148,13 +148,14 @@ export class GeminiAdapter implements AgentAdapter {
       args.push("--yolo");
     }
 
-    const exactCommand = `${GEMINI_EXECUTABLE} ${args.map((a) => JSON.stringify(a)).join(" ")}`;
-    const redactedCommand = (await import("@continuum/shared")).redactString(exactCommand, input.policy.redactPatterns);
+    const { displayCommand, executable, args: redactedArgs, redactionApplied } = 
+      (await import("@continuum/shared")).redactCommand(GEMINI_EXECUTABLE, args, input.policy.redactPatterns);
 
     const ctx = createParseContext(input.runId, input.policy.redactPatterns, input.policy.captureRawOutput);
     const startTime = Date.now();
     let initReceived = false;
     let agentEventReceived = false;
+    let textOutputReceived = false;
 
     // Emit run_started event
     const startedEvent: RunStartedEvent = {
@@ -163,38 +164,37 @@ export class GeminiAdapter implements AgentAdapter {
       sequenceNumber: 0,
       timestamp: now(),
       source: "system",
-      redactionApplied: redactedCommand !== exactCommand,
+      redactionApplied,
       eventType: "run_started",
       payload: {
-        command: redactedCommand,
-        args,
+        command: displayCommand,
+        args: redactedArgs,
         outputMode,
       },
     };
     yield startedEvent;
 
-    let child: any;
+    let child: ReturnType<typeof execa> | undefined;
     let trustFailed = false;
     let approvalRequired = false;
     let authRequired = false;
 
     // Trust output classifier
-    const isTrustPrompt = (text: string) => /do you trust the files in this folder|untrusted folder|project agents due to untrusted folder|folder is not trusted|workspace is not trusted/i.test(text);
-    const isApprovalPrompt = (text: string) => /approval required/i.test(text);
-    const isAuthPrompt = (text: string) => /authentication required/i.test(text);
+    const stripAnsi = (text: string) => text.replace(/\x1b\[[0-9;]*m/g, "");
+    const isTrustPrompt = (text: string) => /do you trust the files in this folder|untrusted folder|project agents due to untrusted folder|folder is not trusted|workspace is not trusted/i.test(stripAnsi(text));
+    const isApprovalPrompt = (text: string) => /approval required/i.test(stripAnsi(text));
+    const isAuthPrompt = (text: string) => /authentication required/i.test(stripAnsi(text));
 
     try {
-      const execaOptions: Record<string, any> = {
+      const execaOptions: Options = {
         cwd: input.workingDirectory,
         reject: false,
         all: false,
         stdout: "pipe",
         stderr: "pipe",
         stdin: "ignore", // Prevent hanging on interactive prompts
+        ...(input.timeoutMs !== undefined ? { timeout: input.timeoutMs } : {})
       };
-      if (input.timeoutMs !== undefined) {
-        execaOptions["timeout"] = input.timeoutMs;
-      }
 
       child = execa(GEMINI_EXECUTABLE, args, execaOptions);
 
@@ -222,44 +222,70 @@ export class GeminiAdapter implements AgentAdapter {
       };
 
       const processStdout = async () => {
-        if (!child.stdout) return;
+        if (!child?.stdout) {
+          stdoutDone = true;
+          if (resolveQueue) resolveQueue();
+          return;
+        }
         const stdoutRl = createReadlineInterface(child.stdout);
         for await (const line of stdoutRl) {
           if (!line.trim()) continue;
+          textOutputReceived = true;
           if (isTrustPrompt(line)) trustFailed = true;
           if (isApprovalPrompt(line)) approvalRequired = true;
           if (isAuthPrompt(line)) authRequired = true;
-          const event = parseGeminiLine(line, ctx);
+
+          const event = parseGeminiLine(line, ctx, false);
           if (event.eventType === "agent_init") initReceived = true;
           if (event.eventType !== "stdout" && event.eventType !== "stderr" && event.eventType !== "unknown_agent_event") agentEventReceived = true;
           pushEvent(event);
         }
+        stdoutDone = true;
+        if (resolveQueue) resolveQueue();
       };
 
       const processStderr = async () => {
-        if (!child.stderr) return;
+        if (!child?.stderr) {
+          stderrDone = true;
+          if (resolveQueue) resolveQueue();
+          return;
+        }
         const stderrRl = createReadlineInterface(child.stderr);
         for await (const line of stderrRl) {
           if (!line.trim()) continue;
+          textOutputReceived = true;
           if (isTrustPrompt(line)) trustFailed = true;
           if (isApprovalPrompt(line)) approvalRequired = true;
           if (isAuthPrompt(line)) authRequired = true;
-          const event = parseStderrLine(line, ctx);
+          const event = parseGeminiLine(line, ctx, true);
           pushEvent(event);
         }
+        stderrDone = true;
+        if (resolveQueue) resolveQueue();
       };
 
-      processStdout().then(() => { stdoutDone = true; if (resolveQueue) resolveQueue(); }).catch(() => { stdoutDone = true; if (resolveQueue) resolveQueue(); });
-      processStderr().then(() => { stderrDone = true; if (resolveQueue) resolveQueue(); }).catch(() => { stderrDone = true; if (resolveQueue) resolveQueue(); });
+      processStdout().catch(() => { stdoutDone = true; if (resolveQueue) resolveQueue(); });
+      processStderr().catch(() => { stderrDone = true; if (resolveQueue) resolveQueue(); });
 
       // Initialization timeout timer
       let initTimeoutFired = false;
-      const initTimer = setTimeout(() => {
-        if (!initReceived && !agentEventReceived) {
-          initTimeoutFired = true;
-          child?.kill("SIGTERM");
-        }
-      }, input.policy.initializationTimeoutMs);
+      let initTimer: NodeJS.Timeout | undefined;
+      
+      if (outputMode !== "json") {
+        initTimer = setTimeout(() => {
+          let hasActivity = false;
+          if (outputMode === "stream-json") {
+            hasActivity = initReceived || agentEventReceived;
+          } else if (outputMode === "text") {
+            hasActivity = textOutputReceived;
+          }
+
+          if (!hasActivity) {
+            initTimeoutFired = true;
+            child?.kill("SIGTERM");
+          }
+        }, input.policy.initializationTimeoutMs);
+      }
 
       // Yield events as they arrive
       while (!stdoutDone || !stderrDone || queue.length > 0) {
@@ -319,7 +345,7 @@ export class GeminiAdapter implements AgentAdapter {
             durationMs,
             timedOut: failureKind === "timed_out",
             cancelled: failureKind === "cancelled",
-            failureKind: failureKind as any,
+            failureKind: failureKind as import("@continuum/shared").AgentFailureKind,
           },
         };
         yield failedEvent;
