@@ -1,50 +1,40 @@
 # Continuum Observer Implementation Plan
 
-## V1.1.1 Verification Hardening Pass (Current State)
+# Continuum Observer Implementation Plan
 
-**Confirmed gaps:**
-- `apps/cli/tests/cli.test.ts` and `packages/shared/tests/adapter-contract.test.ts` contain placeholder tests (`expect(true).toBe(true)`).
-- Secrets in the arguments array of the Gemini CLI run command are currently not redacted before storage.
-- The `captureRawOutput: false` configuration does not strip raw events completely.
-- Structured objects in agent events are not recursively redacted for secrets.
-- Initialization timeout behaves generically, regardless of `stream-json`, `json`, or `text` mode.
-- Output streams concurrency has no deterministic stress tests.
-- Uses of `any` type (like `let child: any` and `AgentFailureKind`) weaken strictness.
-- CI configuration exists but does not prove genuine multi-platform stability.
+## V1.1.2 Evidence Integrity Patch (Phase A)
 
-**Existing reusable code:**
-- Core orchestrator state machine.
-- Event tracking and usage metrics DB tables.
-- `ParseContext` and `ParseStatus`.
-- Redaction patterns array support.
+**Existing V1 strengths:**
+- Strong orchestration and state machine.
+- Git snapshots and evaluator metrics work well.
+- Node SQLite migration successful and performant.
 
-**Tests that are real:**
-- Database tests (`database.test.ts`).
-- Git analyzer tests (`git.test.ts`).
-- Evaluator report tests (`report.test.ts`).
-- Config, utils, and redaction unit tests.
-- Gemini adapter `parser.test.ts` and orchestrator `fake-adapter.test.ts`.
+**Remaining V1 evidence gaps:**
+- `packages/gemini-adapter/src/parser.ts` stores unredacted `tool_call` inputs when `captureRawOutput: false`.
+- `parseStderrLine` ignores `captureRawOutput: false` and always persists stderr lines.
+- `adapter-contract.test.ts` only checks for `run_completed`, failing to acknowledge `run_failed` as a valid terminal event.
+- CLI integration tests lack a valid successful workflow with a fake agent and temporary Git repository.
+- `continuum compare` tests need to verify multiple runs effectively.
+- Smoke tests are overloaded (transport verification mixed with success verification).
 
-**Tests that are placeholders:**
-- CLI integration tests (`cli.test.ts`).
-- Adapter contract tests (`adapter-contract.test.ts`).
+**Tests required:**
+- Improved `defineAgentAdapterContract` with exact terminal event checks, redaction tests, and `captureRawOutput` variations.
+- Successful fake CLI integration workflow (init, run, report, outcome).
+- End-to-end database privacy test with sentinel secrets.
+- Two separate smoke tests: `test:gemini-transport` and `test:gemini-success`.
 
-**Privacy risks:**
-- `args` array persists unredacted secrets.
-- `captureRawOutput: false` does not clear raw fields.
-- Nested JSON secrets evade simple string redaction.
+## Continuum V2 (Phase B)
 
-**Lifecycle risks:**
-- `initializationTimeoutMs` applies indiscriminately to text/JSON output, risking valid slow-startup cancellation.
+**Reusable architecture for V2:**
+- Existing `DatabaseSync` setup is robust for adding FTS tables.
+- `GitAnalyzer` provides a solid foundation for repository reading.
+- CLI infrastructure easily accommodates new `continuum index`, `context`, and `mcp` commands.
 
-**Files to modify:**
-- `docs/implementation-plan.md`
-- `packages/shared/src/agent-adapter.ts` (RedactedCommand)
-- `packages/shared/src/agent-events.ts` (Strict FailureKind)
-- `packages/shared/src/redaction.ts` (Recursive redaction)
-- `packages/gemini-adapter/src/gemini-adapter.ts` (Mode-aware initialization, proper execa types, arg redaction)
-- `packages/agent-core/src/orchestrator.ts` (Raw output cleanup, orchestration strictness)
-- `apps/cli/tests/cli.test.ts` (Integration tests)
-- `packages/shared/tests/adapter-contract.test.ts` (Contract definitions)
-- `.github/workflows/ci.yml` (Tighten CI steps)
-- `README.md`, `docs/architecture.md`, `docs/metrics.md`, `docs/limitations.md` (Update claims and limitations)
+**Schema changes required:**
+- Add tables: `repository_index_runs`, `indexed_files`, `context_items`, `context_item_links`, `context_retrievals`, `context_retrieval_items`.
+- Use SQLite FTS5 for text search.
+- Ensure V1 `agent_runs` can link to `context_retrievals`.
+
+**Backward compatibility risks:**
+- Database migrations must not break existing V1 run records.
+- Storing `tool_call` inputs must remain compatible with V1 evaluation structures.

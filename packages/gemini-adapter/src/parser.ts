@@ -254,7 +254,7 @@ export function parseGeminiLine(
         payload: {
           toolName: data.name,
           toolCallId: data.id,
-          input: ctx.captureRaw ? redactValue(data.input ?? {}, ctx.redactPatterns).value as Record<string, unknown> : (data.input ?? {}),
+          input: redactValue(data.input ?? {}, ctx.redactPatterns).value as Record<string, unknown>,
           raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
@@ -269,7 +269,7 @@ export function parseGeminiLine(
           toolCallId: data.id,
           toolName: data.name,
           exitCode: data.exitCode,
-          output: ctx.captureRaw && data.output ? redactValue(data.output, ctx.redactPatterns).value as string : undefined,
+          output: data.output ? redactValue(data.output, ctx.redactPatterns).value as string : undefined,
           raw: ctx.captureRaw ? lineToStore : undefined,
         },
       };
@@ -336,7 +336,9 @@ export function parseStderrLine(rawLine: string, ctx: ParseContext): StderrEvent
   return {
     ...makeHeader(ctx, "stderr", redacted !== rawLine),
     eventType: "stderr",
-    payload: { line: redacted },
+    payload: { 
+      line: ctx.captureRaw ? redacted : undefined
+    },
   };
 }
 

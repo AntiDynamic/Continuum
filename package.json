@@ -12,10 +12,13 @@
     "clean": "pnpm -r clean"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
     "cross-env": "^10.1.0",
     "eslint": "^9.28.0",
+    "eslint-plugin-vitest": "^0.5.4",
+    "globals": "^17.7.0",
     "typescript": "^5.8.3"
   }
 }

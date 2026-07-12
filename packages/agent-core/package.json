@@ -9,6 +9,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/fake-adapter.js": {
+      "import": "./dist/fake-adapter.js",
+      "types": "./dist/fake-adapter.d.ts"
     }
   },
   "scripts": {

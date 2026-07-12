@@ -16,7 +16,8 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src tests",
     "test": "vitest run",
-    "test:smoke": "cross-env CONTINUUM_REAL_GEMINI_TEST=1 vitest run tests/smoke.test.ts",
+    "test:gemini-transport": "cross-env CONTINUUM_REAL_GEMINI_TEST=1 vitest run tests/smoke-transport.test.ts",
+    "test:gemini-success": "cross-env CONTINUUM_REAL_GEMINI_SUCCESS_TEST=1 vitest run tests/smoke-success.test.ts",
     "clean": "rimraf dist"
   },
   "dependencies": {

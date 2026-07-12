@@ -120,7 +120,26 @@ export async function runRunCommand(
   const agentId = options.agent ?? config.defaultAgent;
   let adapter: import("@continuum/shared").AgentAdapter;
 
-  if (agentId === "gemini") {
+  if (process.env["CONTINUUM_TEST_FAKE_ADAPTER"] === "1") {
+    // Backdoor for CLI integration testing
+    // @ts-ignore
+    const { FakeAdapter, buildFakeSuccessEvents } = await import("@continuum/agent-core/dist/fake-adapter.js");
+    adapter = new FakeAdapter({ events: buildFakeSuccessEvents("dummy-run-id") });
+    (adapter as any)._hackEditFile = async () => {
+      // The CLI test can pass an env var to tell the fake adapter to actually edit a file
+      if (process.env["CONTINUUM_TEST_FAKE_ADAPTER_EDIT_FILE"]) {
+        const fs = await import("node:fs/promises");
+        const path = await import("node:path");
+        const target = path.resolve(repoRoot, process.env["CONTINUUM_TEST_FAKE_ADAPTER_EDIT_FILE"]);
+        await fs.writeFile(target, process.env["CONTINUUM_TEST_FAKE_ADAPTER_EDIT_CONTENT"] || "");
+      }
+    };
+    const originalRun = adapter.run.bind(adapter);
+    adapter.run = async function*(input) {
+      if ((adapter as any)._hackEditFile) await (adapter as any)._hackEditFile();
+      yield* originalRun(input);
+    };
+  } else if (agentId === "gemini") {
     adapter = new GeminiAdapter();
 
     // Check Gemini is available
