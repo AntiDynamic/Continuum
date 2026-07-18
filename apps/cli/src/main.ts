@@ -10,9 +10,10 @@ import { runRunCommand } from "./commands/run.js";
 import { runReportCommand } from "./commands/report.js";
 import { runOutcomeCommand } from "./commands/outcome.js";
 import { runCompareCommand } from "./commands/compare.js";
-import { runIndexCommand } from "./commands/index-repo.js";
-import { runContextCommand } from "./commands/context.js";
+import { runIndexCommand } from "./commands/index-compiler.js";
+import { runContextCommand } from "./commands/context-compiler.js";
 import { runMcpCommand } from "./commands/mcp.js";
+import { runPricingSetCommand, runPricingShowCommand } from "./commands/pricing.js";
 import { printError } from "./display.js";
 
 const program = new Command();
@@ -85,7 +86,9 @@ program
     'Display a detailed report for a run. Use "latest" or omit to see the most recent run.',
   )
   .option("--repo <path>", "Path to the repository (default: cwd).")
-  .action(async (runId: string | undefined, options: { repo?: string }) => {
+  .option("--json", "Emit the structured JSON report model.")
+  .option("--html", "Emit a standalone HTML report.")
+  .action(async (runId: string | undefined, options: { repo?: string; json?: boolean; html?: boolean }) => {
     await runReportCommand(runId, { cwd: process.cwd(), ...options });
   });
 
@@ -118,12 +121,76 @@ program
     await runIndexCommand({ cwd: process.cwd(), dir });
   });
 
-program
-  .command("context <query>")
-  .description("Retrieve context for a query.")
+const context = program
+  .command("context")
+  .description("Search, explain, cover, or pack repository context.");
+
+context
+  .command("search <query>")
+  .description("Search indexed context without recording a delivery.")
   .option("--repo <path>", "Path to the repository (default: cwd).")
-  .action(async (query: string, options: { repo?: string }) => {
-    await runContextCommand(query, { cwd: process.cwd(), repo: options.repo });
+  .option("--json", "Emit structured JSON.")
+  .action(async (query: string, options: { repo?: string; json?: boolean }) => {
+    await runContextCommand(query, {
+      cwd: process.cwd(),
+      repo: options.repo,
+      mode: "search",
+      json: options.json,
+    });
+  });
+
+context
+  .command("pack <query>")
+  .description("Build an estimated context packet and optionally ledger it.")
+  .option("--repo <path>", "Path to the repository (default: cwd).")
+  .option("--run <run-id>", "Run ID or latest for ledger persistence.")
+  .option("--json", "Emit structured JSON.")
+  .option(
+    "--stage <stage>",
+    "orientation, implementation, escalation, or restoration.",
+    "implementation",
+  )
+  .action(async (query: string, options: {
+    repo?: string;
+    run?: string;
+    stage: string;
+    json?: boolean;
+  }) => {
+    const stages = [
+      "orientation",
+      "implementation",
+      "escalation",
+      "restoration",
+    ] as const;
+    if (!stages.includes(options.stage as (typeof stages)[number])) {
+      throw new Error(`Invalid context delivery stage: ${options.stage}`);
+    }
+    await runContextCommand(query, {
+      cwd: process.cwd(),
+      repo: options.repo,
+      mode: "pack",
+      runId: options.run,
+      stage: options.stage as (typeof stages)[number],
+      json: options.json,
+    });
+  });
+
+context
+  .command("explain <item-id>")
+  .description("Explain one repository-scoped context item.")
+  .option("--repo <path>", "Path to the repository (default: cwd).")
+  .option("--json", "Emit structured JSON.")
+  .action(async (itemId: string, options: { repo?: string; json?: boolean }) => {
+    await runContextCommand(itemId, { cwd: process.cwd(), repo: options.repo, mode: "explain", json: options.json });
+  });
+
+context
+  .command("coverage <task>")
+  .description("Analyze required and missing context coverage.")
+  .option("--repo <path>", "Path to the repository (default: cwd).")
+  .option("--json", "Emit structured JSON.")
+  .action(async (task: string, options: { repo?: string; json?: boolean }) => {
+    await runContextCommand(task, { cwd: process.cwd(), repo: options.repo, mode: "coverage", json: options.json });
   });
 
 program
@@ -131,6 +198,44 @@ program
   .description("Start the Continuum MCP stdio server.")
   .action(async () => {
     await runMcpCommand({ cwd: process.cwd() });
+  });
+
+const pricing = program
+  .command("pricing")
+  .description("Manage versioned model pricing profiles.");
+
+pricing
+  .command("show [model]")
+  .description("Show configured pricing profiles.")
+  .option("--provider <provider>", "Filter by provider.")
+  .action(async (model: string | undefined, options: { provider?: string }) => {
+    await runPricingShowCommand(model, {
+      cwd: process.cwd(),
+      provider: options.provider,
+    });
+  });
+
+pricing
+  .command("set <model>")
+  .description("Append a user-configured pricing profile.")
+  .requiredOption("--provider <provider>", "Provider identifier.")
+  .option("--version <version>", "Pricing or model version label.")
+  .option("--input <credits>", "Input credits per million tokens.")
+  .option("--cached-input <credits>", "Cached-input credits per million tokens.")
+  .option("--output <credits>", "Output credits per million tokens.")
+  .option("--effective-from <iso-date>", "ISO-8601 effective timestamp.")
+  .action(async (model: string, options: {
+    provider: string;
+    version?: string;
+    input?: string;
+    cachedInput?: string;
+    output?: string;
+    effectiveFrom?: string;
+  }) => {
+    await runPricingSetCommand(model, {
+      cwd: process.cwd(),
+      ...options,
+    });
   });
 
 // Global error handling
@@ -143,6 +248,11 @@ program.exitOverride((err) => {
 });
 
 // Parse
+const contextActions = new Set(["search", "pack", "explain", "coverage"]);
+if (process.argv[2] === "context" && process.argv[3] && !process.argv[3].startsWith("-") && !contextActions.has(process.argv[3])) {
+  process.argv.splice(3, 0, "search");
+}
+
 program.parseAsync(process.argv).catch((err: unknown) => {
   printError(err instanceof Error ? err.message : String(err));
   process.exit(1);

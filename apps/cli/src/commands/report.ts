@@ -108,6 +108,70 @@ export async function printReport(report: RunReport): Promise<void> {
     }
   }
 
+  section("Context and cost evidence");
+  kv(
+    "Context supplied",
+    String(report.contextLedger.filter((entry) => entry.suppliedToAgent).length),
+    "exact",
+  );
+  const stages = new Map<string, number>();
+  for (const entry of report.contextLedger) {
+    stages.set(entry.stage, (stages.get(entry.stage) ?? 0) + 1);
+  }
+  kv(
+    "Context stages",
+    stages.size > 0
+      ? [...stages.entries()].map(([stage, count]) => `${stage}=${count}`).join(", ")
+      : "none",
+  );
+  const estimatedContextTokens = report.contextPacketAccounting.reduce(
+    (total, accounting) => total + accounting.newTokensDelivered,
+    0,
+  );
+  const potentialDuplicates = report.contextPacketAccounting.reduce(
+    (total, accounting) =>
+      total + accounting.potentialDuplicateTokensAvoided,
+    0,
+  );
+  kv("Estimated context tokens", String(estimatedContextTokens), "estimated");
+  kv(
+    "Potential duplicate context avoided",
+    String(potentialDuplicates),
+    "estimated; no valid baseline",
+  );
+
+  section("Usage evidence");
+  if (report.usageEvidence) {
+    kv("Measurement", report.usageEvidence.usage.measurement);
+    kv("Provider", report.usageEvidence.provider ?? dim("unavailable"));
+    kv("Model", report.usageEvidence.model ?? dim("unavailable"));
+    kv(
+      "Provider-reported input tokens",
+      report.usageEvidence.usage.inputTokens?.toString() ?? dim("unavailable"),
+    );
+    kv(
+      "Provider-reported cached-input tokens",
+      report.usageEvidence.usage.cachedInputTokens?.toString() ?? dim("unavailable"),
+    );
+    kv(
+      "Provider-reported output tokens",
+      report.usageEvidence.usage.outputTokens?.toString() ?? dim("unavailable"),
+    );
+  } else {
+    unavailable("Usage unavailable");
+  }
+  if (report.costEvidence.totalCredits !== undefined) {
+    kv(
+      report.costEvidence.measurement === "estimated"
+        ? "Estimated total credits"
+        : "Derived total credits",
+      report.costEvidence.totalCredits.toString(),
+      report.costEvidence.measurement,
+    );
+  } else {
+    unavailable("Total task cost unavailable");
+  }
+
   section("Metrics");
   for (const metric of report.metrics) {
     kv(metric.name, String(metric.value ?? "—"), qualityLabel(metric.quality));
@@ -148,9 +212,40 @@ export async function printReport(report: RunReport): Promise<void> {
   blank();
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+export function renderHtmlReport(report: RunReport): string {
+  const rows = report.metrics
+    .map(
+      (metric) =>
+        `<tr><th>${escapeHtml(metric.name)}</th><td>${escapeHtml(String(metric.value ?? "unavailable"))}</td><td>${escapeHtml(metric.quality)}</td></tr>`,
+    )
+    .join("");
+  return [
+    "<!doctype html><html><head><meta charset=\"utf-8\">",
+    `<title>Continuum report ${escapeHtml(report.runId)}</title>`,
+    "<style>body{font-family:system-ui;max-width:960px;margin:2rem auto}th{text-align:left}td,th{padding:.35rem;border-bottom:1px solid #ddd}</style>",
+    "</head><body>",
+    `<h1>Continuum Report</h1><p><strong>Run:</strong> ${escapeHtml(report.runId)}</p>`,
+    `<p><strong>Task:</strong> ${escapeHtml(report.task)}</p>`,
+    `<p><strong>Status:</strong> ${escapeHtml(report.status)}</p>`,
+    "<table><tbody>",
+    rows,
+    "</tbody></table>",
+    "<p>No savings percentage is reported without a valid comparable baseline.</p>",
+    "</body></html>",
+  ].join("");
+}
+
 export async function runReportCommand(
   runIdOrLatest: string | undefined,
-  options: { cwd?: string; repo?: string },
+  options: { cwd?: string; repo?: string; json?: boolean; html?: boolean },
 ): Promise<void> {
   const cwd = options.cwd ?? process.cwd();
   const repoPath = options.repo ? resolve(options.repo) : cwd;
@@ -186,7 +281,13 @@ export async function runReportCommand(
     }
 
     const report = buildReport(runId, db);
-    await printReport(report);
+    if (options.json) {
+      line(JSON.stringify(report, null, 2));
+    } else if (options.html) {
+      line(renderHtmlReport(report));
+    } else {
+      await printReport(report);
+    }
   } catch (err) {
     if (err instanceof RunNotFoundError) {
       printError(err.message);

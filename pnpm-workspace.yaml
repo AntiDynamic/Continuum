@@ -2,21 +2,8 @@ packages:
   - apps/*
   - packages/*
 
-allowBuild: better-sqlite3,esbuild
+allowBuilds:
+  esbuild: true
 
 onlyBuiltDependencies:
-  - '-'
-  - ','
-  - '3'
-  - b
-  - better-sqlite3
-  - d
-  - e
   - esbuild
-  - i
-  - l
-  - q
-  - r
-  - s
-  - t
-  - u

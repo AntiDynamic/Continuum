@@ -32,6 +32,30 @@ When the agent provides this information via telemetry (e.g. Gemini CLI's `usage
 
 - **Validation Test Outcomes**: Continuum runs a user-defined test command before and after the agent run.
   - **Fixed Tests**: Tests that were failing before the run, but pass after.
+### Evidence classification
+
+Continuum keeps measurement source and quality explicit:
+
+- **agent-reported** usage is normalized from a provider adapter;
+- **derived** cost is calculated from agent-reported usage and a matching
+  user-configured, versioned pricing profile;
+- **estimated** context tokens use the deterministic conservative character
+  ratio estimator and are never presented as provider billing tokens;
+- **unavailable** is recorded when the required telemetry or pricing evidence
+  does not exist.
+
+Context reports separately expose:
+
+- supplied context items and delivery stages;
+- estimated packet size split into metadata, code, docs, tests, new,
+  potential-duplicate, historical, and stale categories;
+- potential duplicate context avoided through exact-content and
+  whole-file-after-symbol suppression.
+
+Continuum has no valid counterfactual for how much context an agent would have
+received without it. It therefore does not report a token-savings percentage or
+an overall comparison winner.
+
   - **Broken Tests**: Tests that were passing before the run, but fail after.
   - **Unchanged**: Tests that maintained their prior state (passing->passing, failing->failing).
 

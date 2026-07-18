@@ -1,1 +1,1 @@
-export { ContinuumMcpServer } from "./server.js";
+export { ContinuumMcpServer } from "./compiler-server.js";

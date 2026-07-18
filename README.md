@@ -48,7 +48,7 @@ continuum compare <run-a> <run-b>
 
 # V2 Context Features
 continuum index .
-continuum context "query"
+continuum context search "query"
 continuum mcp
 ```
 
@@ -191,12 +191,35 @@ Index the repository into the local SQLite database. Extracts functions, classes
 continuum index .
 ```
 
-### `continuum context "<query>"`
+### `continuum context search "<query>"`
 
-Search the indexed codebase and retrieve packed, optimized context snippets ranked using BM25 and our custom relevance weights.
+Search indexed repository context using SQLite FTS5 BM25 ranking:
 
 ```bash
-continuum context "ranking algorithm"
+continuum context search "ranking algorithm"
+```
+
+Use `context pack` to build an estimated packet. With `--run latest` (or a
+specific run ID), Continuum records packet accounting and delivery decisions,
+including exact-content and whole-file-after-symbol duplicate suppression:
+
+```bash
+continuum context pack "Fix timeout handling" --run latest --stage initial
+```
+
+Token counts are deterministic conservative estimates, not provider billing
+counts. Because Continuum has no valid counterfactual baseline for what an agent
+would otherwise have received, it reports potential duplicate context avoided
+but does not claim a token-savings percentage.
+
+### `continuum pricing show` / `continuum pricing set`
+
+Inspect or append versioned, user-configured pricing profiles used to derive
+cost evidence from normalized agent usage:
+
+```bash
+continuum pricing show
+continuum pricing set fake-1.0 --provider continuum --input 1 --cached-input 0.1 --output 2 --version local-v1 --effective-from 2026-01-01T00:00:00.000Z
 ```
 
 ### `continuum mcp`
@@ -299,22 +322,28 @@ See [docs/limitations.md](docs/limitations.md) for the complete list.
 
 ## Roadmap
 
-### V2: Repository Indexing
+### Current preview: Context Compiler and Hybrid Retrieval
+- Deterministic contextual headers, purpose evidence, provenance, and version hashes
+- TypeScript Compiler API plus coherent Markdown, nested JSON/YAML, and statement-level SQL extraction
+- Exact, FTS5/fallback lexical, bounded relationship, coverage-aware, and diversity-aware retrieval
+- Explainable task classification, risk requirements, score components, reasons, omissions, and token budgets
+- Optional semantic retrieval is disabled by default; no cloud service is required
+
+Commands: `continuum index`, `continuum context search "<query>"`, `continuum context pack "<task>"`, `continuum context explain <item-id>`, and `continuum context coverage "<task>"`. Each context command supports `--json`; `continuum context "<query>"` remains a search alias.
+
+MCP exposes structured search, packet, explanation, and coverage tools. See [the Context Compiler](docs/context-compiler.md), [retrieval](docs/retrieval.md), [coverage](docs/context-coverage.md), [packets](docs/context-packets.md), and [MCP](docs/mcp.md).
+
+### Next: V2 hardening
 - Tree-sitter based code structure indexing
 - Git-history analysis
-- Context items with provenance
+- Context staleness tracking and previous successful/failed episodes
 
-### V3: MCP Context Server
-- Local MCP context server
-- Context packets with staleness tracking
-- Previous successful/failed episodes
-
-### V4: Adaptive Context
+### V3: Adaptive Context
 - Context budget selection
 - Ablation testing
 - Reward signals
 
-### V5: Dashboard
+### V4: Dashboard
 - React + Vite dashboard
 - Run history visualisation
 - Context quality comparisons

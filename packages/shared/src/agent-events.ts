@@ -64,7 +64,6 @@ export interface ToolCallEvent extends EventHeader {
     toolName: string;
     toolCallId?: string | undefined;
     /** Tool input parameters — structure varies per tool. */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: Record<string, any>;
     raw?: string;
   };
@@ -97,6 +96,22 @@ export interface TokenUsageEvent extends EventHeader {
 }
 
 /** A raw line from stdout that was not successfully parsed as structured data. */
+/** Provider-neutral usage evidence emitted only for values the adapter observed. */
+export interface AgentUsageEvent extends EventHeader {
+  eventType: "agent_usage";
+  provider?: string;
+  model?: string;
+  inputTokens?: number;
+  cachedInputTokens?: number;
+  outputTokens?: number;
+  reasoningTokens?: number;
+  toolCalls?: number;
+  measurement:
+    | "provider_reported"
+    | "agent_reported"
+    | "estimated";
+}
+
 export interface StdoutEvent extends EventHeader {
   eventType: "stdout";
   payload: {
@@ -187,6 +202,7 @@ export type AgentEvent =
   | ToolCallEvent
   | ToolResultEvent
   | TokenUsageEvent
+  | AgentUsageEvent
   | StdoutEvent
   | StderrEvent
   | UnknownAgentEvent

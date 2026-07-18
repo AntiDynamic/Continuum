@@ -1,6 +1,6 @@
 import { getRepositoryRoot, isGitRepository } from "@continuum/git-analyzer";
 import { openDatabase, migrate, IndexRunRepository, ContextRepository, RepositoryRow, RepositoryRepository } from "@continuum/database";
-import { discoverFiles, resolveSnapshotIdentity, hashFile, TypeScriptExtractor, MarkdownExtractor, JsonExtractor, YamlExtractor, SqlExtractor } from "@continuum/repository-indexer";
+import { computeWorktreeHash, discoverFiles, resolveSnapshotIdentity, hashFile, hashString, TypeScriptExtractor, MarkdownExtractor, JsonExtractor, YamlExtractor, SqlExtractor } from "@continuum/repository-indexer";
 import { getDbPath, isInitialised } from "../config-helpers.js";
 import { line, section, pass, info, warn, printError } from "../display.js";
 import { resolve, basename } from "node:path";
@@ -62,6 +62,7 @@ export async function runIndexCommand(options: { cwd: string, dir?: string }) {
   ];
 
   let extractedCount = 0;
+  const pathHashes = new Map<string, string>();
 
   for (const file of files) {
     const ext = extractors.find(e => e.match.test(file));
@@ -70,6 +71,7 @@ export async function runIndexCommand(options: { cwd: string, dir?: string }) {
     const absolutePath = resolve(repoRoot, file);
     const content = await readFile(absolutePath, "utf8");
     const fileHash = await hashFile(absolutePath);
+    pathHashes.set(file, fileHash);
 
     const symbols = ext.extractor.extract(absolutePath, content);
     
@@ -86,12 +88,20 @@ export async function runIndexCommand(options: { cwd: string, dir?: string }) {
         source_end_line: sym.endLine,
         symbol_name: sym.name,
         language: ext.lang,
-        content_hash: fileHash,
+        content_hash: hashString(sym.content),
         source_blob_hash: fileHash, // simplification for now
         valid_from_commit: snapshot.base_commit_hash,
         valid_to_commit_exclusive: null,
         indexed_at: new Date().toISOString(),
-        provenance_json: null,
+        provenance_json: JSON.stringify({
+          repository_id: repoRow.id,
+          snapshot_kind: snapshot.snapshot_kind,
+          base_commit_hash: snapshot.base_commit_hash,
+          source_path: file,
+          source_start_line: sym.startLine,
+          source_end_line: sym.endLine,
+          extractor: ext.extractor.constructor.name,
+        }),
         staleness_status: "current",
         staleness_reason: null,
         metadata_json: null
@@ -101,6 +111,12 @@ export async function runIndexCommand(options: { cwd: string, dir?: string }) {
   }
 
   const durationMs = performance.now() - start;
+  if (snapshot.dirty) {
+    const worktreeHash = computeWorktreeHash(pathHashes);
+    snapshot.worktree_hash = worktreeHash;
+    indexRunRepo.setWorktreeHash(indexRun.id, worktreeHash);
+  }
+
   indexRunRepo.finishRun(indexRun.id, "success", durationMs);
   
   pass(`Indexing complete in ${Math.round(durationMs)}ms.`);

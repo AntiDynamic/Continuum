@@ -112,6 +112,14 @@ export class GeminiAdapter implements AgentAdapter {
       // Session ID is reported in the "init" event
       sessionId: hasStreamJson,
       cancellation: true,
+      telemetry: {
+        reportsInputTokens: hasStreamJson,
+        reportsCachedInputTokens: hasStreamJson,
+        reportsOutputTokens: hasStreamJson,
+        reportsReasoningTokens: false,
+        reportsToolUsage: hasStreamJson,
+        reportsModelIdentity: hasStreamJson,
+      },
     };
   }
 
@@ -180,7 +188,8 @@ export class GeminiAdapter implements AgentAdapter {
     let authRequired = false;
 
     // Trust output classifier
-    const stripAnsi = (text: string) => text.replace(/\x1b\[[0-9;]*m/g, "");
+    const ansiEscapePattern = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, "g");
+    const stripAnsi = (text: string) => text.replace(ansiEscapePattern, "");
     const isTrustPrompt = (text: string) => /do you trust the files in this folder|untrusted folder|project agents due to untrusted folder|folder is not trusted|workspace is not trusted/i.test(stripAnsi(text));
     const isApprovalPrompt = (text: string) => /approval required/i.test(stripAnsi(text));
     const isAuthPrompt = (text: string) => /authentication required/i.test(stripAnsi(text));

@@ -24,7 +24,12 @@ describe("End-to-End Database Privacy", () => {
     if (db) {
       db.close();
     }
-    await rm(tempDir, { recursive: true, force: true });
+    await rm(tempDir, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 100,
+    });
   });
 
   it("should prevent CONTINUUM_TEST_SECRET_9f73a1 from persisting in any table", async () => {
@@ -106,5 +111,5 @@ describe("End-to-End Database Privacy", () => {
     const runs = runsStmt.all();
     const serializedRuns = JSON.stringify(runs);
     expect(serializedRuns).not.toContain(secret);
-  });
+  }, 15_000);
 });

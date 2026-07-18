@@ -9,10 +9,13 @@
     "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
     "dev": "tsc --watch",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src tests",
     "test": "vitest run"
   },
   "dependencies": {
     "@continuum/database": "workspace:*",
+    "@continuum/context-engine": "workspace:*",
     "@continuum/git-analyzer": "workspace:*",
     "@continuum/repository-indexer": "workspace:*",
     "@continuum/shared": "workspace:*",

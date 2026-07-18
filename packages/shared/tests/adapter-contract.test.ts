@@ -222,7 +222,7 @@ describe("Mock Adapter Contract Execution", () => {
     private scenario: AdapterContractScenario = "success";
 
     async detectAvailability() { return { available: true }; }
-    async getCapabilities() { return { structuredOutput: true, streamingOutput: true, tokenUsage: true, toolEvents: true, sessionId: true, cancellation: true }; }
+    async getCapabilities() { return { structuredOutput: true, streamingOutput: true, tokenUsage: true, toolEvents: true, sessionId: true, cancellation: true, telemetry: { reportsInputTokens: true, reportsCachedInputTokens: true, reportsOutputTokens: true, reportsReasoningTokens: false, reportsToolUsage: true, reportsModelIdentity: true } }; }
     
     setScenario(scenario: AdapterContractScenario) {
       this.scenario = scenario;

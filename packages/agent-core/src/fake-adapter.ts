@@ -58,6 +58,14 @@ export class FakeAdapter implements AgentAdapter {
       toolEvents: true,
       sessionId: true,
       cancellation: true,
+      telemetry: {
+        reportsInputTokens: true,
+        reportsCachedInputTokens: true,
+        reportsOutputTokens: true,
+        reportsReasoningTokens: true,
+        reportsToolUsage: true,
+        reportsModelIdentity: true,
+      },
     };
   }
 
@@ -85,7 +93,7 @@ export class FakeAdapter implements AgentAdapter {
         yield {
           eventId: generateEventId(),
           runId: input.runId,
-          sequenceNumber: seq++,
+          sequenceNumber: seq,
           timestamp: now(),
           source: "system",
           redactionApplied: false,
@@ -175,13 +183,13 @@ export function buildFakeSuccessEvents(runId: string): AgentEvent[] {
       ...base,
       eventId: generateEventId(),
       sequenceNumber: 6,
-      eventType: "token_usage",
-      payload: {
-        inputTokens: 300,
-        outputTokens: 80,
-        cachedTokens: 0,
-        raw: "",
-      },
+      eventType: "agent_usage",
+      provider: "continuum",
+      model: "fake-1.0",
+      inputTokens: 300,
+      cachedInputTokens: 0,
+      outputTokens: 80,
+      measurement: "agent_reported",
     },
     {
       ...base,

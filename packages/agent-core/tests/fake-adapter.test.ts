@@ -52,7 +52,7 @@ describe("FakeAdapter", () => {
     const types = emitted.map((e) => e.eventType);
     expect(types).toContain("agent_init");
     expect(types).toContain("tool_call");
-    expect(types).toContain("token_usage");
+    expect(types).toContain("agent_usage");
     expect(types).toContain("run_completed");
   });
 

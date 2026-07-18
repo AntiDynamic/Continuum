@@ -98,7 +98,7 @@ export async function getCurrentCommit(root: string): Promise<string | null> {
  * This format is stable across git versions and includes rename detection.
  */
 export async function getPorcelainStatus(root: string): Promise<string> {
-  return gitOptional(root, ["status", "--porcelain=v2", "--branch"]);
+  return gitOptional(root, ["status", "--porcelain=v2", "--branch", "--untracked-files=all"]);
 }
 
 /** Return true when the working tree has no uncommitted changes. */
@@ -112,6 +112,7 @@ export interface GitSnapshot {
   branch: string | null;
   statusPorcelain: string;
   capturedAt: string;
+  pathHashes: Record<string, string>;
 }
 
 /** Capture a complete snapshot of the current repository state. */
@@ -121,11 +122,21 @@ export async function captureSnapshot(root: string): Promise<GitSnapshot> {
     getCurrentBranch(root),
     getPorcelainStatus(root),
   ]);
+  const paths = [...extractDirtyPaths(statusPorcelain)].sort();
+  const pathHashes = Object.fromEntries(
+    await Promise.all(
+      paths.map(async (path) => [
+        path,
+        (await gitOptional(root, ["hash-object", "--", path])) || "<missing>",
+      ]),
+    ),
+  );
 
   return {
     commitHash,
     branch,
     statusPorcelain,
+    pathHashes,
     capturedAt: now(),
   };
 }
@@ -215,6 +226,13 @@ export async function computeDelta(
 ): Promise<FileDelta[]> {
   const deltas: FileDelta[] = [];
 
+  if (
+    beforeSnapshot.commitHash === afterSnapshot.commitHash &&
+    JSON.stringify(beforeSnapshot.pathHashes) === JSON.stringify(afterSnapshot.pathHashes)
+  ) {
+    return [];
+  }
+
   if (beforeSnapshot.commitHash && afterSnapshot.commitHash) {
     // If commits differ, use diff between them for accurate attribution.
     // If same commit, use diff against working tree.
@@ -235,6 +253,17 @@ export async function computeDelta(
       if (!parsed) continue;
 
       const relevantPath = parsed.pathAfter ?? parsed.pathBefore ?? "";
+      if (beforeSnapshot.commitHash === afterSnapshot.commitHash) {
+        const beforePath = parsed.pathBefore ?? relevantPath;
+        const afterPath = parsed.pathAfter ?? relevantPath;
+        if (
+          beforeSnapshot.pathHashes[beforePath] ===
+          afterSnapshot.pathHashes[afterPath]
+        ) {
+          continue;
+        }
+      }
+
       const confidence: AttributionConfidence = dirtyPathsBefore.has(
         relevantPath,
       )
@@ -260,6 +289,21 @@ export async function computeDelta(
         changeType: "untracked",
         binary: false,
         attributionConfidence: "medium",
+      });
+    }
+  }
+
+  for (const path of untrackedAfter) {
+    if (
+      untrackedBefore.has(path) &&
+      beforeSnapshot.pathHashes[path] !== afterSnapshot.pathHashes[path] &&
+      !deltas.some((delta) => (delta.pathAfter ?? delta.pathBefore) === path)
+    ) {
+      deltas.push({
+        pathAfter: path,
+        changeType: "modified",
+        binary: false,
+        attributionConfidence: "low",
       });
     }
   }

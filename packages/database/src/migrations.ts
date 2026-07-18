@@ -283,5 +283,147 @@ export const MIGRATIONS: Migration[] = [
         `);
       }
     }
+  },
+  {
+    version: 3,
+    description: "Context efficiency, pricing, telemetry, and delivery ledger",
+    sql: `
+      CREATE TABLE pricing_profiles (
+        id                                TEXT PRIMARY KEY,
+        provider                          TEXT NOT NULL,
+        model                             TEXT NOT NULL,
+        version                           TEXT,
+        input_credits_per_million_tokens  REAL,
+        cached_input_credits_per_million_tokens REAL,
+        output_credits_per_million_tokens REAL,
+        source                            TEXT NOT NULL,
+        effective_from                    TEXT NOT NULL,
+        created_at                        TEXT NOT NULL,
+        CHECK (source IN ('provider_reported', 'user_configured', 'unknown'))
+      );
+      CREATE INDEX idx_pricing_profiles_model_effective
+        ON pricing_profiles(provider, model, effective_from DESC, created_at DESC);
+
+      CREATE TABLE agent_usage_evidence (
+        run_id               TEXT PRIMARY KEY REFERENCES agent_runs(id),
+        provider             TEXT,
+        model                TEXT,
+        input_tokens         INTEGER,
+        cached_input_tokens  INTEGER,
+        output_tokens        INTEGER,
+        reasoning_tokens     INTEGER,
+        tool_calls           INTEGER,
+        measurement          TEXT NOT NULL,
+        recorded_at          TEXT NOT NULL,
+        CHECK (measurement IN ('provider_reported', 'agent_reported', 'estimated', 'unavailable'))
+      );
+
+      CREATE TABLE run_cost_evidence (
+        run_id               TEXT PRIMARY KEY REFERENCES agent_runs(id),
+        pricing_profile_id   TEXT REFERENCES pricing_profiles(id),
+        input_credits        REAL,
+        cached_input_credits REAL,
+        output_credits       REAL,
+        total_credits        REAL,
+        measurement          TEXT NOT NULL,
+        calculated_at        TEXT NOT NULL,
+        CHECK (measurement IN ('measured', 'derived', 'estimated', 'unavailable'))
+      );
+
+      CREATE TABLE context_packets (
+        id                    TEXT PRIMARY KEY,
+        run_id                TEXT NOT NULL REFERENCES agent_runs(id),
+        estimator_id          TEXT NOT NULL,
+        accounting_json       TEXT NOT NULL,
+        created_at            TEXT NOT NULL
+      );
+      CREATE INDEX idx_context_packets_run ON context_packets(run_id, created_at);
+
+      CREATE TABLE context_deliveries (
+        id                       TEXT PRIMARY KEY,
+        run_id                   TEXT NOT NULL REFERENCES agent_runs(id),
+        packet_id                TEXT NOT NULL REFERENCES context_packets(id),
+        context_item_version_id  TEXT NOT NULL REFERENCES context_item_versions(id),
+        delivery_stage           TEXT NOT NULL,
+        estimated_tokens         INTEGER NOT NULL,
+        delivered_at             TEXT NOT NULL,
+        was_duplicate            INTEGER NOT NULL DEFAULT 0,
+        duplicate_of_delivery_id TEXT REFERENCES context_deliveries(id),
+        supplied_to_agent        INTEGER NOT NULL DEFAULT 1,
+        presence_state           TEXT NOT NULL DEFAULT 'active',
+        content_hash             TEXT NOT NULL,
+        superseded_by_checkpoint_id TEXT,
+        CHECK (delivery_stage IN ('orientation', 'implementation', 'escalation', 'restoration')),
+        CHECK (presence_state IN ('active', 'checkpointed', 'expired', 'unknown'))
+      );
+      CREATE INDEX idx_context_deliveries_run
+        ON context_deliveries(run_id, delivered_at);
+      CREATE INDEX idx_context_deliveries_active_hash
+        ON context_deliveries(run_id, content_hash, presence_state, supplied_to_agent);
+    `,
+  },
+  {
+    version: 4,
+    description: "Context Compiler, explicit FTS identity, relationships, and retrieval evidence",
+    sql: `
+      ALTER TABLE context_item_versions ADD COLUMN contextual_header TEXT;
+      ALTER TABLE context_item_versions ADD COLUMN compiled_content TEXT;
+      ALTER TABLE context_item_links ADD COLUMN confidence TEXT NOT NULL DEFAULT 'medium';
+      ALTER TABLE context_item_links ADD COLUMN evidence_json TEXT;
+      CREATE TABLE context_retrieval_evidence (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        retrieval_id TEXT NOT NULL REFERENCES context_retrievals(id),
+        item_version_id TEXT NOT NULL REFERENCES context_item_versions(id),
+        search_backend TEXT NOT NULL,
+        raw_lexical_score REAL NOT NULL,
+        normalized_lexical_score REAL NOT NULL,
+        score_components_json TEXT NOT NULL,
+        reasons_json TEXT NOT NULL,
+        coverage_json TEXT NOT NULL,
+        estimated_tokens INTEGER NOT NULL,
+        final_rank INTEGER NOT NULL,
+        included INTEGER NOT NULL,
+        omission_reason TEXT,
+        packet_section TEXT,
+        strategy_version TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      );
+      CREATE INDEX idx_context_retrieval_evidence_retrieval
+        ON context_retrieval_evidence(retrieval_id, final_rank);
+    `,
+    up: (db: any) => {
+      const hasFts5 = (() => {
+        try {
+          db.exec("CREATE VIRTUAL TABLE temp.continuum_compiler_fts_probe USING fts5(content);");
+          db.exec("DROP TABLE temp.continuum_compiler_fts_probe;");
+          return true;
+        } catch {
+          return false;
+        }
+      })();
+      if (hasFts5) {
+        db.exec(`
+          CREATE VIRTUAL TABLE context_items_fts_v2 USING fts5(
+            version_id UNINDEXED,
+            repository_id UNINDEXED,
+            title,
+            symbol_name,
+            source_path,
+            contextual_header,
+            content
+          );
+          INSERT INTO context_items_fts_v2(
+            version_id, repository_id, title, symbol_name, source_path,
+            contextual_header, content
+          )
+          SELECT v.id, i.repository_id, COALESCE(v.title, ''),
+                 COALESCE(v.symbol_name, ''), v.source_path,
+                 COALESCE(v.contextual_header, ''),
+                 COALESCE(v.compiled_content, v.content)
+          FROM context_item_versions v
+          JOIN context_items i ON i.id = v.context_item_id;
+        `);
+      }
+    },
   }
 ];

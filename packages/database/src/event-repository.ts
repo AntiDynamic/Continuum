@@ -26,6 +26,10 @@ export class EventRepository {
   }
 
   insert(event: AgentEvent, redactionApplied: boolean): void {
+    const payload =
+      "payload" in event && typeof event.payload === "object" && event.payload !== null
+        ? event.payload
+        : {};
     this.db
       .prepare(
         `INSERT INTO agent_events
@@ -40,11 +44,11 @@ export class EventRepository {
         event.timestamp,
         event.source,
         JSON.stringify(event),
-        "rawPayload" in event.payload
-          ? (event.payload as { rawPayload?: string }).rawPayload ?? null
+        "rawPayload" in payload
+          ? (payload as { rawPayload?: string }).rawPayload ?? null
           : null,
-        "parseStatus" in event.payload
-          ? (event.payload as { parseStatus: string }).parseStatus
+        "parseStatus" in payload
+          ? (payload as { parseStatus: string }).parseStatus
           : "parsed",
         redactionApplied ? 1 : 0,
       );

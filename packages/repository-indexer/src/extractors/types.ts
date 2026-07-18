@@ -1,15 +1,6 @@
-export interface ExtractedSymbol {
-  /** Local symbol name, e.g., 'resolveSnapshotIdentity' */
-  name: string;
-  /** What kind of symbol this is, e.g., 'function', 'class', 'interface', 'import' */
-  kind: string;
-  /** Source code snippet containing this symbol */
-  content: string;
-  /** 1-based start line */
-  startLine: number;
-  /** 1-based end line */
-  endLine: number;
-}
+import type { ExtractedContextCandidate } from "@continuum/shared";
+
+export type ExtractedSymbol = ExtractedContextCandidate;
 
 export interface Extractor {
   /** 

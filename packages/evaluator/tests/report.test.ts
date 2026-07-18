@@ -195,4 +195,38 @@ describe("compareRuns", () => {
     const comparison = compareRuns("run-cmp-e", "run-cmp-f", db);
     expect(comparison.summary).toContain("accepted");
   });
+  it("reports no baseline instead of a savings claim", () => {
+    const repoRepo = new RepositoryRepository(db);
+    const repo = repoRepo.upsert("/project", "project");
+    seedRun("run-cmp-no-baseline", repo.id);
+
+    const report = buildReport("run-cmp-no-baseline", db);
+    const duplicateMetric = report.metrics.find(
+      (metric) => metric.name === "Potential duplicate context avoided",
+    );
+    expect(duplicateMetric?.note).toBe("No valid baseline");
+    expect(report.metrics.some((metric) => /savings/i.test(metric.name))).toBe(false);
+    expect(report.costEvidence.measurement).toBe("unavailable");
+  });
+
+  it("keeps cost, context, and retry dimensions separate", () => {
+    const repoRepo = new RepositoryRepository(db);
+    const repo = repoRepo.upsert("/project", "project");
+    seedRun("run-cmp-foundation-a", repo.id);
+    seedRun("run-cmp-foundation-b", repo.id);
+
+    const comparison = compareRuns(
+      "run-cmp-foundation-a",
+      "run-cmp-foundation-b",
+      db,
+    );
+    const categories = comparison.efficiency.map((item) => item.category);
+    expect(categories).toContain("Total credits");
+    expect(categories).toContain("Context supplied");
+    expect(categories).toContain("Context packet size");
+    expect(categories).toContain("Context delivery stages");
+    expect(categories).toContain("Retries");
+    expect(comparison.summary).toContain("No overall winner");
+  });
+
 });

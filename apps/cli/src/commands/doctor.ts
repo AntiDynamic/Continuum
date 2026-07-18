@@ -68,8 +68,7 @@ async function checkGemini(): Promise<{ ok: boolean; structured: boolean }> {
   // Explicitly note trust behaviour
   info("Gemini folder trust is verified only when an actual run begins.");
 
-  let caps: import("@continuum/shared").AgentCapabilities | undefined;
-  caps = await adapter.getCapabilities();
+  const caps = await adapter.getCapabilities();
   if (caps.streamingOutput) {
     pass("Gemini stream-json output", "supported");
   } else if (caps.structuredOutput) {

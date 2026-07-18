@@ -25,6 +25,7 @@ export type {
   AgentMessageEvent,
   ToolCallEvent,
   ToolResultEvent,
+  AgentUsageEvent,
   TokenUsageEvent,
   StdoutEvent,
   StderrEvent,
@@ -66,6 +67,7 @@ export {
   TestTimeoutError,
   NotInitialisedError,
 } from "./errors.js";
+export * from "./context-efficiency.js";
 
 // Redaction
 export {
@@ -78,6 +80,7 @@ export type { RedactedCommand, RedactionResult } from "./redaction.js";
 export * from "./context-domain.js";
 export * from "./ranking.js";
 export * from "./packing.js";
+export * from "./context-compiler-domain.js";
 
 // Logger
 export { createLogger } from "./logger.js";

@@ -1,4 +1,4 @@
-
+/* global console, process, setTimeout */
 
 const NUM_LINES = 1000;
 

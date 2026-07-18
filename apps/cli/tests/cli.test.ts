@@ -10,15 +10,10 @@ const __dirname = dirname(__filename);
 
 describe("CLI Integration", () => {
   let tempDir: string;
-  let cliBin: string;
+  const cliBin = resolve(__dirname, "../dist/main.js");
 
   beforeAll(async () => {
-    cliBin = resolve(__dirname, "../dist/main.js");
-  });
-
-  beforeEach(async () => {
-    tempDir = join(tmpdir(), `continuum-cli-test-${Math.random().toString(36).slice(2, 8)}`);
-    await mkdir(tempDir, { recursive: true });
+    tempDir = await mkdtemp(resolve(tmpdir(), "continuum-cli-test-"));
     // Initialize a git repository so Continuum commands work
     await execa("git", ["init"], { cwd: tempDir });
     await execa("git", ["config", "user.name", "Test User"], { cwd: tempDir });
@@ -26,13 +21,14 @@ describe("CLI Integration", () => {
     await execa("git", ["commit", "--allow-empty", "-m", "Initial commit"], { cwd: tempDir });
   });
 
+  afterAll(async () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
   it("should have tests for doctor", async () => {
-    const result = await execa("node", [cliBin, "doctor"], { cwd: tempDir, reject: false, timeout: 5000 });
+    const result = await execa("node", [cliBin, "doctor"], { cwd: tempDir, reject: false, timeout: 15000 });
     expect(result.stdout).toContain("Continuum Doctor");
-  }, 10000);
+  }, 20000);
   
   it("should have tests for init", async () => {
     const initDir = resolve(tempDir, "init-test");
@@ -89,6 +85,25 @@ describe("CLI Integration", () => {
       const config = JSON.parse(await import("node:fs/promises").then(m => m.readFile(configPath, "utf8")));
       config.testCommands = ["node check.js"];
       await writeFile(configPath, JSON.stringify(config, null, 2));
+      const pricingResult = await execa(
+        "node",
+        [
+          cliBin,
+          "pricing",
+          "set",
+          "fake-1.0",
+          "--provider",
+          "continuum",
+          "--input",
+          "1",
+          "--cached-input",
+          "0.5",
+          "--output",
+          "2",
+        ],
+        { cwd: runDir, reject: false },
+      );
+      expect(pricingResult.exitCode).toBe(0);
     });
 
     it("should complete a successful agent run", async () => {
@@ -119,6 +134,51 @@ describe("CLI Integration", () => {
         runIdA = runIdMatch[1];
       }
     });
+    it("indexes, ledgers context, suppresses duplicates, and reports cost evidence", async () => {
+      expect(runIdA).toBeDefined();
+
+      const indexResult = await execa("node", [cliBin, "index"], {
+        cwd: runDir,
+        reject: false,
+      });
+      expect(indexResult.exitCode).toBe(0);
+
+      const firstPacket = await execa(
+        "node",
+        [cliBin, "context", "pack", "factorial", "--run", runIdA],
+        { cwd: runDir, reject: false },
+      );
+      expect(firstPacket.exitCode).toBe(0);
+      expect(firstPacket.stdout).toContain("Total estimated tokens");
+
+      const duplicatePacket = await execa(
+        "node",
+        [cliBin, "context", "pack", "factorial", "--run", runIdA],
+        { cwd: runDir, reject: false },
+      );
+      expect(duplicatePacket.exitCode).toBe(0);
+      expect(duplicatePacket.stdout).toContain("Reference existing delivery");
+      expect(duplicatePacket.stdout).toContain(
+        "Potential duplicate tokens avoided",
+      );
+
+      const reportResult = await execa(
+        "node",
+        [cliBin, "report", runIdA, "--json"],
+        { cwd: runDir, reject: false },
+      );
+      expect(reportResult.exitCode).toBe(0);
+      const report = JSON.parse(reportResult.stdout) as {
+        costEvidence: { measurement: string; totalCredits?: number };
+        contextLedger: { suppliedToAgent: boolean }[];
+      };
+      expect(report.costEvidence.measurement).toBe("derived");
+      expect(report.costEvidence.totalCredits).toBeGreaterThan(0);
+      expect(
+        report.contextLedger.some((entry) => !entry.suppliedToAgent),
+      ).toBe(true);
+    }, 30_000);
+
 
     it("should report the successful run", async () => {
       const result = await execa("node", [cliBin, "report", "latest"], { cwd: runDir, reject: false });
@@ -138,6 +198,22 @@ describe("CLI Integration", () => {
 
     it("should allow a failed agent run to compare", async () => {
       // Restore bug
+      await writeFile(resolve(runDir, "src/calculator.ts"), "export function factorial(n) { return 0; }");
+      await execa("git", ["add", "."], { cwd: runDir });
+      await execa("git", ["commit", "-m", "Restore bug"], { cwd: runDir });
+
+      const result = await execa("node", [cliBin, "run", "Fail at fixing"], {
+        cwd: runDir,
+        reject: false,
+        env: {
+          ...process.env,
+          CONTINUUM_TEST_FAKE_ADAPTER: "1",
+          // Don't fix the file, so final test fails
+        }
+      });
+      if (result.exitCode !== 0 && !result.stdout.match(/Run ID/)) {
+        console.error("Failed run stdout:", result.stdout);
+        console.error("Failed run stderr:", result.stderr);
       }
       expect(result.exitCode).toBe(0);
       

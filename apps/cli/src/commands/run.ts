@@ -55,6 +55,7 @@ function formatEventForTerminal(event: AgentEvent): void {
       }
       break;
     case "token_usage":
+    case "agent_usage":
       // Shown in final report
       break;
     case "run_completed":
@@ -122,8 +123,7 @@ export async function runRunCommand(
 
   if (process.env["CONTINUUM_TEST_FAKE_ADAPTER"] === "1") {
     // Backdoor for CLI integration testing
-    // @ts-ignore
-    const { FakeAdapter, buildFakeSuccessEvents } = await import("@continuum/agent-core/dist/fake-adapter.js");
+    const { FakeAdapter, buildFakeSuccessEvents } = await import("@continuum/agent-core");
     adapter = new FakeAdapter({ events: buildFakeSuccessEvents("dummy-run-id") });
     (adapter as any)._hackEditFile = async () => {
       // The CLI test can pass an env var to tell the fake adapter to actually edit a file

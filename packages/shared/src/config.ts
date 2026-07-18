@@ -19,6 +19,13 @@ export const ContinuumConfigSchema = z.object({
    */
   redactPatterns: z.array(z.string()).default([]),
   /** Whether to store raw agent stdout/stderr in addition to parsed events. */
+  /** Optional semantic retrieval remains local and disabled by default. */
+  retrieval: z.object({
+    semantic: z.object({
+      enabled: z.boolean().default(false),
+      backend: z.literal("disabled").default("disabled"),
+    }).default({ enabled: false, backend: "disabled" }),
+  }).default({ semantic: { enabled: false, backend: "disabled" } }),
   captureRawOutput: z.boolean().default(true),
 });
 
@@ -31,6 +38,7 @@ export const DEFAULT_CONFIG: ContinuumConfig = {
   buildCommands: [],
   redactPatterns: [],
   captureRawOutput: true,
+  retrieval: { semantic: { enabled: false, backend: "disabled" } },
 };
 
 /** Working-tree attribution confidence levels. */

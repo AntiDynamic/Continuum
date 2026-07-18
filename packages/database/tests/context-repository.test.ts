@@ -36,7 +36,7 @@ describe("ContextRepository", () => {
   it("inserts versions and searches them", () => {
     const item = repo.upsertContextItem(1, "function", "searchMe");
     
-    repo.insertContextItemVersion({
+    const firstVersion = {
       id: "v1",
       context_item_id: item.id,
       content: "function searchMe() { return 'hello'; }",
@@ -49,13 +49,53 @@ describe("ContextRepository", () => {
       valid_from_commit: "commit1",
       indexed_at: new Date().toISOString(),
       staleness_status: "fresh"
-    });
+    } as const;
+    repo.insertContextItemVersion(firstVersion);
 
     const latest = repo.findLatestItemVersion(item.id);
+
+    repo.insertContextItemVersion({
+      ...firstVersion,
+      id: "v-duplicate",
+      valid_from_commit: "commit2",
+    });
+    const duplicateCount = db
+      .prepare(
+        "SELECT COUNT(*) AS count FROM context_item_versions WHERE context_item_id = ?",
+      )
+      .get(item.id) as { count: number };
+    expect(duplicateCount.count).toBe(1);
+
+    repo.insertContextItemVersion({
+      ...firstVersion,
+      id: "v2",
+      content: "function searchMe() { return 'updated'; }",
+      content_hash: "hash2",
+      source_blob_hash: "blobhash2",
+      valid_from_commit: "commit2",
+    });
+    const versions = db
+      .prepare(
+        "SELECT id, valid_to_commit_exclusive FROM context_item_versions WHERE context_item_id = ? ORDER BY rowid",
+      )
+      .all(item.id) as { id: string; valid_to_commit_exclusive: string | null }[];
+    expect(versions).toEqual([
+      { id: "v1", valid_to_commit_exclusive: "commit2" },
+      { id: "v2", valid_to_commit_exclusive: null },
+    ]);
     expect(latest?.id).toBe("v1");
+    const current = repo.findLatestItemVersion(item.id);
+    expect(current?.id).toBe("v2");
 
     const results = repo.searchContextItems("searchMe", 10, 1);
     expect(results.length).toBe(1);
-    expect(results[0].version.id).toBe("v1");
+    expect(results[0].version.id).toBe("v2");
+    db.exec("DROP TABLE context_items_fts_v2");
+    const fallback = repo.searchContextItems("updated searchMe", 10, 1);
+    expect(fallback[0]).toMatchObject({
+      version: { id: "v2" },
+      backend: "fallback_lexical",
+    });
+    expect(fallback[0]?.score).toBeGreaterThan(0);
   });
 });

@@ -86,20 +86,40 @@ describe("parseGeminiLine — usage event", () => {
       '{"type":"usage","inputTokens":450,"outputTokens":120,"cachedInputTokens":0}',
       ctx,
     );
-    expect(event.eventType).toBe("token_usage");
-    if (event.eventType === "token_usage") {
-      expect(event.payload.inputTokens).toBe(450);
-      expect(event.payload.outputTokens).toBe(120);
-      expect(event.payload.cachedTokens).toBe(0);
+    expect(event.eventType).toBe("agent_usage");
+    if (event.eventType === "agent_usage") {
+      expect(event.inputTokens).toBe(450);
+      expect(event.outputTokens).toBe(120);
+      expect(event.cachedInputTokens).toBe(0);
+      expect(event.measurement).toBe("agent_reported");
     }
   });
 
   it("does not fabricate token usage for empty usage event", () => {
     const ctx = makeCtx();
     const event = parseGeminiLine('{"type":"usage"}', ctx);
-    // Should not emit token_usage with undefined counts — emits unknown instead
+    // Should not emit agent_usage with undefined counts — emits unknown instead
     expect(event.eventType).toBe("unknown_agent_event");
   });
+  it("redacts secrets from normalized telemetry metadata", () => {
+    const secret = "CONTINUUM_TELEMETRY_SECRET";
+    const ctx = createParseContext("telemetry-run", [secret], true);
+    const event = parseGeminiLine(
+      JSON.stringify({
+        type: "usage",
+        model: `model-${secret}`,
+        inputTokens: 10,
+      }),
+      ctx,
+    );
+
+    expect(event.eventType).toBe("agent_usage");
+    expect(JSON.stringify(event)).not.toContain(secret);
+    if (event.eventType === "agent_usage") {
+      expect(event.model).toContain("[REDACTED:CUSTOM]");
+    }
+  });
+
 });
 
 describe("parseGeminiLine — result event", () => {
@@ -184,14 +204,14 @@ describe("fixture: successful-run.jsonl", () => {
     expect(() => parseFixture("successful-run.jsonl")).not.toThrow();
   });
 
-  it("contains init, tool_call, tool_result, token_usage, and agent_result", () => {
+  it("contains init, tool_call, tool_result, agent_usage, and agent_result", () => {
     const events = parseFixture("successful-run.jsonl");
     const types = new Set(events.map((e) => e.eventType));
 
     expect(types.has("agent_init")).toBe(true);
     expect(types.has("tool_call")).toBe(true);
     expect(types.has("tool_result")).toBe(true);
-    expect(types.has("token_usage")).toBe(true);
+    expect(types.has("agent_usage")).toBe(true);
     expect(types.has("agent_result")).toBe(true);
   });
 });

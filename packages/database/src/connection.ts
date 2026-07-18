@@ -5,10 +5,10 @@
  * It requires no native compilation, making it compatible with Node.js 24.x
  * without needing node-gyp or pre-built binaries.
  *
- * Architecture note: better-sqlite3 was originally planned but requires
- * native compilation via node-gyp, which is not always available in CI
- * or fresh developer environments.  node:sqlite provides equivalent
- * synchronous API semantics with zero installation friction.
+ * Architecture note: a third-party native driver was originally planned, but
+ * native compilation is not always available in CI or fresh developer
+ * environments. node:sqlite provides the synchronous API semantics needed here
+ * with zero installation friction.
  *
  * The ExperimentalWarning emitted on stderr is suppressed via the
  * --no-experimental-sqlite flag or silenced via process.emitWarning override
@@ -61,8 +61,8 @@ export function migrate(db: Db): void {
   for (const migration of MIGRATIONS) {
     if (appliedVersions.has(migration.version)) continue;
 
-    // node:sqlite doesn't expose a transaction() helper like better-sqlite3,
-    // so we use BEGIN/COMMIT explicitly.
+    // node:sqlite does not expose a transaction helper, so use BEGIN/COMMIT
+    // explicitly.
     db.exec("BEGIN");
     try {
       if (migration.sql) {

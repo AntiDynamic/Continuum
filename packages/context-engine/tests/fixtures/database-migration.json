@@ -1,0 +1,1 @@
+{"task":"Add user schema migration with rollback","requiredContext":["user migration","users schema","migration rollback","migration tests"],"irrelevantContext":["CLI colors","marketing guide"],"expectedTaskClass":"database_migration"}

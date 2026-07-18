@@ -1,0 +1,1 @@
+{"task":"Fix refresh-token authentication race without weakening trust","requiredContext":["AuthService.refreshToken","RefreshTokenStore","refresh-token tests","authentication security constraints"],"irrelevantContext":["payment module","marketing documentation"],"expectedTaskClass":"security_sensitive"}

@@ -23,6 +23,8 @@ export interface ContextItemVersion {
   id: string;
   context_item_id: string;
   content: string;
+  contextual_header?: string | null;
+  compiled_content?: string | null;
   title: string | null;
   source_path: string;
   source_start_line: number;

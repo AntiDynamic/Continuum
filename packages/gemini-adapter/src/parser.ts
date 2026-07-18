@@ -38,7 +38,7 @@ import type {
   AgentMessageEvent,
   ToolCallEvent,
   ToolResultEvent,
-  TokenUsageEvent,
+  AgentUsageEvent,
   StdoutEvent,
   StderrEvent,
   UnknownAgentEvent,
@@ -94,6 +94,8 @@ const GeminiUsageEvent = z
     outputTokens: z.number().optional(),
     cachedInputTokens: z.number().optional(),
     totalTokens: z.number().optional(),
+    reasoningTokens: z.number().optional(),
+    model: z.string().optional(),
   })
   .passthrough();
 
@@ -281,6 +283,7 @@ export function parseGeminiLine(
       if (
         data.inputTokens === undefined &&
         data.outputTokens === undefined &&
+        data.reasoningTokens === undefined &&
         data.cachedInputTokens === undefined
       ) {
         const evt: UnknownAgentEvent = {
@@ -290,16 +293,16 @@ export function parseGeminiLine(
         };
         return evt;
       }
-      const evt: TokenUsageEvent = {
+      const evt: AgentUsageEvent = {
         ...makeHeader(ctx, "stdout", wasRedacted),
-        eventType: "token_usage",
-        payload: {
-          inputTokens: data.inputTokens,
-          outputTokens: data.outputTokens,
-          cachedTokens: data.cachedInputTokens,
-          totalTokens: data.totalTokens,
-          raw: ctx.captureRaw ? lineToStore : undefined,
-        },
+        eventType: "agent_usage",
+        provider: "google",
+        model: data.model,
+        inputTokens: data.inputTokens,
+        cachedInputTokens: data.cachedInputTokens,
+        outputTokens: data.outputTokens,
+        reasoningTokens: data.reasoningTokens,
+        measurement: "agent_reported",
       };
       return evt;
     }

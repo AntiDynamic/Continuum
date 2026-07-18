@@ -28,10 +28,19 @@ import {
   TestRunRepository,
   UsageMetricRepository,
   UserOutcomeRepository,
+  UsageEvidenceRepository,
+  CostEvidenceRepository,
+  ContextLedgerRepository,
 } from "@continuum/database";
 import type { Db } from "@continuum/database";
+import type { StoredUsageEvidence } from "@continuum/database";
 import { RunNotFoundError, formatDuration } from "@continuum/shared";
-import type { MetricQuality } from "@continuum/shared";
+import type {
+  ContextPacketTokenAccounting,
+  MetricQuality,
+  RunContextLedgerEntry,
+  RunCostEvidence,
+} from "@continuum/shared";
 
 export interface MetricValue {
   name: string;
@@ -89,6 +98,11 @@ export interface RunReport {
   attributionConfidence: string;
 
   evidencePaths: string[];
+  usageEvidence: StoredUsageEvidence | null;
+  costEvidence: RunCostEvidence;
+  contextLedger: RunContextLedgerEntry[];
+  contextPacketAccounting: ContextPacketTokenAccounting[];
+
 }
 
 function makeMetric(
@@ -110,6 +124,9 @@ export function buildReport(runId: string, db: Db): RunReport {
   const testRepo = new TestRunRepository(db);
   const usageRepo = new UsageMetricRepository(db);
   const outcomeRepo = new UserOutcomeRepository(db);
+  const usageEvidenceRepo = new UsageEvidenceRepository(db);
+  const costRepo = new CostEvidenceRepository(db);
+  const ledgerRepo = new ContextLedgerRepository(db);
 
   const run = runRepo.findById(runId);
   if (!run) {
@@ -134,6 +151,16 @@ export function buildReport(runId: string, db: Db): RunReport {
   const usageMetrics = usageRepo.findByRunId(runId);
   const userOutcome = outcomeRepo.findByRunId(runId);
   const totalEvents = eventRepo.countByRunId(runId);
+  const usageEvidence = usageEvidenceRepo.findByRunId(runId);
+  const unavailableUsage = { measurement: "unavailable" as const };
+  const costEvidence: RunCostEvidence =
+    costRepo.findByRunId(runId, usageEvidence?.usage ?? unavailableUsage) ?? {
+      runId,
+      usage: usageEvidence?.usage ?? unavailableUsage,
+      measurement: "unavailable" as const,
+    };
+  const contextLedger = ledgerRepo.findByRunId(runId);
+  const contextPacketAccounting = ledgerRepo.getPacketAccounting(runId);
 
   // Test summaries
   const baselineTests = testRuns
@@ -205,7 +232,7 @@ export function buildReport(runId: string, db: Db): RunReport {
 
   const inputTokens = metricByName.get("input_tokens");
   const outputTokens = metricByName.get("output_tokens");
-  const cachedTokens = metricByName.get("cached_tokens");
+  const cachedTokens = metricByName.get("cached_input_tokens") ?? metricByName.get("cached_tokens");
   const toolCalls = metricByName.get("tool_calls");
 
   if (inputTokens) {
@@ -245,6 +272,51 @@ export function buildReport(runId: string, db: Db): RunReport {
 
   unavailableMetrics.push("Files read by agent");
   unavailableMetrics.push("Model API calls");
+
+  if (costEvidence.totalCredits !== undefined) {
+    metrics.push(
+      makeMetric(
+        costEvidence.measurement === "estimated"
+          ? "Estimated total credits"
+          : "Derived total credits",
+        costEvidence.totalCredits,
+        costEvidence.measurement === "estimated" ? "estimated" : "derived",
+        "credits",
+      ),
+    );
+  } else {
+    unavailableMetrics.push("Total task cost");
+  }
+
+  const contextTokens = contextPacketAccounting.reduce(
+    (total, accounting) => total + accounting.newTokensDelivered,
+    0,
+  );
+  const duplicateTokens = contextPacketAccounting.reduce(
+    (total, accounting) =>
+      total + accounting.potentialDuplicateTokensAvoided,
+    0,
+  );
+  metrics.push(
+    makeMetric(
+      "Context supplied",
+      contextLedger.filter((entry) => entry.suppliedToAgent).length,
+      "exact",
+      "items",
+    ),
+  );
+  metrics.push(
+    makeMetric("Estimated context tokens", contextTokens, "estimated", "tokens"),
+  );
+  metrics.push(
+    makeMetric(
+      "Potential duplicate context avoided",
+      duplicateTokens,
+      "estimated",
+      "tokens",
+      "No valid baseline",
+    ),
+  );
 
   // Warnings
   const warnings: string[] = [];
@@ -316,6 +388,11 @@ export function buildReport(runId: string, db: Db): RunReport {
     attributionConfidence: run.attribution_confidence,
 
     evidencePaths,
+    usageEvidence: usageEvidence ?? null,
+    costEvidence,
+    contextLedger,
+    contextPacketAccounting,
+
   };
 }
 
@@ -481,6 +558,56 @@ export function compareRuns(
         return `${aT.value?.toString() ?? "?"} vs ${bT.value?.toString() ?? "?"} tool calls.`;
       })(),
     },
+    {
+      category: "Cached-input tokens",
+      runA: a.usageEvidence?.usage.cachedInputTokens?.toString() ?? "unavailable",
+      runB: b.usageEvidence?.usage.cachedInputTokens?.toString() ?? "unavailable",
+      observation: "Values retain their usage evidence labels.",
+    },
+    {
+      category: "Output tokens",
+      runA: a.usageEvidence?.usage.outputTokens?.toString() ?? "unavailable",
+      runB: b.usageEvidence?.usage.outputTokens?.toString() ?? "unavailable",
+      observation: "Values retain their usage evidence labels.",
+    },
+    {
+      category: "Total credits",
+      runA: a.costEvidence.totalCredits?.toString() ?? "unavailable",
+      runB: b.costEvidence.totalCredits?.toString() ?? "unavailable",
+      observation:
+        a.costEvidence.totalCredits === undefined ||
+        b.costEvidence.totalCredits === undefined
+          ? "Cost evidence unavailable for one or both runs."
+          : a.costEvidence.totalCredits < b.costEvidence.totalCredits
+            ? `Run A used fewer ${a.costEvidence.measurement} credits.`
+            : b.costEvidence.totalCredits < a.costEvidence.totalCredits
+              ? `Run B used fewer ${b.costEvidence.measurement} credits.`
+              : "Total credits are equal.",
+    },
+    {
+      category: "Context supplied",
+      runA: String(a.contextLedger.filter((entry) => entry.suppliedToAgent).length),
+      runB: String(b.contextLedger.filter((entry) => entry.suppliedToAgent).length),
+      observation: "Counts ledgered items actually supplied to the agent.",
+    },
+    {
+      category: "Context packet size",
+      runA: String(a.contextPacketAccounting.reduce((sum, item) => sum + item.newTokensDelivered, 0)),
+      runB: String(b.contextPacketAccounting.reduce((sum, item) => sum + item.newTokensDelivered, 0)),
+      observation: "Packet sizes are deterministic token estimates.",
+    },
+    {
+      category: "Context delivery stages",
+      runA: [...new Set(a.contextLedger.map((entry) => entry.stage))].join(", ") || "none",
+      runB: [...new Set(b.contextLedger.map((entry) => entry.stage))].join(", ") || "none",
+      observation: "Stages are reported separately; they are not collapsed into a score.",
+    },
+    {
+      category: "Retries",
+      runA: "unavailable",
+      runB: "unavailable",
+      observation: "Retry evidence is not emitted by current adapters.",
+    },
   ];
 
   const repositoryImpact: ComparisonSection[] = [
@@ -507,6 +634,14 @@ export function compareRuns(
       runB: b.attributionConfidence,
       observation:
         "Attribution confidence reflects how much pre-existing dirty state existed before each run.",
+    },
+    {
+      category: "Unrelated changes",
+      runA:
+        a.userOutcome?.unrelated_changes_observed === 1 ? "observed" : "not observed",
+      runB:
+        b.userOutcome?.unrelated_changes_observed === 1 ? "observed" : "not observed",
+      observation: "This dimension depends on recorded developer outcome evidence.",
     },
   ];
 
@@ -567,6 +702,31 @@ export function compareRuns(
     statements.push(
       `Run B was faster (${formatDuration(b.durationMs)} vs ${formatDuration(a.durationMs)}).`,
     );
+  }
+
+  if (
+    a.costEvidence.totalCredits !== undefined &&
+    b.costEvidence.totalCredits !== undefined
+  ) {
+    if (a.costEvidence.totalCredits < b.costEvidence.totalCredits) {
+      statements.push("Run A used fewer evidence-labelled credits.");
+    } else if (b.costEvidence.totalCredits < a.costEvidence.totalCredits) {
+      statements.push("Run B used fewer evidence-labelled credits.");
+    }
+  }
+
+  const aContext = a.contextPacketAccounting.reduce(
+    (sum, item) => sum + item.newTokensDelivered,
+    0,
+  );
+  const bContext = b.contextPacketAccounting.reduce(
+    (sum, item) => sum + item.newTokensDelivered,
+    0,
+  );
+  if (aContext < bContext) {
+    statements.push("Run A supplied less estimated context.");
+  } else if (bContext < aContext) {
+    statements.push("Run B supplied less estimated context.");
   }
 
   if (statements.length === 0) {

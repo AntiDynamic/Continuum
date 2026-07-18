@@ -12,7 +12,10 @@ Future versions intend to add support for other agents (e.g., Claude Code, Antig
 
 Continuum relies on the agent emitting structured, detailed JSON logs. If the agent does not emit an event for a specific action (e.g., a file read that isn't logged, or a tool call that is silently executed), Continuum cannot observe it.
 
-- **Tokens**: Token counts are entirely dependent on the agent emitting `usage` events. If the agent does not report token usage, Continuum cannot track costs.
+- **Tokens and cost**: Provider usage requires an adapter-emitted usage event.
+  Costs are only derived when a matching user-configured pricing profile exists;
+  otherwise cost evidence is explicitly unavailable. Context packet tokens are
+  conservative estimates and are not provider billing counts.
 - **Internal Chain-of-Thought**: The internal reasoning or "scratchpad" thoughts of the language model are often not exposed by the agent CLI to the user, and therefore cannot be captured by Continuum.
 
 ## 3. Git Attribution in Dirty Worktrees
@@ -37,3 +40,14 @@ While Continuum implements a robust regex-based redaction engine for API keys an
 ## 6. Concurrent Runs
 
 Continuum V1 is designed for single-developer, sequential use within a local repository. Running multiple Continuum instances concurrently on the same repository database (`.continuum/continuum.db`) may result in SQLite lock contention (`SQLITE_BUSY`) or interwoven git snapshots.
+
+## 7. Context-Efficiency Claims
+
+Continuum records what context it supplied and can suppress exact duplicate
+content or a whole file after a symbol from that file is already active in the
+run ledger. It does not yet observe every independent context channel used by an
+agent, and it has no counterfactual baseline for what the agent would otherwise
+have received.
+
+Potential duplicate context avoided is therefore a ledgered decision, not proof
+of end-to-end token savings.

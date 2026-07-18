@@ -60,6 +60,12 @@ export class IndexRunRepository {
     };
   }
 
+  setWorktreeHash(id: string, worktreeHash: string): void {
+    this.db
+      .prepare("UPDATE repository_index_runs SET worktree_hash = ? WHERE id = ?")
+      .run(worktreeHash, id);
+  }
+
   finishRun(id: string, status: string, durationMs: number): void {
     this.db
       .prepare(

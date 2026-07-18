@@ -102,10 +102,10 @@ export async function runTestCommand(
   });
 
   let stdout = "";
-  let stderr = "";
+  let stderr: string;
   let timedOut = false;
   let cancelled = false;
-  let exitCode = 0;
+  let exitCode: number;
 
   try {
     const result = await execa(opts.command, {

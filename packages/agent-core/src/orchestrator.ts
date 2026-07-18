@@ -20,6 +20,7 @@ import {
   generateRunId,
   now,
   createLogger,
+  calculateRunCostEvidence,
   normalisePath,
   AgentRunError,
 } from "@continuum/shared";
@@ -28,6 +29,7 @@ import type {
   AgentRunInput,
   AgentEvent,
   ContinuumConfig,
+  AgentUsageEvidence,
   RunStatus,
   OutputMode,
   AttributionConfidence,
@@ -38,6 +40,9 @@ import {
   EventRepository,
   GitSnapshotRepository,
   FileChangeRepository,
+  UsageEvidenceRepository,
+  PricingProfileRepository,
+  CostEvidenceRepository,
   TestRunRepository,
   UsageMetricRepository,
 } from "@continuum/database";
@@ -99,6 +104,9 @@ export async function orchestrateRun(
   const fileChangeRepo = new FileChangeRepository(opts.db);
   const testRunRepo = new TestRunRepository(opts.db);
   const usageRepo = new UsageMetricRepository(opts.db);
+  const usageEvidenceRepo = new UsageEvidenceRepository(opts.db);
+  const pricingRepo = new PricingProfileRepository(opts.db);
+  const costRepo = new CostEvidenceRepository(opts.db);
 
   const repositoryRecord = repoRepo.upsert(repoRoot, repoName);
 
@@ -184,6 +192,9 @@ export async function orchestrateRun(
   let finalAttributionConfidence: AttributionConfidence = "unknown";
   let toolCallCount = 0;
   let hasTokenUsage = false;
+  let usageEvidence: AgentUsageEvidence = { measurement: "unavailable" };
+  let usageProvider: string | undefined;
+  let usageModel: string | undefined;
 
   let terminalEventReceived = false;
 
@@ -218,36 +229,30 @@ export async function orchestrateRun(
       if (event.eventType === "token_usage") {
         hasTokenUsage = true;
         const payload = event.payload;
-        if (payload.inputTokens !== undefined) {
-          usageRepo.insert({
-            runId,
-            metricName: "input_tokens",
-            numericValue: payload.inputTokens,
-            unit: "tokens",
-            source: "adapter",
-            quality: "exact",
-          });
-        }
-        if (payload.outputTokens !== undefined) {
-          usageRepo.insert({
-            runId,
-            metricName: "output_tokens",
-            numericValue: payload.outputTokens,
-            unit: "tokens",
-            source: "adapter",
-            quality: "exact",
-          });
-        }
-        if (payload.cachedTokens !== undefined) {
-          usageRepo.insert({
-            runId,
-            metricName: "cached_tokens",
-            numericValue: payload.cachedTokens,
-            unit: "tokens",
-            source: "adapter",
-            quality: "exact",
-          });
-        }
+        usageEvidence = {
+          inputTokens: payload.inputTokens,
+          cachedInputTokens: payload.cachedTokens,
+          outputTokens: payload.outputTokens,
+          measurement: "agent_reported",
+        };
+      }
+
+      if (event.eventType === "agent_usage") {
+        hasTokenUsage =
+          event.inputTokens !== undefined ||
+          event.cachedInputTokens !== undefined ||
+          event.outputTokens !== undefined ||
+          event.reasoningTokens !== undefined;
+        usageProvider = event.provider;
+        usageModel = event.model;
+        usageEvidence = {
+          inputTokens: event.inputTokens,
+          cachedInputTokens: event.cachedInputTokens,
+          outputTokens: event.outputTokens,
+          reasoningTokens: event.reasoningTokens,
+          toolCalls: event.toolCalls,
+          measurement: event.measurement,
+        };
       }
 
       if (event.eventType === "run_completed") {
@@ -273,7 +278,6 @@ export async function orchestrateRun(
       errorSummary = "Adapter ended without emitting a terminal event";
     }
   } catch (err) {
-    finalStatus = "failed";
     errorSummary =
       err instanceof Error ? err.message : "Unknown orchestration error";
     throw new AgentRunError(
@@ -283,17 +287,52 @@ export async function orchestrateRun(
     );
   }
 
-  // Store tool call count
-  if (toolCallCount > 0) {
+  const normalizedUsage: AgentUsageEvidence = {
+    ...usageEvidence,
+    toolCalls:
+      usageEvidence.toolCalls ?? (toolCallCount > 0 ? toolCallCount : undefined),
+    measurement:
+      usageEvidence.measurement === "unavailable" && toolCallCount > 0
+        ? "agent_reported"
+        : usageEvidence.measurement,
+  };
+  usageEvidenceRepo.upsert({
+    runId,
+    provider: usageProvider,
+    model: usageModel,
+    usage: normalizedUsage,
+  });
+
+  const normalizedMetrics = [
+    ["input_tokens", normalizedUsage.inputTokens, "tokens"],
+    ["cached_input_tokens", normalizedUsage.cachedInputTokens, "tokens"],
+    ["output_tokens", normalizedUsage.outputTokens, "tokens"],
+    ["reasoning_tokens", normalizedUsage.reasoningTokens, "tokens"],
+    ["tool_calls", normalizedUsage.toolCalls, "count"],
+  ] as const;
+  for (const [metricName, numericValue, unit] of normalizedMetrics) {
+    if (numericValue === undefined) continue;
     usageRepo.insert({
       runId,
-      metricName: "tool_calls",
-      numericValue: toolCallCount,
-      unit: "count",
-      source: "adapter",
-      quality: "exact",
+      metricName,
+      numericValue,
+      unit,
+      source: normalizedUsage.measurement,
+      quality:
+        normalizedUsage.measurement === "estimated" ? "estimated" : "exact",
+      exact: normalizedUsage.measurement !== "estimated",
     });
   }
+
+  const pricingProfile = usageModel
+    ? pricingRepo.findLatest(usageModel, usageProvider)
+    : undefined;
+  const costEvidence = calculateRunCostEvidence(
+    runId,
+    normalizedUsage,
+    pricingProfile,
+  );
+  costRepo.upsert(costEvidence, pricingProfile?.id);
 
   // Capture post-run git state
   const afterSnapshot = await captureSnapshot(repoRoot);

@@ -1,4 +1,5 @@
 import type { AgentEvent } from "./agent-events.js";
+import type { AgentTelemetryCapabilities } from "./context-efficiency.js";
 
 /**
  * Agent adapter interface — the vendor-neutral contract that all coding-agent
@@ -52,6 +53,8 @@ export interface AgentCapabilities {
   sessionId: boolean;
   /** Agent supports graceful cancellation. */
   cancellation: boolean;
+  /** Field-level provider-neutral telemetry evidence exposed by the adapter. */
+  telemetry: AgentTelemetryCapabilities;
 }
 
 export interface AgentExecutionPolicy {

@@ -28,3 +28,10 @@ export type {
   UsageMetricRow,
   UserOutcomeRow,
 } from "./event-repository.js";
+export {
+  PricingProfileRepository,
+  UsageEvidenceRepository,
+  CostEvidenceRepository,
+  ContextLedgerRepository,
+} from "./context-efficiency-repository.js";
+export type { StoredUsageEvidence } from "./context-efficiency-repository.js";
