@@ -19,6 +19,7 @@ export interface Migration {
   description: string;
   sql?: string;
   up?: (db: any) => void;
+  requiresForeignKeysOff?: boolean;
 }
 
 export const MIGRATIONS: Migration[] = [
@@ -533,6 +534,47 @@ export const MIGRATIONS: Migration[] = [
       -- final_snapshot_error records a sanitized error message when resolution fails.
       ALTER TABLE codex_executions ADD COLUMN final_snapshot_available INTEGER NOT NULL DEFAULT 1;
       ALTER TABLE codex_executions ADD COLUMN final_snapshot_error TEXT;
+    `,
+  },
+  {
+    version: 8,
+    description: "Phase 4B Assist Runtime and Comparison Execution",
+    requiresForeignKeysOff: true,
+    sql: `
+      -- Rewrite codex_executions to allow mode='assist'
+      CREATE TABLE codex_executions_new (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id), repository_id INTEGER NOT NULL REFERENCES repositories(id), run_id TEXT REFERENCES agent_runs(id),
+        task_text TEXT NOT NULL, codex_thread_id TEXT, codex_turn_id TEXT, codex_version TEXT NOT NULL, model TEXT, mode TEXT NOT NULL,
+        approval_configuration TEXT NOT NULL, sandbox_configuration TEXT NOT NULL, base_commit_hash TEXT NOT NULL, worktree_hash TEXT,
+        final_base_commit_hash TEXT, final_worktree_hash TEXT, repository_changed INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL,
+        started_at TEXT NOT NULL, completed_at TEXT, failure_code TEXT, failure_message TEXT,
+        final_snapshot_available INTEGER NOT NULL DEFAULT 1, final_snapshot_error TEXT,
+        CHECK(mode IN ('shadow', 'assist')), CHECK(repository_changed IN(0,1))
+      );
+      
+      INSERT INTO codex_executions_new SELECT * FROM codex_executions;
+      DROP TABLE codex_executions;
+      ALTER TABLE codex_executions_new RENAME TO codex_executions;
+      
+      CREATE INDEX idx_codex_executions_repository ON codex_executions(repository_id,started_at DESC);
+      
+      -- Add codex_comparison_runs table
+      CREATE TABLE codex_comparison_runs (
+        id TEXT PRIMARY KEY,
+        repository_id INTEGER NOT NULL REFERENCES repositories(id),
+        task_text TEXT NOT NULL,
+        shadow_execution_id TEXT REFERENCES codex_executions(id),
+        assist_execution_id TEXT REFERENCES codex_executions(id),
+        verifier_command TEXT NOT NULL,
+        shadow_exit_code INTEGER,
+        assist_exit_code INTEGER,
+        shadow_stdout_path TEXT,
+        shadow_stderr_path TEXT,
+        assist_stdout_path TEXT,
+        assist_stderr_path TEXT,
+        outcome TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      );
     `,
   },
 ];

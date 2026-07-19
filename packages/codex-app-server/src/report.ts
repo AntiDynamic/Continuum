@@ -314,7 +314,7 @@ export function buildShadowReport(db: Db, executionId: string, _repositoryRoot: 
     } else if (payload.command) {
       // Fall back: parse command via normalizer
       const parsed = parseSearchCommand(String(payload.command));
-      for (const sym of parsed.patterns) {
+      for (const sym of parsed.searchedSymbols) {
         evidenceRecords.push({ path: null, symbol: sym, evidenceType: "direct_repository_search", rawEventSequence: rawSeq, normalizedEventId: normId, confidence: "medium", sourceMethod: "search_command_symbol_parsed", command: payload.command ?? null });
       }
     }
@@ -325,7 +325,7 @@ export function buildShadowReport(db: Db, executionId: string, _repositoryRoot: 
     if (!cmd) continue;
     const parsed = parseSearchCommand(cmd);
     if (parsed.tool === "unknown") continue;
-    for (const sym of parsed.patterns) {
+    for (const sym of parsed.searchedSymbols) {
       evidenceRecords.push({ path: null, symbol: sym, evidenceType: "command_inferred_search", rawEventSequence: e.raw_sequence_number as number, normalizedEventId: e.id as string, confidence: "medium", sourceMethod: "search_command_execution_parsed", command: cmd });
     }
     for (const p of parsed.paths) {
@@ -345,14 +345,14 @@ export function buildShadowReport(db: Db, executionId: string, _repositoryRoot: 
       .filter((e: any) => e.event_type === "repository_search")
       .flatMap((e: any) => {
         if (Array.isArray(e.payload.searchedSymbols)) return e.payload.searchedSymbols as string[];
-        if (e.payload.command) return parseSearchCommand(String(e.payload.command)).patterns;
+        if (e.payload.command) return parseSearchCommand(String(e.payload.command)).searchedSymbols;
         return [];
       }),
     ...payloads
       .filter((e: any) => e.event_type === "command_execution")
       .flatMap((e: any) => {
         const cmd = String(e.payload?.command ?? "");
-        return parseSearchCommand(cmd).patterns;
+        return parseSearchCommand(cmd).searchedSymbols;
       }),
   ])];
 

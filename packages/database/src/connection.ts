@@ -61,6 +61,10 @@ export function migrate(db: Db): void {
   for (const migration of MIGRATIONS) {
     if (appliedVersions.has(migration.version)) continue;
 
+    if (migration.requiresForeignKeysOff) {
+      db.exec("PRAGMA foreign_keys = OFF");
+    }
+
     // node:sqlite does not expose a transaction helper, so use BEGIN/COMMIT
     // explicitly.
     db.exec("BEGIN");
@@ -79,7 +83,14 @@ export function migrate(db: Db): void {
       db.exec("COMMIT");
     } catch (err) {
       db.exec("ROLLBACK");
+      if (migration.requiresForeignKeysOff) {
+        db.exec("PRAGMA foreign_keys = ON");
+      }
       throw err;
+    }
+
+    if (migration.requiresForeignKeysOff) {
+      db.exec("PRAGMA foreign_keys = ON");
     }
   }
 }

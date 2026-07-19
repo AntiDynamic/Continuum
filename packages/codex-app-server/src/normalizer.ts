@@ -7,6 +7,14 @@ const text=(value:unknown):string|null=>typeof value==="string"?value:null;
 const number=(value:unknown):number|null=>typeof value==="number"&&Number.isFinite(value)?value:null;
 
 export interface NormalizedCodexMessage { normalized:CodexNormalizedEventInput[]; usage?:CodexUsageInput; diff?:CodexDiffInput; threadId:string|null; turnId:string|null; itemId:string|null }
+export interface NormalizedRepositorySearchPayload {
+  command: string;
+  cwd: string | null;
+  searchTool: "rg" | "grep" | "git-grep" | "findstr" | "select-string";
+  patterns: string[];
+  searchedSymbols: string[];
+  searchedPaths: string[];
+}
 
 function testFramework(command:string):string|null{
   const lower=command.toLowerCase();
@@ -37,7 +45,22 @@ export function normalizeCodexMessage(message:CodexRawMessage):NormalizedCodexMe
   else if(item.type==="commandExecution"&&(method==="item/completed"||method==="item/started")){
     const command=text(item.command)??"";const cwd=text(item.cwd);const exitCode=number(item.exitCode);const framework=testFramework(command);const paths=inferredPaths(command);
     push("command_execution","directly observed","high",{command,cwd,exitCode,durationMs:number(item.durationMs),status:item.status,source:item.source});
-    for(const path of paths)push(/\b(?:rg|grep|findstr|select-string)\b/i.test(command)?"repository_search":"file_read_evidence","command-inferred","medium",{path,command});
+    
+    const search = parseSearchCommand(command);
+    if (search.tool !== "unknown") {
+      const searchPayload: NormalizedRepositorySearchPayload = {
+        command,
+        cwd,
+        searchTool: search.tool,
+        patterns: search.patterns,
+        searchedSymbols: search.searchedSymbols,
+        searchedPaths: search.paths
+      };
+      push("repository_search", "command-inferred", "medium", searchPayload);
+    } else {
+      for(const path of paths) push("file_read_evidence","command-inferred","medium",{path,command});
+    }
+
     if(framework&&method==="item/completed")push("test_execution","command-inferred","medium",{command,cwd,exitCode,durationMs:number(item.durationMs),framework,status:exitCode===0?"passed":exitCode===null?"unknown":"failed"});
   } else if(item.type==="fileChange"){
     const changes=Array.isArray(item.changes)?item.changes:[];push("file_edit","directly observed","high",{changes,status:item.status});
@@ -62,51 +85,29 @@ export { testFramework, inferredPaths };
 
 /**
  * Parsed result of a repository search command.
- *
- * Deterministic argument parsing for rg, grep, findstr, and select-string.
- * Does NOT use LLM or heuristic regex to extract "symbols" — only extracts
- * literal patterns and explicit path arguments as they appear in the command string.
  */
 export interface ParsedRepositorySearch {
-  /** The search tool detected (rg, grep, findstr, select-string, or unknown) */
-  tool: "rg" | "grep" | "findstr" | "select-string" | "unknown";
-  /**
-   * Literal search patterns (the non-flag positional arguments to the command).
-   * Only includes arguments that are not flag values (e.g. -e PATTERN is included,
-   * --type ts is not). Patterns that look like valid identifiers are likely symbols.
-   * Patterns are returned unquoted.
-   */
+  tool: "rg" | "grep" | "git-grep" | "findstr" | "select-string" | "unknown";
   patterns: string[];
-  /**
-   * Explicit path arguments (positional path args, -f FILE, --include glob, etc.).
-   * Only includes arguments that look like file-system paths (contain / or .).
-   */
+  searchedSymbols: string[];
   paths: string[];
 }
 
-/**
- * Parse a shell command string for rg/grep/findstr/select-string to extract
- * literal search patterns and explicit path arguments.
- *
- * This function uses deterministic argument splitting and flag skipping.
- * It does NOT use regex to extract "symbols" from arbitrary command text.
- * If the command is not a recognised search tool, tool === "unknown" and
- * patterns/paths are empty.
- */
+const IS_SYMBOL = /^[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)*$/;
+
 export function parseSearchCommand(command: string): ParsedRepositorySearch {
-  const empty: ParsedRepositorySearch = { tool: "unknown", patterns: [], paths: [] };
+  const empty: ParsedRepositorySearch = { tool: "unknown", patterns: [], searchedSymbols: [], paths: [] };
   if (!command) return empty;
 
-  // Detect tool
   const lower = command.toLowerCase();
   let tool: ParsedRepositorySearch["tool"] = "unknown";
-  if (/\brg\b/.test(command)) tool = "rg";
+  if (/\bgit\s+grep\b/.test(lower)) tool = "git-grep";
+  else if (/\brg\b/.test(lower)) tool = "rg";
   else if (/\bgrep\b/.test(lower)) tool = "grep";
   else if (/\bfindstr\b/i.test(command)) tool = "findstr";
   else if (/\bselect-string\b/i.test(command)) tool = "select-string";
   if (tool === "unknown") return empty;
 
-  // Tokenize: split on whitespace but respect single/double quotes
   const tokens: string[] = [];
   let current = "";
   let inSingle = false;
@@ -120,7 +121,6 @@ export function parseSearchCommand(command: string): ParsedRepositorySearch {
   }
   if (current) tokens.push(current);
 
-  // Flags that consume one following argument (common for rg/grep)
   const argConsumingFlags = new Set([
     "-e", "--regexp", "-f", "--file",
     "-m", "--max-count", "--max-depth", "-A", "-B", "-C",
@@ -128,30 +128,41 @@ export function parseSearchCommand(command: string): ParsedRepositorySearch {
     "--type", "--type-not", "-t", "--color", "--colors",
     "--encoding", "--path-separator", "--sort", "--sortr",
     "--threads", "-j", "--iglob", "--glob", "-g",
-    // grep equivalents
-    "--include", "--exclude", "--exclude-dir",
-    // PowerShell
-    "-Pattern", "-LiteralPath", "-Path", "-Include", "-Exclude",
+    "--include", "--exclude", "--exclude-dir"
   ]);
 
   const patterns: string[] = [];
   const paths: string[] = [];
 
-  // Skip the tool name itself
   let i = 0;
-  while (i < tokens.length && !/^(?:rg|grep|findstr|select-string)$/i.test(tokens[i]!)) i++;
-  i++; // skip tool token
+  if (tool === "git-grep") {
+    while (i < tokens.length && tokens[i] !== "grep") i++;
+    i++;
+  } else {
+    while (i < tokens.length && !/^(?:rg|grep|findstr|select-string)$/i.test(tokens[i]!)) i++;
+    i++;
+  }
 
-  // Scan remaining tokens
-  let expectPattern = false; // true when the next token is a -e pattern
-  let patternDone = false;   // for rg/grep: first non-flag non-path after tool is the pattern
+  let patternDone = false;
+  let expectPatternNext = false;
+  let expectPathNext = false;
+
   while (i < tokens.length) {
     const tok = tokens[i]!;
 
-    // End of options
     if (tok === "--") { i++; break; }
 
-    // Flag argument: --flag=value
+    if (expectPatternNext) {
+      patterns.push(tok);
+      expectPatternNext = false;
+      i++; continue;
+    }
+    if (expectPathNext) {
+      paths.push(tok);
+      expectPathNext = false;
+      i++; continue;
+    }
+
     if (tok.startsWith("--") && tok.includes("=")) {
       const flag = tok.split("=")[0]!;
       const val = tok.slice(flag.length + 1);
@@ -159,52 +170,53 @@ export function parseSearchCommand(command: string): ParsedRepositorySearch {
       i++; continue;
     }
 
-    // Short/long flag that consumes the next token
-    if (argConsumingFlags.has(tok)) {
-      const nextTok = tokens[i + 1];
-      if (nextTok !== undefined) {
-        if (tok === "-e" || tok === "--regexp") {
-          patterns.push(nextTok);
-        } else if ((tok === "-f" || tok === "--file") && nextTok.includes("/")) {
-          paths.push(nextTok);
-        }
-        i += 2; continue;
-      }
+    if (tool === "select-string") {
+      if (tok.toLowerCase() === "-pattern") { expectPatternNext = true; i++; continue; }
+      if (tok.toLowerCase() === "-path" || tok.toLowerCase() === "-literalpath") { expectPathNext = true; i++; continue; }
+      if (tok.startsWith("-")) { i++; continue; }
+      patterns.push(tok);
       i++; continue;
     }
 
-    // Boolean flags (single dash or double dash without value)
-    if (tok.startsWith("-")) { i++; continue; }
+    if (argConsumingFlags.has(tok)) {
+      if (tok === "-e" || tok === "--regexp") expectPatternNext = true;
+      else if (tok === "-f" || tok === "--file") expectPathNext = true;
+      else i++;
+      i++; continue;
+    }
 
-    // Non-flag token: first is pattern, rest are paths (for rg/grep)
-    if (tool === "rg" || tool === "grep") {
-      if (!patternDone) {
-        patterns.push(tok);
-        patternDone = true;
-      } else {
-        // Subsequent non-flag args are paths
-        if (tok.includes("/") || tok.includes(".")) paths.push(tok);
-      }
-    } else if (tool === "findstr") {
-      // findstr /S /I pattern file1 file2 ...
-      if (!patternDone) { patterns.push(tok); patternDone = true; }
-      else { if (tok.includes("/") || tok.includes(".")) paths.push(tok); }
-    } else if (tool === "select-string") {
+    if (tok.startsWith("-") && tool !== "findstr") { i++; continue; }
+    if (tool === "findstr" && tok.startsWith("/")) { i++; continue; }
+
+    if (!patternDone) {
       patterns.push(tok);
+      patternDone = true;
+    } else {
+      if (tool === "rg" || tool === "grep" || tool === "git-grep") {
+        paths.push(tok);
+      } else {
+        if (tok.includes("/") || tok.includes(".") || tok.includes("\\") || tok.includes("*")) {
+          paths.push(tok);
+        }
+      }
     }
     i++;
   }
 
-  // Any remaining tokens after "--" are paths
   while (i < tokens.length) {
     const tok = tokens[i]!;
-    if (tok.includes("/") || tok.includes(".")) paths.push(tok);
+    if (tok.includes("/") || tok.includes(".") || tok.includes("\\") || tok.includes("*")) paths.push(tok);
     i++;
   }
 
+  const uniquePatterns = [...new Set(patterns.filter(p => p.length > 0))];
+  const uniquePaths = [...new Set(paths.filter(p => p.length > 0))];
+  const searchedSymbols = uniquePatterns.filter(p => IS_SYMBOL.test(p));
+
   return {
     tool,
-    patterns: [...new Set(patterns.filter(p => p.length > 0))],
-    paths: [...new Set(paths.filter(p => p.length > 0))],
+    patterns: uniquePatterns,
+    searchedSymbols,
+    paths: uniquePaths,
   };
 }
