@@ -513,4 +513,26 @@ export const MIGRATIONS: Migration[] = [
       CREATE TRIGGER codex_turn_diffs_no_delete BEFORE DELETE ON codex_turn_diffs BEGIN SELECT RAISE(ABORT,'codex diff ledger is append-only'); END;
     `,
   },
+  {
+    version: 7,
+    description: "Per-item delivery evidence and snapshot availability tracking",
+    sql: `
+      -- Add per-item evidence columns to context_session_delivery_items.
+      -- Legacy rows (before this migration) receive 'unknown_legacy' defaults.
+      -- These columns are nullable so the PRIMARY KEY composite can remain unchanged.
+      ALTER TABLE context_session_delivery_items ADD COLUMN requirement_state TEXT NOT NULL DEFAULT 'unknown_legacy';
+      ALTER TABLE context_session_delivery_items ADD COLUMN coverage_categories_json TEXT NOT NULL DEFAULT '[]';
+      ALTER TABLE context_session_delivery_items ADD COLUMN packet_section TEXT NOT NULL DEFAULT 'unknown_legacy';
+      ALTER TABLE context_session_delivery_items ADD COLUMN selection_reasons_json TEXT NOT NULL DEFAULT '[]';
+      ALTER TABLE context_session_delivery_items ADD COLUMN exact_match_reason TEXT;
+      ALTER TABLE context_session_delivery_items ADD COLUMN relationship_reason TEXT;
+      ALTER TABLE context_session_delivery_items ADD COLUMN coverage_reason TEXT;
+
+      -- Add snapshot availability tracking to codex_executions.
+      -- final_snapshot_available tracks whether final snapshot resolution succeeded.
+      -- final_snapshot_error records a sanitized error message when resolution fails.
+      ALTER TABLE codex_executions ADD COLUMN final_snapshot_available INTEGER NOT NULL DEFAULT 1;
+      ALTER TABLE codex_executions ADD COLUMN final_snapshot_error TEXT;
+    `,
+  },
 ];
