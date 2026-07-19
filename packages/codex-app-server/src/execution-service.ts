@@ -75,7 +75,8 @@ export class CodexExecutionService {
       return{executionId,sessionId,report:buildShadowReport(db,executionId,opened.root),compatibilityWarning:compatibility.warning,authenticationMode:account.mode};
     }catch(error){
       if(client)await client.close().catch(()=>undefined);
-      if(db&&executionId){const executions=new CodexExecutionRepository(db);const snapshot=await resolveSnapshotIdentity(sessions.repositoryRoot).catch(()=>({base_commit_hash:sessions.repository.id.toString(),worktree_hash:null}));const integration=error instanceof CodexIntegrationError?error:new CodexIntegrationError("TURN_FAILURE",error instanceof Error?error.message:String(error));executions.finish(executionId,"failed",snapshot,{code:integration.code,message:integration.message});}
+      if(db&&executionId){const executions=new CodexExecutionRepository(db);const integration=error instanceof CodexIntegrationError?error:new CodexIntegrationError("TURN_FAILURE",error instanceof Error?error.message:String(error));let finalSnapshot:{base_commit_hash:string;worktree_hash:string|null};try{finalSnapshot=await resolveSnapshotIdentity(sessions.repositoryRoot);}catch{// Snapshot resolution failed — use the starting snapshot preserved in the session, never fabricate a commit hash from a database ID
+        const sessionRow=db.prepare("SELECT base_commit_hash,worktree_hash FROM context_sessions WHERE id=?").get(sessionId) as {base_commit_hash:string;worktree_hash:string|null}|undefined;finalSnapshot={base_commit_hash:sessionRow?.base_commit_hash??"SNAPSHOT_UNAVAILABLE",worktree_hash:sessionRow?.worktree_hash??null};}executions.finish(executionId,"failed",finalSnapshot,{code:integration.code,message:integration.message});}
       if(sessionId)await sessions.complete(sessionId,{status:"failed"}).catch(()=>undefined);
       throw error;
     }finally{db?.close();sessions.close();}
