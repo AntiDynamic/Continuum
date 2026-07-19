@@ -1,0 +1,3 @@
+export class RepositoryNotIndexedError extends Error { constructor(public readonly repositoryId: number) { super(`Repository ${repositoryId} has no successful context index. Run \`continuum index\` before starting a context session.`); } }
+export class IndexedSnapshotMismatchError extends Error { constructor() { super("Repository state differs from the indexed snapshot. Run `continuum index` before starting a context session."); } }
+export class ContextEscalationLimitError extends Error { constructor(public readonly limit: number) { super(`Context expansion stopped: maximum escalation count ${limit} reached.`); } }

@@ -14,3 +14,4 @@ export {
   getGitVersion,
 } from "./git.js";
 export type { GitSnapshot, FileDelta } from "./git.js";
+export { resolveSnapshotIdentity } from "./snapshot.js";

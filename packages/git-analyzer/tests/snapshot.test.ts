@@ -1,0 +1,18 @@
+import { afterEach, describe, expect, it } from "vitest";
+import { mkdtemp, rm, writeFile, rename } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { execa } from "execa";
+import { buildCanonicalWorktreeInventory, resolveSnapshotIdentity } from "../src/snapshot.js";
+
+const roots: string[] = [];
+async function git(root: string, args: string[]) { await execa("git", args, { cwd: root }); }
+async function repository() { const root = await mkdtemp(join(tmpdir(), "continuum-snapshot-")); roots.push(root); await git(root, ["init"]); await git(root, ["config", "user.email", "test@example.com"]); await git(root, ["config", "user.name", "Test"]); await writeFile(join(root, "tracked.txt"), "base\n"); await git(root, ["add", "."]); await git(root, ["commit", "-m", "initial"]); return root; }
+afterEach(async () => { await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))); });
+
+describe("canonical worktree snapshot", () => {
+  it("returns a null worktree hash when clean", async () => { const root = await repository(); expect(await resolveSnapshotIdentity(root)).toMatchObject({ snapshot_kind: "commit", worktree_hash: null, dirty: false }); });
+  it("is deterministic and changes for unstaged, staged, and untracked state", async () => { const root = await repository(); await writeFile(join(root, "tracked.txt"), "unstaged\n"); const unstaged = await resolveSnapshotIdentity(root); expect((await resolveSnapshotIdentity(root)).worktree_hash).toBe(unstaged.worktree_hash); await git(root, ["add", "tracked.txt"]); const staged = await resolveSnapshotIdentity(root); expect(staged.worktree_hash).not.toBe(unstaged.worktree_hash); await writeFile(join(root, "new file.txt"), "untracked\n"); expect((await resolveSnapshotIdentity(root)).worktree_hash).not.toBe(staged.worktree_hash); });
+  it("preserves partial staging, deletion, rename, empty, spaces, and unicode paths", async () => { const root = await repository(); await writeFile(join(root, "tracked.txt"), "staged\n"); await git(root, ["add", "tracked.txt"]); await writeFile(join(root, "tracked.txt"), "staged\nunstaged\n"); await writeFile(join(root, "empty file.txt"), ""); await writeFile(join(root, "café.txt"), "same"); await rename(join(root, "tracked.txt"), join(root, "renamed.txt")); const entries = await buildCanonicalWorktreeInventory(root); expect(entries.some((entry) => entry.path === "empty file.txt")).toBe(true); expect(entries.some((entry) => entry.path === "café.txt")).toBe(true); expect(entries.some((entry) => entry.deletionMarker || entry.recordType === "rename_or_copy")).toBe(true); expect((await resolveSnapshotIdentity(root)).worktree_hash).toMatch(/^[a-f0-9]{64}$/); });
+  it("ignores ignored files and distinguishes identical bytes at separate paths", async () => { const root = await repository(); await writeFile(join(root, ".gitignore"), "ignored.txt\n"); await git(root, ["add", ".gitignore"]); await git(root, ["commit", "-m", "ignore"]); await writeFile(join(root, "ignored.txt"), "ignored"); expect((await resolveSnapshotIdentity(root)).snapshot_kind).toBe("commit"); await writeFile(join(root, "a.txt"), "same"); const first = await resolveSnapshotIdentity(root); await writeFile(join(root, "b.txt"), "same"); expect((await resolveSnapshotIdentity(root)).worktree_hash).not.toBe(first.worktree_hash); });
+});

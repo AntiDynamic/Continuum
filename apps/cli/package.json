@@ -16,6 +16,7 @@
     "test": "vitest run --testTimeout=15000 --hookTimeout=30000"
   },
   "dependencies": {
+    "@continuum/codex-app-server": "workspace:*",
     "@continuum/context-engine": "workspace:*",
     "@continuum/agent-core": "workspace:*",
     "@continuum/database": "workspace:*",

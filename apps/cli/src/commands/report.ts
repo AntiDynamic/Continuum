@@ -140,6 +140,23 @@ export async function printReport(report: RunReport): Promise<void> {
     "estimated; no valid baseline",
   );
 
+  section("Context session");
+  if (report.contextSession) {
+    kv("Session ID", report.contextSession.sessionId);
+    kv("Strategy", report.contextSession.strategyId + " v" + report.contextSession.strategyVersion);
+    kv("Snapshot", report.contextSession.snapshot.snapshot_kind + " " + (report.contextSession.snapshot.worktree_hash ?? report.contextSession.snapshot.base_commit_hash));
+    kv("Initial estimated tokens", String(report.contextSession.initialEstimatedTokens), "estimated");
+    kv("Escalation estimated tokens", String(report.contextSession.escalationEstimatedTokens), "estimated");
+    kv("Delivery count", String(report.contextSession.deliveryCount), "exact");
+    kv("Active-reference count", String(report.contextSession.activeReferenceCount), "exact");
+    kv("Estimated duplicate context avoided", String(report.contextSession.estimatedDuplicateTokensAvoided), "estimated; no measured counterfactual baseline");
+    kv("Coverage remaining", report.contextSession.coverageRemaining.join(", ") || "none");
+    kv("Session state", report.contextSession.state);
+    line(dim("  Context supplied; Continuum does not claim causal task improvement."));
+  } else {
+    kv("Context session", "not recorded");
+  }
+
   section("Usage evidence");
   if (report.usageEvidence) {
     kv("Measurement", report.usageEvidence.usage.measurement);
@@ -235,6 +252,9 @@ export function renderHtmlReport(report: RunReport): string {
     `<h1>Continuum Report</h1><p><strong>Run:</strong> ${escapeHtml(report.runId)}</p>`,
     `<p><strong>Task:</strong> ${escapeHtml(report.task)}</p>`,
     `<p><strong>Status:</strong> ${escapeHtml(report.status)}</p>`,
+    report.contextSession
+      ? "<h2>Context session</h2><p><strong>Session:</strong> " + escapeHtml(report.contextSession.sessionId) + "<br><strong>Strategy:</strong> " + escapeHtml(report.contextSession.strategyId) + "<br><strong>Context supplied:</strong> " + escapeHtml(String(report.contextSession.initialEstimatedTokens + report.contextSession.escalationEstimatedTokens)) + " estimated tokens<br><strong>Estimated duplicate context avoided:</strong> " + escapeHtml(String(report.contextSession.estimatedDuplicateTokensAvoided)) + "<br>No measured counterfactual baseline.</p>"
+      : "<h2>Context session</h2><p>not recorded</p>",
     "<table><tbody>",
     rows,
     "</tbody></table>",

@@ -348,6 +348,18 @@ export class ContextRepository {
     ).all(repositoryId, limit) as unknown as ContextItemVersion[];
   }
 
+  findCurrentVersionsByTerms(repositoryId: number, terms: string[], limit = 200): ContextItemVersion[] {
+    const bounded = [...new Set(terms.map((term) => term.toLowerCase()).filter((term) => term.length >= 3))].slice(0, 8);
+    if (!bounded.length) return [];
+    const predicates = bounded.map(() => "(LOWER(v.source_path) LIKE ? OR LOWER(COALESCE(v.symbol_name,'')) LIKE ? OR LOWER(COALESCE(v.title,'')) LIKE ?)").join(" OR ");
+    const params = bounded.flatMap((term) => { const pattern = "%" + term + "%"; return [pattern, pattern, pattern]; });
+    const exact = bounded.map(() => "?").join(",");
+    const sql = "SELECT v.* FROM context_item_versions v JOIN context_items i ON i.id = v.context_item_id " +
+      "WHERE i.repository_id = ? AND v.valid_to_commit_exclusive IS NULL AND (" + predicates + ") " +
+      "ORDER BY CASE WHEN LOWER(COALESCE(v.symbol_name,'')) IN (" + exact + ") THEN 0 WHEN LOWER(v.source_path) LIKE ? THEN 1 ELSE 2 END, v.indexed_at DESC, v.rowid DESC LIMIT ?";
+    return this.db.prepare(sql).all(repositoryId, ...params, ...bounded, "%" + bounded[0] + "%", limit) as unknown as ContextItemVersion[];
+  }
+
   findVersionById(repositoryId: number, versionId: string): ContextItemVersion | undefined {
     return this.db.prepare(
       `SELECT v.* FROM context_item_versions v

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "continuum.real-repository-benchmark.v1",
+  "groundTruthPolicy": "Manually declared before executing retrieval on 2026-07-19; labels were not derived from Continuum output.",
+  "repositories": [
+    {
+      "id": "continuum",
+      "sourcePath": "C:/Users/pares/.gemini/antigravity/scratch/Continuum",
+      "description": "Continuum production repository",
+      "cases": [
+        {
+          "id": "continuum-context-engine",
+          "task": "Show ContextEngine packet retrieval implementation",
+          "requiredPaths": [
+            "packages/context-engine/src/engine.ts"
+          ],
+          "requiredSymbols": [
+            "ContextEngine"
+          ]
+        },
+        {
+          "id": "continuum-snapshot",
+          "task": "Inspect resolveSnapshotIdentity canonical worktree hashing",
+          "requiredPaths": [
+            "packages/git-analyzer/src/snapshot.ts"
+          ],
+          "requiredSymbols": [
+            "resolveSnapshotIdentity"
+          ]
+        },
+        {
+          "id": "continuum-session-cli",
+          "task": "Change CLI runSessionRequest session request handling",
+          "requiredPaths": [
+            "apps/cli/src/commands/session.ts"
+          ],
+          "requiredSymbols": [
+            "runSessionRequest"
+          ]
+        },
+        {
+          "id": "continuum-migrations",
+          "task": "Inspect database MIGRATIONS schema upgrades",
+          "requiredPaths": [
+            "packages/database/src/migrations.ts"
+          ],
+          "requiredSymbols": [
+            "MIGRATIONS"
+          ]
+        },
+        {
+          "id": "continuum-mcp",
+          "task": "Inspect ContextCompilerMcpServer context tool handling",
+          "requiredPaths": [
+            "packages/mcp-server/src/compiler-server.ts"
+          ],
+          "requiredSymbols": [
+            "ContextCompilerMcpServer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aurum-dining",
+      "sourcePath": "C:/Users/pares/.gemini/antigravity/scratch/aurum-dining",
+      "description": "Unrelated local React/TypeScript dining site",
+      "cases": [
+        {
+          "id": "aurum-reservation",
+          "task": "Fix Reservation canNext validation and submission flow",
+          "requiredPaths": [
+            "src/pages/Reservation.tsx"
+          ],
+          "requiredSymbols": [
+            "Reservation"
+          ]
+        },
+        {
+          "id": "aurum-menu",
+          "task": "Change Menu filtering using menuItems and MenuCategory",
+          "requiredPaths": [
+            "src/pages/Menu.tsx",
+            "src/data/menu.ts",
+            "src/types/index.ts"
+          ],
+          "requiredSymbols": [
+            "Menu",
+            "menuItems",
+            "MenuCategory"
+          ]
+        },
+        {
+          "id": "aurum-gallery",
+          "task": "Change Gallery lightbox using galleryImages",
+          "requiredPaths": [
+            "src/pages/Gallery.tsx",
+            "src/data/gallery.ts"
+          ],
+          "requiredSymbols": [
+            "Gallery",
+            "galleryImages"
+          ]
+        },
+        {
+          "id": "aurum-navigation",
+          "task": "Change App routing and Navbar navigation",
+          "requiredPaths": [
+            "src/App.tsx",
+            "src/components/layout/Navbar.tsx"
+          ],
+          "requiredSymbols": [
+            "App",
+            "Navbar"
+          ]
+        },
+        {
+          "id": "aurum-contract",
+          "task": "Change ReservationFormData public type and reservation page",
+          "requiredPaths": [
+            "src/types/index.ts",
+            "src/pages/Reservation.tsx"
+          ],
+          "requiredSymbols": [
+            "ReservationFormData",
+            "Reservation"
+          ]
+        }
+      ]
+    }
+  ]
+}

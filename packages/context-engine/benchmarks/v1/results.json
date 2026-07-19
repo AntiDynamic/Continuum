@@ -1,0 +1,3807 @@
+{
+  "schemaVersion": "continuum.retrieval-benchmark-result.v1",
+  "datasetSchemaVersion": "continuum.retrieval-benchmark.v1",
+  "generatedAt": "2026-07-19T11:43:03.042Z",
+  "environment": {
+    "platform": "win32",
+    "architecture": "x64",
+    "node": "v24.13.0",
+    "cpu": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "logicalProcessors": 8,
+    "totalMemoryBytes": 8215093248
+  },
+  "evidence": {
+    "retrievalQuality": "measured",
+    "latency": "measured locally",
+    "tokens": "estimated",
+    "providerCost": "unavailable",
+    "taskSuccess": "not evaluated in this phase"
+  },
+  "aggregate": {
+    "caseCount": 24,
+    "recallAt1": 0.4465,
+    "recallAt5": 0.8868,
+    "recallAt10": 0.9417,
+    "precisionAt5": 0.6667,
+    "precisionAt10": 0.4417,
+    "meanReciprocalRank": 0.9226,
+    "mandatoryCoverageRecall": 0.9861,
+    "medianInitialPacketEstimatedTokens": 1018.5,
+    "p90InitialPacketEstimatedTokens": 1388,
+    "maximumInitialPacketEstimatedTokens": 1601,
+    "medianRetrievalLatencyMs": 14.005,
+    "p90RetrievalLatencyMs": 32.079,
+    "maximumRetrievalLatencyMs": 56.759,
+    "irrelevantSelectedItemCount": 0,
+    "duplicateFullContentResendRate": 0,
+    "repeatRequestCount": 3,
+    "estimatedDuplicateTokensAvoided": 3147
+  },
+  "byCategory": {
+    "exact_symbol": {
+      "caseCount": 3,
+      "recallAt1": 0.8333,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.6667,
+      "precisionAt10": 0.4,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 880,
+      "p90InitialPacketEstimatedTokens": 1440,
+      "maximumInitialPacketEstimatedTokens": 1440,
+      "medianRetrievalLatencyMs": 13.427,
+      "p90RetrievalLatencyMs": 32.079,
+      "maximumRetrievalLatencyMs": 32.079,
+      "irrelevantSelectedItemCount": 0
+    },
+    "exact_path": {
+      "caseCount": 3,
+      "recallAt1": 0.6667,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.4667,
+      "precisionAt10": 0.2333,
+      "meanReciprocalRank": 0.8333,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 1204,
+      "p90InitialPacketEstimatedTokens": 1366,
+      "maximumInitialPacketEstimatedTokens": 1366,
+      "medianRetrievalLatencyMs": 16.832,
+      "p90RetrievalLatencyMs": 19.225,
+      "maximumRetrievalLatencyMs": 19.225,
+      "irrelevantSelectedItemCount": 0
+    },
+    "local_bug": {
+      "caseCount": 2,
+      "recallAt1": 0.5,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.7,
+      "precisionAt10": 0.55,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 1094,
+      "p90InitialPacketEstimatedTokens": 1181,
+      "maximumInitialPacketEstimatedTokens": 1181,
+      "medianRetrievalLatencyMs": 9.074,
+      "p90RetrievalLatencyMs": 10.976,
+      "maximumRetrievalLatencyMs": 10.976,
+      "irrelevantSelectedItemCount": 0
+    },
+    "cross_package": {
+      "caseCount": 2,
+      "recallAt1": 0.35,
+      "recallAt5": 0.8,
+      "recallAt10": 1,
+      "precisionAt5": 0.6,
+      "precisionAt10": 0.55,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 1034,
+      "p90InitialPacketEstimatedTokens": 1038,
+      "maximumInitialPacketEstimatedTokens": 1038,
+      "medianRetrievalLatencyMs": 19.08,
+      "p90RetrievalLatencyMs": 20.414,
+      "maximumRetrievalLatencyMs": 20.414,
+      "irrelevantSelectedItemCount": 0
+    },
+    "test_failure": {
+      "caseCount": 2,
+      "recallAt1": 0.5,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.6,
+      "precisionAt10": 0.45,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 1280,
+      "p90InitialPacketEstimatedTokens": 1388,
+      "maximumInitialPacketEstimatedTokens": 1388,
+      "medianRetrievalLatencyMs": 12.402,
+      "p90RetrievalLatencyMs": 12.521,
+      "maximumRetrievalLatencyMs": 12.521,
+      "irrelevantSelectedItemCount": 0
+    },
+    "security": {
+      "caseCount": 2,
+      "recallAt1": 0.1666,
+      "recallAt5": 0.7084,
+      "recallAt10": 0.8334,
+      "precisionAt5": 0.8,
+      "precisionAt10": 0.5,
+      "meanReciprocalRank": 0.75,
+      "mandatoryCoverageRecall": 0.8334,
+      "medianInitialPacketEstimatedTokens": 851.5,
+      "p90InitialPacketEstimatedTokens": 1043,
+      "maximumInitialPacketEstimatedTokens": 1043,
+      "medianRetrievalLatencyMs": 31.724,
+      "p90RetrievalLatencyMs": 54.742,
+      "maximumRetrievalLatencyMs": 54.742,
+      "irrelevantSelectedItemCount": 0
+    },
+    "database_migration": {
+      "caseCount": 2,
+      "recallAt1": 0.2916,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.9,
+      "precisionAt10": 0.55,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 1021.5,
+      "p90InitialPacketEstimatedTokens": 1176,
+      "maximumInitialPacketEstimatedTokens": 1176,
+      "medianRetrievalLatencyMs": 13.357,
+      "p90RetrievalLatencyMs": 15.883,
+      "maximumRetrievalLatencyMs": 15.883,
+      "irrelevantSelectedItemCount": 0
+    },
+    "api_contract": {
+      "caseCount": 2,
+      "recallAt1": 0.4334,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.8,
+      "precisionAt10": 0.4,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 926,
+      "p90InitialPacketEstimatedTokens": 1221,
+      "maximumInitialPacketEstimatedTokens": 1221,
+      "medianRetrievalLatencyMs": 13.997,
+      "p90RetrievalLatencyMs": 17.206,
+      "maximumRetrievalLatencyMs": 17.206,
+      "irrelevantSelectedItemCount": 0
+    },
+    "configuration": {
+      "caseCount": 2,
+      "recallAt1": 0.3333,
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "precisionAt5": 0.8,
+      "precisionAt10": 0.45,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 874.5,
+      "p90InitialPacketEstimatedTokens": 985,
+      "maximumInitialPacketEstimatedTokens": 985,
+      "medianRetrievalLatencyMs": 11.8,
+      "p90RetrievalLatencyMs": 12.309,
+      "maximumRetrievalLatencyMs": 12.309,
+      "irrelevantSelectedItemCount": 0
+    },
+    "documentation_mismatch": {
+      "caseCount": 2,
+      "recallAt1": 0.3667,
+      "recallAt5": 0.8,
+      "recallAt10": 0.8,
+      "precisionAt5": 0.8,
+      "precisionAt10": 0.5,
+      "meanReciprocalRank": 1,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 1285,
+      "p90InitialPacketEstimatedTokens": 1601,
+      "maximumInitialPacketEstimatedTokens": 1601,
+      "medianRetrievalLatencyMs": 13.646,
+      "p90RetrievalLatencyMs": 16.475,
+      "maximumRetrievalLatencyMs": 16.475,
+      "irrelevantSelectedItemCount": 0
+    },
+    "ambiguous_behaviour": {
+      "caseCount": 2,
+      "recallAt1": 0.1666,
+      "recallAt5": 0.3333,
+      "recallAt10": 0.6666,
+      "precisionAt5": 0.3,
+      "precisionAt10": 0.4,
+      "meanReciprocalRank": 0.5715,
+      "mandatoryCoverageRecall": 1,
+      "medianInitialPacketEstimatedTokens": 662.5,
+      "p90InitialPacketEstimatedTokens": 841,
+      "maximumInitialPacketEstimatedTokens": 841,
+      "medianRetrievalLatencyMs": 43.543,
+      "p90RetrievalLatencyMs": 56.759,
+      "maximumRetrievalLatencyMs": 56.759,
+      "irrelevantSelectedItemCount": 0
+    }
+  },
+  "ablations": {
+    "lexical_only": {
+      "caseCount": 24,
+      "recallAt1": 0.4674,
+      "recallAt5": 0.8104,
+      "recallAt10": 0.9417,
+      "precisionAt5": 0.65,
+      "precisionAt10": 0.4333,
+      "meanReciprocalRank": 0.9208,
+      "mandatoryCoverageRecall": 0.9861,
+      "medianInitialPacketEstimatedTokens": 1018.5,
+      "p90InitialPacketEstimatedTokens": 1388,
+      "maximumInitialPacketEstimatedTokens": 1601,
+      "medianRetrievalLatencyMs": 14.005,
+      "p90RetrievalLatencyMs": 32.079,
+      "maximumRetrievalLatencyMs": 56.759,
+      "irrelevantSelectedItemCount": 0
+    },
+    "lexical_graph": {
+      "caseCount": 24,
+      "recallAt1": 0.4465,
+      "recallAt5": 0.8868,
+      "recallAt10": 0.9417,
+      "precisionAt5": 0.6583,
+      "precisionAt10": 0.4417,
+      "meanReciprocalRank": 0.9226,
+      "mandatoryCoverageRecall": 0.9861,
+      "medianInitialPacketEstimatedTokens": 1018.5,
+      "p90InitialPacketEstimatedTokens": 1388,
+      "maximumInitialPacketEstimatedTokens": 1601,
+      "medianRetrievalLatencyMs": 14.005,
+      "p90RetrievalLatencyMs": 32.079,
+      "maximumRetrievalLatencyMs": 56.759,
+      "irrelevantSelectedItemCount": 0
+    },
+    "lexical_coverage": {
+      "caseCount": 24,
+      "recallAt1": 0.4674,
+      "recallAt5": 0.8743,
+      "recallAt10": 0.9417,
+      "precisionAt5": 0.6917,
+      "precisionAt10": 0.4375,
+      "meanReciprocalRank": 0.9208,
+      "mandatoryCoverageRecall": 0.9861,
+      "medianInitialPacketEstimatedTokens": 1018.5,
+      "p90InitialPacketEstimatedTokens": 1388,
+      "maximumInitialPacketEstimatedTokens": 1601,
+      "medianRetrievalLatencyMs": 14.005,
+      "p90RetrievalLatencyMs": 32.079,
+      "maximumRetrievalLatencyMs": 56.759,
+      "irrelevantSelectedItemCount": 0
+    },
+    "lexical_graph_coverage": {
+      "caseCount": 24,
+      "recallAt1": 0.4465,
+      "recallAt5": 0.8868,
+      "recallAt10": 0.9417,
+      "precisionAt5": 0.6667,
+      "precisionAt10": 0.4417,
+      "meanReciprocalRank": 0.9226,
+      "mandatoryCoverageRecall": 0.9861,
+      "medianInitialPacketEstimatedTokens": 1018.5,
+      "p90InitialPacketEstimatedTokens": 1388,
+      "maximumInitialPacketEstimatedTokens": 1601,
+      "medianRetrievalLatencyMs": 14.005,
+      "p90RetrievalLatencyMs": 32.079,
+      "maximumRetrievalLatencyMs": 56.759,
+      "irrelevantSelectedItemCount": 0
+    },
+    "full": {
+      "caseCount": 24,
+      "recallAt1": 0.4465,
+      "recallAt5": 0.8868,
+      "recallAt10": 0.9417,
+      "precisionAt5": 0.6667,
+      "precisionAt10": 0.4417,
+      "meanReciprocalRank": 0.9226,
+      "mandatoryCoverageRecall": 0.9861,
+      "medianInitialPacketEstimatedTokens": 1018.5,
+      "p90InitialPacketEstimatedTokens": 1388,
+      "maximumInitialPacketEstimatedTokens": 1601,
+      "medianRetrievalLatencyMs": 14.005,
+      "p90RetrievalLatencyMs": 32.079,
+      "maximumRetrievalLatencyMs": 56.759,
+      "irrelevantSelectedItemCount": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "small-exact-symbol-auth",
+      "repositoryFixture": "small-ts",
+      "category": "exact_symbol",
+      "task": "Show AuthService.validateToken",
+      "requirements": [
+        "path:src/auth-service.ts",
+        "symbol:AuthService.validateToken"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        1
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.validateToken",
+          "score": 15.5282,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 15.1952,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken",
+          "score": 13.7987,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service",
+          "score": 6.193,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "src/auth-service.ts",
+          "symbol": "TokenClaims",
+          "score": 6.1304,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 5.6008,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy",
+          "score": 3.8543,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.6641,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 3.4449,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/cache.ts",
+          "symbol": "invalidateCache",
+          "score": 2.0611,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.5,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1440,
+        "totalSelectedEstimatedTokens": 1440,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 32.079
+      }
+    },
+    {
+      "id": "mono-exact-symbol-session",
+      "repositoryFixture": "monorepo",
+      "category": "exact_symbol",
+      "task": "Show createSession",
+      "requirements": [
+        "path:packages/core/src/session.ts",
+        "symbol:createSession"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/core/src/session.ts",
+          "symbol": "Session",
+          "score": 14.0328,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/core/src/session.ts",
+          "symbol": "createSession",
+          "score": 13.8409,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 5.8053,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 5.3695,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "import ../../core/src/session",
+          "score": 3.788,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 3.6606,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "updateUser",
+          "score": 2.987,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "config/workspace.yaml",
+          "symbol": "sessionTimeoutMs",
+          "score": 2.6356,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "docs/architecture.md",
+          "symbol": "Architecture",
+          "score": 2.5878,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 2.5099,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.5,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.3,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 840,
+        "totalSelectedEstimatedTokens": 840,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 8.663
+      }
+    },
+    {
+      "id": "sql-exact-symbol-rollback",
+      "repositoryFixture": "sql-docs",
+      "category": "exact_symbol",
+      "task": "Show rollbackMigration",
+      "requirements": [
+        "path:src/migration-runner.ts",
+        "symbol:rollbackMigration"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        1
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "src/migration-runner.ts",
+          "symbol": "rollbackMigration",
+          "score": 15.5084,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "tests/migrations.test.ts",
+          "symbol": "migrationRoundTripTest",
+          "score": 7.5004,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "tests/migrations.test.ts",
+          "symbol": "import ../src/migration-runner",
+          "score": 7.0531,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "src/migration-runner.ts",
+          "symbol": "MigrationResult",
+          "score": 5.6569,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.5351,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.5271,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 5",
+          "score": 4.7795,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 4.5007,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "src/migration-runner.ts",
+          "symbol": "applyMigrations",
+          "score": 4.3938,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 4.1329,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 880,
+        "totalSelectedEstimatedTokens": 880,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 13.427
+      }
+    },
+    {
+      "id": "small-exact-path-config",
+      "repositoryFixture": "small-ts",
+      "category": "exact_path",
+      "task": "Inspect config/app.yaml",
+      "requirements": [
+        "path:config/app.yaml"
+      ],
+      "indexedRequirementPresence": [
+        true
+      ],
+      "requirementRanks": [
+        1
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "config/app.yaml",
+          "symbol": "timeoutMs",
+          "score": 9.0796,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "config/app.yaml",
+          "symbol": "trustProxy",
+          "score": 9.079,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/app-config.ts",
+          "symbol": "AppConfig",
+          "score": 4.788,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "src/app-config.ts",
+          "symbol": "loadAppConfig",
+          "score": 4.781,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.4,
+        "precisionAt10": 0.2,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 430,
+        "totalSelectedEstimatedTokens": 430,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 16.832
+      }
+    },
+    {
+      "id": "mono-exact-path-contract",
+      "repositoryFixture": "monorepo",
+      "category": "exact_path",
+      "task": "Inspect packages/api/src/contracts.ts",
+      "requirements": [
+        "path:packages/api/src/contracts.ts"
+      ],
+      "indexedRequirementPresence": [
+        true
+      ],
+      "requirementRanks": [
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/web/src/client.ts",
+          "symbol": "import ../../api/src/contracts",
+          "score": 12.9692,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/api/src/contracts.ts",
+          "symbol": "UserResponse",
+          "score": 9.3933,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/api/src/contracts.ts",
+          "symbol": "ApiError",
+          "score": 8.1455,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 5.5313,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "updateUserContractTest",
+          "score": 5.5307,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 4.9683,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 4.966,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "packages/web/src/client.ts",
+          "symbol": "fetchUser",
+          "score": 4.0577,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "updateUser",
+          "score": 3.9527,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "docs/architecture.md",
+          "symbol": "Architecture",
+          "score": 3.3597,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.4,
+        "precisionAt10": 0.2,
+        "reciprocalRank": 0.5,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1366,
+        "totalSelectedEstimatedTokens": 1366,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 19.225
+      }
+    },
+    {
+      "id": "sql-exact-path-migration",
+      "repositoryFixture": "sql-docs",
+      "category": "exact_path",
+      "task": "Inspect migrations/002_add_refresh_token.sql",
+      "requirements": [
+        "path:migrations/002_add_refresh_token.sql"
+      ],
+      "indexedRequirementPresence": [
+        true
+      ],
+      "requirementRanks": [
+        1
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "users_refresh_token_idx",
+          "score": 17.392,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 10.131,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 9.4225,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "tests/migrations.test.ts",
+          "symbol": "migrationRoundTripTest",
+          "score": 7.0986,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "tests/migrations.test.ts",
+          "symbol": "import ../src/migration-runner",
+          "score": 6.7694,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "src/migration-runner.ts",
+          "symbol": "rollbackMigration",
+          "score": 5.1088,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/migration-runner.ts",
+          "symbol": "applyMigrations",
+          "score": 4.4271,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 4.4029,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "src/migration-runner.ts",
+          "symbol": "MigrationResult",
+          "score": 4.3735,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 3",
+          "score": 4.1156,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 1,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.3,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1204,
+        "totalSelectedEstimatedTokens": 1204,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 14.582
+      }
+    },
+    {
+      "id": "small-local-cache-timeout",
+      "repositoryFixture": "small-ts",
+      "category": "local_bug",
+      "task": "Fix readCache timeout bug and its failing test",
+      "requirements": [
+        "path:src/cache.ts",
+        "path:tests/cache.test.ts",
+        "symbol:readCache",
+        "symbol:cacheTimeoutTest"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        2,
+        1,
+        2,
+        1
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 15.1543,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "src/cache.ts",
+          "symbol": "readCache",
+          "score": 15.1299,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "tests/cache.test.ts",
+          "symbol": "import ../src/cache",
+          "score": 7.7568,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 6.5534,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service",
+          "score": 6.0575,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 4.3651,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/cache.ts",
+          "symbol": "invalidateCache",
+          "score": 3.8893,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 3.2943,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "config/app.yaml",
+          "symbol": "timeoutMs",
+          "score": 2.585,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.5,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1007,
+        "totalSelectedEstimatedTokens": 1007,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 7.172
+      }
+    },
+    {
+      "id": "small-local-token-refresh",
+      "repositoryFixture": "small-ts",
+      "category": "local_bug",
+      "task": "Fix refreshToken validation error with regression test",
+      "requirements": [
+        "path:src/auth-service.ts",
+        "path:tests/auth-service.test.ts",
+        "symbol:AuthService.refreshToken",
+        "symbol:rejectsEmptyTokenTest"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2,
+        1,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken",
+          "score": 12.8372,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 5.1229,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 5.0828,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 4.6439,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.validateToken",
+          "score": 4.5993,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "tests/cache.test.ts",
+          "symbol": "import ../src/cache",
+          "score": 4.583,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service",
+          "score": 4.5644,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy",
+          "score": 4.2886,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.7399,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/auth-service.ts",
+          "symbol": "TokenClaims",
+          "score": 2.8383,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.5,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.7,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1181,
+        "totalSelectedEstimatedTokens": 1181,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 10.976
+      }
+    },
+    {
+      "id": "mono-cross-user-session",
+      "repositoryFixture": "monorepo",
+      "category": "cross_package",
+      "task": "Change updateUser across packages/api and packages/core session creation",
+      "requirements": [
+        "path:packages/api/src/routes.ts",
+        "path:packages/core/src/session.ts",
+        "path:packages/api/tests/routes.test.ts",
+        "symbol:updateUser",
+        "symbol:createSession"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        2,
+        1,
+        6,
+        2,
+        7
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/core/src/session.ts",
+          "symbol": "Session",
+          "score": 14.6556,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "updateUser",
+          "score": 13.37,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 5.8941,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 5.1195,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "import ../../core/src/session",
+          "score": 4.6639,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "updateUserContractTest",
+          "score": 3.9188,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/core/src/session.ts",
+          "symbol": "createSession",
+          "score": 3.8788,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "docs/architecture.md",
+          "symbol": "Architecture",
+          "score": 3.7469,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 3.5869,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 3.2969,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.2,
+        "recallAt5": 0.6,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.7,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1030,
+        "totalSelectedEstimatedTokens": 1030,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 17.745
+      }
+    },
+    {
+      "id": "mono-cross-web-contract",
+      "repositoryFixture": "monorepo",
+      "category": "cross_package",
+      "task": "Update web fetchUser and API UserResponse contract across packages/web and packages/api",
+      "requirements": [
+        "path:packages/web/src/client.ts",
+        "path:packages/api/src/contracts.ts",
+        "symbol:fetchUser",
+        "symbol:UserResponse"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2,
+        1,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/web/src/client.ts",
+          "symbol": "fetchUser",
+          "score": 13.6989,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/api/src/contracts.ts",
+          "symbol": "UserResponse",
+          "score": 13.4298,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/web/src/client.ts",
+          "symbol": "import ../../api/src/contracts",
+          "score": 4.8297,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "updateUserContractTest",
+          "score": 3.8769,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 3.8005,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "docs/architecture.md",
+          "symbol": "Architecture",
+          "score": 3.485,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 3.4545,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 3.2759,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 3.2737,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "packages/config/src/settings.ts",
+          "symbol": "WorkspaceSettings",
+          "score": 3.0198,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "configuration"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.5,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1038,
+        "totalSelectedEstimatedTokens": 1038,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 20.414
+      }
+    },
+    {
+      "id": "small-test-auth",
+      "repositoryFixture": "small-ts",
+      "category": "test_failure",
+      "task": "Failing rejectsEmptyTokenTest expected token rejection",
+      "requirements": [
+        "path:tests/auth-service.test.ts",
+        "path:src/auth-service.ts",
+        "symbol:rejectsEmptyTokenTest",
+        "symbol:AuthService.validateToken"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        5,
+        1,
+        5
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 6.9979,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 5.0828,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "tests/cache.test.ts",
+          "symbol": "import ../src/cache",
+          "score": 4.583,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service",
+          "score": 4.5644,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.validateToken",
+          "score": 4.3089,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy",
+          "score": 4.2816,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken",
+          "score": 4.2261,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "src/auth-service.ts",
+          "symbol": "TokenClaims",
+          "score": 4.0883,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.2682,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 3.015,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.5,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.6,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1172,
+        "totalSelectedEstimatedTokens": 1172,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 12.282
+      }
+    },
+    {
+      "id": "mono-test-route",
+      "repositoryFixture": "monorepo",
+      "category": "test_failure",
+      "task": "Failing updateUserContractTest expected sessionId",
+      "requirements": [
+        "path:packages/api/tests/routes.test.ts",
+        "path:packages/api/src/routes.ts",
+        "symbol:updateUserContractTest",
+        "symbol:updateUser"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        4,
+        1,
+        4
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "updateUserContractTest",
+          "score": 16.7549,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 14.8591,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/core/src/session.ts",
+          "symbol": "Session",
+          "score": 14.4733,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "updateUser",
+          "score": 14.3941,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 7.5502,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 6.2411,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/core/src/session.ts",
+          "symbol": "createSession",
+          "score": 3.6893,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "packages/api/src/contracts.ts",
+          "symbol": "UserResponse",
+          "score": 3.5502,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 3.3056,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "packages/web/src/client.ts",
+          "symbol": "fetchUser",
+          "score": 3.0862,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.5,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.3,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1388,
+        "totalSelectedEstimatedTokens": 1388,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 12.521
+      }
+    },
+    {
+      "id": "small-security-token",
+      "repositoryFixture": "small-ts",
+      "category": "security",
+      "task": "Fix authentication token trust validation without weakening security",
+      "requirements": [
+        "path:src/auth-service.ts",
+        "path:tests/auth-service.test.ts",
+        "path:SECURITY.md",
+        "symbol:AuthService.validateToken"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        3,
+        7,
+        2,
+        3
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 13.6451,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy",
+          "score": 13.2049,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.validateToken",
+          "score": 4.2464,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 4.2025,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken",
+          "score": 4.1636,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.6774,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 3.2558,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "src/auth-service.ts",
+          "symbol": "TokenClaims",
+          "score": 2.7758,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "config/app.yaml",
+          "symbol": "trustProxy",
+          "score": 2.5358,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0,
+        "recallAt5": 0.75,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.6,
+        "reciprocalRank": 0.5,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1043,
+        "totalSelectedEstimatedTokens": 1043,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 8.706
+      }
+    },
+    {
+      "id": "sql-security-refresh",
+      "repositoryFixture": "sql-docs",
+      "category": "security",
+      "task": "Secure refresh token hash storage and never store plaintext tokens",
+      "requirements": [
+        "path:migrations/002_add_refresh_token.sql",
+        "path:SECURITY.md",
+        "path:tests/migrations.test.ts"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2,
+        0
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "users_refresh_token_idx",
+          "score": 12.0894,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "SECURITY.md",
+          "symbol": "Database security",
+          "score": 4.2544,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 4.0483,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 4.048,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 3.2792,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "schema/users.sql",
+          "symbol": "users",
+          "score": 3.0884,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "docs/deployment.md",
+          "symbol": "Deployment",
+          "score": 2.9924,
+          "coverage": [
+            "implementation",
+            "rollback",
+            "documentation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.3333,
+        "recallAt5": 0.6667,
+        "recallAt10": 0.6667,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 0.6667,
+        "initialPacketEstimatedTokens": 660,
+        "totalSelectedEstimatedTokens": 660,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 54.742
+      }
+    },
+    {
+      "id": "sql-migration-users",
+      "repositoryFixture": "sql-docs",
+      "category": "database_migration",
+      "task": "Add users schema migration with rollback and migration test",
+      "requirements": [
+        "path:migrations/001_create_users.sql",
+        "path:tests/migrations.test.ts",
+        "path:docs/schema.md",
+        "symbol:migrationRoundTripTest"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        3,
+        4,
+        1,
+        4
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 15.3195,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "schema/users.sql",
+          "symbol": "users",
+          "score": 14.253,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "users",
+          "score": 13.2169,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "tests/migrations.test.ts",
+          "symbol": "migrationRoundTripTest",
+          "score": 7.6106,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "tests/migrations.test.ts",
+          "symbol": "import ../src/migration-runner",
+          "score": 7.1411,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.7513,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/migration-runner.ts",
+          "symbol": "MigrationResult",
+          "score": 5.6013,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.5196,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "src/migration-runner.ts",
+          "symbol": "rollbackMigration",
+          "score": 5.1421,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 4.9332,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.25,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.5,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1176,
+        "totalSelectedEstimatedTokens": 1176,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 15.883
+      }
+    },
+    {
+      "id": "sql-migration-refresh",
+      "repositoryFixture": "sql-docs",
+      "category": "database_migration",
+      "task": "Change refresh_token_hash schema migration and document rollback",
+      "requirements": [
+        "path:migrations/002_add_refresh_token.sql",
+        "path:docs/schema.md",
+        "path:tests/migrations.test.ts"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        5,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "users_refresh_token_idx",
+          "score": 12.9061,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "tests/migrations.test.ts",
+          "symbol": "migrationRoundTripTest",
+          "score": 6.9542,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "tests/migrations.test.ts",
+          "symbol": "import ../src/migration-runner",
+          "score": 6.6249,
+          "coverage": [
+            "implementation",
+            "tests",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.8055,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 5.731,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.3129,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/migration-runner.ts",
+          "symbol": "rollbackMigration",
+          "score": 5.0866,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 4.9793,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "schema/users.sql",
+          "symbol": "users",
+          "score": 4.8516,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 5",
+          "score": 4.5572,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.3333,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 1,
+        "precisionAt10": 0.6,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 867,
+        "totalSelectedEstimatedTokens": 867,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 10.831
+      }
+    },
+    {
+      "id": "small-api-contract",
+      "repositoryFixture": "small-ts",
+      "category": "api_contract",
+      "task": "Change UserApi getUser public contract and controller implementation",
+      "requirements": [
+        "path:src/api.ts",
+        "symbol:UserApi",
+        "symbol:UserController.getUser"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        1,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "src/api.ts",
+          "symbol": "UserApi",
+          "score": 12.9136,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "src/api.ts",
+          "symbol": "UserController.getUser",
+          "score": 11.1776,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/api.ts",
+          "symbol": "UserController",
+          "score": 4.4213,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.8591,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 3.0619,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "config/app.yaml",
+          "symbol": "timeoutMs",
+          "score": 2.2265,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "config/app.yaml",
+          "symbol": "trustProxy",
+          "score": 2.226,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "src/app-config.ts",
+          "symbol": "AppConfig",
+          "score": 2.2165,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "src/app-config.ts",
+          "symbol": "loadAppConfig",
+          "score": 2.211,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/analytics.ts",
+          "symbol": "recordPageView",
+          "score": 1.716,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.6667,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 631,
+        "totalSelectedEstimatedTokens": 631,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 10.788
+      }
+    },
+    {
+      "id": "mono-api-contract",
+      "repositoryFixture": "monorepo",
+      "category": "api_contract",
+      "task": "Change UserResponse API contract and updateUser route test",
+      "requirements": [
+        "path:packages/api/src/contracts.ts",
+        "path:packages/api/src/routes.ts",
+        "path:packages/api/tests/routes.test.ts",
+        "symbol:UserResponse",
+        "symbol:updateUser"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        2,
+        3,
+        1,
+        2,
+        3
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "updateUserContractTest",
+          "score": 14.8714,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/api/src/contracts.ts",
+          "symbol": "UserResponse",
+          "score": 13.7436,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "updateUser",
+          "score": 13.4608,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 6.6642,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 6.1706,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 6.1158,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/web/src/client.ts",
+          "symbol": "import ../../api/src/contracts",
+          "score": 3.7774,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 3.4829,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "packages/web/src/client.ts",
+          "symbol": "fetchUser",
+          "score": 3.0998,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "packages/core/src/session.ts",
+          "symbol": "Session",
+          "score": 3.0192,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.2,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1221,
+        "totalSelectedEstimatedTokens": 1221,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 17.206
+      }
+    },
+    {
+      "id": "small-config-timeout",
+      "repositoryFixture": "small-ts",
+      "category": "configuration",
+      "task": "Fix app configuration timeoutMs in config/app.yaml and loadAppConfig",
+      "requirements": [
+        "path:config/app.yaml",
+        "path:src/app-config.ts",
+        "symbol:loadAppConfig"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "config/app.yaml",
+          "symbol": "timeoutMs",
+          "score": 18.543,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "src/app-config.ts",
+          "symbol": "loadAppConfig",
+          "score": 14.2691,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/app-config.ts",
+          "symbol": "AppConfig",
+          "score": 14.1808,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "config/app.yaml",
+          "symbol": "trustProxy",
+          "score": 8.9472,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 2.708,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 2.2353,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 1.8885,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "src/cache.ts",
+          "symbol": "readCache",
+          "score": 1.4146,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.3333,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.5,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 764,
+        "totalSelectedEstimatedTokens": 764,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 12.309
+      }
+    },
+    {
+      "id": "mono-config-workspace",
+      "repositoryFixture": "monorepo",
+      "category": "configuration",
+      "task": "Fix workspace configuration sessionTimeoutMs and loadWorkspaceSettings",
+      "requirements": [
+        "path:config/workspace.yaml",
+        "path:packages/config/src/settings.ts",
+        "symbol:loadWorkspaceSettings"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2,
+        2
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "config/workspace.yaml",
+          "symbol": "sessionTimeoutMs",
+          "score": 14.4829,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/config/src/settings.ts",
+          "symbol": "loadWorkspaceSettings",
+          "score": 14.2415,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/config/src/settings.ts",
+          "symbol": "WorkspaceSettings",
+          "score": 14.1456,
+          "coverage": [
+            "implementation",
+            "public_contract",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/core/src/session.ts",
+          "symbol": "Session",
+          "score": 12.4188,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "config/workspace.yaml",
+          "symbol": "apiBaseUrl",
+          "score": 4.7757,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 2.8527,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 2.4165,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 1.817,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "packages/core/src/session.ts",
+          "symbol": "createSession",
+          "score": 1.6119,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "docs/architecture.md",
+          "symbol": "Architecture",
+          "score": 1.0878,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.3333,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.4,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 985,
+        "totalSelectedEstimatedTokens": 985,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 11.291
+      }
+    },
+    {
+      "id": "small-doc-mismatch",
+      "repositoryFixture": "small-ts",
+      "category": "documentation_mismatch",
+      "task": "Fix authentication documentation mismatch for AuthService timeout",
+      "requirements": [
+        "path:docs/authentication.md",
+        "path:src/auth-service.ts",
+        "path:src/app-config.ts",
+        "symbol:AuthService",
+        "symbol:loadAppConfig"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 14.7092,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 13.7777,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken",
+          "score": 11.999,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.validateToken",
+          "score": 11.9817,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service",
+          "score": 6.0349,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "src/auth-service.ts",
+          "symbol": "TokenClaims",
+          "score": 5.9554,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 5.225,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 4.2229,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.3377,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/cache.ts",
+          "symbol": "readCache",
+          "score": 2.9146,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.4,
+        "recallAt5": 0.6,
+        "recallAt10": 0.6,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.5,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 1601,
+        "totalSelectedEstimatedTokens": 1601,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 10.816
+      }
+    },
+    {
+      "id": "sql-doc-mismatch",
+      "repositoryFixture": "sql-docs",
+      "category": "documentation_mismatch",
+      "task": "Fix users schema documentation mismatch for refresh_token_hash",
+      "requirements": [
+        "path:docs/schema.md",
+        "path:schema/users.sql",
+        "path:migrations/002_add_refresh_token.sql"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        2,
+        4
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 15.2307,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "schema/users.sql",
+          "symbol": "users",
+          "score": 14.4668,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "users",
+          "score": 13.0999,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "users_refresh_token_idx",
+          "score": 12.9659,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 5.5632,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 4.8135,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 3",
+          "score": 4.3065,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "users_email_idx",
+          "score": 3.6021,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "migrations/001_create_users.sql",
+          "symbol": "rollback at line 5",
+          "score": 3.5622,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "docs/deployment.md",
+          "symbol": "Deployment",
+          "score": 3.5286,
+          "coverage": [
+            "implementation",
+            "rollback",
+            "documentation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.3333,
+        "recallAt5": 1,
+        "recallAt10": 1,
+        "precisionAt5": 0.8,
+        "precisionAt10": 0.5,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 969,
+        "totalSelectedEstimatedTokens": 969,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 16.475
+      }
+    },
+    {
+      "id": "small-ambiguous-timeout",
+      "repositoryFixture": "small-ts",
+      "category": "ambiguous_behaviour",
+      "task": "Users sometimes time out after refresh",
+      "requirements": [
+        "path:src/auth-service.ts",
+        "path:src/app-config.ts",
+        "path:tests/auth-service.test.ts"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        7,
+        0,
+        0
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 4.3747,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "tests/cache.test.ts",
+          "symbol": "import ../src/cache",
+          "score": 3.665,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.6057,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy",
+          "score": 3.0839,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "src/cache.ts",
+          "symbol": "readCache",
+          "score": 2.9146,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 2.9141,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 2.8767,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "config/app.yaml",
+          "symbol": "timeoutMs",
+          "score": 2.6882,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "src/api.ts",
+          "symbol": "UserApi",
+          "score": 2.0364,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/api.ts",
+          "symbol": "UserController.getUser",
+          "score": 2.0359,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0,
+        "recallAt5": 0,
+        "recallAt10": 0.3333,
+        "precisionAt5": 0,
+        "precisionAt10": 0.2,
+        "reciprocalRank": 0.1429,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 484,
+        "totalSelectedEstimatedTokens": 484,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 56.759
+      }
+    },
+    {
+      "id": "mono-ambiguous-session",
+      "repositoryFixture": "monorepo",
+      "category": "ambiguous_behaviour",
+      "task": "User sessions intermittently return the wrong identifier",
+      "requirements": [
+        "path:packages/core/src/session.ts",
+        "path:packages/api/src/routes.ts",
+        "path:packages/api/tests/routes.test.ts"
+      ],
+      "indexedRequirementPresence": [
+        true,
+        true,
+        true
+      ],
+      "requirementRanks": [
+        1,
+        10,
+        4
+      ],
+      "top10": [
+        {
+          "rank": 1,
+          "path": "packages/core/src/session.ts",
+          "symbol": "Session",
+          "score": 12.6828,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "createSessionContractTest",
+          "score": 4.778,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "packages/core/tests/session.test.ts",
+          "symbol": "import ../src/session",
+          "score": 3.9305,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "updateUserContractTest",
+          "score": 3.747,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "packages/api/tests/routes.test.ts",
+          "symbol": "import ../src/routes",
+          "score": 3.6606,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "docs/architecture.md",
+          "symbol": "Architecture",
+          "score": 3.6434,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "packages/core/src/session.ts",
+          "symbol": "createSession",
+          "score": 3.5397,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "SECURITY.md",
+          "symbol": "Session security",
+          "score": 3.2389,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "packages/config/src/settings.ts",
+          "symbol": "loadWorkspaceSettings",
+          "score": 2.9466,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "packages/api/src/routes.ts",
+          "symbol": "updateUser",
+          "score": 2.7795,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "metrics": {
+        "recallAt1": 0.3333,
+        "recallAt5": 0.6667,
+        "recallAt10": 1,
+        "precisionAt5": 0.6,
+        "precisionAt10": 0.6,
+        "reciprocalRank": 1,
+        "mandatoryCoverageRecall": 1,
+        "initialPacketEstimatedTokens": 841,
+        "totalSelectedEstimatedTokens": 841,
+        "irrelevantSelectedItemCount": 0,
+        "retrievalLatencyMs": 30.326
+      }
+    }
+  ],
+  "failures": [
+    {
+      "caseId": "sql-security-refresh",
+      "classification": "incorrect_coverage_classification",
+      "expected": [
+        "path:tests/migrations.test.ts"
+      ],
+      "retrievedTop10": [
+        {
+          "rank": 1,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "users_refresh_token_idx",
+          "score": 12.0894,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "SECURITY.md",
+          "symbol": "Database security",
+          "score": 4.2544,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "migration at line 1",
+          "score": 4.0483,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "migrations/002_add_refresh_token.sql",
+          "symbol": "rollback at line 3",
+          "score": 4.048,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "docs/schema.md",
+          "symbol": "Users schema",
+          "score": 3.2792,
+          "coverage": [
+            "implementation",
+            "database_schema",
+            "rollback",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "schema/users.sql",
+          "symbol": "users",
+          "score": 3.0884,
+          "coverage": [
+            "implementation",
+            "database_schema"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "docs/deployment.md",
+          "symbol": "Deployment",
+          "score": 2.9924,
+          "coverage": [
+            "implementation",
+            "rollback",
+            "documentation"
+          ]
+        }
+      ],
+      "explanation": "Selected packet did not expose every manually required coverage category.",
+      "defectArea": "retrieval"
+    },
+    {
+      "caseId": "small-doc-mismatch",
+      "classification": "vocabulary_mismatch",
+      "expected": [
+        "path:src/app-config.ts",
+        "symbol:loadAppConfig"
+      ],
+      "retrievedTop10": [
+        {
+          "rank": 1,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 14.7092,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 13.7777,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken",
+          "score": 11.999,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.validateToken",
+          "score": 11.9817,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service",
+          "score": 6.0349,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "src/auth-service.ts",
+          "symbol": "TokenClaims",
+          "score": 5.9554,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest",
+          "score": 5.225,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 4.2229,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.3377,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/cache.ts",
+          "symbol": "readCache",
+          "score": 2.9146,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "explanation": "Mandatory context was indexed but the task vocabulary did not seed it into the production candidate pool.",
+      "defectArea": "retrieval"
+    },
+    {
+      "caseId": "small-ambiguous-timeout",
+      "classification": "vocabulary_mismatch",
+      "expected": [
+        "path:src/app-config.ts",
+        "path:tests/auth-service.test.ts"
+      ],
+      "retrievedTop10": [
+        {
+          "rank": 1,
+          "path": "tests/cache.test.ts",
+          "symbol": "cacheTimeoutTest",
+          "score": 4.3747,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "tests/cache.test.ts",
+          "symbol": "import ../src/cache",
+          "score": 3.665,
+          "coverage": [
+            "implementation",
+            "tests"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "README.md",
+          "symbol": "Small service",
+          "score": 3.6057,
+          "coverage": [
+            "implementation",
+            "architecture",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy",
+          "score": 3.0839,
+          "coverage": [
+            "implementation",
+            "security_constraint",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "src/cache.ts",
+          "symbol": "readCache",
+          "score": 2.9146,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 6,
+          "path": "docs/authentication.md",
+          "symbol": "Authentication",
+          "score": 2.9141,
+          "coverage": [
+            "implementation",
+            "documentation"
+          ]
+        },
+        {
+          "rank": 7,
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService",
+          "score": 2.8767,
+          "coverage": [
+            "implementation"
+          ]
+        },
+        {
+          "rank": 8,
+          "path": "config/app.yaml",
+          "symbol": "timeoutMs",
+          "score": 2.6882,
+          "coverage": [
+            "implementation",
+            "configuration"
+          ]
+        },
+        {
+          "rank": 9,
+          "path": "src/api.ts",
+          "symbol": "UserApi",
+          "score": 2.0364,
+          "coverage": [
+            "implementation",
+            "public_contract"
+          ]
+        },
+        {
+          "rank": 10,
+          "path": "src/api.ts",
+          "symbol": "UserController.getUser",
+          "score": 2.0359,
+          "coverage": [
+            "implementation"
+          ]
+        }
+      ],
+      "explanation": "Mandatory context was indexed but the task vocabulary did not seed it into the production candidate pool.",
+      "defectArea": "retrieval"
+    }
+  ]
+}

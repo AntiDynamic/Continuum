@@ -62,6 +62,20 @@ export interface TestSummary {
   cancelled: boolean;
 }
 
+export interface RunContextSessionSummary {
+  sessionId: string;
+  strategyId: string;
+  strategyVersion: string;
+  snapshot: { snapshot_kind: "commit" | "worktree"; base_commit_hash: string; worktree_hash: string | null; dirty: boolean };
+  initialEstimatedTokens: number;
+  escalationEstimatedTokens: number;
+  deliveryCount: number;
+  activeReferenceCount: number;
+  estimatedDuplicateTokensAvoided: number;
+  coverageRemaining: string[];
+  state: string;
+}
+
 export interface RunReport {
   runId: string;
   task: string;
@@ -102,6 +116,7 @@ export interface RunReport {
   costEvidence: RunCostEvidence;
   contextLedger: RunContextLedgerEntry[];
   contextPacketAccounting: ContextPacketTokenAccounting[];
+  contextSession: RunContextSessionSummary | null;
 
 }
 
@@ -161,6 +176,50 @@ export function buildReport(runId: string, db: Db): RunReport {
     };
   const contextLedger = ledgerRepo.findByRunId(runId);
   const contextPacketAccounting = ledgerRepo.getPacketAccounting(runId);
+  const linkedSession = db.prepare(
+    "SELECT * FROM context_sessions WHERE run_id = ? ORDER BY created_at DESC LIMIT 1",
+  ).get(runId) as {
+    id: string; strategy_id: string; strategy_version: string;
+    snapshot_kind: "commit" | "worktree"; base_commit_hash: string;
+    worktree_hash: string | null; status: string;
+  } | undefined;
+  const contextSession: RunContextSessionSummary | null = linkedSession
+    ? (() => {
+        const deliveries = db.prepare(
+          "SELECT id, stage, estimated_new_tokens, estimated_restored_tokens, estimated_duplicate_tokens_avoided, coverage_remaining_json FROM context_session_deliveries WHERE session_id = ? ORDER BY sequence_number",
+        ).all(linkedSession.id) as unknown as {
+          id: string; stage: string; estimated_new_tokens: number;
+          estimated_restored_tokens: number; estimated_duplicate_tokens_avoided: number;
+          coverage_remaining_json: string;
+        }[];
+        const activeReferenceCount = deliveries.reduce((total, delivery) => total + (
+          db.prepare("SELECT COUNT(*) AS n FROM context_session_delivery_items WHERE delivery_id = ? AND delivery_role = 'active_reference'")
+            .get(delivery.id) as { n: number }
+        ).n, 0);
+        const tokens = (stage: string) => deliveries.filter((delivery) => delivery.stage === stage)
+          .reduce((total, delivery) => total + delivery.estimated_new_tokens + delivery.estimated_restored_tokens, 0);
+        return {
+          sessionId: linkedSession.id,
+          strategyId: linkedSession.strategy_id,
+          strategyVersion: linkedSession.strategy_version,
+          snapshot: {
+            snapshot_kind: linkedSession.snapshot_kind,
+            base_commit_hash: linkedSession.base_commit_hash,
+            worktree_hash: linkedSession.worktree_hash,
+            dirty: linkedSession.snapshot_kind === "worktree",
+          },
+          initialEstimatedTokens: tokens("orientation"),
+          escalationEstimatedTokens: tokens("escalation"),
+          deliveryCount: deliveries.length,
+          activeReferenceCount,
+          estimatedDuplicateTokensAvoided: deliveries.reduce((total, delivery) => total + delivery.estimated_duplicate_tokens_avoided, 0),
+          coverageRemaining: deliveries.length > 0
+            ? JSON.parse(deliveries.at(-1)!.coverage_remaining_json) as string[]
+            : [],
+          state: linkedSession.status,
+        };
+      })()
+    : null;
 
   // Test summaries
   const baselineTests = testRuns
@@ -392,6 +451,7 @@ export function buildReport(runId: string, db: Db): RunReport {
     costEvidence,
     contextLedger,
     contextPacketAccounting,
+    contextSession,
 
   };
 }

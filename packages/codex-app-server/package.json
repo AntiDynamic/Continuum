@@ -1,0 +1,34 @@
+{
+  "name": "@continuum/codex-app-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src tests",
+    "test": "vitest run --testTimeout=30000 --hookTimeout=30000",
+    "test:live": "vitest run tests/live-smoke.test.ts --testTimeout=300000 --hookTimeout=60000",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@continuum/context-engine": "workspace:*",
+    "@continuum/database": "workspace:*",
+    "@continuum/git-analyzer": "workspace:*",
+    "@continuum/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

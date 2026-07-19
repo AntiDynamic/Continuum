@@ -11,7 +11,7 @@
     "dev": "tsc --watch",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src tests",
-    "test": "vitest run"
+    "test": "pnpm --filter @continuum/context-engine build && pnpm build && pnpm --filter @continuum/cli build && vitest run"
   },
   "dependencies": {
     "@continuum/database": "workspace:*",

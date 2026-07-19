@@ -1,0 +1,918 @@
+{
+  "schemaVersion": "continuum.real-repository-benchmark-result.v1",
+  "datasetSchemaVersion": "continuum.real-repository-benchmark.v1",
+  "generatedAt": "2026-07-19T09:46:00.333Z",
+  "environment": {
+    "platform": "win32",
+    "architecture": "x64",
+    "node": "v24.13.0",
+    "cpu": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "logicalProcessors": 8,
+    "totalMemoryBytes": 8215093248
+  },
+  "evidence": {
+    "retrievalQuality": "measured",
+    "latency": "measured locally",
+    "tokens": "estimated",
+    "providerCost": "unavailable",
+    "taskSuccess": "not evaluated in this phase"
+  },
+  "repositories": [
+    {
+      "id": "continuum",
+      "description": "Continuum production repository",
+      "sourceSnapshot": "C:/Users/pares/.gemini/antigravity/scratch/Continuum",
+      "evaluationMode": "isolated source copy indexed through built CLI",
+      "indexDurationMs": 63545.517,
+      "caseCount": 5,
+      "aggregate": {
+        "recallAt1": 0.4,
+        "recallAt5": 0.7,
+        "recallAt10": 0.8,
+        "meanReciprocalRank": 0.5667,
+        "medianInitialPacketEstimatedTokens": 7920,
+        "medianRetrievalLatencyMs": 264.581
+      },
+      "cases": [
+        {
+          "id": "continuum-context-engine",
+          "task": "Show ContextEngine packet retrieval implementation",
+          "requiredPaths": [
+            "packages/context-engine/src/engine.ts"
+          ],
+          "requiredSymbols": [
+            "ContextEngine"
+          ],
+          "requirementRanks": [
+            6,
+            2
+          ],
+          "metrics": {
+            "recallAt1": 0,
+            "recallAt5": 0.5,
+            "recallAt10": 1,
+            "reciprocalRank": 0.5,
+            "initialPacketEstimatedTokens": 7864,
+            "retrievalLatencyMs": 257.354
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "scripts/retrieval-benchmark.mjs",
+              "symbol": "packet",
+              "score": 12.1315
+            },
+            {
+              "rank": 2,
+              "path": "packages/context-engine/tests/engine.test.ts",
+              "symbol": "ContextEngine",
+              "score": 11.3812
+            },
+            {
+              "rank": 3,
+              "path": "scripts/retrieval-benchmark-real.mjs",
+              "symbol": "packet",
+              "score": 10.8829
+            },
+            {
+              "rank": 4,
+              "path": "packages/context-engine/src/session/delta-packet-builder.ts",
+              "symbol": "packet",
+              "score": 10.5094
+            },
+            {
+              "rank": 5,
+              "path": "packages/context-engine/tests/engine.test.ts",
+              "symbol": "packet",
+              "score": 10.4273
+            },
+            {
+              "rank": 6,
+              "path": "packages/context-engine/src/engine.ts",
+              "symbol": "ContextEngine",
+              "score": 10.2231
+            },
+            {
+              "rank": 7,
+              "path": "packages/context-engine/src/engine.ts",
+              "symbol": "packet",
+              "score": 10.0755
+            },
+            {
+              "rank": 8,
+              "path": "packages/context-engine/tests/engine.test.ts",
+              "symbol": "implementation",
+              "score": 9.8678
+            },
+            {
+              "rank": 9,
+              "path": "packages/context-engine/tests/benchmark.test.ts",
+              "symbol": "packet",
+              "score": 9.8461
+            },
+            {
+              "rank": 10,
+              "path": "packages/shared/tests/packing.test.ts",
+              "symbol": "packet",
+              "score": 9.8457
+            }
+          ]
+        },
+        {
+          "id": "continuum-snapshot",
+          "task": "Inspect resolveSnapshotIdentity canonical worktree hashing",
+          "requiredPaths": [
+            "packages/git-analyzer/src/snapshot.ts"
+          ],
+          "requiredSymbols": [
+            "resolveSnapshotIdentity"
+          ],
+          "requirementRanks": [
+            3,
+            3
+          ],
+          "metrics": {
+            "recallAt1": 0,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 0.3333,
+            "initialPacketEstimatedTokens": 7920,
+            "retrievalLatencyMs": 205.034
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "packages/repository-indexer/tests/hashing.test.ts",
+              "symbol": "hashing",
+              "score": 14.9051
+            },
+            {
+              "rank": 2,
+              "path": "packages/repository-indexer/tests/hashing.test.js",
+              "symbol": "hashing",
+              "score": 14.8839
+            },
+            {
+              "rank": 3,
+              "path": "packages/git-analyzer/src/snapshot.ts",
+              "symbol": "resolveSnapshotIdentity",
+              "score": 10.3794
+            },
+            {
+              "rank": 4,
+              "path": "packages/repository-indexer/tests/snapshot.test.ts",
+              "symbol": "snapshot",
+              "score": 10.0027
+            },
+            {
+              "rank": 5,
+              "path": "packages/repository-indexer/tests/hashing.test.ts",
+              "symbol": "computeWorktreeHash produces deterministic hash regardless of insertion order",
+              "score": 9.7059
+            },
+            {
+              "rank": 6,
+              "path": "packages/repository-indexer/tests/hashing.test.js",
+              "symbol": "computeWorktreeHash produces deterministic hash regardless of insertion order",
+              "score": 9.7056
+            },
+            {
+              "rank": 7,
+              "path": "packages/repository-indexer/tests/snapshot.test.ts",
+              "symbol": "returns worktree snapshot when working tree is dirty",
+              "score": 8.8754
+            },
+            {
+              "rank": 8,
+              "path": "packages/repository-indexer/tests/snapshot.test.js",
+              "symbol": "snapshot",
+              "score": 8.7344
+            },
+            {
+              "rank": 9,
+              "path": "packages/repository-indexer/tests/snapshot.test.ts",
+              "symbol": "returns commit snapshot when working tree is clean",
+              "score": 8.6527
+            },
+            {
+              "rank": 10,
+              "path": "packages/repository-indexer/tests/snapshot.test.ts",
+              "symbol": "throws if there is no commit hash",
+              "score": 8.58
+            }
+          ]
+        },
+        {
+          "id": "continuum-session-cli",
+          "task": "Change CLI runSessionRequest session request handling",
+          "requiredPaths": [
+            "apps/cli/src/commands/session.ts"
+          ],
+          "requiredSymbols": [
+            "runSessionRequest"
+          ],
+          "requirementRanks": [
+            1,
+            1
+          ],
+          "metrics": {
+            "recallAt1": 1,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 1,
+            "initialPacketEstimatedTokens": 5817,
+            "retrievalLatencyMs": 276.927
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "apps/cli/src/commands/session.ts",
+              "symbol": "runSessionRequest",
+              "score": 11.6839
+            },
+            {
+              "rank": 2,
+              "path": "packages/context-engine/benchmarks/v1/repositories/monorepo/packages/core/src/session.ts",
+              "symbol": "Session",
+              "score": 10.9649
+            },
+            {
+              "rank": 3,
+              "path": "apps/cli/src/commands/session.ts",
+              "symbol": "session",
+              "score": 10.7637
+            },
+            {
+              "rank": 4,
+              "path": "apps/cli/src/main.ts",
+              "symbol": "session",
+              "score": 10.4847
+            },
+            {
+              "rank": 5,
+              "path": "packages/database/src/repositories/context-session-repository.ts",
+              "symbol": "session",
+              "score": 10.4602
+            },
+            {
+              "rank": 6,
+              "path": "packages/context-engine/tests/session-controller.test.ts",
+              "symbol": "session",
+              "score": 10.4219
+            },
+            {
+              "rank": 7,
+              "path": "packages/context-engine/src/session/session-service.ts",
+              "symbol": "session",
+              "score": 10.4136
+            },
+            {
+              "rank": 8,
+              "path": "packages/context-engine/src/session/controller.ts",
+              "symbol": "session",
+              "score": 10.3895
+            },
+            {
+              "rank": 9,
+              "path": "apps/cli/src/commands/run.ts",
+              "symbol": "change",
+              "score": 10.0654
+            },
+            {
+              "rank": 10,
+              "path": "scripts/retrieval-benchmark.mjs",
+              "symbol": "request",
+              "score": 9.8363
+            }
+          ]
+        },
+        {
+          "id": "continuum-migrations",
+          "task": "Inspect database MIGRATIONS schema upgrades",
+          "requiredPaths": [
+            "packages/database/src/migrations.ts"
+          ],
+          "requiredSymbols": [
+            "MIGRATIONS"
+          ],
+          "requirementRanks": [
+            1,
+            1
+          ],
+          "metrics": {
+            "recallAt1": 1,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 1,
+            "initialPacketEstimatedTokens": 7997,
+            "retrievalLatencyMs": 270.207
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "packages/database/src/migrations.ts",
+              "symbol": "MIGRATIONS",
+              "score": 10.0823
+            },
+            {
+              "rank": 2,
+              "path": "packages/database/tests/database.test.ts",
+              "symbol": "returns the correct schema version",
+              "score": 8.3304
+            },
+            {
+              "rank": 3,
+              "path": "packages/context-engine/tests/fixtures/database-migration.json",
+              "symbol": "task",
+              "score": 8.3264
+            },
+            {
+              "rank": 4,
+              "path": "packages/context-engine/tests/fixtures/database-migration.json",
+              "symbol": "requiredContext",
+              "score": 8.3089
+            },
+            {
+              "rank": 5,
+              "path": "packages/database/tests/context-efficiency.test.ts",
+              "symbol": "applies the current schema and versions pricing profiles append-only",
+              "score": 8.1838
+            },
+            {
+              "rank": 6,
+              "path": "packages/database/tests/database.test.ts",
+              "symbol": "migrate",
+              "score": 8.1331
+            },
+            {
+              "rank": 7,
+              "path": "packages/database/src/migrations.ts",
+              "symbol": "Migration",
+              "score": 8.0289
+            },
+            {
+              "rank": 8,
+              "path": "packages/database/tests/database.test.ts",
+              "symbol": "is idempotent when run twice",
+              "score": 7.5394
+            },
+            {
+              "rank": 9,
+              "path": "packages/database/tests/database.test.ts",
+              "symbol": "creates schema_migrations table",
+              "score": 7.3569
+            },
+            {
+              "rank": 10,
+              "path": "packages/context-engine/tests/engine.test.ts",
+              "symbol": "ContextEngine",
+              "score": 7.1822
+            }
+          ]
+        },
+        {
+          "id": "continuum-mcp",
+          "task": "Inspect ContextCompilerMcpServer context tool handling",
+          "requiredPaths": [
+            "packages/mcp-server/src/compiler-server.ts"
+          ],
+          "requiredSymbols": [
+            "ContextCompilerMcpServer"
+          ],
+          "requirementRanks": [
+            0,
+            0
+          ],
+          "metrics": {
+            "recallAt1": 0,
+            "recallAt5": 0,
+            "recallAt10": 0,
+            "reciprocalRank": 0,
+            "initialPacketEstimatedTokens": 7925,
+            "retrievalLatencyMs": 264.581
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "packages/database/src/context-efficiency-repository.ts",
+              "symbol": "context",
+              "score": 10.1325
+            },
+            {
+              "rank": 2,
+              "path": "apps/cli/src/main.ts",
+              "symbol": "context",
+              "score": 9.9131
+            },
+            {
+              "rank": 3,
+              "path": "packages/database/tests/context-efficiency.test.ts",
+              "symbol": "rejects cross-repository context deliveries",
+              "score": 8.9624
+            },
+            {
+              "rank": 4,
+              "path": "packages/mcp-server/tests/mcp.test.ts",
+              "symbol": "supports client tool listing",
+              "score": 7.6529
+            },
+            {
+              "rank": 5,
+              "path": "packages/mcp-server/tests/mcp.test.ts",
+              "symbol": "ContinuumMcpServer",
+              "score": 7.3784
+            },
+            {
+              "rank": 6,
+              "path": "packages/database/tests/context-session.test.ts",
+              "symbol": "ContextSessionRepository",
+              "score": 7.2733
+            },
+            {
+              "rank": 7,
+              "path": "packages/database/tests/context-repository.test.ts",
+              "symbol": "ContextRepository",
+              "score": 7.2628
+            },
+            {
+              "rank": 8,
+              "path": "packages/context-engine/tests/engine.test.ts",
+              "symbol": "ContextEngine",
+              "score": 6.9928
+            },
+            {
+              "rank": 9,
+              "path": "packages/shared/src/context-compiler-domain.ts",
+              "symbol": "ContextCompiler",
+              "score": 6.6737
+            },
+            {
+              "rank": 10,
+              "path": "packages/database/tests/context-efficiency.test.ts",
+              "symbol": "context efficiency repositories",
+              "score": 6.6094
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aurum-dining",
+      "description": "Unrelated local React/TypeScript dining site",
+      "sourceSnapshot": "C:/Users/pares/.gemini/antigravity/scratch/aurum-dining",
+      "evaluationMode": "isolated source copy indexed through built CLI",
+      "indexDurationMs": 8845.388,
+      "caseCount": 5,
+      "aggregate": {
+        "recallAt1": 0.3667,
+        "recallAt5": 0.9,
+        "recallAt10": 0.9,
+        "meanReciprocalRank": 0.9,
+        "medianInitialPacketEstimatedTokens": 6956,
+        "medianRetrievalLatencyMs": 80.236
+      },
+      "cases": [
+        {
+          "id": "aurum-reservation",
+          "task": "Fix Reservation canNext validation and submission flow",
+          "requiredPaths": [
+            "src/pages/Reservation.tsx"
+          ],
+          "requiredSymbols": [
+            "Reservation"
+          ],
+          "requirementRanks": [
+            1,
+            2
+          ],
+          "metrics": {
+            "recallAt1": 0.5,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 1,
+            "initialPacketEstimatedTokens": 6956,
+            "retrievalLatencyMs": 121.133
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "canNext",
+              "score": 10.0336
+            },
+            {
+              "rank": 2,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "Reservation",
+              "score": 8.3165
+            },
+            {
+              "rank": 3,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "next",
+              "score": 5.7118
+            },
+            {
+              "rank": 4,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "Step",
+              "score": 5.4706
+            },
+            {
+              "rank": 5,
+              "path": "src/pages/Testimonials.tsx",
+              "symbol": "import ../data/testimonials",
+              "score": 5.1389
+            },
+            {
+              "rank": 6,
+              "path": "src/pages/Home.tsx",
+              "symbol": "import ../data/testimonials",
+              "score": 5.135
+            },
+            {
+              "rank": 7,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "handleSubmit",
+              "score": 4.3552
+            },
+            {
+              "rank": 8,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "prev",
+              "score": 4.2118
+            },
+            {
+              "rank": 9,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "FormData",
+              "score": 4.1829
+            },
+            {
+              "rank": 10,
+              "path": "src/pages/Testimonials.tsx",
+              "symbol": "Testimonials",
+              "score": 3.9096
+            }
+          ]
+        },
+        {
+          "id": "aurum-menu",
+          "task": "Change Menu filtering using menuItems and MenuCategory",
+          "requiredPaths": [
+            "src/pages/Menu.tsx",
+            "src/data/menu.ts",
+            "src/types/index.ts"
+          ],
+          "requiredSymbols": [
+            "Menu",
+            "menuItems",
+            "MenuCategory"
+          ],
+          "requirementRanks": [
+            3,
+            1,
+            2,
+            3,
+            1,
+            2
+          ],
+          "metrics": {
+            "recallAt1": 0.3333,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 1,
+            "initialPacketEstimatedTokens": 7643,
+            "retrievalLatencyMs": 80.236
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "src/data/menu.ts",
+              "symbol": "menuItems",
+              "score": 9.6483
+            },
+            {
+              "rank": 2,
+              "path": "src/types/index.ts",
+              "symbol": "MenuCategory",
+              "score": 9.2745
+            },
+            {
+              "rank": 3,
+              "path": "src/pages/Menu.tsx",
+              "symbol": "Menu",
+              "score": 8.4684
+            },
+            {
+              "rank": 4,
+              "path": "src/types/index.ts",
+              "symbol": "MenuItem",
+              "score": 6.3528
+            },
+            {
+              "rank": 5,
+              "path": "src/pages/Menu.tsx",
+              "symbol": "import ../types",
+              "score": 5.1292
+            },
+            {
+              "rank": 6,
+              "path": "src/pages/Menu.tsx",
+              "symbol": "import ../data/menu",
+              "score": 5.1239
+            },
+            {
+              "rank": 7,
+              "path": "src/data/menu.ts",
+              "symbol": "import ../types",
+              "score": 4.9759
+            },
+            {
+              "rank": 8,
+              "path": "src/pages/Home.tsx",
+              "symbol": "import ../data/menu",
+              "score": 4.3653
+            },
+            {
+              "rank": 9,
+              "path": "src/App.tsx",
+              "symbol": "import ./pages/Menu",
+              "score": 4.2072
+            },
+            {
+              "rank": 10,
+              "path": "src/pages/Menu.tsx",
+              "symbol": "chefPicks",
+              "score": 3.8689
+            }
+          ]
+        },
+        {
+          "id": "aurum-gallery",
+          "task": "Change Gallery lightbox using galleryImages",
+          "requiredPaths": [
+            "src/pages/Gallery.tsx",
+            "src/data/gallery.ts"
+          ],
+          "requiredSymbols": [
+            "Gallery",
+            "galleryImages"
+          ],
+          "requirementRanks": [
+            2,
+            1,
+            2,
+            1
+          ],
+          "metrics": {
+            "recallAt1": 0.5,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 1,
+            "initialPacketEstimatedTokens": 5841,
+            "retrievalLatencyMs": 71.509
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "src/data/gallery.ts",
+              "symbol": "galleryImages",
+              "score": 10.616
+            },
+            {
+              "rank": 2,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "Gallery",
+              "score": 8.9173
+            },
+            {
+              "rank": 3,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "import ../data/gallery",
+              "score": 5.4283
+            },
+            {
+              "rank": 4,
+              "path": "src/types/index.ts",
+              "symbol": "GalleryImage",
+              "score": 5.0096
+            },
+            {
+              "rank": 5,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "openLightbox",
+              "score": 4.621
+            },
+            {
+              "rank": 6,
+              "path": "src/App.tsx",
+              "symbol": "import ./pages/Gallery",
+              "score": 4.2908
+            },
+            {
+              "rank": 7,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "filtered",
+              "score": 4.1687
+            },
+            {
+              "rank": 8,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "import yet-another-react-lightbox",
+              "score": 4.143
+            },
+            {
+              "rank": 9,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "import yet-another-react-lightbox/styles.css",
+              "score": 4.1378
+            },
+            {
+              "rank": 10,
+              "path": "src/pages/Gallery.tsx",
+              "symbol": "import react",
+              "score": 4.132
+            }
+          ]
+        },
+        {
+          "id": "aurum-navigation",
+          "task": "Change App routing and Navbar navigation",
+          "requiredPaths": [
+            "src/App.tsx",
+            "src/components/layout/Navbar.tsx"
+          ],
+          "requiredSymbols": [
+            "App",
+            "Navbar"
+          ],
+          "requirementRanks": [
+            1,
+            2,
+            1,
+            2
+          ],
+          "metrics": {
+            "recallAt1": 0.5,
+            "recallAt5": 1,
+            "recallAt10": 1,
+            "reciprocalRank": 1,
+            "initialPacketEstimatedTokens": 7334,
+            "retrievalLatencyMs": 77.059
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "src/App.tsx",
+              "symbol": "App",
+              "score": 8.9028
+            },
+            {
+              "rank": 2,
+              "path": "src/components/layout/Navbar.tsx",
+              "symbol": "Navbar",
+              "score": 8.7643
+            },
+            {
+              "rank": 3,
+              "path": "tsconfig.json",
+              "symbol": "references",
+              "score": 5.0402
+            },
+            {
+              "rank": 4,
+              "path": "src/App.tsx",
+              "symbol": "export 1491",
+              "score": 5.0395
+            },
+            {
+              "rank": 5,
+              "path": "src/components/layout/Navbar.tsx",
+              "symbol": "navLinks",
+              "score": 4.9963
+            },
+            {
+              "rank": 6,
+              "path": "src/components/layout/Navbar.tsx",
+              "symbol": "handleScroll",
+              "score": 4.4557
+            },
+            {
+              "rank": 7,
+              "path": "src/main.tsx",
+              "symbol": "import ./App.tsx",
+              "score": 4.3395
+            },
+            {
+              "rank": 8,
+              "path": "src/pages/About.tsx",
+              "symbol": "timeline",
+              "score": 3.9116
+            },
+            {
+              "rank": 9,
+              "path": "README.md",
+              "symbol": "React + TypeScript + Vite > Expanding the ESLint configuration",
+              "score": 3.8011
+            },
+            {
+              "rank": 10,
+              "path": "src/components/layout/Navbar.tsx",
+              "symbol": "location",
+              "score": 3.7968
+            }
+          ]
+        },
+        {
+          "id": "aurum-contract",
+          "task": "Change ReservationFormData public type and reservation page",
+          "requiredPaths": [
+            "src/types/index.ts",
+            "src/pages/Reservation.tsx"
+          ],
+          "requiredSymbols": [
+            "ReservationFormData",
+            "Reservation"
+          ],
+          "requirementRanks": [
+            11,
+            2,
+            0,
+            2
+          ],
+          "metrics": {
+            "recallAt1": 0,
+            "recallAt5": 0.5,
+            "recallAt10": 0.5,
+            "reciprocalRank": 0.5,
+            "initialPacketEstimatedTokens": 6271,
+            "retrievalLatencyMs": 134.541
+          },
+          "top10": [
+            {
+              "rank": 1,
+              "path": "package.json",
+              "symbol": "type",
+              "score": 9.4211
+            },
+            {
+              "rank": 2,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "Reservation",
+              "score": 8.5734
+            },
+            {
+              "rank": 3,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "FormData",
+              "score": 5.9686
+            },
+            {
+              "rank": 4,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "Step",
+              "score": 5.8835
+            },
+            {
+              "rank": 5,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "handleSubmit",
+              "score": 4.6409
+            },
+            {
+              "rank": 6,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "next",
+              "score": 4.4975
+            },
+            {
+              "rank": 7,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "prev",
+              "score": 4.4975
+            },
+            {
+              "rank": 8,
+              "path": "src/App.tsx",
+              "symbol": "import ./pages/Reservation",
+              "score": 4.4971
+            },
+            {
+              "rank": 9,
+              "path": "src/pages/Reservation.tsx",
+              "symbol": "canNext",
+              "score": 4.4509
+            },
+            {
+              "rank": 10,
+              "path": "src/App.tsx",
+              "symbol": "import ./pages/Contact",
+              "score": 4.398
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

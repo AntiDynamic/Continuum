@@ -8,6 +8,11 @@
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
+    "test:acceptance": "pnpm --filter @continuum/context-engine build && pnpm --filter @continuum/mcp-server build && pnpm --filter @continuum/cli build && pnpm --filter @continuum/cli exec vitest run tests/standalone-acceptance.test.ts --testTimeout=120000 --hookTimeout=60000 && pnpm --filter @continuum/mcp-server exec vitest run tests/session-product.test.ts --testTimeout=120000 --hookTimeout=60000",
+    "test:codex": "pnpm --filter @continuum/codex-app-server test",
+    "test:codex-live": "pnpm --filter @continuum/codex-app-server test:live",
+    "benchmark:retrieval": "node scripts/retrieval-benchmark.mjs",
+    "benchmark:retrieval-real": "node scripts/retrieval-benchmark-real.mjs",
     "test:gemini-smoke": "pnpm --filter @continuum/gemini-adapter test:smoke",
     "clean": "pnpm -r clean"
   },

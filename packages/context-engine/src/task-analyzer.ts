@@ -1,15 +1,16 @@
 import type { ContextCoverageRequirement, TaskAnalysis, TaskAnalyzer, TaskClass } from "@continuum/shared";
+import { normalizeRetrievalTerms } from "./normalization.js";
 
 const WORDS = /[A-Za-z0-9_@./-]+/g;
 
 function requirements(taskClass: TaskClass): ContextCoverageRequirement[] {
-  const required = (category: ContextCoverageRequirement["category"], reason: string): ContextCoverageRequirement => ({ category, required: true, reason });
-  const preferred = (category: ContextCoverageRequirement["category"], reason: string): ContextCoverageRequirement => ({ category, required: false, reason });
+  const required = (category: ContextCoverageRequirement["category"], reason: string): ContextCoverageRequirement => ({ category, state: "required", required: true, reason });
+  const preferred = (category: ContextCoverageRequirement["category"], reason: string): ContextCoverageRequirement => ({ category, state: "recommended", required: false, reason });
   switch (taskClass) {
     case "database_migration": return [required("implementation", "Migration implementation is required."), required("database_schema", "Schema evidence is required."), required("rollback", "Rollback behavior is required."), required("tests", "Migration tests are required."), preferred("configuration", "Deployment configuration may apply."), preferred("architecture", "Architecture constraints may apply.")];
-    case "security_sensitive": return [required("implementation", "Security-sensitive implementation is required."), required("tests", "Security regression tests are required."), required("security_constraint", "Repository security constraints are required."), required("public_contract", "Public security contracts are required."), preferred("architecture", "Architecture boundaries may apply.")];
+    case "security_sensitive": return [required("implementation", "Security-sensitive implementation is required."), preferred("tests", "Security regression tests are required when applicable indexed evidence exists."), required("security_constraint", "Repository security constraints are required."), required("public_contract", "Public security contracts are required."), preferred("architecture", "Architecture boundaries may apply.")];
     case "test_repair": case "local_bug": return [required("implementation", "The affected implementation is required."), required("tests", "Relevant test evidence is required."), preferred("public_contract", "Public contracts may constrain the fix.")];
-    case "configuration": case "dependency_update": return [required("configuration", "Configuration evidence is required."), required("tests", "Validation evidence is required."), preferred("dependency", "Dependency relationships may apply.")];
+    case "configuration": case "dependency_update": return [required("configuration", "Configuration evidence is required."), preferred("tests", "Validation evidence is recommended when applicable indexed tests exist."), preferred("dependency", "Dependency relationships may apply.")];
     case "documentation": return [required("documentation", "The relevant documentation is required."), preferred("implementation", "Implementation may verify documentation claims.")];
     default: return [required("implementation", "Relevant implementation context is required."), preferred("tests", "Tests provide correctness evidence."), preferred("architecture", "Architecture constraints may apply.")];
   }
@@ -44,6 +45,6 @@ export class DeterministicTaskAnalyzer implements TaskAnalyzer {
     else riskReasons.push("No elevated deterministic risk signal matched.");
     const likelyLanguages = mentionedPaths.map((path) => path.split(".").pop() ?? "").filter(Boolean);
     const estimatedComplexity: TaskAnalysis["estimatedComplexity"] = mentionedPackages.length > 1 ? "cross_package" : mentionedPaths.length > 1 || taskClass === "refactor" ? "cross_file" : mentionedPaths.length === 1 || mentionedSymbols.length > 0 ? "local" : "unknown";
-    return { originalTask: task, normalizedTask, taskClass, classificationReasons: reasons, mentionedPaths, mentionedSymbols, mentionedPackages, keywords: [...new Set(words.map((word) => word.toLowerCase()).filter((word) => word.length > 2))], likelyLanguages, requiredCoverage: requirements(taskClass), riskLevel, riskReasons, estimatedComplexity };
+    return { originalTask: task, normalizedTask, taskClass, classificationReasons: reasons, mentionedPaths, mentionedSymbols, mentionedPackages, keywords: normalizeRetrievalTerms(normalizedTask).filter((word) => word.length > 2), likelyLanguages, requiredCoverage: requirements(taskClass), riskLevel, riskReasons, estimatedComplexity };
   }
 }

@@ -51,3 +51,15 @@ have received.
 
 Potential duplicate context avoided is therefore a ledgered decision, not proof
 of end-to-end token savings.
+
+## Progressive context sessions
+
+Continuum does not yet prove causal task improvement. Provider-exact token telemetry is not connected to sessions. Estimated duplicate context avoided is not exact credit savings, and the progressive policy is not claimed to be optimal. Sessions require an exact match with the locally indexed repository snapshot.
+
+## Deterministic retrieval benchmark
+
+Phase 3D measured controlled Recall@10 at 94.17% and mandatory coverage recall at 98.61%. Real-repository medians are 1,847 estimated tokens and 152.797 ms local retrieval latency for Continuum, and 766 tokens and 113.748 ms for aurum-dining. Continuum real Recall@5 declined while Recall@10 remained 80%; exact lookup and database hydration remain the dominant measured costs. Stage-level baseline timings were unavailable before Phase 3D instrumentation. These results do not measure provider tokens, end-to-end task latency, coding-task success, or provider savings.
+
+## Codex shadow integration
+
+Phase 4A observes Codex App Server evidence; it does not constrain Codex, inject Continuum’s predicted packet, prove task success from telemetry alone, or prove provider token/cost savings. Direct App Server item and diff events are stronger evidence than command-inferred paths. Stable accumulated usage is provider measured when emitted; absent fields remain unavailable. Experimental raw-response telemetry is opt-in, separately labelled, and may not be available or replayable. Concurrent external repository edits can still make attribution uncertain.

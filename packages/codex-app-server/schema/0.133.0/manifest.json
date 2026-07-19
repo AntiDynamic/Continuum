@@ -1,0 +1,9 @@
+{
+  "testedCodexVersion": "0.133.0",
+  "protocolMode": "stable",
+  "generator": "codex app-server generate-json-schema",
+  "transport": "stdio://",
+  "compatibility": ">=0.133.0 <0.134.0",
+  "generatedAt": "2026-07-19",
+  "experimentalEnabledByDefault": false
+}

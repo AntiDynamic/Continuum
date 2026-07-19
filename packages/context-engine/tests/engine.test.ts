@@ -54,11 +54,11 @@ describe("ContextEngine", () => {
     expect(db.prepare("SELECT COUNT(*) AS count FROM context_retrieval_evidence").get()).toMatchObject({ count: expect.any(Number) });
   });
 
-  it("reports missing rollback and additional budget for a migration", async () => {
+  it("reports unavailable rollback explicitly when no indexed evidence exists", async () => {
     add("migration", "migrations/1.sql:migration", "migration", "migrations/1.sql", "CREATE TABLE users(id TEXT PRIMARY KEY);", "migration");
     const packet = await new ContextEngine(db, 1, snapshot).packet("Add schema migration with rollback");
-    expect(packet.complete).toBe(false);
-    expect(packet.coverage.missing).toContain("rollback");
-    expect(packet.coverage.additionalEstimatedBudgetRequired).toBeGreaterThan(0);
+    expect(packet.complete).toBe(true);
+    expect(packet.coverage.missing).not.toContain("rollback");
+    expect(packet.coverage.coverageEvidence).toContainEqual(expect.objectContaining({ category: "rollback", state: "unavailable", matchingIndexedCandidateCount: 0, remainingRequirement: false }));
   });
 });

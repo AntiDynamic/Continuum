@@ -1,8 +1,8 @@
 import { basename, resolve } from "node:path";
 import { ContextEngine } from "@continuum/context-engine";
 import { RepositoryRepository, migrate, openDatabase } from "@continuum/database";
-import { getCurrentCommit, getPorcelainStatus, getRepositoryRoot, isGitRepository } from "@continuum/git-analyzer";
-import type { ContextCandidate, ContextDeliveryStage, IndexSnapshotIdentity } from "@continuum/shared";
+import { getRepositoryRoot, isGitRepository, resolveSnapshotIdentity } from "@continuum/git-analyzer";
+import type { ContextCandidate, ContextDeliveryStage } from "@continuum/shared";
 import { getDbPath, isInitialised } from "../config-helpers.js";
 import { recordContextPacketLedger } from "./context-ledger.js";
 import { info, line, printError, section } from "../display.js";
@@ -25,17 +25,6 @@ function printCandidate(candidate: ContextCandidate, rank: number): void {
   line(`   reasons: ${candidate.reasons.join(" ")}`);
 }
 
-async function snapshotFor(root: string): Promise<IndexSnapshotIdentity> {
-  const commit = await getCurrentCommit(root);
-  const status = await getPorcelainStatus(root);
-  return {
-    snapshot_kind: status.length ? "worktree" : "commit",
-    base_commit_hash: commit ?? "unborn",
-    worktree_hash: null,
-    dirty: status.length > 0,
-  };
-}
-
 export async function runContextCommand(query: string, options: ContextCommandOptions): Promise<void> {
   const targetDir = options.repo ? resolve(options.cwd, options.repo) : options.cwd;
   if (!(await isGitRepository(targetDir))) {
@@ -54,7 +43,7 @@ export async function runContextCommand(query: string, options: ContextCommandOp
   migrate(db);
   try {
     const repository = new RepositoryRepository(db).upsert(repoRoot, basename(repoRoot));
-    const engine = new ContextEngine(db, repository.id, await snapshotFor(repoRoot));
+    const engine = new ContextEngine(db, repository.id, await resolveSnapshotIdentity(repoRoot));
     if (options.mode === "explain") {
       const item = engine.explain(query);
       if (options.json) line(JSON.stringify(item ?? null, null, 2));

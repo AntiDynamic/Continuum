@@ -1,7 +1,7 @@
 import { getRepositoryRoot, isGitRepository } from "@continuum/git-analyzer";
 import { ContextRepository, IndexRunRepository, openDatabase, migrate, RepositoryRepository } from "@continuum/database";
 import {
-  CoherentMarkdownExtractor, computeWorktreeHash, DeterministicContextCompiler,
+  CoherentMarkdownExtractor, DeterministicContextCompiler,
   discoverFiles, hashFile, inferContextRelationships, JsonConfigurationExtractor, resolveSnapshotIdentity,
   StatementSqlExtractor, TypeScriptCompilerApiExtractor, YamlConfigurationExtractor,
 } from "@continuum/repository-indexer";
@@ -46,20 +46,14 @@ export async function runIndexCommand(options: { cwd: string; dir?: string }): P
   const files = await discoverFiles(repoRoot);
   info(`Found ${files.length} files to index.`);
   const scanned: { file: string; content: string; fileHash: string; language: string; candidates: ExtractedContextCandidate[] }[] = [];
-  const pathHashes = new Map<string, string>();
   for (const file of files) {
     const selected = extractors.find((entry) => entry.match.test(file));
     if (!selected) continue;
     const absolute = resolve(repoRoot, file);
     const content = await readFile(absolute, "utf8");
     const fileHash = await hashFile(absolute);
-    pathHashes.set(file, fileHash);
     const candidates = await selected.extractor.extract(absolute, content) as ExtractedContextCandidate[];
     scanned.push({ file, content, fileHash, language: selected.language, candidates });
-  }
-  if (snapshot.dirty) {
-    snapshot.worktree_hash = computeWorktreeHash(pathHashes);
-    indexRuns.setWorktreeHash(run.id, snapshot.worktree_hash);
   }
 
   const compiler = new DeterministicContextCompiler();

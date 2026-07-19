@@ -380,3 +380,29 @@ Continuum is developed and tested on Windows (PowerShell).
 ## Architecture
 
 See [docs/architecture.md](docs/architecture.md) for a complete description of the adapter system, run lifecycle, event model, and database design.
+
+## Progressive context sessions
+
+Continuum now exposes repository- and snapshot-bound progressive context sessions through both CLI and MCP. Start with `continuum session start "<task>" --initial-context`, request deltas with `continuum session request`, report typed signals with `continuum session signal`, and inspect persisted evidence with `continuum session report`. See [context sessions](docs/context-sessions.md), [progressive delivery](docs/progressive-delivery.md), [CLI](docs/cli.md), and [MCP](docs/mcp.md).
+
+Context token counts and duplicate-token avoidance are estimates. Continuum does not yet prove causal task improvement, and live provider token telemetry is not connected to sessions.
+
+## Validation benchmark
+
+Run pnpm test:acceptance for standalone CLI/MCP acceptance and pnpm benchmark:retrieval for the 24-case deterministic benchmark. See docs/retrieval-benchmark.md and docs/phase3c-go-no-go.md. Phase 3C is a no-go for native Codex integration until mandatory coverage, real-repository packet size, and medium-repository latency are hardened. Token values are estimates; provider cost and coding-task success are not measured.
+
+### Phase 3D retrieval gate
+
+The deterministic context compiler now uses explicit section budgets with a hard 1,900 estimated-token normal ceiling, metadata-only escalation candidates, symbol/file containment suppression, versioned identifier normalization, explicit coverage states, bounded retrieval, and request-stage benchmark profiling. The unchanged validation gate passes; see [docs/phase3d-go-no-go.md](docs/phase3d-go-no-go.md). This is retrieval evidence only, not a claim of provider token savings or coding-task success.
+
+## Codex Shadow Flight Recorder
+
+After initialization and indexing, observe a native Codex App Server execution without changing the task input:
+
+```bash
+continuum codex "Fix the failing test" --mode shadow --json
+continuum codex list --json
+continuum codex report <execution-id> --json
+```
+
+See [Codex integration](docs/codex-integration.md) and the [Shadow Flight Recorder](docs/shadow-flight-recorder.md). Shadow mode does not restrict Codex or prove provider savings; Continuum context tokens remain estimated.

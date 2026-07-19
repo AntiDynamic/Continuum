@@ -17,6 +17,12 @@ export interface RepositoryIndexRun {
 export class IndexRunRepository {
   constructor(private readonly db: Db) {}
 
+  findLatestSuccessful(repositoryId: number): RepositoryIndexRun | undefined {
+    return this.db.prepare(
+      `SELECT * FROM repository_index_runs WHERE repository_id = ? AND status = 'success' ORDER BY finished_at DESC, started_at DESC LIMIT 1`,
+    ).get(repositoryId) as RepositoryIndexRun | undefined;
+  }
+
   createRun(
     repositoryId: number,
     snapshotKind: string,

@@ -255,4 +255,54 @@ describe("CLI Integration", () => {
       expect(result.stderr).toContain("Run \"a\" was not found in the database");
     });
   });
+  describe("Progressive context session CLI", () => {
+    let sessionDir: string;
+    let sessionId: string;
+
+    beforeAll(async () => {
+      sessionDir = resolve(tempDir, "session-workflow");
+      await mkdir(sessionDir);
+      await execa("git", ["init"], { cwd: sessionDir });
+      await execa("git", ["config", "user.name", "Test User"], { cwd: sessionDir });
+      await execa("git", ["config", "user.email", "test@example.com"], { cwd: sessionDir });
+      await mkdir(resolve(sessionDir, "src"));
+      await writeFile(resolve(sessionDir, "src/service.ts"), "export function refreshToken() { return 'trusted'; }\n");
+      await execa("git", ["add", "."], { cwd: sessionDir });
+      await execa("git", ["commit", "-m", "fixture"], { cwd: sessionDir });
+      await execa("node", [cliBin, "init", "--non-interactive"], { cwd: sessionDir });
+      await writeFile(resolve(sessionDir, "local-policy.md"), "Do not weaken trust validation.\n");
+      const indexed = await execa("node", [cliBin, "index"], { cwd: sessionDir, reject: false });
+      expect(indexed.exitCode).toBe(0);
+    });
+
+    it("starts, reports, lists, idempotently delivers, and completes", async () => {
+      const start = await execa("node", [cliBin, "session", "start", "Fix refresh token timeout", "--initial-context", "--json"], { cwd: sessionDir, reject: false });
+      expect(start.exitCode).toBe(0);
+      const started = JSON.parse(start.stdout) as { schemaVersion: string; session: { id: string }; initialContext: { id: string } };
+      sessionId = started.session.id;
+      expect(started.schemaVersion).toBe("continuum.context-session.v1");
+
+      const repeated = await execa("node", [cliBin, "session", "context", sessionId, "--json"], { cwd: sessionDir, reject: false });
+      expect(repeated.exitCode).toBe(0);
+      expect((JSON.parse(repeated.stdout) as { packet: { id: string } }).packet.id).toBe(started.initialContext.id);
+
+      const status = await execa("node", [cliBin, "session", "status", sessionId, "--json"], { cwd: sessionDir, reject: false });
+      expect((JSON.parse(status.stdout) as { deliveryCount: number }).deliveryCount).toBe(1);
+      const list = await execa("node", [cliBin, "session", "list", "--status", "active", "--json"], { cwd: sessionDir, reject: false });
+      expect((JSON.parse(list.stdout) as { sessions: { session: { id: string } }[] }).sessions.some((item) => item.session.id === sessionId)).toBe(true);
+      const agentSignal = await execa("node", [cliBin, "session", "signal", sessionId, "--type", "agent-context-request", "--query", "refreshToken", "--json"], { cwd: sessionDir, reject: false });
+      expect(agentSignal.exitCode).toBe(0);
+      expect((JSON.parse(agentSignal.stdout) as { result: { trigger: string } }).result.trigger).toBe("agent_request");
+
+      const report = await execa("node", [cliBin, "session", "report", sessionId, "--json"], { cwd: sessionDir, reject: false });
+      expect((JSON.parse(report.stdout) as { schemaVersion: string }).schemaVersion).toBe("continuum.context-session-report.v1");
+
+      const complete = await execa("node", [cliBin, "session", "complete", sessionId, "--status", "completed", "--json"], { cwd: sessionDir, reject: false });
+      expect((JSON.parse(complete.stdout) as { status: string }).status).toBe("completed");
+      const rejected = await execa("node", [cliBin, "session", "request", sessionId, "refreshToken"], { cwd: sessionDir, reject: false });
+      expect(rejected.exitCode).not.toBe(0);
+      expect(rejected.stderr).toContain("already completed");
+    }, 45_000);
+  });
+
 });

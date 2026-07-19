@@ -1,0 +1,2 @@
+databaseUrl: sqlite://continuum.db
+migrationTable: schema_migrations

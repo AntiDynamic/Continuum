@@ -85,6 +85,33 @@ describe("buildReport", () => {
     expect(report.status).toBe("completed");
     expect(report.agentId).toBe("fake");
     expect(report.totalEvents).toBe(1);
+    expect(report.contextSession).toBeNull();
+  });
+
+  it("includes persisted linked context-session evidence", () => {
+    const repo = new RepositoryRepository(db).upsert("/project", "project");
+    seedRun("run-with-session", repo.id);
+    const timestamp = now();
+    db.prepare(
+      "INSERT INTO context_sessions(id,repository_id,run_id,task_text,task_analysis_json,snapshot_kind,base_commit_hash,worktree_hash,strategy_id,strategy_version,status,maximum_estimated_tokens,delivered_estimated_tokens,active_estimated_tokens,remaining_estimated_tokens,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    ).run("session-report", repo.id, "run-with-session", "Fix bug", "{}", "worktree", "abc", "dirty-hash", "minimum-safe-progressive-v1", "1", "active", 8000, 150, 150, 7850, timestamp, timestamp);
+    db.prepare(
+      "INSERT INTO context_session_deliveries(id,session_id,sequence_number,stage,trigger_json,reason,estimated_new_tokens,estimated_restored_tokens,estimated_duplicate_tokens_avoided,coverage_added_json,coverage_remaining_json,strategy_id,strategy_version,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    ).run("delivery-initial", "session-report", 1, "orientation", "{\"type\":\"initial\"}", "initial", 100, 0, 0, "[\"implementation\"]", "[\"tests\"]", "minimum-safe-progressive-v1", "1", timestamp);
+    db.prepare(
+      "INSERT INTO context_session_deliveries(id,session_id,sequence_number,stage,trigger_json,reason,estimated_new_tokens,estimated_restored_tokens,estimated_duplicate_tokens_avoided,coverage_added_json,coverage_remaining_json,strategy_id,strategy_version,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    ).run("delivery-escalation", "session-report", 2, "escalation", "{\"type\":\"test_failure\"}", "test failure", 50, 0, 25, "[\"tests\"]", "[]", "minimum-safe-progressive-v1", "1", timestamp);
+
+    const report = buildReport("run-with-session", db);
+    expect(report.contextSession).toMatchObject({
+      sessionId: "session-report",
+      initialEstimatedTokens: 100,
+      escalationEstimatedTokens: 50,
+      deliveryCount: 2,
+      estimatedDuplicateTokensAvoided: 25,
+      coverageRemaining: [],
+      state: "active",
+    });
   });
 
   it("lists input_tokens as unavailable when not recorded", () => {

@@ -425,5 +425,92 @@ export const MIGRATIONS: Migration[] = [
         `);
       }
     },
-  }
+  },
+  {
+    version: 5,
+    description: "Context sessions and progressive delivery",
+    sql: `
+      CREATE TABLE context_sessions (
+        id TEXT PRIMARY KEY, repository_id INTEGER NOT NULL REFERENCES repositories(id), run_id TEXT REFERENCES agent_runs(id),
+        task_text TEXT NOT NULL, task_analysis_json TEXT NOT NULL, snapshot_kind TEXT NOT NULL,
+        base_commit_hash TEXT NOT NULL, worktree_hash TEXT, strategy_id TEXT NOT NULL, strategy_version TEXT NOT NULL,
+        status TEXT NOT NULL, maximum_estimated_tokens INTEGER NOT NULL, delivered_estimated_tokens INTEGER NOT NULL DEFAULT 0,
+        active_estimated_tokens INTEGER NOT NULL DEFAULT 0, remaining_estimated_tokens INTEGER NOT NULL,
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL, completed_at TEXT,
+        CHECK (status IN ('planning','active','checkpointed','completed','failed','cancelled')),
+        CHECK (maximum_estimated_tokens >= 0 AND delivered_estimated_tokens >= 0 AND active_estimated_tokens >= 0 AND remaining_estimated_tokens >= 0 AND remaining_estimated_tokens <= maximum_estimated_tokens),
+        CHECK ((snapshot_kind = 'commit' AND worktree_hash IS NULL) OR (snapshot_kind = 'worktree' AND worktree_hash IS NOT NULL))
+      );
+      CREATE TABLE context_session_deliveries (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id), sequence_number INTEGER NOT NULL,
+        stage TEXT NOT NULL, trigger_json TEXT NOT NULL, reason TEXT NOT NULL, estimated_new_tokens INTEGER NOT NULL,
+        estimated_restored_tokens INTEGER NOT NULL DEFAULT 0, estimated_duplicate_tokens_avoided INTEGER NOT NULL DEFAULT 0,
+        coverage_added_json TEXT NOT NULL, coverage_remaining_json TEXT NOT NULL, strategy_id TEXT NOT NULL, strategy_version TEXT NOT NULL, created_at TEXT NOT NULL,
+        UNIQUE(session_id, sequence_number)
+      );
+      CREATE TABLE context_session_delivery_items (
+        delivery_id TEXT NOT NULL REFERENCES context_session_deliveries(id), context_item_version_id TEXT NOT NULL REFERENCES context_item_versions(id),
+        delivery_role TEXT NOT NULL, estimated_tokens INTEGER NOT NULL, content_hash TEXT NOT NULL, presence_state TEXT NOT NULL,
+        duplicate_of_delivery_id TEXT, omission_reason TEXT, PRIMARY KEY(delivery_id, context_item_version_id, delivery_role),
+        CHECK (delivery_role IN ('new','active_reference','restored','omitted'))
+      );
+      CREATE TABLE context_presence_transitions (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id), context_item_version_id TEXT NOT NULL REFERENCES context_item_versions(id),
+        previous_state TEXT, new_state TEXT NOT NULL, reason TEXT NOT NULL, evidence_json TEXT NOT NULL, created_at TEXT NOT NULL
+      );
+      CREATE TABLE context_session_signals (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id), signal_type TEXT NOT NULL, signal_json TEXT NOT NULL, decision_json TEXT, created_at TEXT NOT NULL
+      );
+      CREATE INDEX idx_context_sessions_repository ON context_sessions(repository_id, created_at);
+      CREATE INDEX idx_context_session_deliveries_session ON context_session_deliveries(session_id, sequence_number);
+      CREATE INDEX idx_context_presence_session ON context_presence_transitions(session_id, created_at);
+    `,
+  },
+  {
+    version: 6,
+    description: "Codex App Server shadow executions and flight-recorder evidence",
+    sql: `
+      CREATE TABLE codex_executions (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id), repository_id INTEGER NOT NULL REFERENCES repositories(id), run_id TEXT REFERENCES agent_runs(id),
+        task_text TEXT NOT NULL, codex_thread_id TEXT, codex_turn_id TEXT, codex_version TEXT NOT NULL, model TEXT, mode TEXT NOT NULL,
+        approval_configuration TEXT NOT NULL, sandbox_configuration TEXT NOT NULL, base_commit_hash TEXT NOT NULL, worktree_hash TEXT,
+        final_base_commit_hash TEXT, final_worktree_hash TEXT, repository_changed INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL,
+        started_at TEXT NOT NULL, completed_at TEXT, failure_code TEXT, failure_message TEXT,
+        CHECK(mode='shadow'), CHECK(repository_changed IN(0,1))
+      );
+      CREATE INDEX idx_codex_executions_repository ON codex_executions(repository_id,started_at DESC);
+      CREATE TABLE codex_raw_events (
+        execution_id TEXT NOT NULL REFERENCES codex_executions(id), sequence_number INTEGER NOT NULL, direction TEXT NOT NULL,
+        message_category TEXT NOT NULL, method TEXT, request_id TEXT, thread_id TEXT, turn_id TEXT, item_id TEXT,
+        timestamp TEXT NOT NULL, raw_json TEXT NOT NULL, PRIMARY KEY(execution_id,sequence_number)
+      );
+      CREATE TABLE codex_normalized_events (
+        id TEXT PRIMARY KEY, execution_id TEXT NOT NULL REFERENCES codex_executions(id), raw_sequence_number INTEGER NOT NULL,
+        event_type TEXT NOT NULL, evidence_type TEXT NOT NULL, confidence TEXT NOT NULL, thread_id TEXT, turn_id TEXT, item_id TEXT,
+        payload_json TEXT NOT NULL, created_at TEXT NOT NULL,
+        FOREIGN KEY(execution_id,raw_sequence_number) REFERENCES codex_raw_events(execution_id,sequence_number)
+      );
+      CREATE INDEX idx_codex_normalized_execution ON codex_normalized_events(execution_id,raw_sequence_number);
+      CREATE TABLE codex_usage_snapshots (
+        id TEXT PRIMARY KEY, execution_id TEXT NOT NULL REFERENCES codex_executions(id), raw_sequence_number INTEGER NOT NULL,
+        source TEXT NOT NULL, input_tokens INTEGER, cached_input_tokens INTEGER, output_tokens INTEGER, reasoning_tokens INTEGER,
+        total_tokens INTEGER, accumulation TEXT NOT NULL, measurement TEXT NOT NULL, timestamp TEXT NOT NULL, raw_provider_payload_json TEXT NOT NULL,
+        CHECK(accumulation IN('accumulated','per_response')), CHECK(measurement IN('measured','estimated','unavailable')),
+        FOREIGN KEY(execution_id,raw_sequence_number) REFERENCES codex_raw_events(execution_id,sequence_number)
+      );
+      CREATE TABLE codex_turn_diffs (
+        id TEXT PRIMARY KEY, execution_id TEXT NOT NULL REFERENCES codex_executions(id), raw_sequence_number INTEGER NOT NULL,
+        turn_id TEXT, content_hash TEXT NOT NULL, diff_text TEXT NOT NULL, created_at TEXT NOT NULL,
+        UNIQUE(execution_id,turn_id,content_hash), FOREIGN KEY(execution_id,raw_sequence_number) REFERENCES codex_raw_events(execution_id,sequence_number)
+      );
+      CREATE TRIGGER codex_raw_events_no_update BEFORE UPDATE ON codex_raw_events BEGIN SELECT RAISE(ABORT,'codex raw event ledger is append-only'); END;
+      CREATE TRIGGER codex_raw_events_no_delete BEFORE DELETE ON codex_raw_events BEGIN SELECT RAISE(ABORT,'codex raw event ledger is append-only'); END;
+      CREATE TRIGGER codex_normalized_events_no_update BEFORE UPDATE ON codex_normalized_events BEGIN SELECT RAISE(ABORT,'codex normalized event ledger is append-only'); END;
+      CREATE TRIGGER codex_normalized_events_no_delete BEFORE DELETE ON codex_normalized_events BEGIN SELECT RAISE(ABORT,'codex normalized event ledger is append-only'); END;
+      CREATE TRIGGER codex_usage_snapshots_no_update BEFORE UPDATE ON codex_usage_snapshots BEGIN SELECT RAISE(ABORT,'codex usage ledger is append-only'); END;
+      CREATE TRIGGER codex_usage_snapshots_no_delete BEFORE DELETE ON codex_usage_snapshots BEGIN SELECT RAISE(ABORT,'codex usage ledger is append-only'); END;
+      CREATE TRIGGER codex_turn_diffs_no_update BEFORE UPDATE ON codex_turn_diffs BEGIN SELECT RAISE(ABORT,'codex diff ledger is append-only'); END;
+      CREATE TRIGGER codex_turn_diffs_no_delete BEFORE DELETE ON codex_turn_diffs BEGIN SELECT RAISE(ABORT,'codex diff ledger is append-only'); END;
+    `,
+  },
 ];

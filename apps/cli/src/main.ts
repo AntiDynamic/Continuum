@@ -14,9 +14,15 @@ import { runIndexCommand } from "./commands/index-compiler.js";
 import { runContextCommand } from "./commands/context-compiler.js";
 import { runMcpCommand } from "./commands/mcp.js";
 import { runPricingSetCommand, runPricingShowCommand } from "./commands/pricing.js";
+import {
+  runSessionComplete, runSessionContext, runSessionList, runSessionReport,
+  runSessionRequest, runSessionSignal, runSessionStart, runSessionStatus,
+} from "./commands/session.js";
 import { printError } from "./display.js";
+import { runCodexList, runCodexReport, runCodexShadow, runCodexStatus } from "./commands/codex.js";
 
 const program = new Command();
+const collect = (value: string, previous: string[] = []): string[] => [...previous, value];
 
 program
   .name("continuum")
@@ -200,6 +206,79 @@ program
     await runMcpCommand({ cwd: process.cwd() });
   });
 
+const session = program.command("session").description("Manage progressive context sessions.");
+
+session.command("start <task>").description("Start a progressive context session.")
+  .option("--budget-tokens <number>", "Maximum estimated context-token budget.")
+  .option("--run <run-id>", "Run ID or latest.")
+  .option("--initial-context", "Create the initial context delivery.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (task: string, options: any) => runSessionStart(task, { cwd: process.cwd(), ...options }));
+
+session.command("status <session-id>").description("Show context session status.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionStatus(id, { cwd: process.cwd(), ...options }));
+
+session.command("context <session-id>").description("Get the idempotent initial context delivery.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionContext(id, { cwd: process.cwd(), ...options }));
+
+session.command("request <session-id> <query>").description("Request a progressive context delta.")
+  .option("--symbol <symbol>", "Requested symbol.", collect, [])
+  .option("--path <path>", "Requested repository path.", collect, [])
+  .option("--coverage <category>", "Requested coverage category.", collect, [])
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, query: string, options: any) => runSessionRequest(id, query, { cwd: process.cwd(), ...options }));
+
+session.command("signal <session-id>").description("Report a typed context-control signal.")
+  .requiredOption("--type <type>", "agent-context-request, test-failure, missing-coverage, or out-of-scope-modification.")
+  .option("--query <query>", "Agent context request query.")
+  .option("--tests <path>", "Failing test path.", collect, [])
+  .option("--error <summary>", "Failure summary.")
+  .option("--path <path>", "Related path.", collect, [])
+  .option("--symbol <symbol>", "Related symbol.", collect, [])
+  .option("--coverage <category>", "Missing coverage.", collect, [])
+  .option("--modified <path>", "Modified out-of-scope path.", collect, [])
+  .option("--predicted <path>", "Predicted path.", collect, [])
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionSignal(id, { cwd: process.cwd(), ...options }));
+
+session.command("report <session-id>").description("Report persisted context-session evidence.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionReport(id, { cwd: process.cwd(), ...options }));
+
+session.command("complete <session-id>").description("Complete a progressive context session.")
+  .requiredOption("--status <status>", "completed, failed, or cancelled.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionComplete(id, { cwd: process.cwd(), ...options }));
+
+session.command("list").description("List recent sessions for this repository.")
+  .option("--status <status>", "Filter by status.").option("--limit <number>", "Maximum sessions.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (options: any) => runSessionList({ cwd: process.cwd(), ...options }));
+
+const codex = program.command("codex").description("Run Codex in shadow mode, or inspect persisted executions.");
+
+codex.command("run <task>", { hidden: true }).description("Run a Codex shadow execution.")
+  .option("--mode <mode>", "Phase 4A supports shadow only.", "shadow")
+  .option("--repo <path>", "Repository path.").option("--model <model>", "Codex model override.")
+  .option("--approval-policy <policy>", "untrusted, on-failure, on-request, or never.", "on-request")
+  .option("--sandbox <mode>", "read-only, workspace-write, or danger-full-access.", "workspace-write")
+  .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
+  .option("--json", "Emit structured JSON only.").option("--report <path>", "Write the JSON Flight Recorder report.")
+  .option("--experimental-raw-usage", "Opt into experimental API raw-response telemetry.")
+  .action(async(task:string,options:any)=>runCodexShadow(task,{cwd:process.cwd(),...options}));
+
+codex.command("report <execution-id>").description("Render a persisted Shadow Flight Recorder report.")
+  .option("--repo <path>", "Repository path.").option("--json", "Emit structured JSON only.")
+  .action(async(id:string,options:any)=>runCodexReport(id,{cwd:process.cwd(),...options}));
+codex.command("status <execution-id>").description("Show one persisted Codex execution.")
+  .option("--repo <path>", "Repository path.").option("--json", "Emit structured JSON only.")
+  .action(async(id:string,options:any)=>runCodexStatus(id,{cwd:process.cwd(),...options}));
+codex.command("list").description("List persisted Codex shadow executions.")
+  .option("--repo <path>", "Repository path.").option("--limit <number>", "Maximum executions.").option("--json", "Emit structured JSON only.")
+  .action(async(options:any)=>runCodexList({cwd:process.cwd(),...options}));
+
 const pricing = program
   .command("pricing")
   .description("Manage versioned model pricing profiles.");
@@ -251,6 +330,10 @@ program.exitOverride((err) => {
 const contextActions = new Set(["search", "pack", "explain", "coverage"]);
 if (process.argv[2] === "context" && process.argv[3] && !process.argv[3].startsWith("-") && !contextActions.has(process.argv[3])) {
   process.argv.splice(3, 0, "search");
+}
+const codexActions = new Set(["report", "status", "list", "run"]);
+if (process.argv[2] === "codex" && process.argv[3] && !process.argv[3].startsWith("-") && !codexActions.has(process.argv[3])) {
+  process.argv.splice(3, 0, "run");
 }
 
 program.parseAsync(process.argv).catch((err: unknown) => {

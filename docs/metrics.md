@@ -66,3 +66,7 @@ Captured via the `continuum outcome` command:
 - **Accepted**: The developer accepted the agent's work as-is, without modifications.
 - **Modified**: The developer accepted the core of the agent's work, but had to make manual corrections or adjustments before committing.
 - **Rejected**: The agent's work was incorrect, unhelpful, or harmful, and was discarded by the developer (e.g. via `git reset --hard`).
+
+## Context-session estimates
+
+Session reports distinguish estimated initial and escalation tokens, active-reference counts, and estimated duplicate context avoided. Context token counts are estimates. Duplicate-token avoidance is estimated. Live provider token telemetry is not yet connected to sessions, and no measured counterfactual baseline or causal improvement is claimed.

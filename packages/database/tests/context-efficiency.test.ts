@@ -60,7 +60,7 @@ describe("context efficiency repositories", () => {
   });
 
   it("applies the current schema and versions pricing profiles append-only", () => {
-    expect(getSchemaVersion(db)).toBe(4);
+    expect(getSchemaVersion(db)).toBe(6);
     const pricing = new PricingProfileRepository(db);
     pricing.set({
       provider: "continuum",

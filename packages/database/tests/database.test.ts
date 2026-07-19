@@ -40,12 +40,12 @@ describe("migrate", () => {
   });
 
   it("returns the correct schema version", () => {
-    expect(getSchemaVersion(db)).toBe(4);
+    expect(getSchemaVersion(db)).toBe(6);
   });
 
   it("is idempotent when run twice", () => {
     expect(() => migrate(db)).not.toThrow();
-    expect(getSchemaVersion(db)).toBe(4);
+    expect(getSchemaVersion(db)).toBe(6);
   });
 });
 
@@ -260,5 +260,18 @@ describe("UsageMetricRepository", () => {
     expect(found).toHaveLength(1);
     expect(found[0]?.numeric_value).toBe(1200);
     expect(found[0]?.metric_name).toBe("input_tokens");
+  });
+});
+
+
+describe("Codex flight-recorder migration", () => {
+  it("creates append-only evidence ledgers", () => {
+    const at = new Date().toISOString();
+    const repository = new RepositoryRepository(db).upsert("/tmp/codex-ledger", "codex-ledger");
+    db.prepare(`INSERT INTO context_sessions(id,repository_id,run_id,task_text,task_analysis_json,snapshot_kind,base_commit_hash,worktree_hash,strategy_id,strategy_version,status,maximum_estimated_tokens,delivered_estimated_tokens,active_estimated_tokens,remaining_estimated_tokens,created_at,updated_at,completed_at) VALUES(?,?,NULL,?,'{}','commit',?,NULL,'test','1','completed',100,0,0,100,?,?,?)`).run("session-codex",repository.id,"task","abc",at,at,at);
+    db.prepare(`INSERT INTO codex_executions(id,session_id,repository_id,run_id,task_text,codex_thread_id,codex_turn_id,codex_version,model,mode,approval_configuration,sandbox_configuration,base_commit_hash,worktree_hash,final_base_commit_hash,final_worktree_hash,repository_changed,status,started_at,completed_at,failure_code,failure_message) VALUES(?,?,?,NULL,?,NULL,NULL,?,NULL,'shadow','never','read-only',?,NULL,NULL,NULL,0,'running',?,NULL,NULL,NULL)`).run("execution-codex","session-codex",repository.id,"task","0.133.0","abc",at);
+    db.prepare(`INSERT INTO codex_raw_events(execution_id,sequence_number,direction,message_category,method,request_id,thread_id,turn_id,item_id,timestamp,raw_json) VALUES(?,1,'server_to_client','notification','turn/started',NULL,NULL,NULL,NULL,?,'{}')`).run("execution-codex",at);
+    expect(() => db.prepare("UPDATE codex_raw_events SET raw_json='changed' WHERE execution_id=?").run("execution-codex")).toThrow(/append-only/);
+    expect(() => db.prepare("DELETE FROM codex_raw_events WHERE execution_id=?").run("execution-codex")).toThrow(/append-only/);
   });
 });

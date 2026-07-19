@@ -6,10 +6,10 @@ describe("snapshot", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.mocked(gitAnalyzer.getRepositoryRoot).mockResolvedValue("/mock/repo");
+        vi.mocked(gitAnalyzer.resolveSnapshotIdentity).mockResolvedValue({ snapshot_kind: "commit", base_commit_hash: "abcdef1234567890", worktree_hash: null, dirty: false });
     });
     it("returns commit snapshot when working tree is clean", async () => {
-        vi.mocked(gitAnalyzer.getCurrentCommit).mockResolvedValue("abcdef1234567890");
-        vi.mocked(gitAnalyzer.isWorkingTreeClean).mockResolvedValue(true);
+        vi.mocked(gitAnalyzer.resolveSnapshotIdentity).mockResolvedValue({ snapshot_kind: "commit", base_commit_hash: "abcdef1234567890", worktree_hash: null, dirty: false });
         const result = await resolveSnapshotIdentity("/mock/repo/some/path");
         expect(result).toEqual({
             snapshot_kind: "commit",
@@ -19,18 +19,17 @@ describe("snapshot", () => {
         });
     });
     it("returns worktree snapshot when working tree is dirty", async () => {
-        vi.mocked(gitAnalyzer.getCurrentCommit).mockResolvedValue("abcdef1234567890");
-        vi.mocked(gitAnalyzer.isWorkingTreeClean).mockResolvedValue(false);
+        vi.mocked(gitAnalyzer.resolveSnapshotIdentity).mockResolvedValue({ snapshot_kind: "worktree", base_commit_hash: "abcdef1234567890", worktree_hash: "deterministic-worktree-hash", dirty: true });
         const result = await resolveSnapshotIdentity("/mock/repo/some/path");
         expect(result).toEqual({
             snapshot_kind: "worktree",
             base_commit_hash: "abcdef1234567890",
-            worktree_hash: null,
+            worktree_hash: "deterministic-worktree-hash",
             dirty: true,
         });
     });
     it("throws if there is no commit hash", async () => {
-        vi.mocked(gitAnalyzer.getCurrentCommit).mockResolvedValue(null);
+        vi.mocked(gitAnalyzer.resolveSnapshotIdentity).mockRejectedValue(new Error("repository has no commits"));
         await expect(resolveSnapshotIdentity("/mock/repo")).rejects.toThrow(/no commits/);
     });
 });

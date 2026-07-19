@@ -35,3 +35,6 @@ export {
   ContextLedgerRepository,
 } from "./context-efficiency-repository.js";
 export type { StoredUsageEvidence } from "./context-efficiency-repository.js";
+
+export * from "./repositories/context-session-repository.js";
+export * from "./repositories/codex-execution-repository.js";

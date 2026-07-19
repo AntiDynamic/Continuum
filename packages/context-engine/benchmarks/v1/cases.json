@@ -1,0 +1,639 @@
+{
+  "schemaVersion": "continuum.retrieval-benchmark.v1",
+  "groundTruthPolicy": "Manually declared before executing rankings; keys are path#symbol patterns and are never derived from Continuum output.",
+  "cases": [
+    {
+      "id": "small-exact-symbol-auth",
+      "repositoryFixture": "small-ts",
+      "task": "Show AuthService.validateToken",
+      "category": "exact_symbol",
+      "requiredPaths": [
+        "src/auth-service.ts"
+      ],
+      "requiredSymbols": [
+        "AuthService.validateToken"
+      ],
+      "requiredCoverage": [
+        "implementation"
+      ],
+      "optionalRelevantItemIds": [
+        "tests/auth-service.test.ts#rejectsEmptyTokenTest"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "src/auth-service.ts#*",
+        "*#AuthService.validateToken"
+      ]
+    },
+    {
+      "id": "mono-exact-symbol-session",
+      "repositoryFixture": "monorepo",
+      "task": "Show createSession",
+      "category": "exact_symbol",
+      "requiredPaths": [
+        "packages/core/src/session.ts"
+      ],
+      "requiredSymbols": [
+        "createSession"
+      ],
+      "requiredCoverage": [
+        "implementation"
+      ],
+      "optionalRelevantItemIds": [
+        "packages/core/tests/session.test.ts#createSessionContractTest"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/core/src/session.ts#*",
+        "*#createSession"
+      ]
+    },
+    {
+      "id": "sql-exact-symbol-rollback",
+      "repositoryFixture": "sql-docs",
+      "task": "Show rollbackMigration",
+      "category": "exact_symbol",
+      "requiredPaths": [
+        "src/migration-runner.ts"
+      ],
+      "requiredSymbols": [
+        "rollbackMigration"
+      ],
+      "requiredCoverage": [
+        "implementation"
+      ],
+      "optionalRelevantItemIds": [
+        "tests/migrations.test.ts#migrationRoundTripTest"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/email-renderer.ts#renderWelcomeEmail"
+      ],
+      "requiredItemIds": [
+        "src/migration-runner.ts#*",
+        "*#rollbackMigration"
+      ]
+    },
+    {
+      "id": "small-exact-path-config",
+      "repositoryFixture": "small-ts",
+      "task": "Inspect config/app.yaml",
+      "category": "exact_path",
+      "requiredPaths": [
+        "config/app.yaml"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "configuration"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "config/app.yaml#*"
+      ]
+    },
+    {
+      "id": "mono-exact-path-contract",
+      "repositoryFixture": "monorepo",
+      "task": "Inspect packages/api/src/contracts.ts",
+      "category": "exact_path",
+      "requiredPaths": [
+        "packages/api/src/contracts.ts"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "public_contract"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/api/src/contracts.ts#*"
+      ]
+    },
+    {
+      "id": "sql-exact-path-migration",
+      "repositoryFixture": "sql-docs",
+      "task": "Inspect migrations/002_add_refresh_token.sql",
+      "category": "exact_path",
+      "requiredPaths": [
+        "migrations/002_add_refresh_token.sql"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "database_schema",
+        "rollback"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/email-renderer.ts#renderWelcomeEmail"
+      ],
+      "requiredItemIds": [
+        "migrations/002_add_refresh_token.sql#*"
+      ]
+    },
+    {
+      "id": "small-local-cache-timeout",
+      "repositoryFixture": "small-ts",
+      "task": "Fix readCache timeout bug and its failing test",
+      "category": "local_bug",
+      "requiredPaths": [
+        "src/cache.ts",
+        "tests/cache.test.ts"
+      ],
+      "requiredSymbols": [
+        "readCache",
+        "cacheTimeoutTest"
+      ],
+      "requiredCoverage": [
+        "implementation",
+        "tests"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "src/cache.ts#*",
+        "tests/cache.test.ts#*",
+        "*#readCache",
+        "*#cacheTimeoutTest"
+      ]
+    },
+    {
+      "id": "small-local-token-refresh",
+      "repositoryFixture": "small-ts",
+      "task": "Fix refreshToken validation error with regression test",
+      "category": "local_bug",
+      "requiredPaths": [
+        "src/auth-service.ts",
+        "tests/auth-service.test.ts"
+      ],
+      "requiredSymbols": [
+        "AuthService.refreshToken",
+        "rejectsEmptyTokenTest"
+      ],
+      "requiredCoverage": [
+        "implementation",
+        "tests"
+      ],
+      "optionalRelevantItemIds": [
+        "SECURITY.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "src/auth-service.ts#*",
+        "tests/auth-service.test.ts#*",
+        "*#AuthService.refreshToken",
+        "*#rejectsEmptyTokenTest"
+      ]
+    },
+    {
+      "id": "mono-cross-user-session",
+      "repositoryFixture": "monorepo",
+      "task": "Change updateUser across packages/api and packages/core session creation",
+      "category": "cross_package",
+      "requiredPaths": [
+        "packages/api/src/routes.ts",
+        "packages/core/src/session.ts",
+        "packages/api/tests/routes.test.ts"
+      ],
+      "requiredSymbols": [
+        "updateUser",
+        "createSession"
+      ],
+      "requiredCoverage": [
+        "implementation",
+        "tests"
+      ],
+      "optionalRelevantItemIds": [
+        "docs/architecture.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/api/src/routes.ts#*",
+        "packages/core/src/session.ts#*",
+        "packages/api/tests/routes.test.ts#*",
+        "*#updateUser",
+        "*#createSession"
+      ]
+    },
+    {
+      "id": "mono-cross-web-contract",
+      "repositoryFixture": "monorepo",
+      "task": "Update web fetchUser and API UserResponse contract across packages/web and packages/api",
+      "category": "cross_package",
+      "requiredPaths": [
+        "packages/web/src/client.ts",
+        "packages/api/src/contracts.ts"
+      ],
+      "requiredSymbols": [
+        "fetchUser",
+        "UserResponse"
+      ],
+      "requiredCoverage": [
+        "implementation",
+        "public_contract"
+      ],
+      "optionalRelevantItemIds": [
+        "docs/architecture.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/web/src/client.ts#*",
+        "packages/api/src/contracts.ts#*",
+        "*#fetchUser",
+        "*#UserResponse"
+      ]
+    },
+    {
+      "id": "small-test-auth",
+      "repositoryFixture": "small-ts",
+      "task": "Failing rejectsEmptyTokenTest expected token rejection",
+      "category": "test_failure",
+      "requiredPaths": [
+        "tests/auth-service.test.ts",
+        "src/auth-service.ts"
+      ],
+      "requiredSymbols": [
+        "rejectsEmptyTokenTest",
+        "AuthService.validateToken"
+      ],
+      "requiredCoverage": [
+        "tests",
+        "implementation"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "tests/auth-service.test.ts#*",
+        "src/auth-service.ts#*",
+        "*#rejectsEmptyTokenTest",
+        "*#AuthService.validateToken"
+      ]
+    },
+    {
+      "id": "mono-test-route",
+      "repositoryFixture": "monorepo",
+      "task": "Failing updateUserContractTest expected sessionId",
+      "category": "test_failure",
+      "requiredPaths": [
+        "packages/api/tests/routes.test.ts",
+        "packages/api/src/routes.ts"
+      ],
+      "requiredSymbols": [
+        "updateUserContractTest",
+        "updateUser"
+      ],
+      "requiredCoverage": [
+        "tests",
+        "implementation"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/api/tests/routes.test.ts#*",
+        "packages/api/src/routes.ts#*",
+        "*#updateUserContractTest",
+        "*#updateUser"
+      ]
+    },
+    {
+      "id": "small-security-token",
+      "repositoryFixture": "small-ts",
+      "task": "Fix authentication token trust validation without weakening security",
+      "category": "security",
+      "requiredPaths": [
+        "src/auth-service.ts",
+        "tests/auth-service.test.ts",
+        "SECURITY.md"
+      ],
+      "requiredSymbols": [
+        "AuthService.validateToken"
+      ],
+      "requiredCoverage": [
+        "implementation",
+        "tests",
+        "security_constraint",
+        "public_contract"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "src/auth-service.ts#*",
+        "tests/auth-service.test.ts#*",
+        "SECURITY.md#*",
+        "*#AuthService.validateToken"
+      ]
+    },
+    {
+      "id": "sql-security-refresh",
+      "repositoryFixture": "sql-docs",
+      "task": "Secure refresh token hash storage and never store plaintext tokens",
+      "category": "security",
+      "requiredPaths": [
+        "migrations/002_add_refresh_token.sql",
+        "SECURITY.md",
+        "tests/migrations.test.ts"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "database_schema",
+        "security_constraint",
+        "tests"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/email-renderer.ts#renderWelcomeEmail"
+      ],
+      "requiredItemIds": [
+        "migrations/002_add_refresh_token.sql#*",
+        "SECURITY.md#*",
+        "tests/migrations.test.ts#*"
+      ]
+    },
+    {
+      "id": "sql-migration-users",
+      "repositoryFixture": "sql-docs",
+      "task": "Add users schema migration with rollback and migration test",
+      "category": "database_migration",
+      "requiredPaths": [
+        "migrations/001_create_users.sql",
+        "tests/migrations.test.ts",
+        "docs/schema.md"
+      ],
+      "requiredSymbols": [
+        "migrationRoundTripTest"
+      ],
+      "requiredCoverage": [
+        "implementation",
+        "database_schema",
+        "rollback",
+        "tests"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/email-renderer.ts#renderWelcomeEmail"
+      ],
+      "requiredItemIds": [
+        "migrations/001_create_users.sql#*",
+        "tests/migrations.test.ts#*",
+        "docs/schema.md#*",
+        "*#migrationRoundTripTest"
+      ]
+    },
+    {
+      "id": "sql-migration-refresh",
+      "repositoryFixture": "sql-docs",
+      "task": "Change refresh_token_hash schema migration and document rollback",
+      "category": "database_migration",
+      "requiredPaths": [
+        "migrations/002_add_refresh_token.sql",
+        "docs/schema.md",
+        "tests/migrations.test.ts"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "implementation",
+        "database_schema",
+        "rollback",
+        "tests"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/email-renderer.ts#renderWelcomeEmail"
+      ],
+      "requiredItemIds": [
+        "migrations/002_add_refresh_token.sql#*",
+        "docs/schema.md#*",
+        "tests/migrations.test.ts#*"
+      ]
+    },
+    {
+      "id": "small-api-contract",
+      "repositoryFixture": "small-ts",
+      "task": "Change UserApi getUser public contract and controller implementation",
+      "category": "api_contract",
+      "requiredPaths": [
+        "src/api.ts"
+      ],
+      "requiredSymbols": [
+        "UserApi",
+        "UserController.getUser"
+      ],
+      "requiredCoverage": [
+        "public_contract",
+        "implementation"
+      ],
+      "optionalRelevantItemIds": [
+        "README.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "src/api.ts#*",
+        "*#UserApi",
+        "*#UserController.getUser"
+      ]
+    },
+    {
+      "id": "mono-api-contract",
+      "repositoryFixture": "monorepo",
+      "task": "Change UserResponse API contract and updateUser route test",
+      "category": "api_contract",
+      "requiredPaths": [
+        "packages/api/src/contracts.ts",
+        "packages/api/src/routes.ts",
+        "packages/api/tests/routes.test.ts"
+      ],
+      "requiredSymbols": [
+        "UserResponse",
+        "updateUser"
+      ],
+      "requiredCoverage": [
+        "public_contract",
+        "implementation",
+        "tests"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/api/src/contracts.ts#*",
+        "packages/api/src/routes.ts#*",
+        "packages/api/tests/routes.test.ts#*",
+        "*#UserResponse",
+        "*#updateUser"
+      ]
+    },
+    {
+      "id": "small-config-timeout",
+      "repositoryFixture": "small-ts",
+      "task": "Fix app configuration timeoutMs in config/app.yaml and loadAppConfig",
+      "category": "configuration",
+      "requiredPaths": [
+        "config/app.yaml",
+        "src/app-config.ts"
+      ],
+      "requiredSymbols": [
+        "loadAppConfig"
+      ],
+      "requiredCoverage": [
+        "configuration",
+        "tests"
+      ],
+      "optionalRelevantItemIds": [
+        "docs/authentication.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "config/app.yaml#*",
+        "src/app-config.ts#*",
+        "*#loadAppConfig"
+      ]
+    },
+    {
+      "id": "mono-config-workspace",
+      "repositoryFixture": "monorepo",
+      "task": "Fix workspace configuration sessionTimeoutMs and loadWorkspaceSettings",
+      "category": "configuration",
+      "requiredPaths": [
+        "config/workspace.yaml",
+        "packages/config/src/settings.ts"
+      ],
+      "requiredSymbols": [
+        "loadWorkspaceSettings"
+      ],
+      "requiredCoverage": [
+        "configuration",
+        "tests"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "config/workspace.yaml#*",
+        "packages/config/src/settings.ts#*",
+        "*#loadWorkspaceSettings"
+      ]
+    },
+    {
+      "id": "small-doc-mismatch",
+      "repositoryFixture": "small-ts",
+      "task": "Fix authentication documentation mismatch for AuthService timeout",
+      "category": "documentation_mismatch",
+      "requiredPaths": [
+        "docs/authentication.md",
+        "src/auth-service.ts",
+        "src/app-config.ts"
+      ],
+      "requiredSymbols": [
+        "AuthService",
+        "loadAppConfig"
+      ],
+      "requiredCoverage": [
+        "documentation",
+        "implementation"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "docs/authentication.md#*",
+        "src/auth-service.ts#*",
+        "src/app-config.ts#*",
+        "*#AuthService",
+        "*#loadAppConfig"
+      ]
+    },
+    {
+      "id": "sql-doc-mismatch",
+      "repositoryFixture": "sql-docs",
+      "task": "Fix users schema documentation mismatch for refresh_token_hash",
+      "category": "documentation_mismatch",
+      "requiredPaths": [
+        "docs/schema.md",
+        "schema/users.sql",
+        "migrations/002_add_refresh_token.sql"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "documentation",
+        "database_schema"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/email-renderer.ts#renderWelcomeEmail"
+      ],
+      "requiredItemIds": [
+        "docs/schema.md#*",
+        "schema/users.sql#*",
+        "migrations/002_add_refresh_token.sql#*"
+      ]
+    },
+    {
+      "id": "small-ambiguous-timeout",
+      "repositoryFixture": "small-ts",
+      "task": "Users sometimes time out after refresh",
+      "category": "ambiguous_behaviour",
+      "requiredPaths": [
+        "src/auth-service.ts",
+        "src/app-config.ts",
+        "tests/auth-service.test.ts"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "implementation",
+        "tests"
+      ],
+      "optionalRelevantItemIds": [
+        "docs/authentication.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "src/analytics.ts#recordPageView"
+      ],
+      "requiredItemIds": [
+        "src/auth-service.ts#*",
+        "src/app-config.ts#*",
+        "tests/auth-service.test.ts#*"
+      ]
+    },
+    {
+      "id": "mono-ambiguous-session",
+      "repositoryFixture": "monorepo",
+      "task": "User sessions intermittently return the wrong identifier",
+      "category": "ambiguous_behaviour",
+      "requiredPaths": [
+        "packages/core/src/session.ts",
+        "packages/api/src/routes.ts",
+        "packages/api/tests/routes.test.ts"
+      ],
+      "requiredSymbols": [],
+      "requiredCoverage": [
+        "implementation",
+        "tests"
+      ],
+      "optionalRelevantItemIds": [
+        "docs/architecture.md"
+      ],
+      "explicitlyIrrelevantItemIds": [
+        "packages/billing/src/invoice.ts#calculateInvoice"
+      ],
+      "requiredItemIds": [
+        "packages/core/src/session.ts#*",
+        "packages/api/src/routes.ts#*",
+        "packages/api/tests/routes.test.ts#*"
+      ]
+    }
+  ]
+}
