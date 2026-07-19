@@ -4,7 +4,7 @@ import { now } from "@continuum/shared";
 export interface CodexExecutionRow {
   id: string; session_id: string; repository_id: number; run_id: string | null; task_text: string;
   codex_thread_id: string | null; codex_turn_id: string | null; codex_version: string; model: string | null;
-  mode: "shadow"; approval_configuration: string; sandbox_configuration: string; base_commit_hash: string;
+  mode: "shadow" | "assist"; approval_configuration: string; sandbox_configuration: string; base_commit_hash: string;
   worktree_hash: string | null; final_base_commit_hash: string | null; final_worktree_hash: string | null;
   repository_changed: number; status: string; started_at: string; completed_at: string | null;
   failure_code: string | null; failure_message: string | null;

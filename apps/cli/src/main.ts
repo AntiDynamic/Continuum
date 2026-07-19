@@ -19,7 +19,7 @@ import {
   runSessionRequest, runSessionSignal, runSessionStart, runSessionStatus,
 } from "./commands/session.js";
 import { printError } from "./display.js";
-import { runCodexList, runCodexReport, runCodexShadow, runCodexStatus } from "./commands/codex.js";
+import { runCodexList, runCodexReport, runCodexShadow, runCodexStatus, runCodexCompare } from "./commands/codex.js";
 
 const program = new Command();
 const collect = (value: string, previous: string[] = []): string[] => [...previous, value];
@@ -259,8 +259,8 @@ session.command("list").description("List recent sessions for this repository.")
 
 const codex = program.command("codex").description("Run Codex in shadow mode, or inspect persisted executions.");
 
-codex.command("run <task>", { hidden: true }).description("Run a Codex shadow execution.")
-  .option("--mode <mode>", "Phase 4A supports shadow only.", "shadow")
+codex.command("run <task>", { hidden: true }).description("Run a Codex execution (shadow or assist).")
+  .option("--mode <mode>", "shadow or assist.", "shadow")
   .option("--repo <path>", "Repository path.").option("--model <model>", "Codex model override.")
   .option("--approval-policy <policy>", "untrusted, on-failure, on-request, or never.", "on-request")
   .option("--sandbox <mode>", "read-only, workspace-write, or danger-full-access.", "workspace-write")
@@ -268,6 +268,13 @@ codex.command("run <task>", { hidden: true }).description("Run a Codex shadow ex
   .option("--json", "Emit structured JSON only.").option("--report <path>", "Write the JSON Flight Recorder report.")
   .option("--experimental-raw-usage", "Opt into experimental API raw-response telemetry.")
   .action(async(task:string,options:any)=>runCodexShadow(task,{cwd:process.cwd(),...options}));
+
+codex.command("compare <task>").description("Run shadow and assist executions sequentially, and compare verification results.")
+  .requiredOption("--verifier <command>", "The verification command (e.g. 'pnpm test').")
+  .option("--repo <path>", "Repository path.").option("--model <model>", "Codex model override.")
+  .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
+  .option("--json", "Emit structured JSON only.")
+  .action(async(task:string,options:any)=>runCodexCompare(task,{cwd:process.cwd(),...options}));
 
 codex.command("report <execution-id>").description("Render a persisted Shadow Flight Recorder report.")
   .option("--repo <path>", "Repository path.").option("--json", "Emit structured JSON only.")
@@ -331,7 +338,7 @@ const contextActions = new Set(["search", "pack", "explain", "coverage"]);
 if (process.argv[2] === "context" && process.argv[3] && !process.argv[3].startsWith("-") && !contextActions.has(process.argv[3])) {
   process.argv.splice(3, 0, "search");
 }
-const codexActions = new Set(["report", "status", "list", "run"]);
+const codexActions = new Set(["report", "status", "list", "run", "compare"]);
 if (process.argv[2] === "codex" && process.argv[3] && !process.argv[3].startsWith("-") && !codexActions.has(process.argv[3])) {
   process.argv.splice(3, 0, "run");
 }

@@ -228,10 +228,18 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
 
   private async handleServerRequest(request: CodexServerRequestContext): Promise<void> {
     try {
-      let response: unknown;
-      if (this.options.onServerRequest) response = await this.options.onServerRequest(request);
-      else if (request.method === "item/commandExecution/requestApproval" || request.method === "item/fileChange/requestApproval") response = { decision: "decline" };
-      else throw new CodexIntegrationError("UNSUPPORTED_SERVER_REQUEST", `Unsupported Codex server request: ${request.method}`);
+      let response: unknown = null;
+      if (this.options.onServerRequest) {
+        response = await this.options.onServerRequest(request);
+      }
+      
+      if (!response) {
+        if (request.method === "item/commandExecution/requestApproval" || request.method === "item/fileChange/requestApproval") {
+          response = { decision: "decline" };
+        } else {
+          throw new CodexIntegrationError("UNSUPPORTED_SERVER_REQUEST", `Unsupported Codex server request: ${request.method}`);
+        }
+      }
       await this.respondToServerRequest(request.id, response);
     } catch (error) {
       await this.write({ id: request.id, error: { code: -32601, message: error instanceof Error ? error.message : String(error) } });

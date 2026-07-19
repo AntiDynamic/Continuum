@@ -28,17 +28,43 @@ async function interactiveApproval(request:CodexServerRequestContext):Promise<Co
   const prompt=createInterface({input,output});try{const answer=(await prompt.question("Decision: ")).trim().toLowerCase();if(answer==="accept")return"accept";if(answer==="accept-session")return"acceptForSession";if(answer==="cancel")return"cancel";return"decline";}finally{prompt.close();}
 }
 export async function runCodexShadow(task:string,options:CodexRunOptions):Promise<void>{
-  if(options.mode!=="shadow")throw new Error("Assist mode is unavailable in Phase 4A. Use --mode shadow.");
+  if(options.mode!=="shadow" && options.mode!=="assist")throw new Error("Mode must be shadow or assist.");
   if(options.approvalPolicy&&!approvals.includes(options.approvalPolicy as CodexApprovalPolicy))throw new Error("Unsupported approval policy: "+options.approvalPolicy);
   if(options.sandbox&&!sandboxes.includes(options.sandbox as CodexSandboxMode))throw new Error("Unsupported sandbox mode: "+options.sandbox);
-  const interactive=Boolean(process.stdin.isTTY&&!options.json);const service=new CodexExecutionService();
+  const interactive=Boolean(process.stdin.isTTY&&!options.json);
+  const { CodexAssistExecutionService } = await import("@continuum/codex-app-server");
+  const service=options.mode === "assist" ? new CodexAssistExecutionService() : new CodexExecutionService();
   try{
     const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
-    const result=await service.runShadow({cwd:options.cwd,repository:options.repo,task,mode:"shadow",model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})});
+    const runOptions = {cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
+    
+    const result=options.mode === "assist" ? await (service as any).runAssist(runOptions) : await (service as any).runShadow(runOptions);
+    
     if(options.report)await writeFile(options.report,JSON.stringify(result.report,null,2)+"\n","utf8");
     if(options.json)line(JSON.stringify(result,null,2));else{printReport(result.report);kv("Authentication mode",result.authenticationMode);if(result.compatibilityWarning)line("WARNING: "+result.compatibilityWarning);}
   }catch(error){if(error instanceof CodexIntegrationError)throw new Error(`${error.code}: ${error.message}`, { cause: error });throw error;}
 }
+
+export interface CodexCompareCliOptions extends CodexRunOptions { verifier: string; }
+
+export async function runCodexCompare(task:string,options:CodexCompareCliOptions):Promise<void>{
+  const { CodexComparisonService } = await import("@continuum/codex-app-server");
+  const service = new CodexComparisonService();
+  try {
+    const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
+    const result = await service.runComparison({cwd:options.cwd,repository:options.repo,task,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,verifierCommand:options.verifier,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})});
+    if(options.json)line(JSON.stringify(result,null,2));else{
+      line(bold("CODEX COMPARISON RUN"));blank();
+      kv("Shadow Execution", result.shadowExecutionId);
+      kv("Shadow Verifier Success", String(result.shadowVerifierSuccess));
+      kv("Assist Execution", result.assistExecutionId);
+      kv("Assist Verifier Success", String(result.assistVerifierSuccess));
+    }
+  } catch (error) {
+    if(error instanceof CodexIntegrationError)throw new Error(`${error.code}: ${error.message}`, { cause: error });throw error;
+  }
+}
+
 export async function runCodexReport(id:string,options:CodexReadOptions):Promise<void>{const report=await new CodexExecutionService().report(options.cwd,id,options.repo);if(options.json)line(JSON.stringify(report,null,2));else printReport(report);}
 export async function runCodexStatus(id:string,options:CodexReadOptions):Promise<void>{const status=await new CodexExecutionService().status(options.cwd,id,options.repo);line(options.json?JSON.stringify(status,null,2):JSON.stringify(status,null,2));}
 export async function runCodexList(options:CodexReadOptions):Promise<void>{const rows=await new CodexExecutionService().list(options.cwd,options.repo,options.limit?Number(options.limit):20);line(options.json?JSON.stringify(rows,null,2):JSON.stringify(rows,null,2));}
