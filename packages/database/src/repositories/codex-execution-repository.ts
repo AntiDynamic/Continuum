@@ -59,6 +59,12 @@ export class CodexExecutionRepository {
       this.db.exec("COMMIT"); return sequence;
     } catch(error) { this.db.exec("ROLLBACK"); throw error; }
   }
+  recordAssistToolCall(executionId: string, toolName: string, argumentsJson: string, success: boolean, contentItemsJson: string): void {
+    this.db.prepare("INSERT INTO codex_assist_tool_call_events(id,execution_id,tool_name,arguments_json,response_success,response_content_items_json) VALUES(?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,toolName,argumentsJson,success?1:0,contentItemsJson);
+  }
+  recordAssistInjection(executionId: string, sessionId: string, sequence: number, sizeBytes: number, role: string): void {
+    this.db.prepare("INSERT INTO codex_assist_injections(id,execution_id,context_session_id,injection_sequence,envelope_size_bytes,source_role) VALUES(?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,sessionId,sequence,sizeBytes,role);
+  }
   listRaw(executionId:string):CodexRawEventRow[]{return this.db.prepare("SELECT * FROM codex_raw_events WHERE execution_id=? ORDER BY sequence_number").all(executionId) as unknown as CodexRawEventRow[];}
   listNormalized(executionId:string):any[]{return this.db.prepare("SELECT * FROM codex_normalized_events WHERE execution_id=? ORDER BY raw_sequence_number,rowid").all(executionId) as any[];}
   listUsage(executionId:string):any[]{return this.db.prepare("SELECT * FROM codex_usage_snapshots WHERE execution_id=? ORDER BY raw_sequence_number,rowid").all(executionId) as any[];}

@@ -40,12 +40,12 @@ describe("migrate", () => {
   });
 
   it("returns the correct schema version", () => {
-    expect(getSchemaVersion(db)).toBe(8);
+    expect(getSchemaVersion(db)).toBe(9);
   });
 
   it("is idempotent when run twice", () => {
     expect(() => migrate(db)).not.toThrow();
-    expect(getSchemaVersion(db)).toBe(8);
+    expect(getSchemaVersion(db)).toBe(9);
   });
 });
 

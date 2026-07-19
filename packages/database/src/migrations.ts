@@ -577,4 +577,27 @@ export const MIGRATIONS: Migration[] = [
       );
     `,
   },
+  {
+    version: 9,
+    description: "Phase 4B.1 Codex Assist Tool Events and Injections",
+    sql: `
+      CREATE TABLE IF NOT EXISTS codex_assist_tool_call_events (
+        id TEXT PRIMARY KEY,
+        execution_id TEXT NOT NULL REFERENCES codex_executions(id),
+        tool_name TEXT NOT NULL,
+        arguments_json TEXT NOT NULL,
+        response_success INTEGER NOT NULL,
+        response_content_items_json TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS codex_assist_injections (
+        id TEXT PRIMARY KEY,
+        execution_id TEXT NOT NULL REFERENCES codex_executions(id),
+        context_session_id TEXT NOT NULL REFERENCES context_sessions(id),
+        injection_sequence INTEGER NOT NULL,
+        envelope_size_bytes INTEGER NOT NULL,
+        source_role TEXT NOT NULL
+      );
+    `,
+  },
 ];

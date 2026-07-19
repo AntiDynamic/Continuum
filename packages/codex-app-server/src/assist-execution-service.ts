@@ -69,10 +69,20 @@ export class CodexAssistExecutionService {
       const approval = async (request: CodexServerRequestContext): Promise<unknown> => {
         const assistResponse = await assistRouter.handleRequest(request);
         if (assistResponse) {
-          executions.recordReceived({
-            raw: { execution_id: executionId, direction: "client_to_server", message_category: "notification", method: "continuum/approvalDecision", request_id: String(request.id), thread_id: isRecord(request.params) ? value(request.params, "threadId") : null, turn_id: isRecord(request.params) ? value(request.params, "turnId") : null, item_id: isRecord(request.params) ? value(request.params, "itemId") : null, timestamp: new Date().toISOString(), raw_json: JSON.stringify(assistResponse) },
-            normalized: [{ eventType: "approval_decision", evidenceType: "directly observed", confidence: "high", payload: { requestMethod: request.method, decision: assistResponse.decision } }]
-          });
+          executions.recordAssistToolCall(
+            executionId, 
+            "continuum_request_context", 
+            JSON.stringify(isRecord(request.params) ? request.params["arguments"] ?? {} : {}), 
+            assistResponse.success, 
+            JSON.stringify(assistResponse.contentItems)
+          );
+          executions.recordAssistInjection(
+            executionId, 
+            sessionId, 
+            injectionSequence++, 
+            Buffer.byteLength(JSON.stringify(assistResponse.contentItems), "utf8"), 
+            "tool"
+          );
           return assistResponse;
         }
         const decision = options.approvalHandler ? await options.approvalHandler(request) : "decline";
@@ -95,18 +105,31 @@ export class CodexAssistExecutionService {
           }
         }
       });
-      await client.initialize({ experimentalApi: options.experimentalRawUsage === true });
+      await client.initialize({ experimentalApi: true });
       const account = await client.readAccount();
       if (!account.authenticated && account.requiresOpenaiAuth) throw new CodexIntegrationError("AUTHENTICATION_REQUIRED", "Codex authentication is required. Run 'codex login' using the normal Codex CLI, then retry.");
-      
-      const thread = await client.startThread({ cwd: opened.root, model: options.model, approvalPolicy: options.approvalPolicy ?? "on-request", sandbox: options.sandbox ?? "workspace-write" });
+      const thread = await client.startThread({ 
+        cwd: opened.root, model: options.model, approvalPolicy: options.approvalPolicy ?? "on-request", sandbox: options.sandbox ?? "workspace-write",
+        dynamicTools: [{
+          name: "continuum_request_context",
+          description: "Request additional context packets from the repository using lexical search, path matching, and symbol resolution.",
+          inputSchema: { type: "object", properties: { query: { type: "string", description: "The natural language query, path, or symbol to search for." } }, required: ["query"] }
+        }]
+      });
       executions.setLifecycle(executionId, { threadId: thread.id, model: thread.model, status: "running" });
       
       const initialContextEnvelope = started.initialContext ? buildContextEnvelope(started.initialContext) : "";
-      const assistInstructions = `\n\nTo search the codebase, you have access to a progressive context engine. Run the command \`continuum_context search <query>\` to retrieve relevant code snippets.`;
-      const prompt = `${options.task}\n\n${initialContextEnvelope}${assistInstructions}`;
+      let injectionSequence = 0;
+      executions.recordAssistInjection(executionId, sessionId, injectionSequence++, Buffer.byteLength(initialContextEnvelope, "utf8"), "system");
       
-      const turn = await client.startTurn({ threadId: thread.id, task: prompt, model: options.model });
+      const turn = await client.startTurn({ 
+        threadId: thread.id,
+        inputs: [
+          { type: "text", text: options.task, text_elements: [] },
+          { type: "text", text: initialContextEnvelope, text_elements: [] }
+        ],
+        model: options.model 
+      });
       executions.setLifecycle(executionId, { turnId: turn.id, status: "running" });
       
       const timeoutMs = options.timeoutMs ?? 300_000;

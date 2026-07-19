@@ -4,3 +4,4 @@ packages/codex-app-server/schema/**
 # Benchmark result snapshots — not benchmark case definitions
 packages/context-engine/benchmarks/v1/*-results.json
 packages/context-engine/benchmarks/v1/phase3d-*.json
+temp-schemas/**

@@ -88,6 +88,7 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
     const result = await this.request("thread/start", {
       cwd: options.cwd,
       ...(options.model ? { model: options.model } : {}),
+      ...(options.dynamicTools ? { dynamicTools: options.dynamicTools } : {}),
       approvalPolicy: options.approvalPolicy ?? "on-request",
       sandbox: options.sandbox ?? "workspace-write",
       ephemeral: false,
@@ -102,7 +103,7 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   async startTurn(options: CodexTurnOptions): Promise<CodexTurn> {
     const result = await this.request("turn/start", {
       threadId: options.threadId,
-      input: [{ type: "text", text: options.task, text_elements: [] }],
+      input: options.inputs ?? [{ type: "text", text: options.task ?? "", text_elements: [] }],
       ...(options.model ? { model: options.model } : {}),
     });
     if (!isRecord(result) || !isRecord(result.turn) || typeof result.turn.id !== "string") {

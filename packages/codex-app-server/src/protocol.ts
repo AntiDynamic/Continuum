@@ -1,3 +1,5 @@
+import type { CodexDynamicToolSpec } from "./protocol-adapters/0.133.0/dynamic-tools.js";
+
 export type JsonRpcId = string | number;
 export interface JsonRpcRequest { id: JsonRpcId; method: string; params?: unknown }
 export interface JsonRpcNotification { method: string; params?: unknown }
@@ -15,9 +17,10 @@ export interface CodexInitializeOptions {
 }
 export interface CodexServerInfo { userAgent: string; codexHome: string; platformFamily: string; platformOs: string }
 export interface CodexAccountState { authenticated: boolean; requiresOpenaiAuth: boolean; mode: "apiKey" | "chatgpt" | "amazonBedrock" | "none" }
-export interface CodexThreadOptions { cwd: string; model?: string; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode }
+export interface CodexThreadOptions { cwd: string; model?: string; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode; dynamicTools?: CodexDynamicToolSpec[] }
 export interface CodexThread { id: string; model: string | null; modelProvider: string | null; cwd: string }
-export interface CodexTurnOptions { threadId: string; task: string; model?: string }
+export interface CodexTextInput { type: "text"; text: string; text_elements: [] }
+export interface CodexTurnOptions { threadId: string; task?: string; inputs?: CodexTextInput[]; model?: string }
 export interface CodexTurn { id: string; threadId: string; status: string }
 
 export interface CodexRawMessage {

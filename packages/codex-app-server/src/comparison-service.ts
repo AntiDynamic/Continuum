@@ -1,4 +1,7 @@
 import { execSync } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { CodexExecutionService, type CodexShadowOptions } from "./execution-service.js";
 import { CodexAssistExecutionService } from "./assist-execution-service.js";
 import { openCodexDatabase } from "./execution-service.js";
@@ -26,65 +29,68 @@ function runVerifier(command: string, cwd: string): { success: boolean; output: 
   }
 }
 
-function resetGitState(cwd: string): void {
-  execSync("git reset --hard HEAD", { cwd });
-  execSync("git clean -fd", { cwd });
-}
-
 export class CodexComparisonService {
   async runComparison(options: CodexCompareOptions): Promise<CodexComparisonResult> {
-    const shadowService = new CodexExecutionService();
-    const assistService = new CodexAssistExecutionService();
-    
-    // Ensure clean state before starting
-    resetGitState(options.cwd);
-    
-    // 1. Run Shadow
-    console.log("[Comparison] Running Shadow (unassisted) execution...");
-    const shadowResult = await shadowService.runShadow({ ...options, mode: "shadow" });
-    const shadowVerifier = runVerifier(options.verifierCommand, options.cwd);
-    
-    // Reset state
-    console.log("[Comparison] Resetting workspace state...");
-    resetGitState(options.cwd);
-    
-    // 2. Run Assist
-    console.log("[Comparison] Running Assist (assisted) execution...");
-    const assistResult = await assistService.runAssist(options);
-    const assistVerifier = runVerifier(options.verifierCommand, options.cwd);
-    
-    // Reset state
-    resetGitState(options.cwd);
-    
-    // 3. Persist Comparison
-    const comparisonId = crypto.randomUUID();
-    const opened = await openCodexDatabase(options.cwd, options.repository);
+    const cwd = options.cwd;
+    const worktreePath = mkdtempSync(join(tmpdir(), "continuum-compare-"));
+
     try {
-      opened.db.prepare(
-        `INSERT INTO codex_comparison_runs (id, shadow_execution_id, shadow_verifier_success, shadow_verifier_output, assist_execution_id, assist_verifier_success, assist_verifier_output, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-      ).run(
+      // Create isolated worktree detached at current HEAD
+      execSync(`git worktree add --detach "${worktreePath}" HEAD`, { cwd, stdio: "ignore" });
+
+      const shadowOptions: CodexShadowOptions = { ...options, cwd: worktreePath, mode: "shadow" };
+      const shadowService = new CodexExecutionService();
+      const shadowResult = await shadowService.runShadow(shadowOptions);
+      const shadowVerifier = runVerifier(options.verifierCommand, worktreePath);
+
+      // Clean worktree for assist run
+      execSync(`git reset --hard HEAD`, { cwd: worktreePath, stdio: "ignore" });
+      execSync(`git clean -fd`, { cwd: worktreePath, stdio: "ignore" });
+
+      const assistOptions = { ...options, cwd: worktreePath };
+      const assistService = new CodexAssistExecutionService();
+      const assistResult = await assistService.runAssist(assistOptions);
+      const assistVerifier = runVerifier(options.verifierCommand, worktreePath);
+
+      const comparisonId = crypto.randomUUID();
+      const outcome = shadowVerifier.success && !assistVerifier.success ? "regression" :
+                      !shadowVerifier.success && assistVerifier.success ? "improvement" :
+                      shadowVerifier.success && assistVerifier.success ? "both_passed" : "both_failed";
+
+      const opened = await openCodexDatabase(options.cwd, options.repository);
+      const repoRow = opened.db.prepare("SELECT id FROM repositories WHERE canonical_path=?").get(opened.root) as { id: number };
+      opened.db.prepare(`
+        INSERT INTO codex_comparison_runs(
+          id, repository_id, task_text, shadow_execution_id, assist_execution_id, verifier_command,
+          shadow_exit_code, assist_exit_code, shadow_stdout_path, shadow_stderr_path, assist_stdout_path, assist_stderr_path, outcome, created_at
+        ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      `).run(
         comparisonId,
+        repoRow.id,
+        options.task,
         shadowResult.executionId,
-        shadowVerifier.success ? 1 : 0,
-        shadowVerifier.output,
         assistResult.executionId,
-        assistVerifier.success ? 1 : 0,
-        assistVerifier.output,
+        options.verifierCommand,
+        shadowVerifier.success ? 0 : 1,
+        assistVerifier.success ? 0 : 1,
+        null, null, null, null, // File paths for stdout/err can be null for now
+        outcome,
         new Date().toISOString()
       );
-    } finally {
       opened.db.close();
+
+      return {
+        id: comparisonId,
+        shadowExecutionId: shadowResult.executionId,
+        shadowVerifierSuccess: shadowVerifier.success,
+        shadowVerifierOutput: shadowVerifier.output,
+        assistExecutionId: assistResult.executionId,
+        assistVerifierSuccess: assistVerifier.success,
+        assistVerifierOutput: assistVerifier.output
+      };
+    } finally {
+      try { execSync(`git worktree remove --force "${worktreePath}"`, { cwd, stdio: "ignore" }); } catch {}
+      try { rmSync(worktreePath, { recursive: true, force: true }); } catch {}
     }
-    
-    return {
-      id: comparisonId,
-      shadowExecutionId: shadowResult.executionId,
-      shadowVerifierSuccess: shadowVerifier.success,
-      shadowVerifierOutput: shadowVerifier.output,
-      assistExecutionId: assistResult.executionId,
-      assistVerifierSuccess: assistVerifier.success,
-      assistVerifierOutput: assistVerifier.output
-    };
   }
 }

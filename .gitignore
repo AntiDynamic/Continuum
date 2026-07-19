@@ -26,3 +26,4 @@ pnpm-debug.log*
 
 # Test coverage
 coverage/
+temp-schemas/**
