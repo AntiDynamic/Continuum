@@ -11,6 +11,7 @@ jobs:
     name: Build & Test (Node ${{ matrix.node-version }} on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [22, 24]
@@ -22,7 +23,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        
+
     - name: Enable Corepack
       run: corepack enable
 
@@ -32,11 +33,11 @@ jobs:
     - name: Lint
       run: pnpm lint
 
-    - name: Typecheck
-      run: pnpm typecheck
-
     - name: Build
       run: pnpm build
+
+    - name: Typecheck
+      run: pnpm typecheck
 
     - name: Test
       run: pnpm test
