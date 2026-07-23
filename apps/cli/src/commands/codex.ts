@@ -70,3 +70,17 @@ export async function runCodexCompare(task:string,options:CodexCompareCliOptions
 export async function runCodexReport(id:string,options:CodexReadOptions):Promise<void>{const report=await new CodexExecutionService().report(options.cwd,id,options.repo);if(options.json)line(JSON.stringify(report,null,2));else printReport(report);}
 export async function runCodexStatus(id:string,options:CodexReadOptions):Promise<void>{const status=await new CodexExecutionService().status(options.cwd,id,options.repo);line(options.json?JSON.stringify(status,null,2):JSON.stringify(status,null,2));}
 export async function runCodexList(options:CodexReadOptions):Promise<void>{const rows=await new CodexExecutionService().list(options.cwd,options.repo,options.limit?Number(options.limit):20);line(options.json?JSON.stringify(rows,null,2):JSON.stringify(rows,null,2));}
+
+export async function runCodexCompareReport(pairId:string,options:CodexReadOptions):Promise<void>{
+  const { CodexComparisonService } = await import("@continuum/codex-app-server");
+  const report=await new CodexComparisonService().comparisonReport(options.cwd,pairId,options.repo);
+  if(options.json){line(JSON.stringify(report));return;}
+  line(bold("CONTINUUM SHADOW/ASSIST COMPARISON"));blank();
+  kv("Pair",report.pairId);kv("Comparability",report.comparability.valid?"valid":"invalid");
+  kv("Shadow outcome",report.verifierResults.shadow.success?"passed":"failed");
+  kv("Assist outcome",report.verifierResults.assist.success?"passed":"failed");
+  section("Provider usage");line(JSON.stringify(report.providerUsage,null,2));
+  section("Measured deltas");line(JSON.stringify(report.measuredDeltas,null,2));
+  section("Assist context metrics");line(JSON.stringify(report.assistContextMetrics,null,2));
+  section("Warnings");for(const warning of report.warnings)line("  "+warning);
+}

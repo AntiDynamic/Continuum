@@ -11,8 +11,9 @@ import { normalizeCodexMessage } from "./normalizer.js";
 import type { CodexRawMessage, CodexServerRequestContext } from "./protocol.js";
 import { buildAssistFlightRecorderReport, type AssistFlightRecorderReport } from "./assist-report.js";
 import { openCodexDatabase, type CodexShadowOptions, type CodexShadowResult } from "./execution-service.js";
-import { buildContextEnvelope } from "./assist-context-envelope.js";
+import { buildContextEnvelope, serializeCanonical } from "./assist-context-envelope.js";
 import { AssistToolRouter } from "./assist-tool-router.js";
+import { buildAssistContextToolResult, buildAssistToolFailureResult, parseAssistContextToolResult, serializeAssistContextToolResult } from "./assist-tool-result.js";
 
 export interface CodexAssistResult extends Omit<CodexShadowResult, "report"> { report: AssistFlightRecorderReport; }
 
@@ -32,6 +33,7 @@ export class CodexAssistExecutionService {
     let sessionId = "";
     let activeThreadId: string | null = null;
     let activeTurnId: string | null = null;
+    let sessionActive = true;
     try {
       const started = await sessions.start({ task: options.task, createInitialContext: true, maximumEstimatedTokens: options.sessionBudget ?? 6000 });
       sessionId = started.session.id;
@@ -55,44 +57,68 @@ export class CodexAssistExecutionService {
       const completion = new Promise<{ status: string; params: unknown }>((resolvePromise, rejectPromise) => {
         completionResolve = resolvePromise; completionReject = rejectPromise;
       });
-      
+      let budgetState={sessionId,sessionEstimatedTokensUsed:started.session.deliveredEstimatedTokens,remainingEstimatedTokens:started.session.remainingEstimatedTokens};
+      const requestRawSequence=new Map<string,number>();
+      const requestIdToTool=new Map<string,{callId:string;toolName:string;threadId:string|null;turnId:string|null;namespace:string|null;argumentsJson:string}>();
       const recordRaw = async (message: CodexRawMessage): Promise<void> => {
         const identity = ids(message);
+        const parsed=isRecord(message.parsed)?message.parsed:{};
+        const params=isRecord(parsed["params"])?parsed["params"]:{};
+        const requestKey=message.requestId===null?null:String(message.requestId);
+        const callId=typeof params["callId"]==="string"?params["callId"]:requestKey?`invalid:${requestKey}`:null;
+        const toolName=typeof params["tool"]==="string"?params["tool"]:null;
+        const linked=requestKey?requestIdToTool.get(requestKey):undefined;
         const normalized = message.direction === "server_to_client" || message.direction === "server_stderr" ? normalizeCodexMessage(message) : { normalized: [], threadId: identity.threadId, turnId: identity.turnId, itemId: identity.itemId };
-        executions.recordReceived({
-          raw: { execution_id: executionId, direction: message.direction, message_category: message.category, method: message.method, request_id: message.requestId === null ? null : String(message.requestId), thread_id: identity.threadId, turn_id: identity.turnId, item_id: identity.itemId, timestamp: message.timestamp, raw_json: message.raw },
+        if(message.category==="server_request"&&message.method==="item/tool/call"&&callId&&toolName)normalized.normalized.push({eventType:"assist_tool_requested",evidenceType:"directly observed",confidence:"high",payload:{callId,toolName}});
+        if(message.direction==="client_to_server"&&message.category==="response"&&linked)normalized.normalized.push({eventType:"assist_tool_completed",evidenceType:"directly observed",confidence:"high",payload:{callId:linked.callId,toolName:linked.toolName}});
+        const sequence=executions.recordReceived({
+          raw: { execution_id: executionId, direction: message.direction, message_category: message.category, method: message.method, request_id: requestKey, thread_id: identity.threadId??linked?.threadId??null, turn_id: identity.turnId??linked?.turnId??null, item_id: identity.itemId, timestamp: message.timestamp, raw_json: message.raw },
           normalized: normalized.normalized, ...(normalized.usage ? { usage: normalized.usage } : {}), ...(normalized.diff ? { diff: normalized.diff } : {})
         });
+        if(callId&&requestKey){requestRawSequence.set(callId,sequence);requestIdToTool.set(requestKey,{callId,toolName:toolName??"",threadId:identity.threadId,turnId:identity.turnId,namespace:params["namespace"]===null?null:typeof params["namespace"]==="string"?params["namespace"]:null,argumentsJson:serializeCanonical(params["arguments"]??{})});}
+        if(message.direction==="client_to_server"&&message.category==="response"&&linked){
+          const result=isRecord(parsed["result"])?parsed["result"]:{};const items=Array.isArray(result["contentItems"])?result["contentItems"]:[];const first=isRecord(items[0])?items[0]:{};const resultJson=typeof first["text"]==="string"?first["text"]:serializeCanonical(result);
+          let failureCode:string|null=null,failureMessage:string|null=null,deliveryId:string|null=null,estimatedResultTokens:number|null=null;
+          try{const structured=parseAssistContextToolResult(resultJson);failureCode=structured.failureCode;failureMessage=structured.failureMessage;deliveryId=structured.deliveryId;estimatedResultTokens=structured.estimatedNewTokens+structured.estimatedRestoredTokens;}catch{}
+          executions.recordAssistToolEvent({executionId,sessionId,threadId:linked.threadId,turnId:linked.turnId,callId:linked.callId,namespace:linked.namespace,toolName:linked.toolName,eventType:"response_sent",argumentsJson:linked.argumentsJson,deliveryId,resultJson,estimatedResultTokens,failureCode,failureMessage,rawSequenceNumber:sequence});
+        }
       };
-      
-      const assistRouter = new AssistToolRouter(async (request) => {
-        const packet = await sessions.request(sessionId, { query: request.query, ...(request.requestedSymbols ? { requestedSymbols: request.requestedSymbols } : {}), ...(request.requestedPaths ? { requestedPaths: request.requestedPaths } : {}) });
-        return buildContextEnvelope(packet);
-      }, { maximumCalls: options.maxContextToolCalls ?? 8, threadId: () => activeThreadId, turnId: () => activeTurnId });
-      
+
+      const assistRouter = new AssistToolRouter(async (request, toolCallsUsed) => {
+        const before=await sessions.status(sessionId);budgetState={sessionId,sessionEstimatedTokensUsed:before.session.deliveredEstimatedTokens,remainingEstimatedTokens:before.session.remainingEstimatedTokens};
+        if(before.session.remainingEstimatedTokens===0){const refused=buildAssistToolFailureResult({...budgetState,failureCode:"SESSION_TOKEN_LIMIT",failureMessage:"The session context budget is exhausted.",toolCallsUsed,maximumToolCalls:options.maxContextToolCalls??8});return{success:false,text:serializeAssistContextToolResult(refused)};}
+        const packet = await sessions.request(sessionId, { query: request.query, reason: request.reason, ...(request.requestedSymbols ? { requestedSymbols: request.requestedSymbols } : {}), ...(request.requestedPaths ? { requestedPaths: request.requestedPaths } : {}), ...(request.requestedCoverage ? { requestedCoverage: request.requestedCoverage } : {}), maximumEstimatedTokens: options.maxContextResultTokens ?? 1500 });
+        const status = await sessions.status(sessionId);budgetState={sessionId,sessionEstimatedTokensUsed:status.session.deliveredEstimatedTokens,remainingEstimatedTokens:status.session.remainingEstimatedTokens};
+        const result = buildAssistContextToolResult(packet, { maximumResultTokens: options.maxContextResultTokens ?? 1500, maximumToolCalls: options.maxContextToolCalls ?? 8, toolCallsUsed, sessionEstimatedTokensUsed: status.session.deliveredEstimatedTokens, remainingSessionTokens: status.session.remainingEstimatedTokens + packet.estimatedNewTokens + packet.estimatedRestoredTokens });
+        return { success: result.success, text: serializeAssistContextToolResult(result) };
+      }, async (signal) => {
+        const outcome=await sessions.signal(sessionId,{...signal.signal,maximumEstimatedTokens:options.maxContextResultTokens??1500});
+        if("newItems" in outcome){const status=await sessions.status(sessionId);budgetState={sessionId,sessionEstimatedTokensUsed:status.session.deliveredEstimatedTokens,remainingEstimatedTokens:status.session.remainingEstimatedTokens};const result=buildAssistContextToolResult(outcome,{maximumResultTokens:options.maxContextResultTokens??1500,maximumToolCalls:options.maxContextToolCalls??8,toolCallsUsed:0,sessionEstimatedTokensUsed:status.session.deliveredEstimatedTokens,remainingSessionTokens:status.session.remainingEstimatedTokens+outcome.estimatedNewTokens+outcome.estimatedRestoredTokens});return serializeAssistContextToolResult(result);}
+        return serializeCanonical(outcome);
+      }, { maximumCalls: options.maxContextToolCalls ?? 8, threadId: () => activeThreadId, turnId: () => activeTurnId, failureContext:()=>budgetState,executionActive:()=>executionId.length>0,sessionActive:()=>sessionActive,snapshotMatches:async()=>{const current=await resolveSnapshotIdentity(sessions.repositoryRoot);return current.base_commit_hash===started.session.snapshot.base_commit_hash&&current.worktree_hash===started.session.snapshot.worktree_hash;} });
       const approval = async (request: CodexServerRequestContext): Promise<unknown> => {
+        const params=isRecord(request.params)?request.params:{};const toolName=typeof params["tool"]==="string"?params["tool"]:"unknown";const callId=typeof params["callId"]==="string"?params["callId"]:`invalid:${String(request.id)}`;const threadId=typeof params["threadId"]==="string"?params["threadId"]:null;const turnId=typeof params["turnId"]==="string"?params["turnId"]:null;const namespace=params["namespace"]===null?null:typeof params["namespace"]==="string"?params["namespace"]:null;const argumentsJson=serializeCanonical(params["arguments"]??{});const rawSequenceNumber=requestRawSequence.get(callId)??null;
+        if(request.method==="item/tool/call")executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:toolName==="continuum_report_context_signal"?"signal_received":"requested",argumentsJson,rawSequenceNumber});
         const assistResponse = await assistRouter.handleRequest(request);
         if (assistResponse) {
-          executions.recordAssistToolCall(
-            executionId, 
-            "continuum_request_context", 
-            JSON.stringify(isRecord(request.params) ? request.params["arguments"] ?? {} : {}), 
-            assistResponse.success, 
-            JSON.stringify(assistResponse.contentItems)
-          );
-          const toolInjectionSequence = injectionSequence++;
           const toolSerialized = assistResponse.contentItems[0]?.text ?? "";
-          executions.recordAssistInjectionDetailed(executionId, sessionId, toolInjectionSequence, toolSerialized, "tool", null, null);
+          let deliveryId:string|null=null,estimatedResultTokens:number|null=null,failureCode:string|null=null,failureMessage:string|null=null;
+          try{const structured=parseAssistContextToolResult(toolSerialized);deliveryId=structured.deliveryId;estimatedResultTokens=structured.estimatedNewTokens+structured.estimatedRestoredTokens;failureCode=structured.failureCode;failureMessage=structured.failureMessage;}catch{}
+          if(toolName==="continuum_report_context_signal"&&assistResponse.success)executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:"signal_decision",argumentsJson,resultJson:toolSerialized,deliveryId,estimatedResultTokens,rawSequenceNumber});
+          else if(assistResponse.success){executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:"validated",argumentsJson,rawSequenceNumber});if(deliveryId)executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:"delivery_created",argumentsJson,deliveryId,resultJson:toolSerialized,estimatedResultTokens,rawSequenceNumber});}
+          else if(failureCode==="CONTEXT_REQUEST_FAILED"||failureCode==="SIGNAL_FAILED"){executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:"validated",argumentsJson,rawSequenceNumber});executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:"failed",argumentsJson,resultJson:toolSerialized,estimatedResultTokens,failureCode,failureMessage,rawSequenceNumber});}
+          else executions.recordAssistToolEvent({executionId,sessionId,threadId,turnId,callId,namespace,toolName,eventType:"refused",argumentsJson,resultJson:toolSerialized,estimatedResultTokens,failureCode:failureCode??"INVALID_ARGUMENTS",failureMessage:failureMessage??"Native tool request refused.",rawSequenceNumber});
+          executions.recordAssistToolCall(executionId,toolName,argumentsJson,assistResponse.success,JSON.stringify(assistResponse.contentItems));
+          if(toolName==="continuum_request_context"){const toolInjectionSequence=injectionSequence++;executions.recordAssistInjectionDetailed(executionId,sessionId,toolInjectionSequence,toolSerialized,"tool",deliveryId,estimatedResultTokens);}
           return assistResponse;
         }
         const decision = options.approvalHandler ? await options.approvalHandler(request) : "decline";
         executions.recordReceived({
-          raw: { execution_id: executionId, direction: "client_to_server", message_category: "notification", method: "continuum/approvalDecision", request_id: String(request.id), thread_id: isRecord(request.params) ? value(request.params, "threadId") : null, turn_id: isRecord(request.params) ? value(request.params, "turnId") : null, item_id: isRecord(request.params) ? value(request.params, "itemId") : null, timestamp: new Date().toISOString(), raw_json: JSON.stringify({ decision }) },
+          raw: { execution_id: executionId, direction: "client_to_server", message_category: "notification", method: "continuum/approvalDecision", request_id: String(request.id), thread_id: threadId, turn_id: turnId, item_id: null, timestamp: new Date().toISOString(), raw_json: JSON.stringify({ decision }) },
           normalized: [{ eventType: "approval_decision", evidenceType: "directly observed", confidence: "high", payload: { requestMethod: request.method, decision } }]
         });
         return { decision };
       };
-      
       client = new StdioCodexAppServerClient();
       await client.start({
         ...options.process, ...(options.process?.executable ? { executable: options.process.executable } : {}),
@@ -114,7 +140,7 @@ export class CodexAssistExecutionService {
           name: "continuum_request_context",
           description: "Use only when required repository evidence is missing. Prefer exact symbols and repository-relative paths; do not repeat delivered context.",
           inputSchema: { type: "object", additionalProperties: false, required: ["query", "reason"], properties: { query: { type: "string", minLength: 1, maxLength: 2000 }, requestedSymbols: { type: "array", maxItems: 20, items: { type: "string", minLength: 1, maxLength: 300 } }, requestedPaths: { type: "array", maxItems: 20, items: { type: "string", minLength: 1, maxLength: 500 } }, requestedCoverage: { type: "array", maxItems: 12, uniqueItems: true, items: { enum: ["implementation", "public_contract", "tests", "configuration", "architecture", "security_constraint", "database_schema", "rollback", "dependency", "documentation", "historical_episode", "repository_state"] } }, reason: { enum: ["missing_implementation", "missing_test", "missing_contract", "missing_constraint", "test_failure", "scope_check", "other"] } } }
-        }]
+        }, { name: "continuum_report_context_signal", description: "Report a repository-context signal.", inputSchema: { type: "object", additionalProperties: false, required: ["type"], properties: { type: { enum: ["agent_context_request", "test_failure", "missing_coverage", "out_of_scope_modification"] }, query: { type: "string" }, failingTests: { type: "array", maxItems: 20, items: { type: "string" } }, errorSummary: { type: "string" }, categories: { type: "array", maxItems: 12, items: { type: "string" } }, modifiedPaths: { type: "array", maxItems: 20, items: { type: "string" } }, predictedPaths: { type: "array", maxItems: 20, items: { type: "string" } } } } }]
       });
       activeThreadId = thread.id;
       executions.setLifecycle(executionId, { threadId: thread.id, model: thread.model, status: "running" });
@@ -144,7 +170,7 @@ export class CodexAssistExecutionService {
       
       const finalStatus = completed.status === "completed" ? "completed" : completed.status === "interrupted" ? "interrupted" : "failed";
       const sessionResult: ContextSessionResult = { status: finalStatus === "completed" ? "completed" : finalStatus === "interrupted" ? "cancelled" : "failed" };
-      await sessions.complete(sessionId, sessionResult);
+      await sessions.complete(sessionId, sessionResult); sessionActive = false;
       await client.close(); client = null;
       const finalSnapshot = await resolveSnapshotIdentity(opened.root); executions.finish(executionId, finalStatus, finalSnapshot);
       return { executionId, sessionId, report: buildAssistFlightRecorderReport(opened.db, executionId, opened.root), compatibilityWarning: compatibility.warning, authenticationMode: account.mode };
@@ -160,7 +186,7 @@ export class CodexAssistExecutionService {
         }
         executions.finish(executionId, "failed", finalSnapshot, { code: integration.code, message: integration.message });
       }
-      if (sessionId) await sessions.complete(sessionId, { status: "failed" }).catch(() => undefined);
+      if (sessionId) await sessions.complete(sessionId, { status: "failed" }).catch(() => undefined); sessionActive = false;
       throw error;
     } finally { db?.close(); sessions.close(); }
   }

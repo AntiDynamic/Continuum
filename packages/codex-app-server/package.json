@@ -23,7 +23,8 @@
     "@continuum/context-engine": "workspace:*",
     "@continuum/database": "workspace:*",
     "@continuum/git-analyzer": "workspace:*",
-    "@continuum/shared": "workspace:*"
+    "@continuum/shared": "workspace:*",
+    "@continuum/repository-indexer": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",

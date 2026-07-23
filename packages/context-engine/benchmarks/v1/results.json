@@ -1,7 +1,7 @@
 {
   "schemaVersion": "continuum.retrieval-benchmark-result.v1",
   "datasetSchemaVersion": "continuum.retrieval-benchmark.v1",
-  "generatedAt": "2026-07-23T11:09:17.050Z",
+  "generatedAt": "2026-07-23T14:06:34.062Z",
   "environment": {
     "platform": "win32",
     "architecture": "x64",
@@ -29,9 +29,9 @@
     "medianInitialPacketEstimatedTokens": 1018.5,
     "p90InitialPacketEstimatedTokens": 1388,
     "maximumInitialPacketEstimatedTokens": 1601,
-    "medianRetrievalLatencyMs": 3.564,
-    "p90RetrievalLatencyMs": 4.87,
-    "maximumRetrievalLatencyMs": 8.386,
+    "medianRetrievalLatencyMs": 9.02,
+    "p90RetrievalLatencyMs": 12.415,
+    "maximumRetrievalLatencyMs": 19.288,
     "irrelevantSelectedItemCount": 0,
     "duplicateFullContentResendRate": 0,
     "repeatRequestCount": 3,
@@ -50,9 +50,9 @@
       "medianInitialPacketEstimatedTokens": 880,
       "p90InitialPacketEstimatedTokens": 1440,
       "maximumInitialPacketEstimatedTokens": 1440,
-      "medianRetrievalLatencyMs": 3.534,
-      "p90RetrievalLatencyMs": 8.386,
-      "maximumRetrievalLatencyMs": 8.386,
+      "medianRetrievalLatencyMs": 11.571,
+      "p90RetrievalLatencyMs": 19.288,
+      "maximumRetrievalLatencyMs": 19.288,
       "irrelevantSelectedItemCount": 0
     },
     "exact_path": {
@@ -67,9 +67,9 @@
       "medianInitialPacketEstimatedTokens": 1204,
       "p90InitialPacketEstimatedTokens": 1366,
       "maximumInitialPacketEstimatedTokens": 1366,
-      "medianRetrievalLatencyMs": 3.701,
-      "p90RetrievalLatencyMs": 4.259,
-      "maximumRetrievalLatencyMs": 4.259,
+      "medianRetrievalLatencyMs": 9.999,
+      "p90RetrievalLatencyMs": 12.487,
+      "maximumRetrievalLatencyMs": 12.487,
       "irrelevantSelectedItemCount": 0
     },
     "local_bug": {
@@ -84,9 +84,9 @@
       "medianInitialPacketEstimatedTokens": 1094,
       "p90InitialPacketEstimatedTokens": 1181,
       "maximumInitialPacketEstimatedTokens": 1181,
-      "medianRetrievalLatencyMs": 2.856,
-      "p90RetrievalLatencyMs": 2.98,
-      "maximumRetrievalLatencyMs": 2.98,
+      "medianRetrievalLatencyMs": 6.939,
+      "p90RetrievalLatencyMs": 8.395,
+      "maximumRetrievalLatencyMs": 8.395,
       "irrelevantSelectedItemCount": 0
     },
     "cross_package": {
@@ -101,9 +101,9 @@
       "medianInitialPacketEstimatedTokens": 1034,
       "p90InitialPacketEstimatedTokens": 1038,
       "maximumInitialPacketEstimatedTokens": 1038,
-      "medianRetrievalLatencyMs": 4.45,
-      "p90RetrievalLatencyMs": 4.455,
-      "maximumRetrievalLatencyMs": 4.455,
+      "medianRetrievalLatencyMs": 9.92,
+      "p90RetrievalLatencyMs": 11.415,
+      "maximumRetrievalLatencyMs": 11.415,
       "irrelevantSelectedItemCount": 0
     },
     "test_failure": {
@@ -118,9 +118,9 @@
       "medianInitialPacketEstimatedTokens": 1280,
       "p90InitialPacketEstimatedTokens": 1388,
       "maximumInitialPacketEstimatedTokens": 1388,
-      "medianRetrievalLatencyMs": 2.944,
-      "p90RetrievalLatencyMs": 3.106,
-      "maximumRetrievalLatencyMs": 3.106,
+      "medianRetrievalLatencyMs": 7.868,
+      "p90RetrievalLatencyMs": 8.52,
+      "maximumRetrievalLatencyMs": 8.52,
       "irrelevantSelectedItemCount": 0
     },
     "security": {
@@ -135,9 +135,9 @@
       "medianInitialPacketEstimatedTokens": 851.5,
       "p90InitialPacketEstimatedTokens": 1043,
       "maximumInitialPacketEstimatedTokens": 1043,
-      "medianRetrievalLatencyMs": 2.565,
-      "p90RetrievalLatencyMs": 2.567,
-      "maximumRetrievalLatencyMs": 2.567,
+      "medianRetrievalLatencyMs": 6.921,
+      "p90RetrievalLatencyMs": 7.926,
+      "maximumRetrievalLatencyMs": 7.926,
       "irrelevantSelectedItemCount": 0
     },
     "database_migration": {
@@ -152,9 +152,9 @@
       "medianInitialPacketEstimatedTokens": 1021.5,
       "p90InitialPacketEstimatedTokens": 1176,
       "maximumInitialPacketEstimatedTokens": 1176,
-      "medianRetrievalLatencyMs": 3.779,
-      "p90RetrievalLatencyMs": 3.964,
-      "maximumRetrievalLatencyMs": 3.964,
+      "medianRetrievalLatencyMs": 10.838,
+      "p90RetrievalLatencyMs": 12.176,
+      "maximumRetrievalLatencyMs": 12.176,
       "irrelevantSelectedItemCount": 0
     },
     "api_contract": {
@@ -169,9 +169,9 @@
       "medianInitialPacketEstimatedTokens": 926,
       "p90InitialPacketEstimatedTokens": 1221,
       "maximumInitialPacketEstimatedTokens": 1221,
-      "medianRetrievalLatencyMs": 5.424,
-      "p90RetrievalLatencyMs": 5.977,
-      "maximumRetrievalLatencyMs": 5.977,
+      "medianRetrievalLatencyMs": 9.829,
+      "p90RetrievalLatencyMs": 10.514,
+      "maximumRetrievalLatencyMs": 10.514,
       "irrelevantSelectedItemCount": 0
     },
     "configuration": {
@@ -186,9 +186,9 @@
       "medianInitialPacketEstimatedTokens": 874.5,
       "p90InitialPacketEstimatedTokens": 985,
       "maximumInitialPacketEstimatedTokens": 985,
-      "medianRetrievalLatencyMs": 3.903,
-      "p90RetrievalLatencyMs": 4.359,
-      "maximumRetrievalLatencyMs": 4.359,
+      "medianRetrievalLatencyMs": 8.266,
+      "p90RetrievalLatencyMs": 9.374,
+      "maximumRetrievalLatencyMs": 9.374,
       "irrelevantSelectedItemCount": 0
     },
     "documentation_mismatch": {
@@ -203,9 +203,9 @@
       "medianInitialPacketEstimatedTokens": 1285,
       "p90InitialPacketEstimatedTokens": 1601,
       "maximumInitialPacketEstimatedTokens": 1601,
-      "medianRetrievalLatencyMs": 3.664,
-      "p90RetrievalLatencyMs": 3.905,
-      "maximumRetrievalLatencyMs": 3.905,
+      "medianRetrievalLatencyMs": 7.947,
+      "p90RetrievalLatencyMs": 8.897,
+      "maximumRetrievalLatencyMs": 8.897,
       "irrelevantSelectedItemCount": 0
     },
     "ambiguous_behaviour": {
@@ -220,9 +220,9 @@
       "medianInitialPacketEstimatedTokens": 662.5,
       "p90InitialPacketEstimatedTokens": 841,
       "maximumInitialPacketEstimatedTokens": 841,
-      "medianRetrievalLatencyMs": 3.676,
-      "p90RetrievalLatencyMs": 3.907,
-      "maximumRetrievalLatencyMs": 3.907,
+      "medianRetrievalLatencyMs": 11.117,
+      "p90RetrievalLatencyMs": 12.415,
+      "maximumRetrievalLatencyMs": 12.415,
       "irrelevantSelectedItemCount": 0
     }
   },
@@ -239,9 +239,9 @@
       "medianInitialPacketEstimatedTokens": 1018.5,
       "p90InitialPacketEstimatedTokens": 1388,
       "maximumInitialPacketEstimatedTokens": 1601,
-      "medianRetrievalLatencyMs": 3.564,
-      "p90RetrievalLatencyMs": 4.87,
-      "maximumRetrievalLatencyMs": 8.386,
+      "medianRetrievalLatencyMs": 9.02,
+      "p90RetrievalLatencyMs": 12.415,
+      "maximumRetrievalLatencyMs": 19.288,
       "irrelevantSelectedItemCount": 0
     },
     "lexical_graph": {
@@ -256,9 +256,9 @@
       "medianInitialPacketEstimatedTokens": 1018.5,
       "p90InitialPacketEstimatedTokens": 1388,
       "maximumInitialPacketEstimatedTokens": 1601,
-      "medianRetrievalLatencyMs": 3.564,
-      "p90RetrievalLatencyMs": 4.87,
-      "maximumRetrievalLatencyMs": 8.386,
+      "medianRetrievalLatencyMs": 9.02,
+      "p90RetrievalLatencyMs": 12.415,
+      "maximumRetrievalLatencyMs": 19.288,
       "irrelevantSelectedItemCount": 0
     },
     "lexical_coverage": {
@@ -273,9 +273,9 @@
       "medianInitialPacketEstimatedTokens": 1018.5,
       "p90InitialPacketEstimatedTokens": 1388,
       "maximumInitialPacketEstimatedTokens": 1601,
-      "medianRetrievalLatencyMs": 3.564,
-      "p90RetrievalLatencyMs": 4.87,
-      "maximumRetrievalLatencyMs": 8.386,
+      "medianRetrievalLatencyMs": 9.02,
+      "p90RetrievalLatencyMs": 12.415,
+      "maximumRetrievalLatencyMs": 19.288,
       "irrelevantSelectedItemCount": 0
     },
     "lexical_graph_coverage": {
@@ -290,9 +290,9 @@
       "medianInitialPacketEstimatedTokens": 1018.5,
       "p90InitialPacketEstimatedTokens": 1388,
       "maximumInitialPacketEstimatedTokens": 1601,
-      "medianRetrievalLatencyMs": 3.564,
-      "p90RetrievalLatencyMs": 4.87,
-      "maximumRetrievalLatencyMs": 8.386,
+      "medianRetrievalLatencyMs": 9.02,
+      "p90RetrievalLatencyMs": 12.415,
+      "maximumRetrievalLatencyMs": 19.288,
       "irrelevantSelectedItemCount": 0
     },
     "full": {
@@ -307,9 +307,9 @@
       "medianInitialPacketEstimatedTokens": 1018.5,
       "p90InitialPacketEstimatedTokens": 1388,
       "maximumInitialPacketEstimatedTokens": 1601,
-      "medianRetrievalLatencyMs": 3.564,
-      "p90RetrievalLatencyMs": 4.87,
-      "maximumRetrievalLatencyMs": 8.386,
+      "medianRetrievalLatencyMs": 9.02,
+      "p90RetrievalLatencyMs": 12.415,
+      "maximumRetrievalLatencyMs": 19.288,
       "irrelevantSelectedItemCount": 0
     }
   },
@@ -442,7 +442,7 @@
         "initialPacketEstimatedTokens": 1440,
         "totalSelectedEstimatedTokens": 1440,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 8.386
+        "retrievalLatencyMs": 19.288
       }
     },
     {
@@ -574,7 +574,7 @@
         "initialPacketEstimatedTokens": 840,
         "totalSelectedEstimatedTokens": 840,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.534
+        "retrievalLatencyMs": 11.571
       }
     },
     {
@@ -717,7 +717,7 @@
         "initialPacketEstimatedTokens": 880,
         "totalSelectedEstimatedTokens": 880,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.981
+        "retrievalLatencyMs": 7.881
       }
     },
     {
@@ -788,7 +788,7 @@
         "initialPacketEstimatedTokens": 430,
         "totalSelectedEstimatedTokens": 430,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.221
+        "retrievalLatencyMs": 7.771
       }
     },
     {
@@ -916,7 +916,7 @@
         "initialPacketEstimatedTokens": 1366,
         "totalSelectedEstimatedTokens": 1366,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 4.259
+        "retrievalLatencyMs": 12.487
       }
     },
     {
@@ -1056,7 +1056,7 @@
         "initialPacketEstimatedTokens": 1204,
         "totalSelectedEstimatedTokens": 1204,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.701
+        "retrievalLatencyMs": 9.999
       }
     },
     {
@@ -1184,7 +1184,7 @@
         "initialPacketEstimatedTokens": 1007,
         "totalSelectedEstimatedTokens": 1007,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.732
+        "retrievalLatencyMs": 5.483
       }
     },
     {
@@ -1322,7 +1322,7 @@
         "initialPacketEstimatedTokens": 1181,
         "totalSelectedEstimatedTokens": 1181,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.98
+        "retrievalLatencyMs": 8.395
       }
     },
     {
@@ -1463,7 +1463,7 @@
         "initialPacketEstimatedTokens": 1030,
         "totalSelectedEstimatedTokens": 1030,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 4.455
+        "retrievalLatencyMs": 8.425
       }
     },
     {
@@ -1603,7 +1603,7 @@
         "initialPacketEstimatedTokens": 1038,
         "totalSelectedEstimatedTokens": 1038,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 4.445
+        "retrievalLatencyMs": 11.415
       }
     },
     {
@@ -1741,7 +1741,7 @@
         "initialPacketEstimatedTokens": 1172,
         "totalSelectedEstimatedTokens": 1172,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.782
+        "retrievalLatencyMs": 8.52
       }
     },
     {
@@ -1878,7 +1878,7 @@
         "initialPacketEstimatedTokens": 1388,
         "totalSelectedEstimatedTokens": 1388,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.106
+        "retrievalLatencyMs": 7.216
       }
     },
     {
@@ -2006,7 +2006,7 @@
         "initialPacketEstimatedTokens": 1043,
         "totalSelectedEstimatedTokens": 1043,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.563
+        "retrievalLatencyMs": 5.916
       }
     },
     {
@@ -2117,7 +2117,7 @@
         "initialPacketEstimatedTokens": 660,
         "totalSelectedEstimatedTokens": 660,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 2.567
+        "retrievalLatencyMs": 7.926
       }
     },
     {
@@ -2266,7 +2266,7 @@
         "initialPacketEstimatedTokens": 1176,
         "totalSelectedEstimatedTokens": 1176,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.594
+        "retrievalLatencyMs": 9.501
       }
     },
     {
@@ -2411,7 +2411,7 @@
         "initialPacketEstimatedTokens": 867,
         "totalSelectedEstimatedTokens": 867,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.964
+        "retrievalLatencyMs": 12.176
       }
     },
     {
@@ -2546,7 +2546,7 @@
         "initialPacketEstimatedTokens": 631,
         "totalSelectedEstimatedTokens": 631,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 4.87
+        "retrievalLatencyMs": 10.514
       }
     },
     {
@@ -2686,7 +2686,7 @@
         "initialPacketEstimatedTokens": 1221,
         "totalSelectedEstimatedTokens": 1221,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 5.977
+        "retrievalLatencyMs": 9.143
       }
     },
     {
@@ -2803,7 +2803,7 @@
         "initialPacketEstimatedTokens": 764,
         "totalSelectedEstimatedTokens": 764,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.447
+        "retrievalLatencyMs": 9.374
       }
     },
     {
@@ -2941,7 +2941,7 @@
         "initialPacketEstimatedTokens": 985,
         "totalSelectedEstimatedTokens": 985,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 4.359
+        "retrievalLatencyMs": 7.158
       }
     },
     {
@@ -3080,7 +3080,7 @@
         "initialPacketEstimatedTokens": 1601,
         "totalSelectedEstimatedTokens": 1601,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.905
+        "retrievalLatencyMs": 6.997
       }
     },
     {
@@ -3221,7 +3221,7 @@
         "initialPacketEstimatedTokens": 969,
         "totalSelectedEstimatedTokens": 969,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.424
+        "retrievalLatencyMs": 8.897
       }
     },
     {
@@ -3356,7 +3356,7 @@
         "initialPacketEstimatedTokens": 484,
         "totalSelectedEstimatedTokens": 484,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.446
+        "retrievalLatencyMs": 12.415
       }
     },
     {
@@ -3492,7 +3492,7 @@
         "initialPacketEstimatedTokens": 841,
         "totalSelectedEstimatedTokens": 841,
         "irrelevantSelectedItemCount": 0,
-        "retrievalLatencyMs": 3.907
+        "retrievalLatencyMs": 9.819
       }
     }
   ],

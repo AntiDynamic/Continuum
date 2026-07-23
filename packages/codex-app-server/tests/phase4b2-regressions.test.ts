@@ -2,10 +2,13 @@ import { execFileSync } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { ContextPacketItem, DeltaContextPacket } from "@continuum/shared";
-import { migrate, openDatabase, RepositoryRepository } from "@continuum/database";
+import { IndexRunRepository, migrate, openDatabase, RepositoryRepository } from "@continuum/database";
+import { getRepositoryRoot } from "@continuum/git-analyzer";
 import { afterEach, describe, expect, it } from "vitest";
 import { buildContextEnvelope } from "../src/assist-context-envelope.js";
+import { buildAssistContextToolResult, serializeAssistContextToolResult } from "../src/assist-tool-result.js";
 import { CodexComparisonService } from "../src/comparison-service.js";
 
 const createdDirectories: string[] = [];
@@ -49,7 +52,6 @@ describe("Phase 4B.2 mandatory regressions", () => {
   it("prepares shadow and assist in detached independent worktrees with independent databases", async () => {
     const repository = await mkdtemp(join(tmpdir(), "continuum-phase4b2-source-"));
     createdDirectories.push(repository);
-    await writeFile(join(repository, ".gitignore"), ".continuum/\n", "utf8");
     await writeFile(join(repository, "tracked.ts"), "export const value = 1;\n", "utf8");
     execFileSync("git", ["init"], { cwd: repository });
     execFileSync("git", ["config", "user.email", "continuum@example.test"], { cwd: repository });
@@ -71,11 +73,71 @@ describe("Phase 4B.2 mandatory regressions", () => {
     try {
       expect(workspace.shadowWorktreePath).not.toBe(workspace.assistWorktreePath);
       expect(workspace.shadowDatabasePath).not.toBe(workspace.assistDatabasePath);
+      const shadowDb=openDatabase(workspace.shadowDatabasePath),assistDb=openDatabase(workspace.assistDatabasePath);
+      try { const shadowRepository=shadowDb.prepare("SELECT id FROM repositories ORDER BY id DESC LIMIT 1").get() as {id:number};const assistRepository=assistDb.prepare("SELECT id FROM repositories ORDER BY id DESC LIMIT 1").get() as {id:number};expect(shadowRepository.id).not.toBe(assistRepository.id);expect((shadowDb.prepare("SELECT COUNT(*) n FROM context_sessions").get() as {n:number}).n).toBe(0);expect((assistDb.prepare("SELECT COUNT(*) n FROM context_sessions").get() as {n:number}).n).toBe(0);expect((shadowDb.prepare("SELECT snapshot_kind,worktree_hash FROM repository_index_runs ORDER BY started_at DESC LIMIT 1").get() as {snapshot_kind:string;worktree_hash:string|null})).toEqual({snapshot_kind:"commit",worktree_hash:null});expect((assistDb.prepare("SELECT snapshot_kind,worktree_hash FROM repository_index_runs ORDER BY started_at DESC LIMIT 1").get() as {snapshot_kind:string;worktree_hash:string|null})).toEqual({snapshot_kind:"commit",worktree_hash:null}); } finally { shadowDb.close();assistDb.close(); }
       expect(workspace.commit).toBe(execFileSync("git", ["rev-parse", "HEAD"], { cwd: repository, encoding: "utf8" }).trim());
       expect(await readFile(join(repository, "tracked.ts"), "utf8")).toBe(trackedBefore);
       expect(await readFile(join(repository, "untracked.ts"), "utf8")).toBe(untrackedBefore);
     } finally {
       workspace.cleanup();
     }
+  });
+  it("preserves truthful item metadata instead of legacy defaults", () => {
+    const packet = maliciousPacket();
+    const parsed: unknown = JSON.parse(buildContextEnvelope(packet));
+    expect(parsed).toMatchObject({
+      items: [{
+        requirementState: "required",
+        packetSection: "exact_implementation",
+        coverageCategories: ["implementation"],
+        selectionReasons: ["regression"],
+        contentHash: "content-hash",
+        startLine: 1,
+        endLine: 5
+      }]
+    });
+  });
+
+  it("keeps complete comparison artifacts after temporary worktrees are cleaned", async () => {
+    const repository = await mkdtemp(join(tmpdir(), "continuum-phase4b3-artifacts-"));
+    createdDirectories.push(repository);
+    await writeFile(join(repository, "tracked.ts"), "export const value = 1;\n", "utf8");
+    execFileSync("git", ["init"], { cwd: repository });
+    execFileSync("git", ["config", "user.email", "continuum@example.test"], { cwd: repository });
+    execFileSync("git", ["config", "user.name", "Continuum Regression"], { cwd: repository });
+    execFileSync("git", ["add", "."], { cwd: repository });
+    execFileSync("git", ["commit", "-m", "fixture"], { cwd: repository });
+    await mkdir(join(repository, ".continuum"));
+    await writeFile(join(repository, ".continuum", "config.json"), "{}", "utf8");
+    const database = openDatabase(join(repository, ".continuum", "continuum.db"));
+    migrate(database);
+    const canonicalRepository = await getRepositoryRoot(repository);
+    const row = new RepositoryRepository(database).upsert(canonicalRepository, "phase4b3-fixture");
+    const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repository, encoding: "utf8" }).trim();
+    const run = new IndexRunRepository(database).createRun(row.id, "commit", commit, null, false);
+    new IndexRunRepository(database).finishRun(run.id, "success", 1);
+    database.close();
+    const fixture = fileURLToPath(new URL("./fixtures/fake-app-server.mjs", import.meta.url));
+    const comparison = await new CodexComparisonService().runComparison({ cwd: repository, task: "artifact persistence", verifierCommand: "node -e \"process.exit(0)\"", process: { executable: process.execPath, executableArgs: [fixture], env: { ...process.env, FAKE_CODEX_SCENARIO: "normal" } }, codexVersionOverride: "fixture" });
+    const controller = openDatabase(join(repository, ".continuum", "continuum.db"));
+    try {
+      const artifacts = controller.prepare("SELECT mode, report_schema_version, report_json FROM codex_comparison_artifacts WHERE comparison_id=? ORDER BY mode").all(comparison.id) as Array<{ mode: string; report_schema_version: string; report_json: string }>;
+      expect(artifacts).toHaveLength(2);
+      expect(artifacts.map((artifact) => artifact.mode)).toEqual(["assist", "shadow"]);
+      expect(artifacts.every((artifact) => artifact.report_json.length > 0)).toBe(true);
+    } finally {
+      controller.close();
+    }
+  });
+  it("returns a canonical structured result exactly at the configured result limit", () => {
+    const result = buildAssistContextToolResult(maliciousPacket(), { maximumResultTokens: 12, maximumToolCalls: 8, toolCallsUsed: 1, sessionEstimatedTokensUsed: 12, remainingSessionTokens: 100 });
+    expect(result).toMatchObject({ schemaVersion: "continuum.assist-tool-result.v1", success: true, estimatedNewTokens: 12, limitReached: false });
+    expect(JSON.parse(serializeAssistContextToolResult(result))).toEqual(result);
+  });
+
+  it("refuses when required content exceeds result or remaining session budget", () => {
+    const packet = maliciousPacket();
+    expect(buildAssistContextToolResult(packet, { maximumResultTokens: 11, maximumToolCalls: 8, toolCallsUsed: 1, sessionEstimatedTokensUsed: 12, remainingSessionTokens: 100 })).toMatchObject({ success: false, limitReached: true, failureCode: "RESULT_TOKEN_LIMIT" });
+    expect(buildAssistContextToolResult(packet, { maximumResultTokens: 12, maximumToolCalls: 8, toolCallsUsed: 2, sessionEstimatedTokensUsed: 12, remainingSessionTokens: 11 })).toMatchObject({ success: false, limitReached: true, failureCode: "SESSION_TOKEN_LIMIT" });
   });
 });

@@ -7,8 +7,30 @@ const send=(value)=>process.stdout.write(JSON.stringify(value)+"\n");
 const scenario=process.env.FAKE_CODEX_SCENARIO??"normal";
 let cwd=process.cwd();
 let approvalRequestId=900;
+let dynamicRequestIndex=0;
+const dynamicRequests=[
+  {callId:"context-1",namespace:"continuum",tool:"continuum_request_context",arguments:{query:"rare implementation",reason:"missing_implementation",requestedPaths:["rare.ts"]}},
+  {callId:"context-2",namespace:null,tool:"continuum_request_context",arguments:{query:"rare implementation",reason:"missing_implementation",requestedPaths:["rare.ts"]}},
+  {callId:"context-3",namespace:"continuum",tool:"continuum_request_context",arguments:{query:"rare implementation",reason:"missing_implementation",requestedPaths:["rare.ts"]}},
+  {callId:"coverage-1",namespace:"continuum",tool:"continuum_request_context",arguments:{query:"tests for add",reason:"missing_test",requestedCoverage:["tests"]}},
+  {callId:"signal-test",namespace:"continuum",tool:"continuum_report_context_signal",arguments:{type:"test_failure",failingTests:["add test"],errorSummary:"expected two"}},
+  {callId:"signal-coverage",namespace:"continuum",tool:"continuum_report_context_signal",arguments:{type:"missing_coverage",categories:["tests"]}},
+  {callId:"signal-scope",namespace:"continuum",tool:"continuum_report_context_signal",arguments:{type:"out_of_scope_modification",modifiedPaths:["src/other.ts"],predictedPaths:["src/add.ts"]}},
+  {callId:"invalid-namespace",namespace:"other",tool:"continuum_request_context",arguments:{query:"x",reason:"other"}},
+  {callId:"invalid-thread",namespace:"continuum",tool:"continuum_request_context",threadId:"wrong-thread",arguments:{query:"x",reason:"other"}},
+  {callId:"invalid-turn",namespace:"continuum",tool:"continuum_request_context",turnId:"wrong-turn",arguments:{query:"x",reason:"other"}},
+  {namespace:"continuum",tool:"continuum_request_context",arguments:{query:"x",reason:"other"}},
+  {callId:"traversal",namespace:"continuum",tool:"continuum_request_context",arguments:{query:"x",reason:"other",requestedPaths:["../secret"]}},
+];
 const rl=createInterface({input:process.stdin,crlfDelay:Infinity});
 process.stderr.write("fake app-server stderr is separate\n");
+
+function sendNextDynamicRequest(){
+  const request=dynamicRequests[dynamicRequestIndex];
+  if(!request){setTimeout(completeTurn,10);return;}
+  const id=1000+dynamicRequestIndex;
+  send({id,method:"item/tool/call",params:{threadId:request.threadId??"thread-fixture",turnId:request.turnId??"turn-fixture",callId:request.callId,namespace:request.namespace,tool:request.tool,arguments:request.arguments}});
+}
 
 function completeTurn(){
   send({method:"unknown/futureNotification",params:{optionalField:null}});
@@ -36,8 +58,10 @@ rl.on("line",line=>{
     send({id:message.id,result:{turn:{id:"turn-fixture",status:"inProgress"}}});
     send({method:"turn/started",params:{threadId:"thread-fixture",turn:{id:"turn-fixture"}}});
     if(scenario==="unexpected-exit")setTimeout(()=>process.exit(23),5);
+    else if(scenario==="assist-tools")setTimeout(sendNextDynamicRequest,20);
     else{send({id:approvalRequestId,method:scenario==="unsupported-request"?"unknown/request":"item/commandExecution/requestApproval",params:{threadId:"thread-fixture",turnId:"turn-fixture",itemId:"approval-1",startedAtMs:Date.now(),command:"pnpm test",cwd,reason:"run tests"}});setTimeout(completeTurn,20);}
   }else if(message.method==="turn/interrupt"){send({id:message.id,result:{}});send({method:"turn/completed",params:{threadId:"thread-fixture",turn:{id:message.params.turnId,status:"interrupted",items:[],itemsView:{type:"full"},error:null,startedAt:1,completedAt:2,durationMs:1}}});}
   else if(message.id===approvalRequestId)send({method:"serverRequest/resolved",params:{threadId:"thread-fixture",requestId:approvalRequestId}});
+  else if(scenario==="assist-tools"&&typeof message.id==="number"&&message.id>=1000){dynamicRequestIndex+=1;setTimeout(sendNextDynamicRequest,5);}
 });
 rl.on("close",()=>process.exit(0));

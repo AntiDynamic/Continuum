@@ -1,7 +1,7 @@
 {
   "schemaVersion": "continuum.real-repository-benchmark-result.v1",
   "datasetSchemaVersion": "continuum.real-repository-benchmark.v1",
-  "generatedAt": "2026-07-23T11:10:38.592Z",
+  "generatedAt": "2026-07-23T14:09:34.613Z",
   "environment": {
     "platform": "win32",
     "architecture": "x64",
@@ -23,79 +23,79 @@
       "description": "Continuum production repository",
       "sourceSnapshot": "C:/Users/pares/.gemini/antigravity/scratch/Continuum",
       "evaluationMode": "isolated source copy indexed through built CLI",
-      "indexDurationMs": 65837.835,
+      "indexDurationMs": 148891.708,
       "caseCount": 5,
       "aggregate": {
         "recallAt1": 0.3,
         "recallAt5": 0.4,
         "recallAt10": 0.8,
-        "meanReciprocalRank": 0.4841,
-        "medianInitialPacketEstimatedTokens": 1892,
-        "p90InitialPacketEstimatedTokens": 1900,
-        "maximumInitialPacketEstimatedTokens": 1900,
-        "medianRetrievalLatencyMs": 151.017,
-        "p90RetrievalLatencyMs": 165.14,
-        "maximumRetrievalLatencyMs": 165.14,
+        "meanReciprocalRank": 0.4889,
+        "medianInitialPacketEstimatedTokens": 1818,
+        "p90InitialPacketEstimatedTokens": 1875,
+        "maximumInitialPacketEstimatedTokens": 1875,
+        "medianRetrievalLatencyMs": 521.794,
+        "p90RetrievalLatencyMs": 562.928,
+        "maximumRetrievalLatencyMs": 562.928,
         "stageLatency": {
           "taskAnalysis": {
-            "p50Ms": 0.089,
-            "p90Ms": 0.339,
-            "maximumMs": 0.339
+            "p50Ms": 0.204,
+            "p90Ms": 0.595,
+            "maximumMs": 0.595
           },
           "queryNormalization": {
-            "p50Ms": 0.005,
-            "p90Ms": 0.008,
-            "maximumMs": 0.008
+            "p50Ms": 0.018,
+            "p90Ms": 0.03,
+            "maximumMs": 0.03
           },
           "exactLookup": {
-            "p50Ms": 57.796,
-            "p90Ms": 62.833,
-            "maximumMs": 62.833
+            "p50Ms": 214.427,
+            "p90Ms": 259.638,
+            "maximumMs": 259.638
           },
           "lexicalFtsLookup": {
-            "p50Ms": 48.396,
-            "p90Ms": 66.591,
-            "maximumMs": 66.591
+            "p50Ms": 155.816,
+            "p90Ms": 257.219,
+            "maximumMs": 257.219
           },
           "candidateSeeding": {
-            "p50Ms": 2.056,
-            "p90Ms": 3.324,
-            "maximumMs": 3.324
+            "p50Ms": 8.296,
+            "p90Ms": 10.282,
+            "maximumMs": 10.282
           },
           "relationshipExpansion": {
-            "p50Ms": 5.593,
-            "p90Ms": 57.571,
-            "maximumMs": 57.571
+            "p50Ms": 15.802,
+            "p90Ms": 204.297,
+            "maximumMs": 204.297
           },
           "coverageClassification": {
-            "p50Ms": 3.953,
-            "p90Ms": 5.565,
-            "maximumMs": 5.565
+            "p50Ms": 11.18,
+            "p90Ms": 17.683,
+            "maximumMs": 17.683
           },
           "databaseHydration": {
-            "p50Ms": 127.581,
-            "p90Ms": 150.704,
-            "maximumMs": 150.704
+            "p50Ms": 481.859,
+            "p90Ms": 536.533,
+            "maximumMs": 536.533
           },
           "ranking": {
-            "p50Ms": 0.054,
-            "p90Ms": 0.086,
-            "maximumMs": 0.086
+            "p50Ms": 0.135,
+            "p90Ms": 0.252,
+            "maximumMs": 0.252
           },
           "diversitySelection": {
-            "p50Ms": 0.488,
-            "p90Ms": 0.905,
-            "maximumMs": 0.905
+            "p50Ms": 2.194,
+            "p90Ms": 4.891,
+            "maximumMs": 4.891
           },
           "tokenEstimation": {
-            "p50Ms": 0.05,
-            "p90Ms": 0.092,
-            "maximumMs": 0.092
+            "p50Ms": 0.176,
+            "p90Ms": 0.313,
+            "maximumMs": 0.313
           },
           "packetAssembly": {
-            "p50Ms": 4.196,
-            "p90Ms": 69.069,
-            "maximumMs": 69.069
+            "p50Ms": 11.317,
+            "p90Ms": 14.369,
+            "maximumMs": 14.369
           }
         }
       },
@@ -110,35 +110,35 @@
             "ContextEngine"
           ],
           "requirementRanks": [
-            7,
+            6,
             21
           ],
           "metrics": {
             "recallAt1": 0,
             "recallAt5": 0,
             "recallAt10": 0.5,
-            "reciprocalRank": 0.1429,
-            "initialPacketEstimatedTokens": 1899,
-            "retrievalLatencyMs": 157.993,
+            "reciprocalRank": 0.1667,
+            "initialPacketEstimatedTokens": 1858,
+            "retrievalLatencyMs": 439.374,
             "stageProfile": {
-              "taskAnalysis": 0.339,
-              "queryNormalization": 0.008,
-              "lexicalFtsLookup": 48.396,
-              "exactLookup": 57.796,
-              "databaseHydration": 124.176,
-              "candidateSeeding": 3.324,
-              "relationshipExpansion": 17.985,
-              "coverageClassification": 3.953,
-              "tokenEstimation": 0.056,
-              "ranking": 0.086,
-              "diversitySelection": 0.905,
-              "packetAssembly": 5.869
+              "taskAnalysis": 0.595,
+              "queryNormalization": 0.018,
+              "lexicalFtsLookup": 116.078,
+              "exactLookup": 214.427,
+              "databaseHydration": 383.742,
+              "candidateSeeding": 10.282,
+              "relationshipExpansion": 53.237,
+              "coverageClassification": 11.158,
+              "tokenEstimation": 0.183,
+              "ranking": 0.252,
+              "diversitySelection": 3.831,
+              "packetAssembly": 14.369
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "107a0894-9f0b-4355-a121-da2b2cc3667d",
+                "itemId": "e253cbce-3267-4588-87c2-7c43985b3b2a",
                 "sourcePath": "scripts/retrieval-benchmark.mjs",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -155,7 +155,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.2108,
+                "lexicalScore": 2.2109,
                 "relationshipScore": 2,
                 "coverageScore": 1.5,
                 "estimatedTokens": 199,
@@ -164,7 +164,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "24d9ee5e-fcd7-41e6-9d44-6dfe1aa203fa",
+                "itemId": "4110e084-5c81-477b-89b7-7d8b1472beee",
                 "sourcePath": "scripts/retrieval-benchmark-real.mjs",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -180,7 +180,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.2103,
+                "lexicalScore": 2.2104,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 204,
@@ -189,7 +189,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "e7dcae4a-fe8a-4217-b2a3-7cd563414fc2",
+                "itemId": "f266ec61-5147-40a2-a47d-0e3d795584c7",
                 "sourcePath": "scripts/retrieval-benchmark-real.mjs",
                 "symbol": "engine",
                 "coverageCategories": [
@@ -205,7 +205,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.1119,
+                "lexicalScore": 2.1133,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 210,
@@ -214,7 +214,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "44b5bbdf-49c8-43ac-bcae-9fd63be10e08",
+                "itemId": "71dde9ad-be34-4444-a504-2a9888178c8b",
                 "sourcePath": "packages/context-engine/src/session/controller.ts",
                 "symbol": "engine",
                 "coverageCategories": [
@@ -230,7 +230,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.1111,
+                "lexicalScore": 2.1108,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 221,
@@ -239,32 +239,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "747a13ac-f185-43a5-90ea-0288c90de0d3",
-                "sourcePath": "apps/cli/src/commands/context-compiler.ts",
-                "symbol": "packet",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: packet",
-                  "Exact title match: packet",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 180 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 2.0793,
-                "relationshipScore": 0.75,
-                "coverageScore": 1.5,
-                "estimatedTokens": 180,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "79e3598a-91ce-453f-8326-3f42562f0bd1",
+                "itemId": "1d11d40c-e3b0-496c-b3e2-88933f00cb2e",
                 "sourcePath": "packages/context-engine/src/session/controller.ts",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -280,7 +255,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0869,
+                "lexicalScore": 2.0848,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 207,
@@ -289,7 +264,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "c0924073-4464-49da-a88a-ea16886befac",
+                "itemId": "eb243aff-dfb0-42b7-9a84-e96ca197a814",
                 "sourcePath": "packages/context-engine/src/engine.ts",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -305,7 +280,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.2341,
+                "lexicalScore": 2.2335,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 495,
@@ -314,31 +289,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "490b7c67-82a6-4f8b-8221-d91aafcbd99f",
-                "sourcePath": "packages/context-engine/src/engine.ts",
-                "symbol": "ContextEngine.analyze",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: ContextEngine.analyze",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 183 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 8,
-                "lexicalScore": 2.1009,
-                "relationshipScore": 0.75,
-                "coverageScore": 2,
-                "estimatedTokens": 183,
-                "relevance": "mandatory",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "8bc27779-c1ee-40a7-8b65-50e24c1e1de2",
+                "itemId": "9c6355f2-5b78-4c27-9598-74b278607d6b",
                 "sourcePath": "packages/context-engine/src/session/delta-packet-builder.ts",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -354,16 +305,40 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0823,
+                "lexicalScore": 2.0801,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 322,
                 "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "3595e772-72de-4d60-a905-bd66d529c0f0",
+                "sourcePath": "packages/context-engine/src/engine.ts",
+                "symbol": "ContextEngine.analyze",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: ContextEngine.analyze",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Source path matches a task keyword.",
+                  "Estimated cost: 183 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 8,
+                "lexicalScore": 2.1013,
+                "relationshipScore": 0.75,
+                "coverageScore": 2,
+                "estimatedTokens": 183,
+                "relevance": "mandatory",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "31c6af38-396c-43e7-9004-ab325878f6c1",
+                "itemId": "42870156-c3bb-4453-83d6-b8ed4bab0a57",
                 "sourcePath": "packages/context-engine/src/engine.ts",
                 "symbol": "ContextEngine.explain",
                 "coverageCategories": [
@@ -378,7 +353,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1006,
+                "lexicalScore": 2.101,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 200,
@@ -387,7 +362,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "48a9b7e8-596e-4856-8296-1ea275011313",
+                "itemId": "6e556063-3c60-47a4-b79a-17bd6ff3704c",
                 "sourcePath": "packages/context-engine/src/engine.ts",
                 "symbol": "ContextEngine.constructor",
                 "coverageCategories": [
@@ -402,7 +377,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.0988,
+                "lexicalScore": 2.0993,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 286,
@@ -411,7 +386,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "3d966875-f0e3-4360-bf22-8a9c77b28954",
+                "itemId": "6f431216-2c8d-4670-bbbc-27f74e36f4d3",
                 "sourcePath": "packages/context-engine/src/engine.ts",
                 "symbol": "ContextEngine.coverageFor",
                 "coverageCategories": [
@@ -426,7 +401,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.0864,
+                "lexicalScore": 2.087,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 773,
@@ -435,7 +410,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ae3c1df2-6bdd-490d-ba63-e216d5b10800",
+                "itemId": "9dafc1ae-91e3-4f02-83f9-886319c2771e",
                 "sourcePath": "scripts/retrieval-benchmark-real.mjs",
                 "symbol": "import ../packages/context-engine/dist/index.js",
                 "coverageCategories": [
@@ -450,7 +425,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1109,
+                "lexicalScore": 2.1118,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 231,
@@ -459,7 +434,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "7b004476-4229-407d-8295-63835c2339b8",
+                "itemId": "1e2274fd-cb04-4a2f-a26a-a946ad10c0af",
                 "sourcePath": "scripts/retrieval-benchmark.mjs",
                 "symbol": "import ../packages/context-engine/dist/index.js",
                 "coverageCategories": [
@@ -474,7 +449,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1113,
+                "lexicalScore": 2.1122,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 240,
@@ -483,7 +458,32 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "cbf88a42-bb92-437d-a7e6-f830a5711b74",
+                "itemId": "dbeb5e7a-2ec8-430a-b089-8f3166b92e9d",
+                "sourcePath": "apps/cli/src/commands/context-compiler.ts",
+                "symbol": "packet",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: packet",
+                  "Exact title match: packet",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Source path matches a task keyword.",
+                  "Estimated cost: 180 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.55,
+                "relationshipScore": 0.75,
+                "coverageScore": 1.5,
+                "estimatedTokens": 180,
+                "relevance": "optional",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "c63a60e8-6b43-4c8b-bcb6-f7d74dd3c7a1",
                 "sourcePath": "packages/database/src/context-efficiency-repository.ts",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -508,7 +508,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "05fc8021-f8ec-4e12-a50a-49ca5c5bb11a",
+                "itemId": "02e32fc4-f377-401e-b7e8-82974a565918",
                 "sourcePath": "apps/cli/src/commands/context-compiler.ts",
                 "symbol": "engine",
                 "coverageCategories": [
@@ -533,7 +533,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "bac4194b-fe96-4cac-8c5b-c587263e3467",
+                "itemId": "ae6cf071-231e-488b-8783-2dc6771ffa3b",
                 "sourcePath": "packages/database/src/context-efficiency-repository.ts",
                 "symbol": "context",
                 "coverageCategories": [
@@ -556,47 +556,23 @@
                 "relevance": "optional",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
-              },
-              {
-                "itemId": "b2d8e87a-c09e-4bc1-8f7e-91dc7ed2d03e",
-                "sourcePath": "apps/cli/src/main.ts",
-                "symbol": "context",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: context",
-                  "Exact title match: context",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 220 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.3833,
-                "relationshipScore": 0,
-                "coverageScore": 2,
-                "estimatedTokens": 220,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
               }
             ],
             "totals": {
-              "mandatoryTokens": 678,
-              "optionalTokens": 1221,
-              "implementationTokens": 1899,
+              "mandatoryTokens": 495,
+              "optionalTokens": 1363,
+              "implementationTokens": 1858,
               "testTokens": 0,
               "documentationTokens": 0,
               "configurationTokens": 0,
               "constraintTokens": 0,
               "fullFileTokens": 0,
-              "symbolLevelTokens": 1899,
+              "symbolLevelTokens": 1858,
               "metadataOnlyCandidateCount": 10
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "c0924073-4464-49da-a88a-ea16886befac",
+                "itemId": "eb243aff-dfb0-42b7-9a84-e96ca197a814",
                 "sourcePath": "packages/context-engine/src/engine.ts",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -612,7 +588,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.2341,
+                "lexicalScore": 2.2335,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 495,
@@ -621,7 +597,32 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "44b5bbdf-49c8-43ac-bcae-9fd63be10e08",
+                "itemId": "9c6355f2-5b78-4c27-9598-74b278607d6b",
+                "sourcePath": "packages/context-engine/src/session/delta-packet-builder.ts",
+                "symbol": "packet",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: packet",
+                  "Exact title match: packet",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Source path matches a task keyword.",
+                  "Estimated cost: 322 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 2.0801,
+                "relationshipScore": 0.75,
+                "coverageScore": 1.5,
+                "estimatedTokens": 322,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "71dde9ad-be34-4444-a504-2a9888178c8b",
                 "sourcePath": "packages/context-engine/src/session/controller.ts",
                 "symbol": "engine",
                 "coverageCategories": [
@@ -637,7 +638,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.1111,
+                "lexicalScore": 2.1108,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 221,
@@ -646,7 +647,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "e7dcae4a-fe8a-4217-b2a3-7cd563414fc2",
+                "itemId": "f266ec61-5147-40a2-a47d-0e3d795584c7",
                 "sourcePath": "scripts/retrieval-benchmark-real.mjs",
                 "symbol": "engine",
                 "coverageCategories": [
@@ -662,7 +663,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.1119,
+                "lexicalScore": 2.1133,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 210,
@@ -671,7 +672,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "79e3598a-91ce-453f-8326-3f42562f0bd1",
+                "itemId": "1d11d40c-e3b0-496c-b3e2-88933f00cb2e",
                 "sourcePath": "packages/context-engine/src/session/controller.ts",
                 "symbol": "packet",
                 "coverageCategories": [
@@ -687,35 +688,10 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0869,
+                "lexicalScore": 2.0848,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
                 "estimatedTokens": 207,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "24d9ee5e-fcd7-41e6-9d44-6dfe1aa203fa",
-                "sourcePath": "scripts/retrieval-benchmark-real.mjs",
-                "symbol": "packet",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: packet",
-                  "Exact title match: packet",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 204 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 2.2103,
-                "relationshipScore": 0.75,
-                "coverageScore": 1.5,
-                "estimatedTokens": 204,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
@@ -739,49 +715,49 @@
               "rank": 3,
               "path": "scripts/retrieval-benchmark-real.mjs",
               "symbol": "engine",
-              "score": 14.7452
+              "score": 14.7467
             },
             {
               "rank": 4,
               "path": "packages/context-engine/src/session/controller.ts",
               "symbol": "engine",
-              "score": 14.7383
+              "score": 14.7381
             },
             {
               "rank": 5,
-              "path": "apps/cli/src/commands/context-compiler.ts",
+              "path": "packages/context-engine/src/session/controller.ts",
               "symbol": "packet",
-              "score": 14.7293
+              "score": 14.7198
             },
             {
               "rank": 6,
-              "path": "packages/context-engine/src/session/controller.ts",
+              "path": "packages/context-engine/src/engine.ts",
               "symbol": "packet",
-              "score": 14.7219
+              "score": 14.7085
             },
             {
               "rank": 7,
-              "path": "packages/context-engine/src/engine.ts",
+              "path": "packages/context-engine/src/session/delta-packet-builder.ts",
               "symbol": "packet",
-              "score": 14.7091
+              "score": 14.6512
             },
             {
               "rank": 8,
-              "path": "packages/context-engine/src/session/delta-packet-builder.ts",
-              "symbol": "packet",
-              "score": 14.6534
+              "path": "packages/context-engine/src/engine.ts",
+              "symbol": "ContextEngine.analyze",
+              "score": 13.7496
             },
             {
               "rank": 9,
               "path": "packages/context-engine/src/engine.ts",
-              "symbol": "ContextEngine.analyze",
-              "score": 13.7493
+              "symbol": "ContextEngine.explain",
+              "score": 13.7399
             },
             {
               "rank": 10,
               "path": "packages/context-engine/src/engine.ts",
-              "symbol": "ContextEngine.explain",
-              "score": 13.7395
+              "symbol": "ContextEngine.constructor",
+              "score": 13.6904
             }
           ]
         },
@@ -803,27 +779,27 @@
             "recallAt5": 0,
             "recallAt10": 1,
             "reciprocalRank": 0.1667,
-            "initialPacketEstimatedTokens": 1900,
-            "retrievalLatencyMs": 151.017,
+            "initialPacketEstimatedTokens": 1795,
+            "retrievalLatencyMs": 534.533,
             "stageProfile": {
-              "taskAnalysis": 0.109,
-              "queryNormalization": 0.005,
-              "lexicalFtsLookup": 66.591,
-              "exactLookup": 55.397,
-              "databaseHydration": 127.581,
-              "candidateSeeding": 2.056,
-              "relationshipExpansion": 5.593,
-              "coverageClassification": 4.808,
-              "tokenEstimation": 0.092,
-              "ranking": 0.058,
-              "diversitySelection": 0.533,
-              "packetAssembly": 3.771
+              "taskAnalysis": 0.487,
+              "queryNormalization": 0.024,
+              "lexicalFtsLookup": 257.219,
+              "exactLookup": 208.837,
+              "databaseHydration": 481.859,
+              "candidateSeeding": 9.309,
+              "relationshipExpansion": 15.802,
+              "coverageClassification": 14.995,
+              "tokenEstimation": 0.313,
+              "ranking": 0.155,
+              "diversitySelection": 2.194,
+              "packetAssembly": 10.961
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "bddd94f8-ada8-4b81-aa11-8a5db2122689",
+                "itemId": "d6939f25-8f75-4e91-b066-19e2a2c18bd3",
                 "sourcePath": "packages/git-analyzer/src/snapshot.ts",
                 "symbol": "resolveSnapshotIdentity",
                 "coverageCategories": [
@@ -848,7 +824,31 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "51971df8-b429-4f58-abc0-044e14bc3a62",
+                "itemId": "ef8fdb65-e9a8-4371-9b6e-b82ca1263e83",
+                "sourcePath": "packages/codex-app-server/src/assist-tool-router.ts",
+                "symbol": "identity",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: identity",
+                  "Exact title match: identity",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 394 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 1.9597,
+                "relationshipScore": 0,
+                "coverageScore": 2,
+                "estimatedTokens": 394,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "e1c12b97-1d3d-4c32-b2c6-82db039f0c59",
                 "sourcePath": "packages/repository-indexer/src/compiler.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -863,7 +863,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.9927,
+                "lexicalScore": 1.9872,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 209,
@@ -872,7 +872,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "110774bd-8639-4121-9372-2549dad1c754",
+                "itemId": "4e6a4b84-7883-44e4-ba73-f85c38d14c39",
                 "sourcePath": "packages/codex-app-server/src/execution-service.ts",
                 "symbol": "identity",
                 "coverageCategories": [
@@ -887,7 +887,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.9683,
+                "lexicalScore": 1.9669,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 207,
@@ -896,7 +896,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2d96d3f4-c5a7-42e9-ba99-ba2519e4cc74",
+                "itemId": "05184efa-f8e6-4283-b8d3-5032739c9a6f",
                 "sourcePath": "packages/codex-app-server/src/assist-execution-service.ts",
                 "symbol": "identity",
                 "coverageCategories": [
@@ -907,20 +907,44 @@
                   "Exact title match: identity",
                   "Lexical relevance via fts5.",
                   "Required coverage: implementation",
-                  "Estimated cost: 238 tokens (character-ratio-v1).",
+                  "Estimated cost: 246 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.9656,
+                "lexicalScore": 1.9633,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
-                "estimatedTokens": 238,
+                "estimatedTokens": 246,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "93743669-5917-4a1b-bcd7-bc294c389847",
+                "itemId": "568ceb6a-05c0-4765-8a2a-1f5fe502f20a",
+                "sourcePath": "packages/repository-indexer/src/production-index-service.ts",
+                "symbol": "snapshot",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: snapshot",
+                  "Exact title match: snapshot",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 217 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.4429,
+                "relationshipScore": 0,
+                "coverageScore": 1.5,
+                "estimatedTokens": 217,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "b2c96f96-fba4-4b69-a054-62e7ba7a848c",
                 "sourcePath": "packages/codex-app-server/src/assist-context-envelope.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -931,116 +955,20 @@
                   "Exact title match: snapshot",
                   "Lexical relevance via fallback_lexical.",
                   "Required coverage: implementation",
-                  "Estimated cost: 170 tokens (character-ratio-v1).",
+                  "Estimated cost: 173 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
                 "lexicalScore": 0.3714,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
-                "estimatedTokens": 170,
+                "estimatedTokens": 173,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b17ad5cb-e38c-4885-aa47-5b0b8c00dce6",
-                "sourcePath": "apps/cli/src/commands/index-repo.ts",
-                "symbol": "snapshot",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: snapshot",
-                  "Exact title match: snapshot",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 184 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.3714,
-                "relationshipScore": 0,
-                "coverageScore": 1.5,
-                "estimatedTokens": 184,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "87cca563-1c6e-4415-af9c-3dfbc816e9a4",
-                "sourcePath": "apps/cli/src/commands/index-compiler.ts",
-                "symbol": "snapshot",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: snapshot",
-                  "Exact title match: snapshot",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 192 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.3714,
-                "relationshipScore": 0,
-                "coverageScore": 1.5,
-                "estimatedTokens": 192,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "eb9525b8-3ae2-460e-97da-62a99df366ee",
-                "sourcePath": "scripts/retrieval-benchmark.mjs",
-                "symbol": "snapshot",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: snapshot",
-                  "Exact title match: snapshot",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 198 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.3714,
-                "relationshipScore": 0,
-                "coverageScore": 1.5,
-                "estimatedTokens": 198,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "2178e185-a288-4a1f-9ae3-23532100d54b",
-                "sourcePath": "packages/repository-indexer/src/hashing.ts",
-                "symbol": "hash",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact title match: hash",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 153 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 1.5,
-                "lexicalScore": 1.8987,
-                "relationshipScore": 0.75,
-                "coverageScore": 1.5,
-                "estimatedTokens": 153,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "c92894ea-c6de-4965-85df-463ff2cf4362",
+                "itemId": "214cee58-45a4-4ce3-9acb-6bd0e7e4692d",
                 "sourcePath": "packages/repository-indexer/tests/hashing.test.ts",
                 "symbol": "hashing",
                 "coverageCategories": [
@@ -1059,7 +987,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.923,
+                "lexicalScore": 1.9072,
                 "relationshipScore": 4,
                 "coverageScore": 2.75,
                 "estimatedTokens": 568,
@@ -1068,7 +996,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d96b6b7c-715f-4068-b911-5bae29f52872",
+                "itemId": "fa1626b7-6adf-4180-8635-bcdfecc84bf4",
                 "sourcePath": "packages/repository-indexer/tests/snapshot.test.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1087,7 +1015,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.842,
+                "lexicalScore": 1.8416,
                 "relationshipScore": 4,
                 "coverageScore": 2.75,
                 "estimatedTokens": 680,
@@ -1096,7 +1024,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "e8b4c76a-2136-43e8-a0c4-a6a628219c4b",
+                "itemId": "0bb22084-b59b-4ad7-89af-4759e239fcce",
                 "sourcePath": "packages/repository-indexer/tests/hashing.test.js",
                 "symbol": "hashing",
                 "coverageCategories": [
@@ -1114,7 +1042,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.9234,
+                "lexicalScore": 1.9076,
                 "relationshipScore": 2.75,
                 "coverageScore": 2.75,
                 "estimatedTokens": 607,
@@ -1123,7 +1051,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "1c70ed66-c970-468f-8ed9-c936eb55f8e4",
+                "itemId": "2e0d8664-152e-42d8-98e7-fda5194b772b",
                 "sourcePath": "packages/repository-indexer/tests/snapshot.test.js",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1141,7 +1069,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.842,
+                "lexicalScore": 1.8416,
                 "relationshipScore": 2.75,
                 "coverageScore": 2.75,
                 "estimatedTokens": 713,
@@ -1150,7 +1078,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "23a380ca-a9e5-4d02-8e1a-d0e8e0ece721",
+                "itemId": "e0642ac2-77d2-4c3f-be1b-095f60fd478c",
                 "sourcePath": "packages/git-analyzer/tests/snapshot.test.ts",
                 "symbol": "canonical worktree snapshot",
                 "coverageCategories": [
@@ -1163,20 +1091,20 @@
                   "Required coverage: implementation, tests",
                   "Task-related or relationship-verified test candidate.",
                   "Source path matches a task keyword.",
-                  "Estimated cost: 961 tokens (character-ratio-v1).",
+                  "Estimated cost: 1102 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.0968,
+                "lexicalScore": 2.0945,
                 "relationshipScore": 2.75,
                 "coverageScore": 2.75,
-                "estimatedTokens": 961,
+                "estimatedTokens": 1102,
                 "relevance": "optional",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b424fdba-fab2-4aef-b223-4457f491f87e",
+                "itemId": "5edfce6f-4b6b-4140-ac12-29ff74a44a70",
                 "sourcePath": "apps/cli/tests/standalone-acceptance.test.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1202,7 +1130,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "e0e13a1f-850a-4bfd-9314-c5511dcec731",
+                "itemId": "536e7d49-8ceb-4d6f-b7b3-463e43523610",
                 "sourcePath": "packages/context-engine/tests/engine.test.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1228,7 +1156,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "659aa4e5-bb6d-469b-a1ff-ccc0bce68d8b",
+                "itemId": "77c9af79-5e53-4efe-adcd-0ce62d325884",
                 "sourcePath": "packages/database/tests/context-session.test.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1254,7 +1182,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "e20f56fe-d390-425d-a2fe-a7914825d75d",
+                "itemId": "cc3bebaa-4578-476a-a456-352668e9fe37",
                 "sourcePath": "packages/context-engine/tests/phase3d-hardening.test.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1280,7 +1208,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "93fac446-1a05-4d4d-b670-9279579be123",
+                "itemId": "f0e80d99-84ed-47e1-89f0-da7c13ce5e4c",
                 "sourcePath": "packages/context-engine/tests/session-controller.test.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1308,19 +1236,43 @@
             ],
             "totals": {
               "mandatoryTokens": 349,
-              "optionalTokens": 1551,
-              "implementationTokens": 1900,
+              "optionalTokens": 1446,
+              "implementationTokens": 1795,
               "testTokens": 0,
               "documentationTokens": 0,
               "configurationTokens": 0,
               "constraintTokens": 0,
               "fullFileTokens": 0,
-              "symbolLevelTokens": 1900,
+              "symbolLevelTokens": 1795,
               "metadataOnlyCandidateCount": 10
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "bddd94f8-ada8-4b81-aa11-8a5db2122689",
+                "itemId": "ef8fdb65-e9a8-4371-9b6e-b82ca1263e83",
+                "sourcePath": "packages/codex-app-server/src/assist-tool-router.ts",
+                "symbol": "identity",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: identity",
+                  "Exact title match: identity",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 394 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 1.9597,
+                "relationshipScore": 0,
+                "coverageScore": 2,
+                "estimatedTokens": 394,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "d6939f25-8f75-4e91-b066-19e2a2c18bd3",
                 "sourcePath": "packages/git-analyzer/src/snapshot.ts",
                 "symbol": "resolveSnapshotIdentity",
                 "coverageCategories": [
@@ -1345,7 +1297,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2d96d3f4-c5a7-42e9-ba99-ba2519e4cc74",
+                "itemId": "05184efa-f8e6-4283-b8d3-5032739c9a6f",
                 "sourcePath": "packages/codex-app-server/src/assist-execution-service.ts",
                 "symbol": "identity",
                 "coverageCategories": [
@@ -1356,20 +1308,44 @@
                   "Exact title match: identity",
                   "Lexical relevance via fts5.",
                   "Required coverage: implementation",
-                  "Estimated cost: 238 tokens (character-ratio-v1).",
+                  "Estimated cost: 246 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.9656,
+                "lexicalScore": 1.9633,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
-                "estimatedTokens": 238,
+                "estimatedTokens": 246,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "51971df8-b429-4f58-abc0-044e14bc3a62",
+                "itemId": "568ceb6a-05c0-4765-8a2a-1f5fe502f20a",
+                "sourcePath": "packages/repository-indexer/src/production-index-service.ts",
+                "symbol": "snapshot",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: snapshot",
+                  "Exact title match: snapshot",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 217 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.4429,
+                "relationshipScore": 0,
+                "coverageScore": 1.5,
+                "estimatedTokens": 217,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "e1c12b97-1d3d-4c32-b2c6-82db039f0c59",
                 "sourcePath": "packages/repository-indexer/src/compiler.ts",
                 "symbol": "snapshot",
                 "coverageCategories": [
@@ -1384,58 +1360,10 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.9927,
+                "lexicalScore": 1.9872,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 209,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "110774bd-8639-4121-9372-2549dad1c754",
-                "sourcePath": "packages/codex-app-server/src/execution-service.ts",
-                "symbol": "identity",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: identity",
-                  "Exact title match: identity",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 207 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 1.9683,
-                "relationshipScore": 0,
-                "coverageScore": 1.5,
-                "estimatedTokens": 207,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "eb9525b8-3ae2-460e-97da-62a99df366ee",
-                "sourcePath": "scripts/retrieval-benchmark.mjs",
-                "symbol": "snapshot",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: snapshot",
-                  "Exact title match: snapshot",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 198 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.3714,
-                "relationshipScore": 0,
-                "coverageScore": 1.5,
-                "estimatedTokens": 198,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
@@ -1447,31 +1375,31 @@
               "rank": 1,
               "path": "packages/repository-indexer/tests/hashing.test.ts",
               "symbol": "hashing",
-              "score": 18.8575
+              "score": 18.8416
             },
             {
               "rank": 2,
               "path": "packages/repository-indexer/tests/snapshot.test.ts",
               "symbol": "snapshot",
-              "score": 18.7142
+              "score": 18.7138
             },
             {
               "rank": 3,
               "path": "packages/repository-indexer/tests/hashing.test.js",
               "symbol": "hashing",
-              "score": 17.5862
+              "score": 17.5704
             },
             {
               "rank": 4,
               "path": "packages/repository-indexer/tests/snapshot.test.js",
               "symbol": "snapshot",
-              "score": 17.4459
+              "score": 17.4454
             },
             {
               "rank": 5,
               "path": "packages/git-analyzer/tests/snapshot.test.ts",
               "symbol": "canonical worktree snapshot",
-              "score": 16.0629
+              "score": 15.9823
             },
             {
               "rank": 6,
@@ -1524,26 +1452,26 @@
             "recallAt10": 1,
             "reciprocalRank": 1,
             "initialPacketEstimatedTokens": 1875,
-            "retrievalLatencyMs": 165.14,
+            "retrievalLatencyMs": 562.928,
             "stageProfile": {
-              "taskAnalysis": 0.089,
-              "queryNormalization": 0.006,
-              "lexicalFtsLookup": 32.786,
-              "exactLookup": 60.347,
-              "databaseHydration": 150.704,
-              "candidateSeeding": 2.048,
-              "relationshipExpansion": 57.571,
-              "coverageClassification": 5.565,
-              "tokenEstimation": 0.049,
-              "ranking": 0.036,
-              "diversitySelection": 0.357,
-              "packetAssembly": 4.01
+              "taskAnalysis": 0.204,
+              "queryNormalization": 0.03,
+              "lexicalFtsLookup": 116.519,
+              "exactLookup": 215.716,
+              "databaseHydration": 536.533,
+              "candidateSeeding": 8.296,
+              "relationshipExpansion": 204.297,
+              "coverageClassification": 17.683,
+              "tokenEstimation": 0.168,
+              "ranking": 0.103,
+              "diversitySelection": 0.998,
+              "packetAssembly": 8.773
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "18fe9a1f-2a19-4c91-941a-d23ed070ce76",
+                "itemId": "5a4f04a6-4d84-4230-b20f-fecb3634ef08",
                 "sourcePath": "apps/cli/src/commands/session.ts",
                 "symbol": "runSessionRequest",
                 "coverageCategories": [
@@ -1559,7 +1487,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.297,
+                "lexicalScore": 2.2966,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 280,
@@ -1568,7 +1496,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ecb46dd1-ba4a-4ab5-b99f-030273eea9e3",
+                "itemId": "91335768-4825-4b84-9eba-987efc30f648",
                 "sourcePath": "apps/cli/src/main.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -1583,7 +1511,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0611,
+                "lexicalScore": 2.063,
                 "relationshipScore": 0,
                 "coverageScore": 2,
                 "estimatedTokens": 219,
@@ -1592,7 +1520,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "339c7bc9-2cb0-4133-abb5-4820161995ff",
+                "itemId": "c728f6ca-c8f5-4c7e-ae84-31a505d5c475",
                 "sourcePath": "apps/cli/src/commands/run.ts",
                 "symbol": "change",
                 "coverageCategories": [
@@ -1607,7 +1535,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.1188,
+                "lexicalScore": 2.1195,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 238,
@@ -1616,7 +1544,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6ec2f18c-683d-4acf-ad84-6e1981ad5d81",
+                "itemId": "79dcce6d-1e42-4441-bec9-4d7bac97403c",
                 "sourcePath": "apps/cli/src/commands/session.ts",
                 "symbol": "runSessionStart",
                 "coverageCategories": [
@@ -1631,7 +1559,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1359,
+                "lexicalScore": 2.1379,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 570,
@@ -1640,7 +1568,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "1451a4d0-24b9-4945-b89b-d74fe0e3232e",
+                "itemId": "b4bc9e5d-2252-4ecc-b70c-43f292fcdd74",
                 "sourcePath": "packages/context-engine/benchmarks/v1/repositories/monorepo/packages/core/src/session.ts",
                 "symbol": "Session",
                 "coverageCategories": [
@@ -1666,7 +1594,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b8dd5e03-7704-4855-bffc-21edb47fbd8a",
+                "itemId": "55840cda-7d3f-4c29-b05e-c83e3bdd2a7a",
                 "sourcePath": "apps/cli/src/commands/session.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -1691,7 +1619,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "56fef105-c0ba-4ddc-b6a6-eacfe55f4d42",
+                "itemId": "1e2a6cc9-7a19-47ab-bf44-eb6059f765de",
                 "sourcePath": "apps/cli/src/main.ts",
                 "symbol": "request <session-id> <query>",
                 "coverageCategories": [
@@ -1705,7 +1633,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.2007,
+                "lexicalScore": 2.2004,
                 "relationshipScore": 0,
                 "coverageScore": 2,
                 "estimatedTokens": 240,
@@ -1714,7 +1642,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "a0e09092-9c4f-438f-8880-dcae5f47560f",
+                "itemId": "3f830b90-395f-47c6-b9b0-dae98c06be24",
                 "sourcePath": "apps/cli/src/commands/session.ts",
                 "symbol": "runSessionSignal",
                 "coverageCategories": [
@@ -1729,7 +1657,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1451,
+                "lexicalScore": 2.1443,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 673,
@@ -1738,7 +1666,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "cd627e23-f7a4-4c3b-be11-f5854a459a88",
+                "itemId": "97249a1f-92f1-4c5f-b015-7ca1914d1340",
                 "sourcePath": "packages/database/src/repositories/context-session-repository.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -1763,7 +1691,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6f22bb41-221f-44f5-beb7-f42138246508",
+                "itemId": "d3f89573-6ae8-4922-b787-6b96ae380d5d",
                 "sourcePath": "scripts/retrieval-benchmark.mjs",
                 "symbol": "cliRun",
                 "coverageCategories": [
@@ -1777,7 +1705,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.112,
+                "lexicalScore": 2.1132,
                 "relationshipScore": 0,
                 "coverageScore": 2,
                 "estimatedTokens": 223,
@@ -1786,7 +1714,30 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "3520f9be-005b-463a-a950-416955a44753",
+                "itemId": "61f6516e-752d-4a80-b81b-bacac88fa5b5",
+                "sourcePath": "scripts/retrieval-benchmark-real.mjs",
+                "symbol": "cliRun",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: cliRun",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 224 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 8,
+                "lexicalScore": 2.1128,
+                "relationshipScore": 0,
+                "coverageScore": 2,
+                "estimatedTokens": 224,
+                "relevance": "optional",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "d7f77786-a63f-46f9-bfde-214ed855e653",
                 "sourcePath": "packages/context-engine/src/session/session-service.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -1811,30 +1762,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "5ee157f3-1c35-4074-abe8-8da77f3a1258",
-                "sourcePath": "scripts/retrieval-benchmark-real.mjs",
-                "symbol": "cliRun",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: cliRun",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 224 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 8,
-                "lexicalScore": 2.1116,
-                "relationshipScore": 0,
-                "coverageScore": 2,
-                "estimatedTokens": 224,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "afbae922-9f4d-42d2-80e6-c27fc4a9b705",
+                "itemId": "30f151ee-b1cd-4813-b716-7780a5cf1959",
                 "sourcePath": "packages/context-engine/src/session/controller.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -1859,7 +1787,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8e495f1a-8c91-4ffa-aff3-5522d418fa08",
+                "itemId": "fbe3a693-f78d-4d6a-8df0-4c08fad8b263",
                 "sourcePath": "docs/cli.md",
                 "symbol": "CLI",
                 "coverageCategories": [
@@ -1874,7 +1802,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 1.94,
+                "lexicalScore": 1.9399,
                 "relationshipScore": 0,
                 "coverageScore": 2,
                 "estimatedTokens": 309,
@@ -1883,7 +1811,55 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "685a68ac-360d-4276-9380-0bf58228866c",
+                "itemId": "edd2b176-e182-4924-a614-3e0be895904a",
+                "sourcePath": "packages/codex-app-server/src/assist-context-envelope.ts",
+                "symbol": "session",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: session",
+                  "Exact title match: session",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 159 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.3769,
+                "relationshipScore": 0,
+                "coverageScore": 1.5,
+                "estimatedTokens": 159,
+                "relevance": "optional",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "0ff04c5f-e3cc-4705-964f-5cc2a266e36a",
+                "sourcePath": "packages/codex-app-server/src/assist-report-v2.ts",
+                "symbol": "request",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: request",
+                  "Exact title match: request",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 195 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.3769,
+                "relationshipScore": 0,
+                "coverageScore": 1.5,
+                "estimatedTokens": 195,
+                "relevance": "optional",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "c43e2d08-b257-409a-b1c5-2e17dd0244f1",
                 "sourcePath": "packages/codex-app-server/src/report.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -1905,54 +1881,6 @@
                 "relevance": "optional",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
-              },
-              {
-                "itemId": "75dd1771-73e7-4241-9bf3-8b5fcc83bbb8",
-                "sourcePath": "scripts/retrieval-benchmark.mjs",
-                "symbol": "request",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: request",
-                  "Exact title match: request",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 219 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.3769,
-                "relationshipScore": 0,
-                "coverageScore": 1.5,
-                "estimatedTokens": 219,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "4af85fef-b3bc-4da0-abc9-3dfde64313bb",
-                "sourcePath": "packages/database/src/repositories/context-session-repository.ts",
-                "symbol": "run",
-                "coverageCategories": [
-                  "implementation"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: run",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 188 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 8,
-                "lexicalScore": 0.4538,
-                "relationshipScore": 0.75,
-                "coverageScore": 1.5,
-                "estimatedTokens": 188,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
               }
             ],
             "totals": {
@@ -1969,7 +1897,7 @@
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "6ec2f18c-683d-4acf-ad84-6e1981ad5d81",
+                "itemId": "79dcce6d-1e42-4441-bec9-4d7bac97403c",
                 "sourcePath": "apps/cli/src/commands/session.ts",
                 "symbol": "runSessionStart",
                 "coverageCategories": [
@@ -1984,7 +1912,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1359,
+                "lexicalScore": 2.1379,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 570,
@@ -1993,7 +1921,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "18fe9a1f-2a19-4c91-941a-d23ed070ce76",
+                "itemId": "5a4f04a6-4d84-4230-b20f-fecb3634ef08",
                 "sourcePath": "apps/cli/src/commands/session.ts",
                 "symbol": "runSessionRequest",
                 "coverageCategories": [
@@ -2009,7 +1937,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.297,
+                "lexicalScore": 2.2966,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 280,
@@ -2018,7 +1946,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "56fef105-c0ba-4ddc-b6a6-eacfe55f4d42",
+                "itemId": "1e2a6cc9-7a19-47ab-bf44-eb6059f765de",
                 "sourcePath": "apps/cli/src/main.ts",
                 "symbol": "request <session-id> <query>",
                 "coverageCategories": [
@@ -2032,7 +1960,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.2007,
+                "lexicalScore": 2.2004,
                 "relationshipScore": 0,
                 "coverageScore": 2,
                 "estimatedTokens": 240,
@@ -2041,7 +1969,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "339c7bc9-2cb0-4133-abb5-4820161995ff",
+                "itemId": "c728f6ca-c8f5-4c7e-ae84-31a505d5c475",
                 "sourcePath": "apps/cli/src/commands/run.ts",
                 "symbol": "change",
                 "coverageCategories": [
@@ -2056,7 +1984,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.1188,
+                "lexicalScore": 2.1195,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 238,
@@ -2065,7 +1993,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ecb46dd1-ba4a-4ab5-b99f-030273eea9e3",
+                "itemId": "91335768-4825-4b84-9eba-987efc30f648",
                 "sourcePath": "apps/cli/src/main.ts",
                 "symbol": "session",
                 "coverageCategories": [
@@ -2080,7 +2008,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0611,
+                "lexicalScore": 2.063,
                 "relationshipScore": 0,
                 "coverageScore": 2,
                 "estimatedTokens": 219,
@@ -2095,25 +2023,25 @@
               "rank": 1,
               "path": "apps/cli/src/commands/session.ts",
               "symbol": "runSessionRequest",
-              "score": 15.3915
+              "score": 15.391
             },
             {
               "rank": 2,
               "path": "apps/cli/src/main.ts",
               "symbol": "session",
-              "score": 14.4394
+              "score": 14.4413
             },
             {
               "rank": 3,
               "path": "apps/cli/src/commands/run.ts",
               "symbol": "change",
-              "score": 13.9866
+              "score": 13.9873
             },
             {
               "rank": 4,
               "path": "apps/cli/src/commands/session.ts",
               "symbol": "runSessionStart",
-              "score": 13.5692
+              "score": 13.5712
             },
             {
               "rank": 5,
@@ -2125,7 +2053,7 @@
               "rank": 6,
               "path": "apps/cli/src/commands/session.ts",
               "symbol": "runSessionSignal",
-              "score": 13.5212
+              "score": 13.5204
             },
             {
               "rank": 7,
@@ -2137,7 +2065,7 @@
               "rank": 8,
               "path": "apps/cli/src/main.ts",
               "symbol": "request <session-id> <query>",
-              "score": 13.0673
+              "score": 13.067
             },
             {
               "rank": 9,
@@ -2149,7 +2077,7 @@
               "rank": 10,
               "path": "scripts/retrieval-benchmark.mjs",
               "symbol": "cliRun",
-              "score": 12.9881
+              "score": 12.9893
             }
           ]
         },
@@ -2171,27 +2099,27 @@
             "recallAt5": 1,
             "recallAt10": 1,
             "reciprocalRank": 1,
-            "initialPacketEstimatedTokens": 1714,
-            "retrievalLatencyMs": 112.721,
+            "initialPacketEstimatedTokens": 1801,
+            "retrievalLatencyMs": 390.757,
             "stageProfile": {
-              "taskAnalysis": 0.057,
-              "queryNormalization": 0.004,
-              "lexicalFtsLookup": 42.601,
-              "exactLookup": 55.86,
-              "databaseHydration": 101.983,
-              "candidateSeeding": 1.48,
-              "relationshipExpansion": 3.522,
-              "coverageClassification": 3.757,
-              "tokenEstimation": 0.05,
-              "ranking": 0.049,
-              "diversitySelection": 0.488,
-              "packetAssembly": 69.069
+              "taskAnalysis": 0.163,
+              "queryNormalization": 0.018,
+              "lexicalFtsLookup": 155.816,
+              "exactLookup": 184.992,
+              "databaseHydration": 347.759,
+              "candidateSeeding": 4.353,
+              "relationshipExpansion": 6.951,
+              "coverageClassification": 11.18,
+              "tokenEstimation": 0.164,
+              "ranking": 0.135,
+              "diversitySelection": 1.37,
+              "packetAssembly": 12.993
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "a6132234-7510-44e3-81df-14d2cc01208c",
+                "itemId": "821dd1ee-af24-42a1-9d78-7c200b02397f",
                 "sourcePath": "packages/context-engine/benchmarks/v1/repositories/sql-docs/docs/schema.md",
                 "symbol": "Users schema",
                 "coverageCategories": [
@@ -2208,7 +2136,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.8412,
+                "lexicalScore": 1.836,
                 "relationshipScore": 0.75,
                 "coverageScore": 3.5,
                 "estimatedTokens": 171,
@@ -2217,7 +2145,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "efa01703-3f9f-49d2-b31f-7c0c61665171",
+                "itemId": "f6fc6065-406d-44cf-9280-076d8fecd0ee",
                 "sourcePath": "packages/database/src/migrations.ts",
                 "symbol": "Migration",
                 "coverageCategories": [
@@ -2235,7 +2163,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.147,
+                "lexicalScore": 2.1479,
                 "relationshipScore": 0.75,
                 "coverageScore": 2.75,
                 "estimatedTokens": 339,
@@ -2244,7 +2172,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "96f43862-11b7-4dc9-9219-a20870079eb8",
+                "itemId": "ae9f17ad-ec42-4d4b-be74-ffcee44d0aa7",
                 "sourcePath": "packages/repository-indexer/src/extractors/sql-v2.ts",
                 "symbol": "migration",
                 "coverageCategories": [
@@ -2259,7 +2187,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.8821,
+                "lexicalScore": 1.8848,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 168,
@@ -2268,7 +2196,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "1ec8e6df-227c-4ece-a3a8-c497725a5058",
+                "itemId": "62c5a487-58e7-413a-a444-673d7f731df3",
                 "sourcePath": "packages/codex-app-server/src/compatibility.ts",
                 "symbol": "schema",
                 "coverageCategories": [
@@ -2283,7 +2211,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 1.8322,
+                "lexicalScore": 1.827,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 171,
@@ -2292,7 +2220,31 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "5d68560d-4e48-49bf-a306-d77fcb6561d0",
+                "itemId": "f8c3585b-54c0-4120-b90b-82548377907b",
+                "sourcePath": "packages/codex-app-server/src/comparison-service-v2.ts",
+                "symbol": "schema",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: schema",
+                  "Exact title match: schema",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 259 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.3833,
+                "relationshipScore": 0,
+                "coverageScore": 1.5,
+                "estimatedTokens": 259,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "e3f129ba-fbd9-4a1a-813b-df6705a996b0",
                 "sourcePath": "packages/codex-app-server/tests/phase4b2-regressions.test.ts",
                 "symbol": "database",
                 "coverageCategories": [
@@ -2304,20 +2256,20 @@
                   "Lexical relevance via fallback_lexical.",
                   "Required coverage: implementation, tests",
                   "Task-related or relationship-verified test candidate.",
-                  "Estimated cost: 207 tokens (character-ratio-v1).",
+                  "Estimated cost: 229 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 1.5,
                 "lexicalScore": 0.3833,
                 "relationshipScore": 1.25,
                 "coverageScore": 2.25,
-                "estimatedTokens": 207,
+                "estimatedTokens": 229,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d1366825-3db0-45bf-a199-acf9a19a594c",
+                "itemId": "6f73c662-a514-40e3-8fec-29652fd12b64",
                 "sourcePath": "packages/context-engine/tests/fixtures/database-migration.json",
                 "symbol": "task",
                 "coverageCategories": [
@@ -2335,7 +2287,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 2.0291,
+                "lexicalScore": 2.0285,
                 "relationshipScore": 2,
                 "coverageScore": 4.25,
                 "estimatedTokens": 143,
@@ -2344,7 +2296,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "3d406b51-8401-4b1e-ac0a-69aa21a40f6f",
+                "itemId": "ecb2d1d0-3df5-4203-8edc-d708fa43207d",
                 "sourcePath": "packages/context-engine/tests/fixtures/database-migration.json",
                 "symbol": "requiredContext",
                 "coverageCategories": [
@@ -2362,7 +2314,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 2.0337,
+                "lexicalScore": 2.0332,
                 "relationshipScore": 2,
                 "coverageScore": 4.25,
                 "estimatedTokens": 172,
@@ -2371,7 +2323,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "4ffb1c3b-3697-4d9c-9b1f-a601dd431fa7",
+                "itemId": "ece34bcf-1b1d-42f8-97ff-e7af3f050698",
                 "sourcePath": "packages/context-engine/tests/fixtures/database-migration.json",
                 "symbol": "expectedTaskClass",
                 "coverageCategories": [
@@ -2388,7 +2340,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.9752,
+                "lexicalScore": 1.9755,
                 "relationshipScore": 2,
                 "coverageScore": 3.5,
                 "estimatedTokens": 149,
@@ -2397,7 +2349,33 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "7906fe04-47bc-4723-91fc-4ad07fa3bbe2",
+                "itemId": "e30f7f3b-c551-4eca-b7ea-bd6e4a36d447",
+                "sourcePath": "packages/database/src/migrations.ts",
+                "symbol": "MIGRATIONS",
+                "coverageCategories": [
+                  "implementation",
+                  "database_schema"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: MIGRATIONS",
+                  "Exact title match: MIGRATIONS",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation, database_schema",
+                  "Source path matches a task keyword.",
+                  "Estimated cost: 11366 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.55,
+                "relationshipScore": 0.75,
+                "coverageScore": 2.25,
+                "estimatedTokens": 11366,
+                "relevance": "mandatory",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "60672bee-077e-49fb-9e03-91bf6efa6a20",
                 "sourcePath": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
                 "symbol": "migrationRoundTripTest",
                 "coverageCategories": [
@@ -2415,42 +2393,16 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 2.04,
+                "lexicalScore": 2.0419,
                 "relationshipScore": 2,
                 "coverageScore": 4.25,
                 "estimatedTokens": 194,
                 "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "b997e491-c2ea-43c4-89f1-c45d79b5b196",
-                "sourcePath": "packages/database/src/migrations.ts",
-                "symbol": "MIGRATIONS",
-                "coverageCategories": [
-                  "implementation",
-                  "database_schema"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: MIGRATIONS",
-                  "Exact title match: MIGRATIONS",
-                  "Lexical relevance via fallback_lexical.",
-                  "Required coverage: implementation, database_schema",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 10448 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 9.5,
-                "lexicalScore": 0.55,
-                "relationshipScore": 0.75,
-                "coverageScore": 2.25,
-                "estimatedTokens": 10448,
-                "relevance": "mandatory",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "3106efc9-e0d3-48a9-92d5-8061e6899efb",
+                "itemId": "2ac604f7-75cf-416a-8b7e-3c175be99e49",
                 "sourcePath": "packages/database/tests/database.test.ts",
                 "symbol": "migrate",
                 "coverageCategories": [
@@ -2467,7 +2419,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.9407,
+                "lexicalScore": 1.9395,
                 "relationshipScore": 3.25,
                 "coverageScore": 2.75,
                 "estimatedTokens": 327,
@@ -2476,7 +2428,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ede282e0-d690-4c86-a3c9-9c2940685cde",
+                "itemId": "8aadcb14-0471-451e-8bb4-94c93babcf8e",
                 "sourcePath": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
                 "symbol": "import ../src/migration-runner",
                 "coverageCategories": [
@@ -2494,7 +2446,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 2.0554,
+                "lexicalScore": 2.057,
                 "relationshipScore": 2,
                 "coverageScore": 3.75,
                 "estimatedTokens": 179,
@@ -2503,7 +2455,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "77156985-b493-4295-bdb5-3385bed7cf11",
+                "itemId": "37389f28-e087-46d7-8c62-514d0a857e29",
                 "sourcePath": "packages/context-engine/tests/phase3d-hardening.test.ts",
                 "symbol": "marks an oversized mandatory symbol incomplete without exceeding the ceiling",
                 "coverageCategories": [
@@ -2520,7 +2472,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.8662,
+                "lexicalScore": 1.8684,
                 "relationshipScore": 2.5,
                 "coverageScore": 3.5,
                 "estimatedTokens": 452,
@@ -2529,7 +2481,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "193acfee-3bbe-4dfc-b350-df38e1fbc6e8",
+                "itemId": "9c4623a5-1eb5-4493-8c09-26fac9897845",
                 "sourcePath": "packages/context-engine/tests/fixtures/database-migration.json",
                 "symbol": "irrelevantContext",
                 "coverageCategories": [
@@ -2546,7 +2498,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.9642,
+                "lexicalScore": 1.9646,
                 "relationshipScore": 2,
                 "coverageScore": 3.5,
                 "estimatedTokens": 158,
@@ -2555,7 +2507,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2c8e35bb-0de2-439e-8040-9fc80cd2e6e2",
+                "itemId": "b45565e6-eb92-440d-a2d5-ca401a44b935",
                 "sourcePath": "packages/database/tests/database.test.ts",
                 "symbol": "creates schema_migrations table",
                 "coverageCategories": [
@@ -2571,7 +2523,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 2.2243,
+                "lexicalScore": 2.2234,
                 "relationshipScore": 2,
                 "coverageScore": 2.75,
                 "estimatedTokens": 247,
@@ -2580,7 +2532,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2af87fdc-3dd7-4472-af07-8efb40057cad",
+                "itemId": "6dc6b72e-61be-495c-b16f-c17a0b9658e1",
                 "sourcePath": "packages/database/tests/database.test.ts",
                 "symbol": "returns the correct schema version",
                 "coverageCategories": [
@@ -2596,7 +2548,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.9432,
+                "lexicalScore": 1.9361,
                 "relationshipScore": 2,
                 "coverageScore": 2.75,
                 "estimatedTokens": 207,
@@ -2605,7 +2557,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "cb8c39e0-308d-45cd-8094-2681d8c5c3fb",
+                "itemId": "2374194c-fb36-4446-b5b6-69da478a5636",
                 "sourcePath": "packages/context-engine/tests/engine.test.ts",
                 "symbol": "reports unavailable rollback explicitly when no indexed evidence exists",
                 "coverageCategories": [
@@ -2621,7 +2573,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.9724,
+                "lexicalScore": 1.9731,
                 "relationshipScore": 1.25,
                 "coverageScore": 3.5,
                 "estimatedTokens": 406,
@@ -2630,7 +2582,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8488d762-941f-448a-bcd2-d9b6beb2e9c0",
+                "itemId": "01d136f8-b117-4a74-8cda-976a170ea982",
                 "sourcePath": "packages/database/tests/context-efficiency.test.ts",
                 "symbol": "applies the current schema and versions pricing profiles append-only",
                 "coverageCategories": [
@@ -2646,35 +2598,10 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.9269,
+                "lexicalScore": 1.9198,
                 "relationshipScore": 2,
                 "coverageScore": 2.75,
                 "estimatedTokens": 449,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "c30a1470-fbe1-4fe2-b36b-6bd2c5ece89d",
-                "sourcePath": "packages/context-engine/tests/task-analyzer.test.ts",
-                "symbol": "it.each",
-                "coverageCategories": [
-                  "implementation",
-                  "tests",
-                  "rollback"
-                ],
-                "selectionReasons": [
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation, tests, rollback",
-                  "Task-related or relationship-verified test candidate.",
-                  "Estimated cost: 286 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 0,
-                "lexicalScore": 1.8279,
-                "relationshipScore": 1.25,
-                "coverageScore": 3.5,
-                "estimatedTokens": 286,
                 "relevance": "optional",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
@@ -2682,19 +2609,19 @@
             ],
             "totals": {
               "mandatoryTokens": 339,
-              "optionalTokens": 1375,
-              "implementationTokens": 1714,
-              "testTokens": 865,
+              "optionalTokens": 1462,
+              "implementationTokens": 1801,
+              "testTokens": 693,
               "documentationTokens": 171,
               "configurationTokens": 0,
-              "constraintTokens": 1168,
+              "constraintTokens": 974,
               "fullFileTokens": 0,
-              "symbolLevelTokens": 1714,
+              "symbolLevelTokens": 1801,
               "metadataOnlyCandidateCount": 10
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "efa01703-3f9f-49d2-b31f-7c0c61665171",
+                "itemId": "f6fc6065-406d-44cf-9280-076d8fecd0ee",
                 "sourcePath": "packages/database/src/migrations.ts",
                 "symbol": "Migration",
                 "coverageCategories": [
@@ -2712,7 +2639,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.147,
+                "lexicalScore": 2.1479,
                 "relationshipScore": 0.75,
                 "coverageScore": 2.75,
                 "estimatedTokens": 339,
@@ -2721,7 +2648,31 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "5d68560d-4e48-49bf-a306-d77fcb6561d0",
+                "itemId": "f8c3585b-54c0-4120-b90b-82548377907b",
+                "sourcePath": "packages/codex-app-server/src/comparison-service-v2.ts",
+                "symbol": "schema",
+                "coverageCategories": [
+                  "implementation"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: schema",
+                  "Exact title match: schema",
+                  "Lexical relevance via fallback_lexical.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 259 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 9.5,
+                "lexicalScore": 0.3833,
+                "relationshipScore": 0,
+                "coverageScore": 1.5,
+                "estimatedTokens": 259,
+                "relevance": "optional",
+                "delivery": "full_content",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "e3f129ba-fbd9-4a1a-813b-df6705a996b0",
                 "sourcePath": "packages/codex-app-server/tests/phase4b2-regressions.test.ts",
                 "symbol": "database",
                 "coverageCategories": [
@@ -2733,47 +2684,20 @@
                   "Lexical relevance via fallback_lexical.",
                   "Required coverage: implementation, tests",
                   "Task-related or relationship-verified test candidate.",
-                  "Estimated cost: 207 tokens (character-ratio-v1).",
+                  "Estimated cost: 229 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 1.5,
                 "lexicalScore": 0.3833,
                 "relationshipScore": 1.25,
                 "coverageScore": 2.25,
-                "estimatedTokens": 207,
+                "estimatedTokens": 229,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "7906fe04-47bc-4723-91fc-4ad07fa3bbe2",
-                "sourcePath": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
-                "symbol": "migrationRoundTripTest",
-                "coverageCategories": [
-                  "implementation",
-                  "tests",
-                  "database_schema",
-                  "rollback"
-                ],
-                "selectionReasons": [
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation, tests, database_schema, rollback",
-                  "Task-related or relationship-verified test candidate.",
-                  "Source path matches a task keyword.",
-                  "Estimated cost: 194 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 0,
-                "lexicalScore": 2.04,
-                "relationshipScore": 2,
-                "coverageScore": 4.25,
-                "estimatedTokens": 194,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "3d406b51-8401-4b1e-ac0a-69aa21a40f6f",
+                "itemId": "ecb2d1d0-3df5-4203-8edc-d708fa43207d",
                 "sourcePath": "packages/context-engine/tests/fixtures/database-migration.json",
                 "symbol": "requiredContext",
                 "coverageCategories": [
@@ -2791,7 +2715,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 2.0337,
+                "lexicalScore": 2.0332,
                 "relationshipScore": 2,
                 "coverageScore": 4.25,
                 "estimatedTokens": 172,
@@ -2800,7 +2724,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "a6132234-7510-44e3-81df-14d2cc01208c",
+                "itemId": "821dd1ee-af24-42a1-9d78-7c200b02397f",
                 "sourcePath": "packages/context-engine/benchmarks/v1/repositories/sql-docs/docs/schema.md",
                 "symbol": "Users schema",
                 "coverageCategories": [
@@ -2817,7 +2741,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 0,
-                "lexicalScore": 1.8412,
+                "lexicalScore": 1.836,
                 "relationshipScore": 0.75,
                 "coverageScore": 3.5,
                 "estimatedTokens": 171,
@@ -2832,19 +2756,19 @@
               "rank": 1,
               "path": "packages/database/src/migrations.ts",
               "symbol": "Migration",
-              "score": 15.9587
+              "score": 15.9596
             },
             {
               "rank": 2,
               "path": "packages/repository-indexer/src/extractors/sql-v2.ts",
               "symbol": "migration",
-              "score": 13.7888
+              "score": 13.7915
             },
             {
               "rank": 3,
               "path": "packages/codex-app-server/src/compatibility.ts",
               "symbol": "schema",
-              "score": 13.7372
+              "score": 13.732
             },
             {
               "rank": 4,
@@ -2854,39 +2778,39 @@
             },
             {
               "rank": 5,
-              "path": "packages/context-engine/tests/fixtures/database-migration.json",
-              "symbol": "task",
-              "score": 9.1996
+              "path": "packages/codex-app-server/src/comparison-service-v2.ts",
+              "symbol": "schema",
+              "score": 12.2394
             },
             {
               "rank": 6,
               "path": "packages/context-engine/tests/fixtures/database-migration.json",
-              "symbol": "requiredContext",
-              "score": 9.1881
+              "symbol": "task",
+              "score": 9.1991
             },
             {
               "rank": 7,
-              "path": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
-              "symbol": "migrationRoundTripTest",
-              "score": 9.1822
+              "path": "packages/context-engine/tests/fixtures/database-migration.json",
+              "symbol": "requiredContext",
+              "score": 9.1877
             },
             {
               "rank": 8,
-              "path": "packages/database/tests/database.test.ts",
-              "symbol": "migrate",
-              "score": 8.759
+              "path": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
+              "symbol": "migrationRoundTripTest",
+              "score": 9.1842
             },
             {
               "rank": 9,
-              "path": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
-              "symbol": "import ../src/migration-runner",
-              "score": 8.7059
+              "path": "packages/database/tests/database.test.ts",
+              "symbol": "migrate",
+              "score": 8.7578
             },
             {
               "rank": 10,
-              "path": "packages/context-engine/tests/phase3d-hardening.test.ts",
-              "symbol": "marks an oversized mandatory symbol incomplete without exceeding the ceiling",
-              "score": 8.615
+              "path": "packages/context-engine/benchmarks/v1/repositories/sql-docs/tests/migrations.test.ts",
+              "symbol": "import ../src/migration-runner",
+              "score": 8.7075
             }
           ]
         },
@@ -2908,27 +2832,27 @@
             "recallAt5": 0,
             "recallAt10": 0.5,
             "reciprocalRank": 0.1111,
-            "initialPacketEstimatedTokens": 1892,
-            "retrievalLatencyMs": 146.787,
+            "initialPacketEstimatedTokens": 1818,
+            "retrievalLatencyMs": 521.794,
             "stageProfile": {
-              "taskAnalysis": 0.042,
-              "queryNormalization": 0.004,
-              "lexicalFtsLookup": 65.255,
-              "exactLookup": 62.833,
-              "databaseHydration": 132.834,
-              "candidateSeeding": 2.343,
-              "relationshipExpansion": 4.747,
-              "coverageClassification": 2.357,
-              "tokenEstimation": 0.041,
-              "ranking": 0.054,
-              "diversitySelection": 0.418,
-              "packetAssembly": 4.196
+              "taskAnalysis": 0.155,
+              "queryNormalization": 0.012,
+              "lexicalFtsLookup": 224.179,
+              "exactLookup": 259.638,
+              "databaseHydration": 498.416,
+              "candidateSeeding": 7.167,
+              "relationshipExpansion": 14.598,
+              "coverageClassification": 9.05,
+              "tokenEstimation": 0.176,
+              "ranking": 0.128,
+              "diversitySelection": 4.891,
+              "packetAssembly": 11.317
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "18112dd0-7e10-4e5a-bf33-cd50c4e58f30",
+                "itemId": "43041e9c-eb4f-4d93-abc4-02804baa94df",
                 "sourcePath": "packages/shared/src/context-compiler-domain.ts",
                 "symbol": "ContextCompiler",
                 "coverageCategories": [
@@ -2954,32 +2878,32 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d772a20c-ef39-4751-a452-367e31ad0a05",
-                "sourcePath": "packages/codex-app-server/src/normalizer.ts",
-                "symbol": "tool",
+                "itemId": "3c4646db-7302-4b67-803e-8fbc2cc02cc8",
+                "sourcePath": "packages/codex-app-server/src/assist-tool-router.ts",
+                "symbol": "context",
                 "coverageCategories": [
                   "implementation"
                 ],
                 "selectionReasons": [
-                  "Exact normalized symbol match: tool",
-                  "Exact title match: tool",
+                  "Exact normalized symbol match: context",
+                  "Exact title match: context",
                   "Lexical relevance via fts5.",
                   "Required coverage: implementation",
                   "Source path matches a task keyword.",
-                  "Estimated cost: 153 tokens (character-ratio-v1).",
+                  "Estimated cost: 206 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0168,
+                "lexicalScore": 2.0689,
                 "relationshipScore": 0.75,
                 "coverageScore": 1.5,
-                "estimatedTokens": 153,
+                "estimatedTokens": 206,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d2d501cf-9acd-4761-9e97-82c5753f6285",
+                "itemId": "de75cda9-c3be-4e13-937c-1c31504ab454",
                 "sourcePath": "apps/cli/src/commands/mcp.ts",
                 "symbol": "server",
                 "coverageCategories": [
@@ -2994,7 +2918,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0125,
+                "lexicalScore": 2.0051,
                 "relationshipScore": 0,
                 "coverageScore": 1.5,
                 "estimatedTokens": 133,
@@ -3003,7 +2927,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6b7f1159-4167-4e7f-8f8a-07942b8c6973",
+                "itemId": "df5e6ca4-b75f-4013-8678-971086ae7d76",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.connect",
                 "coverageCategories": [
@@ -3018,7 +2942,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.2295,
+                "lexicalScore": 2.2273,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 236,
@@ -3027,7 +2951,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "0801c959-f58b-425f-866d-128c6abaaaed",
+                "itemId": "9c538b31-51ad-4f87-a2b5-173df11c2780",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.constructor",
                 "coverageCategories": [
@@ -3042,7 +2966,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1668,
+                "lexicalScore": 2.1595,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 225,
@@ -3051,7 +2975,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "bbc60180-566b-4108-bd89-600a6d80087b",
+                "itemId": "d0cb82cd-2bfa-4642-bf3f-2f3e832b0a12",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.start",
                 "coverageCategories": [
@@ -3066,7 +2990,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1668,
+                "lexicalScore": 2.1594,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 225,
@@ -3075,7 +2999,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "9deaeaa3-94fa-4978-9257-21ee1d2354bd",
+                "itemId": "ef686cb2-da7a-4efb-b7f3-ef7217f54c9e",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.withSession",
                 "coverageCategories": [
@@ -3090,7 +3014,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1646,
+                "lexicalScore": 2.1571,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 280,
@@ -3099,7 +3023,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "bc375e83-86fa-48ec-be41-a74db2b6b626",
+                "itemId": "8b0a4e8b-d57b-4c49-aa23-b14d7826b80a",
                 "sourcePath": "pnpm-lock.yaml",
                 "symbol": "importers.packages/mcp-server.dependencies.@continuum/context-engine",
                 "coverageCategories": [
@@ -3115,7 +3039,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1047,
+                "lexicalScore": 2.0975,
                 "relationshipScore": 0.5,
                 "coverageScore": 2,
                 "estimatedTokens": 175,
@@ -3124,57 +3048,32 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "3df37b3c-8198-4c75-896b-8c1d04b57d25",
+                "itemId": "680aa513-5482-4b0a-954e-ce22e8438508",
                 "sourcePath": "pnpm-lock.yaml",
-                "symbol": "importers.packages/mcp-server.dependencies.zod",
+                "symbol": "importers.packages/mcp-server.dependencies.@modelcontextprotocol/sdk",
                 "coverageCategories": [
                   "implementation",
                   "configuration",
                   "dependency"
                 ],
                 "selectionReasons": [
-                  "Exact normalized symbol match: importers.packages/mcp-server.dependencies.zod",
+                  "Exact normalized symbol match: importers.packages/mcp-server.dependencies.@modelcontextprotocol/sdk",
                   "Lexical relevance via fts5.",
                   "Required coverage: implementation",
-                  "Estimated cost: 146 tokens (character-ratio-v1).",
+                  "Estimated cost: 173 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.0101,
+                "lexicalScore": 2.0681,
                 "relationshipScore": 0.5,
                 "coverageScore": 2,
-                "estimatedTokens": 146,
+                "estimatedTokens": 173,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
               },
               {
-                "itemId": "38d9bf33-0b7b-4568-af23-e7a93c3e6522",
-                "sourcePath": "pnpm-lock.yaml",
-                "symbol": "importers.packages/mcp-server.devDependencies.typescript",
-                "coverageCategories": [
-                  "implementation",
-                  "configuration",
-                  "dependency"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: importers.packages/mcp-server.devDependencies.typescript",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 154 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 8,
-                "lexicalScore": 2.0101,
-                "relationshipScore": 0.5,
-                "coverageScore": 2,
-                "estimatedTokens": 154,
-                "relevance": "optional",
-                "delivery": "full_content",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "c0e951b1-902e-4144-8a11-8dfece7d32bd",
+                "itemId": "9fa173be-f45e-436f-8641-88b8093bd49f",
                 "sourcePath": "packages/mcp-server/tests/mcp.test.ts",
                 "symbol": "ContinuumMcpServer",
                 "coverageCategories": [
@@ -3192,7 +3091,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.2135,
+                "lexicalScore": 2.2015,
                 "relationshipScore": 4,
                 "coverageScore": 2.75,
                 "estimatedTokens": 621,
@@ -3201,7 +3100,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "78dcb525-2bfc-444c-9d9c-21efa5b7af18",
+                "itemId": "c1a24499-d53a-4be6-b5de-9af5f86d3fa1",
                 "sourcePath": "packages/mcp-server/tests/mcp.test.ts",
                 "symbol": "server",
                 "coverageCategories": [
@@ -3219,7 +3118,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 9.5,
-                "lexicalScore": 2.0844,
+                "lexicalScore": 2.0772,
                 "relationshipScore": 2.75,
                 "coverageScore": 2.25,
                 "estimatedTokens": 179,
@@ -3228,7 +3127,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "7deb74ba-ec4f-43d0-8b42-484055cd9b56",
+                "itemId": "632e3224-f7eb-49ae-8481-2339413bbdf3",
                 "sourcePath": "pnpm-lock.yaml",
                 "symbol": "importers.packages/mcp-server.devDependencies.vitest",
                 "coverageCategories": [
@@ -3246,7 +3145,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.0087,
+                "lexicalScore": 2.0018,
                 "relationshipScore": 2.5,
                 "coverageScore": 2.75,
                 "estimatedTokens": 162,
@@ -3255,7 +3154,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "a07aeb79-a28d-4c2e-9a81-e77d7de9a6ba",
+                "itemId": "4bfa6953-e15c-452f-bb56-e3407a5da824",
                 "sourcePath": "packages/repository-indexer/tests/context-compiler.test.ts",
                 "symbol": "compiler",
                 "coverageCategories": [
@@ -3282,7 +3181,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "734a2d91-0eaf-4c86-9953-1932ee5b9cf3",
+                "itemId": "e8d3c2a8-c79c-4c1b-ac94-f1256549c739",
                 "sourcePath": "packages/repository-indexer/tests/context-compiler.test.ts",
                 "symbol": "Context Compiler extractors",
                 "coverageCategories": [
@@ -3309,7 +3208,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "523c610a-0f0c-455c-a7ae-598f75cbdc15",
+                "itemId": "ea5852b2-dbc3-4b77-ba85-19cce9dbad08",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer",
                 "coverageCategories": [
@@ -3325,7 +3224,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.2211,
+                "lexicalScore": 2.2111,
                 "relationshipScore": 2,
                 "coverageScore": 2,
                 "estimatedTokens": 2790,
@@ -3334,7 +3233,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "fc2d0689-14b3-4239-bec7-767e8cdec73a",
+                "itemId": "09cc4e6f-ebfb-44fc-b024-c09c5a94bb50",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.scopedEngine",
                 "coverageCategories": [
@@ -3349,7 +3248,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1553,
+                "lexicalScore": 2.1476,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 517,
@@ -3358,7 +3257,57 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "aa495fc9-c0a2-4c81-a6dd-07ed3cd85efa",
+                "itemId": "40461fa6-4b34-4351-8b69-57d647be466d",
+                "sourcePath": "pnpm-lock.yaml",
+                "symbol": "importers.packages/mcp-server.dependencies.zod",
+                "coverageCategories": [
+                  "implementation",
+                  "configuration",
+                  "dependency"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: importers.packages/mcp-server.dependencies.zod",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 146 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 8,
+                "lexicalScore": 2.0031,
+                "relationshipScore": 0.5,
+                "coverageScore": 2,
+                "estimatedTokens": 146,
+                "relevance": "optional",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "ea9595ae-b39e-4c32-a486-a614956b1513",
+                "sourcePath": "pnpm-lock.yaml",
+                "symbol": "importers.packages/mcp-server.devDependencies.typescript",
+                "coverageCategories": [
+                  "implementation",
+                  "configuration",
+                  "dependency"
+                ],
+                "selectionReasons": [
+                  "Exact normalized symbol match: importers.packages/mcp-server.devDependencies.typescript",
+                  "Lexical relevance via fts5.",
+                  "Required coverage: implementation",
+                  "Estimated cost: 154 tokens (character-ratio-v1).",
+                  "Query normalization: deterministic-identifier-normalization-v1."
+                ],
+                "exactMatchScore": 8,
+                "lexicalScore": 2.0031,
+                "relationshipScore": 0.5,
+                "coverageScore": 2,
+                "estimatedTokens": 154,
+                "relevance": "optional",
+                "delivery": "metadata_only",
+                "representation": "symbol_level"
+              },
+              {
+                "itemId": "90e7adac-0d0a-4144-b637-351ba837e752",
                 "sourcePath": "pnpm-lock.yaml",
                 "symbol": "importers.apps/cli.dependencies.@continuum/mcp-server",
                 "coverageCategories": [
@@ -3374,60 +3323,10 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.0154,
+                "lexicalScore": 2.0086,
                 "relationshipScore": 0.5,
                 "coverageScore": 2,
                 "estimatedTokens": 167,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "82c3863a-9299-4668-9ec5-612583404682",
-                "sourcePath": "pnpm-lock.yaml",
-                "symbol": "importers.packages/mcp-server.devDependencies.@types/node",
-                "coverageCategories": [
-                  "implementation",
-                  "configuration",
-                  "dependency"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: importers.packages/mcp-server.devDependencies.@types/node",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 157 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 8,
-                "lexicalScore": 2.009,
-                "relationshipScore": 0.5,
-                "coverageScore": 2,
-                "estimatedTokens": 157,
-                "relevance": "optional",
-                "delivery": "metadata_only",
-                "representation": "symbol_level"
-              },
-              {
-                "itemId": "8703e58e-1821-410a-a4e8-7c784af4dec3",
-                "sourcePath": "pnpm-lock.yaml",
-                "symbol": "importers.packages/mcp-server.dependencies.@continuum/shared",
-                "coverageCategories": [
-                  "implementation",
-                  "configuration",
-                  "dependency"
-                ],
-                "selectionReasons": [
-                  "Exact normalized symbol match: importers.packages/mcp-server.dependencies.@continuum/shared",
-                  "Lexical relevance via fts5.",
-                  "Required coverage: implementation",
-                  "Estimated cost: 165 tokens (character-ratio-v1).",
-                  "Query normalization: deterministic-identifier-normalization-v1."
-                ],
-                "exactMatchScore": 8,
-                "lexicalScore": 2.0095,
-                "relationshipScore": 0.5,
-                "coverageScore": 2,
-                "estimatedTokens": 165,
                 "relevance": "optional",
                 "delivery": "metadata_only",
                 "representation": "symbol_level"
@@ -3435,19 +3334,19 @@
             ],
             "totals": {
               "mandatoryTokens": 966,
-              "optionalTokens": 926,
-              "implementationTokens": 1892,
+              "optionalTokens": 852,
+              "implementationTokens": 1818,
               "testTokens": 0,
               "documentationTokens": 0,
-              "configurationTokens": 475,
+              "configurationTokens": 348,
               "constraintTokens": 0,
               "fullFileTokens": 0,
-              "symbolLevelTokens": 1892,
+              "symbolLevelTokens": 1818,
               "metadataOnlyCandidateCount": 10
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "9deaeaa3-94fa-4978-9257-21ee1d2354bd",
+                "itemId": "ef686cb2-da7a-4efb-b7f3-ef7217f54c9e",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.withSession",
                 "coverageCategories": [
@@ -3462,7 +3361,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1646,
+                "lexicalScore": 2.1571,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 280,
@@ -3471,7 +3370,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6b7f1159-4167-4e7f-8f8a-07942b8c6973",
+                "itemId": "df5e6ca4-b75f-4013-8678-971086ae7d76",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.connect",
                 "coverageCategories": [
@@ -3486,7 +3385,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.2295,
+                "lexicalScore": 2.2273,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 236,
@@ -3495,7 +3394,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "0801c959-f58b-425f-866d-128c6abaaaed",
+                "itemId": "9c538b31-51ad-4f87-a2b5-173df11c2780",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.constructor",
                 "coverageCategories": [
@@ -3510,7 +3409,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1668,
+                "lexicalScore": 2.1595,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 225,
@@ -3519,7 +3418,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "bbc60180-566b-4108-bd89-600a6d80087b",
+                "itemId": "d0cb82cd-2bfa-4642-bf3f-2f3e832b0a12",
                 "sourcePath": "packages/mcp-server/src/compiler-server.ts",
                 "symbol": "ContinuumMcpServer.start",
                 "coverageCategories": [
@@ -3534,7 +3433,7 @@
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
                 "exactMatchScore": 8,
-                "lexicalScore": 2.1668,
+                "lexicalScore": 2.1594,
                 "relationshipScore": 0.75,
                 "coverageScore": 2,
                 "estimatedTokens": 225,
@@ -3543,26 +3442,26 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "bc375e83-86fa-48ec-be41-a74db2b6b626",
-                "sourcePath": "pnpm-lock.yaml",
-                "symbol": "importers.packages/mcp-server.dependencies.@continuum/context-engine",
+                "itemId": "3c4646db-7302-4b67-803e-8fbc2cc02cc8",
+                "sourcePath": "packages/codex-app-server/src/assist-tool-router.ts",
+                "symbol": "context",
                 "coverageCategories": [
-                  "implementation",
-                  "configuration",
-                  "dependency"
+                  "implementation"
                 ],
                 "selectionReasons": [
-                  "Exact normalized symbol match: importers.packages/mcp-server.dependencies.@continuum/context-engine",
+                  "Exact normalized symbol match: context",
+                  "Exact title match: context",
                   "Lexical relevance via fts5.",
                   "Required coverage: implementation",
-                  "Estimated cost: 175 tokens (character-ratio-v1).",
+                  "Source path matches a task keyword.",
+                  "Estimated cost: 206 tokens (character-ratio-v1).",
                   "Query normalization: deterministic-identifier-normalization-v1."
                 ],
-                "exactMatchScore": 8,
-                "lexicalScore": 2.1047,
-                "relationshipScore": 0.5,
-                "coverageScore": 2,
-                "estimatedTokens": 175,
+                "exactMatchScore": 9.5,
+                "lexicalScore": 2.0689,
+                "relationshipScore": 0.75,
+                "coverageScore": 1.5,
+                "estimatedTokens": 206,
                 "relevance": "optional",
                 "delivery": "full_content",
                 "representation": "symbol_level"
@@ -3574,19 +3473,19 @@
               "rank": 1,
               "path": "packages/mcp-server/tests/mcp.test.ts",
               "symbol": "ContinuumMcpServer",
-              "score": 17.6185
+              "score": 17.6065
             },
             {
               "rank": 2,
               "path": "packages/mcp-server/tests/mcp.test.ts",
               "symbol": "server",
-              "score": 17.4849
+              "score": 17.4778
             },
             {
               "rank": 3,
               "path": "pnpm-lock.yaml",
               "symbol": "importers.packages/mcp-server.devDependencies.vitest",
-              "score": 16.1687
+              "score": 16.1618
             },
             {
               "rank": 4,
@@ -3598,7 +3497,7 @@
               "rank": 5,
               "path": "packages/shared/src/context-compiler-domain.ts",
               "symbol": "ContextCompiler",
-              "score": 15.2436
+              "score": 15.2435
             },
             {
               "rank": 6,
@@ -3608,27 +3507,27 @@
             },
             {
               "rank": 7,
-              "path": "packages/codex-app-server/src/normalizer.ts",
-              "symbol": "tool",
-              "score": 14.6818
+              "path": "packages/codex-app-server/src/assist-tool-router.ts",
+              "symbol": "context",
+              "score": 14.7045
             },
             {
               "rank": 8,
               "path": "apps/cli/src/commands/mcp.ts",
               "symbol": "server",
-              "score": 13.9386
+              "score": 13.9312
             },
             {
               "rank": 9,
               "path": "packages/mcp-server/src/compiler-server.ts",
               "symbol": "ContinuumMcpServer.connect",
-              "score": 13.8484
+              "score": 13.8462
             },
             {
               "rank": 10,
               "path": "packages/mcp-server/src/compiler-server.ts",
               "symbol": "ContinuumMcpServer.constructor",
-              "score": 13.7918
+              "score": 13.7845
             }
           ]
         }
@@ -3639,7 +3538,7 @@
       "description": "Unrelated local React/TypeScript dining site",
       "sourceSnapshot": "C:/Users/pares/.gemini/antigravity/scratch/aurum-dining",
       "evaluationMode": "isolated source copy indexed through built CLI",
-      "indexDurationMs": 4023.095,
+      "indexDurationMs": 7671.249,
       "caseCount": 5,
       "aggregate": {
         "recallAt1": 0.4167,
@@ -3649,69 +3548,69 @@
         "medianInitialPacketEstimatedTokens": 766,
         "p90InitialPacketEstimatedTokens": 1520,
         "maximumInitialPacketEstimatedTokens": 1520,
-        "medianRetrievalLatencyMs": 23.53,
-        "p90RetrievalLatencyMs": 27.78,
-        "maximumRetrievalLatencyMs": 27.78,
+        "medianRetrievalLatencyMs": 63.281,
+        "p90RetrievalLatencyMs": 98.01,
+        "maximumRetrievalLatencyMs": 98.01,
         "stageLatency": {
           "taskAnalysis": {
-            "p50Ms": 0.044,
-            "p90Ms": 0.05,
-            "maximumMs": 0.05
+            "p50Ms": 0.167,
+            "p90Ms": 0.322,
+            "maximumMs": 0.322
           },
           "queryNormalization": {
-            "p50Ms": 0.005,
-            "p90Ms": 0.007,
-            "maximumMs": 0.007
+            "p50Ms": 0.02,
+            "p90Ms": 0.118,
+            "maximumMs": 0.118
           },
           "exactLookup": {
-            "p50Ms": 7.575,
-            "p90Ms": 10.103,
-            "maximumMs": 10.103
+            "p50Ms": 22.897,
+            "p90Ms": 28.299,
+            "maximumMs": 28.299
           },
           "lexicalFtsLookup": {
-            "p50Ms": 3.472,
-            "p90Ms": 6.601,
-            "maximumMs": 6.601
+            "p50Ms": 12.28,
+            "p90Ms": 20.81,
+            "maximumMs": 20.81
           },
           "candidateSeeding": {
-            "p50Ms": 1.234,
-            "p90Ms": 1.884,
-            "maximumMs": 1.884
+            "p50Ms": 3.753,
+            "p90Ms": 6.196,
+            "maximumMs": 6.196
           },
           "relationshipExpansion": {
-            "p50Ms": 0.795,
-            "p90Ms": 0.878,
-            "maximumMs": 0.878
+            "p50Ms": 3.15,
+            "p90Ms": 3.329,
+            "maximumMs": 3.329
           },
           "coverageClassification": {
-            "p50Ms": 6.733,
-            "p90Ms": 9.37,
-            "maximumMs": 9.37
+            "p50Ms": 16.347,
+            "p90Ms": 25.785,
+            "maximumMs": 25.785
           },
           "databaseHydration": {
-            "p50Ms": 11.175,
-            "p90Ms": 17.582,
-            "maximumMs": 17.582
+            "p50Ms": 39.617,
+            "p90Ms": 48.573,
+            "maximumMs": 48.573
           },
           "ranking": {
-            "p50Ms": 0.032,
-            "p90Ms": 0.038,
-            "maximumMs": 0.038
+            "p50Ms": 0.072,
+            "p90Ms": 0.2,
+            "maximumMs": 0.2
           },
           "diversitySelection": {
-            "p50Ms": 0.22,
-            "p90Ms": 0.338,
-            "maximumMs": 0.338
+            "p50Ms": 0.823,
+            "p90Ms": 1.065,
+            "maximumMs": 1.065
           },
           "tokenEstimation": {
-            "p50Ms": 0.023,
-            "p90Ms": 0.072,
-            "maximumMs": 0.072
+            "p50Ms": 0.067,
+            "p90Ms": 0.224,
+            "maximumMs": 0.224
           },
           "packetAssembly": {
-            "p50Ms": 3.373,
-            "p90Ms": 5.587,
-            "maximumMs": 5.587
+            "p50Ms": 10.262,
+            "p90Ms": 14.75,
+            "maximumMs": 14.75
           }
         }
       },
@@ -3735,26 +3634,26 @@
             "recallAt10": 1,
             "reciprocalRank": 1,
             "initialPacketEstimatedTokens": 1012,
-            "retrievalLatencyMs": 27.78,
+            "retrievalLatencyMs": 53.251,
             "stageProfile": {
-              "taskAnalysis": 0.045,
-              "queryNormalization": 0.005,
-              "lexicalFtsLookup": 3.472,
-              "exactLookup": 7.797,
-              "databaseHydration": 12.038,
-              "candidateSeeding": 1.269,
-              "relationshipExpansion": 0.769,
-              "coverageClassification": 7.049,
-              "tokenEstimation": 0.027,
-              "ranking": 0.035,
-              "diversitySelection": 0.338,
-              "packetAssembly": 5.587
+              "taskAnalysis": 0.088,
+              "queryNormalization": 0.004,
+              "lexicalFtsLookup": 6.819,
+              "exactLookup": 18.276,
+              "databaseHydration": 28.423,
+              "candidateSeeding": 3.537,
+              "relationshipExpansion": 3.329,
+              "coverageClassification": 16.347,
+              "tokenEstimation": 0.067,
+              "ranking": 0.042,
+              "diversitySelection": 0.972,
+              "packetAssembly": 12.873
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "97bc0c5c-cc4b-42a8-aea9-d1eacf6d8606",
+                "itemId": "a2986ba0-c33f-48f7-bbf8-b61554bb3cef",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "canNext",
                 "coverageCategories": [
@@ -3779,7 +3678,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "078a7037-ca5a-42d2-9b57-16f12cf424a2",
+                "itemId": "815a31d2-0d82-4a71-b416-78900428dca2",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "next",
                 "coverageCategories": [
@@ -3804,7 +3703,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "0f92f3f9-a179-47f5-8d07-cc8513927a13",
+                "itemId": "f080fcad-bb78-452b-a069-54ae284b81d5",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -3828,7 +3727,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b12dc65d-d9c6-4960-ac1b-da12dc8184fd",
+                "itemId": "a1707bf9-d11b-4dbd-ad87-70be1b2925f6",
                 "sourcePath": "src/pages/Home.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -3852,7 +3751,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b5e852d1-d03f-4ca0-aa3d-7a37b2053c28",
+                "itemId": "83f39712-7b72-41b7-9ff1-a3114b084a67",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "handleSubmit",
                 "coverageCategories": [
@@ -3875,7 +3774,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "7ef137d8-64ff-4afe-8f82-0e69c54694d4",
+                "itemId": "ec989147-2300-41a9-8068-5b38b2a28820",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "Reservation",
                 "coverageCategories": [
@@ -3900,7 +3799,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "808ea56d-eec6-4b69-81b1-98d25fe9e2df",
+                "itemId": "dedde3b0-efbb-49f6-98ae-5cac393421ed",
                 "sourcePath": "src/data/testimonials.ts",
                 "symbol": "testimonials",
                 "coverageCategories": [
@@ -3924,7 +3823,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "4795f19d-9a75-4963-83ca-e4db47ba4515",
+                "itemId": "d3a08e8e-ec29-4ec2-8a03-3d8e14f3c0e5",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "Step",
                 "coverageCategories": [
@@ -3948,7 +3847,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "08182002-98c4-40e1-8d22-946b5d9c7058",
+                "itemId": "4ee9663c-6a12-4637-bdad-af9f841fb1f0",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "prev",
                 "coverageCategories": [
@@ -3971,7 +3870,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "96ca76ef-d3b3-4182-87e8-b0673337eae8",
+                "itemId": "119eaee4-d3bd-4a7f-9e35-bec378675293",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "FormData",
                 "coverageCategories": [
@@ -3995,7 +3894,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8447d0f8-f748-4ec0-bb08-eb9acd7025f8",
+                "itemId": "093458b8-1c24-4947-8165-3b435573adc1",
                 "sourcePath": "src/App.tsx",
                 "symbol": "import ./pages/About",
                 "coverageCategories": [
@@ -4018,7 +3917,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "f2047a4f-9640-4b69-b4e5-7d6a1aebb400",
+                "itemId": "b55c17b6-04a0-49e8-9bf9-840d5a28557e",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "Testimonials",
                 "coverageCategories": [
@@ -4042,7 +3941,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ef047d22-b9bc-48be-a1d2-8dbe597ff871",
+                "itemId": "5240c313-0d2a-4844-b87d-352dc8feb697",
                 "sourcePath": "README.md",
                 "symbol": "React + TypeScript + Vite > Expanding the ESLint configuration",
                 "coverageCategories": [
@@ -4066,7 +3965,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "de6d441a-cbef-4008-9c4e-8b92e813727b",
+                "itemId": "dc1819e4-5e91-43a6-8460-5a7db7d25b85",
                 "sourcePath": "README.md",
                 "symbol": "React + TypeScript + Vite",
                 "coverageCategories": [
@@ -4090,7 +3989,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "04825008-9545-4b67-a1f6-4fa3e5ba6a09",
+                "itemId": "55d2f8a7-b95a-4644-8bdf-ff8acfc9043e",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "stepNum",
                 "coverageCategories": [
@@ -4127,7 +4026,7 @@
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "97bc0c5c-cc4b-42a8-aea9-d1eacf6d8606",
+                "itemId": "a2986ba0-c33f-48f7-bbf8-b61554bb3cef",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "canNext",
                 "coverageCategories": [
@@ -4152,7 +4051,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b12dc65d-d9c6-4960-ac1b-da12dc8184fd",
+                "itemId": "a1707bf9-d11b-4dbd-ad87-70be1b2925f6",
                 "sourcePath": "src/pages/Home.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -4176,7 +4075,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "0f92f3f9-a179-47f5-8d07-cc8513927a13",
+                "itemId": "f080fcad-bb78-452b-a069-54ae284b81d5",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -4200,7 +4099,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b5e852d1-d03f-4ca0-aa3d-7a37b2053c28",
+                "itemId": "83f39712-7b72-41b7-9ff1-a3114b084a67",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "handleSubmit",
                 "coverageCategories": [
@@ -4223,7 +4122,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "078a7037-ca5a-42d2-9b57-16f12cf424a2",
+                "itemId": "815a31d2-0d82-4a71-b416-78900428dca2",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "next",
                 "coverageCategories": [
@@ -4339,26 +4238,26 @@
             "recallAt10": 1,
             "reciprocalRank": 1,
             "initialPacketEstimatedTokens": 565,
-            "retrievalLatencyMs": 24.778,
+            "retrievalLatencyMs": 63.281,
             "stageProfile": {
-              "taskAnalysis": 0.041,
-              "queryNormalization": 0.005,
-              "lexicalFtsLookup": 3.835,
-              "exactLookup": 6.289,
-              "databaseHydration": 10.874,
-              "candidateSeeding": 1.234,
-              "relationshipExpansion": 0.75,
-              "coverageClassification": 9.37,
-              "tokenEstimation": 0.023,
-              "ranking": 0.032,
-              "diversitySelection": 0.22,
-              "packetAssembly": 3.373
+              "taskAnalysis": 0.167,
+              "queryNormalization": 0.021,
+              "lexicalFtsLookup": 13.457,
+              "exactLookup": 22.897,
+              "databaseHydration": 39.617,
+              "candidateSeeding": 5.091,
+              "relationshipExpansion": 3.263,
+              "coverageClassification": 25.785,
+              "tokenEstimation": 0.072,
+              "ranking": 0.072,
+              "diversitySelection": 1.065,
+              "packetAssembly": 10.262
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "880e2765-ab3e-4eeb-983b-73bf287e9085",
+                "itemId": "61e672f0-7f7f-4d21-928e-f1b808c26fc7",
                 "sourcePath": "src/types/index.ts",
                 "symbol": "MenuCategory",
                 "coverageCategories": [
@@ -4383,7 +4282,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8919870f-e120-48c1-9297-8698f0e8f597",
+                "itemId": "364ed1e4-ada5-419e-b1df-412efa3f74c9",
                 "sourcePath": "src/types/index.ts",
                 "symbol": "MenuItem",
                 "coverageCategories": [
@@ -4407,7 +4306,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6bbf289a-9a05-492e-9322-b15d1d9b5dc6",
+                "itemId": "4f1d0286-b6c0-4719-a46f-374805725e04",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "import ../data/menu",
                 "coverageCategories": [
@@ -4431,7 +4330,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "03a6c1f1-6753-4047-b2b2-e42f89e6ecf8",
+                "itemId": "eac90725-8c2a-4e74-a22b-71f0888700a6",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "Menu",
                 "coverageCategories": [
@@ -4456,7 +4355,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "89964d72-feff-4f8e-91fb-28d18b3458c6",
+                "itemId": "735fa097-f1dc-4ccf-bd2a-4b1dabe54457",
                 "sourcePath": "src/data/menu.ts",
                 "symbol": "menuItems",
                 "coverageCategories": [
@@ -4481,7 +4380,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "21030f98-a2c8-4360-8a5f-3e3cac89fdc7",
+                "itemId": "c85fb703-b533-41af-8601-e39bb3456dec",
                 "sourcePath": "src/pages/Home.tsx",
                 "symbol": "import ../data/menu",
                 "coverageCategories": [
@@ -4504,7 +4403,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "3330ec99-b445-4258-b131-d3a0cf62cd65",
+                "itemId": "476b7743-f26f-402a-8b2e-c70404d1bbfe",
                 "sourcePath": "src/App.tsx",
                 "symbol": "import ./pages/Menu",
                 "coverageCategories": [
@@ -4527,7 +4426,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "a10177ab-a24a-462b-a73b-7369c730277e",
+                "itemId": "373c1fe8-53f3-4f67-954a-b9253e11f377",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "matchCat",
                 "coverageCategories": [
@@ -4550,7 +4449,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "11b4b3b9-af0f-4f1e-a7a9-6455bbb6ea69",
+                "itemId": "46944177-1a65-44c3-84f8-c204934f851e",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "filtered",
                 "coverageCategories": [
@@ -4573,7 +4472,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "685e6d96-69b1-4cd5-9e82-d0614a7345d9",
+                "itemId": "41561fcf-9057-4971-bf56-409255cd0697",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "matchSearch",
                 "coverageCategories": [
@@ -4596,7 +4495,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "de6d441a-cbef-4008-9c4e-8b92e813727b",
+                "itemId": "dc1819e4-5e91-43a6-8460-5a7db7d25b85",
                 "sourcePath": "README.md",
                 "symbol": "React + TypeScript + Vite",
                 "coverageCategories": [
@@ -4620,7 +4519,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "76c0db85-616c-4d70-9d42-18fdea94f59f",
+                "itemId": "f51503fa-bac9-44f1-bf87-0f5e91c30ade",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "import react",
                 "coverageCategories": [
@@ -4643,7 +4542,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "58f9434d-6f3b-4465-843d-fa5ad1f5fa2c",
+                "itemId": "3215a464-ca97-4c08-98d6-975774433b79",
                 "sourcePath": "src/data/menu.ts",
                 "symbol": "import ../types",
                 "coverageCategories": [
@@ -4680,7 +4579,7 @@
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "8919870f-e120-48c1-9297-8698f0e8f597",
+                "itemId": "364ed1e4-ada5-419e-b1df-412efa3f74c9",
                 "sourcePath": "src/types/index.ts",
                 "symbol": "MenuItem",
                 "coverageCategories": [
@@ -4704,7 +4603,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6bbf289a-9a05-492e-9322-b15d1d9b5dc6",
+                "itemId": "4f1d0286-b6c0-4719-a46f-374805725e04",
                 "sourcePath": "src/pages/Menu.tsx",
                 "symbol": "import ../data/menu",
                 "coverageCategories": [
@@ -4728,7 +4627,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "880e2765-ab3e-4eeb-983b-73bf287e9085",
+                "itemId": "61e672f0-7f7f-4d21-928e-f1b808c26fc7",
                 "sourcePath": "src/types/index.ts",
                 "symbol": "MenuCategory",
                 "coverageCategories": [
@@ -4840,26 +4739,26 @@
             "recallAt10": 1,
             "reciprocalRank": 1,
             "initialPacketEstimatedTokens": 1520,
-            "retrievalLatencyMs": 17.394,
+            "retrievalLatencyMs": 59.21,
             "stageProfile": {
-              "taskAnalysis": 0.05,
-              "queryNormalization": 0.007,
-              "lexicalFtsLookup": 2.808,
-              "exactLookup": 7.572,
-              "databaseHydration": 11.175,
-              "candidateSeeding": 0.833,
-              "relationshipExpansion": 0.795,
-              "coverageClassification": 6.016,
-              "tokenEstimation": 0.01,
-              "ranking": 0.012,
-              "diversitySelection": 0.2,
-              "packetAssembly": 2.839
+              "taskAnalysis": 0.322,
+              "queryNormalization": 0.02,
+              "lexicalFtsLookup": 12.28,
+              "exactLookup": 28.299,
+              "databaseHydration": 43.481,
+              "candidateSeeding": 3.753,
+              "relationshipExpansion": 2.901,
+              "coverageClassification": 22.123,
+              "tokenEstimation": 0.041,
+              "ranking": 0.2,
+              "diversitySelection": 0.547,
+              "packetAssembly": 8.444
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "6ad165a7-67e9-4bc5-b5ee-f2c2d0076f9c",
+                "itemId": "3559f59c-fa98-4dd7-b57a-867058c08565",
                 "sourcePath": "src/data/gallery.ts",
                 "symbol": "galleryImages",
                 "coverageCategories": [
@@ -4885,7 +4784,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2863873e-b538-478f-a158-034a0f2e064e",
+                "itemId": "180ddc8a-c837-4f4a-a049-4054619cb04d",
                 "sourcePath": "src/types/index.ts",
                 "symbol": "GalleryImage",
                 "coverageCategories": [
@@ -4909,7 +4808,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "cb123ad8-c1f2-4d1f-87d6-b2d3258f9dc5",
+                "itemId": "92a74cae-f215-4a06-874a-ee64054db5a6",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import ../data/gallery",
                 "coverageCategories": [
@@ -4933,7 +4832,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b08dd454-303d-4386-bf2a-d3a57c09d48e",
+                "itemId": "09d5e4b9-4f5f-43bc-9e05-b425fe505a29",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "Gallery",
                 "coverageCategories": [
@@ -4958,7 +4857,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8584d774-0ea4-46bf-b138-d51f55c5ae2c",
+                "itemId": "41eba0e0-2142-49b6-aaec-d2f7777aca62",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "openLightbox",
                 "coverageCategories": [
@@ -4981,7 +4880,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "dc1b7bca-5533-45de-a199-228a36f5cd01",
+                "itemId": "c8db702d-175d-474f-9993-3f5195711a91",
                 "sourcePath": "src/App.tsx",
                 "symbol": "import ./pages/Gallery",
                 "coverageCategories": [
@@ -5004,7 +4903,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "f0bc322d-4aa1-4fce-a2ad-59dc55673a92",
+                "itemId": "8dcb0b23-846b-4d72-b3da-7d846a07691c",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "filtered",
                 "coverageCategories": [
@@ -5027,7 +4926,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d7026be0-2bc0-4c1e-9744-8526de884b02",
+                "itemId": "8275f58b-c933-4fc9-af4c-88489b155eb2",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import yet-another-react-lightbox",
                 "coverageCategories": [
@@ -5050,7 +4949,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "eb8b0606-7424-48c2-9597-fcc2424ab77e",
+                "itemId": "1fcc31fc-e173-44ea-9b10-6ea1212bb258",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import yet-another-react-lightbox/styles.css",
                 "coverageCategories": [
@@ -5073,7 +4972,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "52b76611-96d4-4230-8fbb-a762d79ff4be",
+                "itemId": "9731c8f8-ce82-4d3a-98df-f6a900fe4443",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import react",
                 "coverageCategories": [
@@ -5096,7 +4995,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "a6989891-b2e7-4d84-91f7-58bb373c62ac",
+                "itemId": "355b803f-9be4-42de-9b05-a009416f5bdb",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import ../types",
                 "coverageCategories": [
@@ -5119,7 +5018,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "897dc988-bad1-4b03-b6b4-fb553fb7cdd6",
+                "itemId": "d637e479-4eab-4b03-ad25-9e85cbe5ea02",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import lucide-react",
                 "coverageCategories": [
@@ -5142,7 +5041,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "29671150-e468-49fd-b7fc-74b951d3ae34",
+                "itemId": "178f6b40-d59a-45c6-909c-dc342b8e027d",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "slides",
                 "coverageCategories": [
@@ -5179,7 +5078,7 @@
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "6ad165a7-67e9-4bc5-b5ee-f2c2d0076f9c",
+                "itemId": "3559f59c-fa98-4dd7-b57a-867058c08565",
                 "sourcePath": "src/data/gallery.ts",
                 "symbol": "galleryImages",
                 "coverageCategories": [
@@ -5205,7 +5104,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "cb123ad8-c1f2-4d1f-87d6-b2d3258f9dc5",
+                "itemId": "92a74cae-f215-4a06-874a-ee64054db5a6",
                 "sourcePath": "src/pages/Gallery.tsx",
                 "symbol": "import ../data/gallery",
                 "coverageCategories": [
@@ -5229,7 +5128,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2863873e-b538-478f-a158-034a0f2e064e",
+                "itemId": "180ddc8a-c837-4f4a-a049-4054619cb04d",
                 "sourcePath": "src/types/index.ts",
                 "symbol": "GalleryImage",
                 "coverageCategories": [
@@ -5340,26 +5239,26 @@
             "recallAt10": 1,
             "reciprocalRank": 1,
             "initialPacketEstimatedTokens": 680,
-            "retrievalLatencyMs": 18.982,
+            "retrievalLatencyMs": 69.769,
             "stageProfile": {
-              "taskAnalysis": 0.037,
-              "queryNormalization": 0.004,
-              "lexicalFtsLookup": 2.732,
-              "exactLookup": 7.575,
-              "databaseHydration": 11.112,
-              "candidateSeeding": 1.093,
-              "relationshipExpansion": 0.805,
-              "coverageClassification": 6.733,
-              "tokenEstimation": 0.019,
-              "ranking": 0.015,
-              "diversitySelection": 0.114,
-              "packetAssembly": 2.806
+              "taskAnalysis": 0.238,
+              "queryNormalization": 0.118,
+              "lexicalFtsLookup": 6.955,
+              "exactLookup": 21.02,
+              "databaseHydration": 30.022,
+              "candidateSeeding": 2.678,
+              "relationshipExpansion": 2.046,
+              "coverageClassification": 13.554,
+              "tokenEstimation": 0.064,
+              "ranking": 0.05,
+              "diversitySelection": 0.561,
+              "packetAssembly": 8.866
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "8dc5cb01-596b-4cba-9321-c3287092981a",
+                "itemId": "48c67cd5-3e36-4e79-973d-e052e16819be",
                 "sourcePath": "src/App.tsx",
                 "symbol": "App",
                 "coverageCategories": [
@@ -5383,7 +5282,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "51aa341b-747b-443f-8df1-0a3969db65eb",
+                "itemId": "434068db-b9c9-43c8-b0c0-aa9321997bff",
                 "sourcePath": "tsconfig.json",
                 "symbol": "references",
                 "coverageCategories": [
@@ -5407,7 +5306,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8628bc8c-456b-404d-8da4-a79d60de18f6",
+                "itemId": "2e93a11b-c2f3-459b-bb52-bde714d0f91b",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "Navbar",
                 "coverageCategories": [
@@ -5432,7 +5331,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d8c6ee5e-a7ad-40d9-8955-b44b6d849e43",
+                "itemId": "9a0709cf-c5e2-470e-8675-2c329ea3acd4",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "navLinks",
                 "coverageCategories": [
@@ -5456,7 +5355,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "8ed34fbb-6b50-4003-b4b3-adc18b8a405e",
+                "itemId": "67fe339c-bd1e-40d3-bda8-8540da56ea7e",
                 "sourcePath": "src/App.tsx",
                 "symbol": "export 1491",
                 "coverageCategories": [
@@ -5479,7 +5378,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "9d1c57cc-0b43-4ee0-a172-8926ac63280f",
+                "itemId": "d364c700-b7df-4d90-945d-1470746ca24a",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "handleScroll",
                 "coverageCategories": [
@@ -5502,7 +5401,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d72b1578-3605-4011-99c7-e31b17522f50",
+                "itemId": "f84bbad7-2e93-4711-b066-8822bba417e7",
                 "sourcePath": "src/main.tsx",
                 "symbol": "import ./App.tsx",
                 "coverageCategories": [
@@ -5525,7 +5424,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ef047d22-b9bc-48be-a1d2-8dbe597ff871",
+                "itemId": "5240c313-0d2a-4844-b87d-352dc8feb697",
                 "sourcePath": "README.md",
                 "symbol": "React + TypeScript + Vite > Expanding the ESLint configuration",
                 "coverageCategories": [
@@ -5549,7 +5448,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "ddc5995f-8884-4537-bea5-f18d8b99b2eb",
+                "itemId": "3f623050-d6dc-4822-86af-88173ec59857",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "location",
                 "coverageCategories": [
@@ -5572,7 +5471,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6af8ef90-53ac-452a-b8e2-b386ad7be1b5",
+                "itemId": "adb6d082-597e-4fcf-b10d-a9086aed0cbe",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "import react",
                 "coverageCategories": [
@@ -5595,7 +5494,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "2d6c229b-f0b2-4104-bef9-9656b2cadd62",
+                "itemId": "c9f50046-abe2-4664-b8dc-48c29360210d",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "import lucide-react",
                 "coverageCategories": [
@@ -5618,7 +5517,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "d2a5623e-48a2-4470-b335-5523b5a4313d",
+                "itemId": "8c4c69a0-5c12-4468-8bd1-79caaf1194c2",
                 "sourcePath": "src/components/layout/Navbar.tsx",
                 "symbol": "import framer-motion",
                 "coverageCategories": [
@@ -5655,7 +5554,7 @@
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "8dc5cb01-596b-4cba-9321-c3287092981a",
+                "itemId": "48c67cd5-3e36-4e79-973d-e052e16819be",
                 "sourcePath": "src/App.tsx",
                 "symbol": "App",
                 "coverageCategories": [
@@ -5679,7 +5578,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "51aa341b-747b-443f-8df1-0a3969db65eb",
+                "itemId": "434068db-b9c9-43c8-b0c0-aa9321997bff",
                 "sourcePath": "tsconfig.json",
                 "symbol": "references",
                 "coverageCategories": [
@@ -5790,26 +5689,26 @@
             "recallAt10": 0.5,
             "reciprocalRank": 1,
             "initialPacketEstimatedTokens": 766,
-            "retrievalLatencyMs": 23.53,
+            "retrievalLatencyMs": 98.01,
             "stageProfile": {
-              "taskAnalysis": 0.044,
-              "queryNormalization": 0.005,
-              "lexicalFtsLookup": 6.601,
-              "exactLookup": 10.103,
-              "databaseHydration": 17.582,
-              "candidateSeeding": 1.884,
-              "relationshipExpansion": 0.878,
-              "coverageClassification": 6.681,
-              "tokenEstimation": 0.072,
-              "ranking": 0.038,
-              "diversitySelection": 0.304,
-              "packetAssembly": 4.23
+              "taskAnalysis": 0.117,
+              "queryNormalization": 0.015,
+              "lexicalFtsLookup": 20.81,
+              "exactLookup": 24.614,
+              "databaseHydration": 48.573,
+              "candidateSeeding": 6.196,
+              "relationshipExpansion": 3.15,
+              "coverageClassification": 15.136,
+              "tokenEstimation": 0.224,
+              "ranking": 0.105,
+              "diversitySelection": 0.823,
+              "packetAssembly": 14.75
             }
           },
           "packetComposition": {
             "items": [
               {
-                "itemId": "96ca76ef-d3b3-4182-87e8-b0673337eae8",
+                "itemId": "119eaee4-d3bd-4a7f-9e35-bec378675293",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "FormData",
                 "coverageCategories": [
@@ -5835,7 +5734,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "298e331b-0990-4824-8dba-183daeb48a6b",
+                "itemId": "69fdee8d-a404-4e7e-bf35-3509311827cc",
                 "sourcePath": "package.json",
                 "symbol": "type",
                 "coverageCategories": [
@@ -5861,7 +5760,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b12dc65d-d9c6-4960-ac1b-da12dc8184fd",
+                "itemId": "a1707bf9-d11b-4dbd-ad87-70be1b2925f6",
                 "sourcePath": "src/pages/Home.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -5887,7 +5786,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "0f92f3f9-a179-47f5-8d07-cc8513927a13",
+                "itemId": "f080fcad-bb78-452b-a069-54ae284b81d5",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -5913,7 +5812,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "7ef137d8-64ff-4afe-8f82-0e69c54694d4",
+                "itemId": "ec989147-2300-41a9-8068-5b38b2a28820",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "Reservation",
                 "coverageCategories": [
@@ -5938,7 +5837,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6c7329c4-7dc4-4d78-9448-050a1ad9ad5d",
+                "itemId": "342e31ea-581f-47c7-8437-36b86aee41b4",
                 "sourcePath": "src/data/testimonials.ts",
                 "symbol": "import ../types",
                 "coverageCategories": [
@@ -5963,7 +5862,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "6e030826-ea33-47f7-9d0c-aab4ac7b1307",
+                "itemId": "bcaa84f3-effe-4198-88ff-cbba322feb5e",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "regular",
                 "coverageCategories": [
@@ -5988,7 +5887,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "13559983-d7ee-4be3-b2ba-0fe9688169d2",
+                "itemId": "1dc773d9-d38b-4fa0-8d81-1fa8d15dd64e",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "featured",
                 "coverageCategories": [
@@ -6013,7 +5912,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "808ea56d-eec6-4b69-81b1-98d25fe9e2df",
+                "itemId": "dedde3b0-efbb-49f6-98ae-5cac393421ed",
                 "sourcePath": "src/data/testimonials.ts",
                 "symbol": "testimonials",
                 "coverageCategories": [
@@ -6038,7 +5937,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "97bc0c5c-cc4b-42a8-aea9-d1eacf6d8606",
+                "itemId": "a2986ba0-c33f-48f7-bbf8-b61554bb3cef",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "canNext",
                 "coverageCategories": [
@@ -6061,7 +5960,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "4795f19d-9a75-4963-83ca-e4db47ba4515",
+                "itemId": "d3a08e8e-ec29-4ec2-8a03-3d8e14f3c0e5",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "Step",
                 "coverageCategories": [
@@ -6085,7 +5984,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b5e852d1-d03f-4ca0-aa3d-7a37b2053c28",
+                "itemId": "83f39712-7b72-41b7-9ff1-a3114b084a67",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "handleSubmit",
                 "coverageCategories": [
@@ -6108,9 +6007,9 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "078a7037-ca5a-42d2-9b57-16f12cf424a2",
+                "itemId": "4ee9663c-6a12-4637-bdad-af9f841fb1f0",
                 "sourcePath": "src/pages/Reservation.tsx",
-                "symbol": "next",
+                "symbol": "prev",
                 "coverageCategories": [
                   "implementation"
                 ],
@@ -6131,9 +6030,9 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "08182002-98c4-40e1-8d22-946b5d9c7058",
+                "itemId": "815a31d2-0d82-4a71-b416-78900428dca2",
                 "sourcePath": "src/pages/Reservation.tsx",
-                "symbol": "prev",
+                "symbol": "next",
                 "coverageCategories": [
                   "implementation"
                 ],
@@ -6168,7 +6067,7 @@
             },
             "largestFiveSelectedItems": [
               {
-                "itemId": "96ca76ef-d3b3-4182-87e8-b0673337eae8",
+                "itemId": "119eaee4-d3bd-4a7f-9e35-bec378675293",
                 "sourcePath": "src/pages/Reservation.tsx",
                 "symbol": "FormData",
                 "coverageCategories": [
@@ -6194,7 +6093,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "b12dc65d-d9c6-4960-ac1b-da12dc8184fd",
+                "itemId": "a1707bf9-d11b-4dbd-ad87-70be1b2925f6",
                 "sourcePath": "src/pages/Home.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -6220,7 +6119,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "0f92f3f9-a179-47f5-8d07-cc8513927a13",
+                "itemId": "f080fcad-bb78-452b-a069-54ae284b81d5",
                 "sourcePath": "src/pages/Testimonials.tsx",
                 "symbol": "import ../data/testimonials",
                 "coverageCategories": [
@@ -6246,7 +6145,7 @@
                 "representation": "symbol_level"
               },
               {
-                "itemId": "298e331b-0990-4824-8dba-183daeb48a6b",
+                "itemId": "69fdee8d-a404-4e7e-bf35-3509311827cc",
                 "sourcePath": "package.json",
                 "symbol": "type",
                 "coverageCategories": [

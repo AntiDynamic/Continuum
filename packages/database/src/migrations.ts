@@ -623,4 +623,42 @@ export const MIGRATIONS: Migration[] = [
       CREATE TRIGGER codex_comparison_artifacts_no_delete BEFORE DELETE ON codex_comparison_artifacts BEGIN SELECT RAISE(ABORT,'comparison artifacts are append-only'); END;
     `,
   },
-];
+  {
+    version: 11,
+    description: "Phase 4B.3 append-only native assist tool event chain",
+    sql: `
+      CREATE TABLE codex_assist_tool_call_events_v2 (
+        id TEXT PRIMARY KEY, execution_id TEXT NOT NULL REFERENCES codex_executions(id), session_id TEXT NOT NULL REFERENCES context_sessions(id),
+        thread_id TEXT, turn_id TEXT, call_id TEXT NOT NULL, namespace TEXT, tool_name TEXT NOT NULL,
+        event_type TEXT NOT NULL CHECK(event_type IN ('requested','validated','delivery_created','response_sent','refused','failed','signal_received','signal_decision')),
+        arguments_json TEXT, arguments_hash TEXT, delivery_id TEXT, result_json TEXT, result_hash TEXT,
+        estimated_result_tokens INTEGER, failure_code TEXT, failure_message TEXT, raw_sequence_number INTEGER, created_at TEXT NOT NULL
+      );
+      CREATE INDEX idx_assist_tool_events_execution_created ON codex_assist_tool_call_events_v2(execution_id,created_at);
+      CREATE INDEX idx_assist_tool_events_execution_call ON codex_assist_tool_call_events_v2(execution_id,call_id);
+      CREATE INDEX idx_assist_tool_events_session_created ON codex_assist_tool_call_events_v2(session_id,created_at);
+      CREATE TRIGGER codex_assist_tool_events_v2_no_update BEFORE UPDATE ON codex_assist_tool_call_events_v2 BEGIN SELECT RAISE(ABORT,'assist tool event chain is append-only'); END;
+      CREATE TRIGGER codex_assist_tool_events_v2_no_delete BEFORE DELETE ON codex_assist_tool_call_events_v2 BEGIN SELECT RAISE(ABORT,'assist tool event chain is append-only'); END;
+    `,
+  },
+  {
+    version: 12,
+    description: "Phase 4B.3 durable matched-comparison reports",
+    sql: `
+      ALTER TABLE codex_comparison_artifacts ADD COLUMN report_sha256 TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN report_schema_version TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN report_json TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN report_sha256 TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN task_hash TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN base_commit_hash TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN git_tree_hash TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN model TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN approval_policy TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN sandbox TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN timeout_ms INTEGER;
+      ALTER TABLE codex_comparison_runs ADD COLUMN verifier_evidence_json TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN comparability_json TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN measured_deltas_json TEXT;
+      ALTER TABLE codex_comparison_runs ADD COLUMN completed_at TEXT;
+    `,
+  },];
