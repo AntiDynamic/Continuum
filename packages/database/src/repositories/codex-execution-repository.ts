@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { Db } from "../connection.js";
 import { now } from "@continuum/shared";
 
@@ -65,7 +66,9 @@ export class CodexExecutionRepository {
   recordAssistInjection(executionId: string, sessionId: string, sequence: number, sizeBytes: number, role: string): void {
     this.db.prepare("INSERT INTO codex_assist_injections(id,execution_id,context_session_id,injection_sequence,envelope_size_bytes,source_role) VALUES(?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,sessionId,sequence,sizeBytes,role);
   }
-  listRaw(executionId:string):CodexRawEventRow[]{return this.db.prepare("SELECT * FROM codex_raw_events WHERE execution_id=? ORDER BY sequence_number").all(executionId) as unknown as CodexRawEventRow[];}
+  recordAssistInjectionDetailed(executionId:string,sessionId:string,sequence:number,serialized:string,sourceRole:string,deliveryId:string|null,estimatedTokens:number|null):void { const hash=createHash("sha256").update(serialized,"utf8").digest("hex"); this.db.prepare("INSERT INTO codex_assist_injections(id,execution_id,context_session_id,injection_sequence,envelope_size_bytes,source_role,serialized_envelope,envelope_sha256,schema_version,delivery_id,estimated_tokens,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,sessionId,sequence,Buffer.byteLength(serialized,"utf8"),sourceRole,serialized,hash,"continuum.assist-context.v1",deliveryId,estimatedTokens,now()); }
+  recordAssistEnvelope(executionId:string,sequence:number,serialized:string,deliveryId:string|null,estimatedTokens:number|null):void { const hash=createHash("sha256").update(serialized,"utf8").digest("hex"); this.db.prepare("UPDATE codex_assist_injections SET serialized_envelope=?,envelope_sha256=?,schema_version=?,delivery_id=?,estimated_tokens=?,created_at=? WHERE execution_id=? AND injection_sequence=?").run(serialized,hash,"continuum.assist-context.v1",deliveryId,estimatedTokens,now(),executionId,sequence); }
+    listRaw(executionId:string):CodexRawEventRow[]{return this.db.prepare("SELECT * FROM codex_raw_events WHERE execution_id=? ORDER BY sequence_number").all(executionId) as unknown as CodexRawEventRow[];}
   listNormalized(executionId:string):any[]{return this.db.prepare("SELECT * FROM codex_normalized_events WHERE execution_id=? ORDER BY raw_sequence_number,rowid").all(executionId) as any[];}
   listUsage(executionId:string):any[]{return this.db.prepare("SELECT * FROM codex_usage_snapshots WHERE execution_id=? ORDER BY raw_sequence_number,rowid").all(executionId) as any[];}
   latestDiff(executionId:string):any|undefined{return this.db.prepare("SELECT * FROM codex_turn_diffs WHERE execution_id=? ORDER BY raw_sequence_number DESC LIMIT 1").get(executionId) as any;}

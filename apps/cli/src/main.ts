@@ -267,6 +267,9 @@ codex.command("run <task>", { hidden: true }).description("Run a Codex execution
   .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
   .option("--json", "Emit structured JSON only.").option("--report <path>", "Write the JSON Flight Recorder report.")
   .option("--experimental-raw-usage", "Opt into experimental API raw-response telemetry.")
+  .option("--session-budget <integer>", "Assist session estimated-token budget (1900-20000).")
+  .option("--max-context-tool-calls <integer>", "Maximum native context-tool calls (1-50).")
+  .option("--max-context-result-tokens <integer>", "Maximum estimated tokens per tool result (250-4000).")
   .action(async(task:string,options:any)=>runCodexShadow(task,{cwd:process.cwd(),...options}));
 
 codex.command("compare <task>").description("Run shadow and assist executions sequentially, and compare verification results.")

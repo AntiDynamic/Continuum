@@ -15,7 +15,7 @@ import { buildShadowReport, type ShadowFlightRecorderReport } from "./report.js"
 export interface CodexShadowOptions {
   cwd:string; repository?:string; task:string; mode:"shadow"; model?:string;
   approvalPolicy?:CodexApprovalPolicy; sandbox?:CodexSandboxMode; timeoutMs?:number;
-  experimentalRawUsage?:boolean; process?:CodexProcessOptions; codexVersionOverride?:string;
+  experimentalRawUsage?:boolean; process?:CodexProcessOptions; codexVersionOverride?:string; sessionBudget?:number; maxContextToolCalls?:number; maxContextResultTokens?:number;
   approvalHandler?:(request:CodexServerRequestContext)=>Promise<CodexApprovalDecision>;
 }
 export interface CodexShadowResult { executionId:string; sessionId:string; report:ShadowFlightRecorderReport; compatibilityWarning:string|null; authenticationMode:string }

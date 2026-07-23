@@ -9,3 +9,4 @@ export * from "./comparison-service.js";
 export * from "./normalizer.js";
 export * from "./protocol.js";
 export * from "./report.js";
+export * from "./assist-report.js";

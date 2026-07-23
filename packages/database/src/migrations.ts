@@ -600,4 +600,27 @@ export const MIGRATIONS: Migration[] = [
       );
     `,
   },
+  {
+    version: 10,
+    description: "Phase 4B.2 assist evidence envelopes and comparison artifacts",
+    sql: `
+      ALTER TABLE codex_assist_injections ADD COLUMN serialized_envelope TEXT;
+      ALTER TABLE codex_assist_injections ADD COLUMN envelope_sha256 TEXT;
+      ALTER TABLE codex_assist_injections ADD COLUMN schema_version TEXT;
+      ALTER TABLE codex_assist_injections ADD COLUMN delivery_id TEXT;
+      ALTER TABLE codex_assist_injections ADD COLUMN estimated_tokens INTEGER;
+      ALTER TABLE codex_assist_injections ADD COLUMN created_at TEXT;
+      CREATE TABLE codex_comparison_artifacts (
+        comparison_id TEXT NOT NULL REFERENCES codex_comparison_runs(id),
+        mode TEXT NOT NULL CHECK(mode IN ('shadow','assist')),
+        execution_id TEXT NOT NULL,
+        report_schema_version TEXT NOT NULL,
+        report_json TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        PRIMARY KEY(comparison_id,mode)
+      );
+      CREATE TRIGGER codex_comparison_artifacts_no_update BEFORE UPDATE ON codex_comparison_artifacts BEGIN SELECT RAISE(ABORT,'comparison artifacts are append-only'); END;
+      CREATE TRIGGER codex_comparison_artifacts_no_delete BEFORE DELETE ON codex_comparison_artifacts BEGIN SELECT RAISE(ABORT,'comparison artifacts are append-only'); END;
+    `,
+  },
 ];
