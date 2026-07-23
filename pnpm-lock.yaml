@@ -121,6 +121,9 @@ importers:
       '@continuum/git-analyzer':
         specifier: workspace:*
         version: link:../git-analyzer
+      '@continuum/repository-indexer':
+        specifier: workspace:*
+        version: link:../repository-indexer
       '@continuum/shared':
         specifier: workspace:*
         version: link:../shared

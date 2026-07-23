@@ -40,12 +40,12 @@ describe("migrate", () => {
   });
 
   it("returns the correct schema version", () => {
-    expect(getSchemaVersion(db)).toBe(9);
+    expect(getSchemaVersion(db)).toBe(12);
   });
 
   it("is idempotent when run twice", () => {
     expect(() => migrate(db)).not.toThrow();
-    expect(getSchemaVersion(db)).toBe(9);
+    expect(getSchemaVersion(db)).toBe(12);
   });
 });
 
@@ -273,5 +273,8 @@ describe("Codex flight-recorder migration", () => {
     db.prepare(`INSERT INTO codex_raw_events(execution_id,sequence_number,direction,message_category,method,request_id,thread_id,turn_id,item_id,timestamp,raw_json) VALUES(?,1,'server_to_client','notification','turn/started',NULL,NULL,NULL,NULL,?,'{}')`).run("execution-codex",at);
     expect(() => db.prepare("UPDATE codex_raw_events SET raw_json='changed' WHERE execution_id=?").run("execution-codex")).toThrow(/append-only/);
     expect(() => db.prepare("DELETE FROM codex_raw_events WHERE execution_id=?").run("execution-codex")).toThrow(/append-only/);
+    db.prepare(`INSERT INTO codex_assist_tool_call_events_v2(id,execution_id,session_id,thread_id,turn_id,call_id,namespace,tool_name,event_type,created_at) VALUES('event-codex','execution-codex','session-codex',NULL,NULL,'call-1','continuum','continuum_request_context','requested',?)`).run(at);
+    expect(() => db.prepare("UPDATE codex_assist_tool_call_events_v2 SET event_type='failed' WHERE id='event-codex'").run()).toThrow(/append-only/);
+    expect(() => db.prepare("DELETE FROM codex_assist_tool_call_events_v2 WHERE id='event-codex'").run()).toThrow(/append-only/);
   });
 });

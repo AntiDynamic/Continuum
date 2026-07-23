@@ -8,12 +8,14 @@ import {
 } from "@continuum/codex-app-server";
 import { blank, bold, kv, line, section } from "../display.js";
 
-export interface CodexRunOptions { cwd:string; repo?:string; mode:string; model?:string; approvalPolicy?:string; sandbox?:string; json?:boolean; report?:string; timeout?:string; experimentalRawUsage?:boolean }
+export interface CodexRunOptions { cwd:string; repo?:string; mode:string; model?:string; approvalPolicy?:string; sandbox?:string; json?:boolean; report?:string; timeout?:string; experimentalRawUsage?:boolean; sessionBudget?:string; maxContextToolCalls?:string; maxContextResultTokens?:string }
 export interface CodexReadOptions { cwd:string; repo?:string; json?:boolean; limit?:string }
 const approvals:CodexApprovalPolicy[]=["untrusted","on-failure","on-request","never"];
 const sandboxes:CodexSandboxMode[]=["read-only","workspace-write","danger-full-access"];
 function duration(value:string|undefined):number|undefined{if(!value)return undefined;const match=value.match(/^(\d+)(ms|s|m)?$/);if(!match)throw new Error("Invalid timeout. Use milliseconds, seconds (s), or minutes (m).");const number=Number(match[1]);return number*(match[2]==="m"?60000:match[2]==="s"?1000:1);}
 function pct(value:number|null):string{return value===null?"n/a":(value*100).toFixed(1)+"%";}
+function boundedInteger(value:string|undefined,label:string,minimum:number,maximum:number):number|undefined{if(value===undefined)return undefined;if(!/^\d+$/.test(value))throw new Error(`${label} must be an integer.`);const parsed=Number(value);if(parsed<minimum||parsed>maximum)throw new Error(`${label} must be between ${minimum} and ${maximum}.`);return parsed;}
+
 function printReport(report:ShadowFlightRecorderReport):void{
   line(bold("CONTINUUM SHADOW FLIGHT RECORDER"));blank();kv("Schema",report.schemaVersion);kv("Task",report.execution.task);kv("Status",report.execution.status);kv("Codex",report.execution.codexVersion);kv("Model",report.execution.model??"unavailable");kv("Duration",report.execution.durationMs+" ms");
   section("Continuum prediction");kv("Estimated initial tokens",report.prediction.estimatedTokens.toLocaleString("en-US"),"estimated");kv("Predicted items",String(report.prediction.items.length));kv("Mandatory items",String(report.prediction.items.filter(i=>i.requirementState==="required").length));
@@ -36,7 +38,7 @@ export async function runCodexShadow(task:string,options:CodexRunOptions):Promis
   const service=options.mode === "assist" ? new CodexAssistExecutionService() : new CodexExecutionService();
   try{
     const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
-    const runOptions = {cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
+    const runOptions = {cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,sessionBudget:boundedInteger(options.sessionBudget,"--session-budget",1900,20000),maxContextToolCalls:boundedInteger(options.maxContextToolCalls,"--max-context-tool-calls",1,50),maxContextResultTokens:boundedInteger(options.maxContextResultTokens,"--max-context-result-tokens",250,4000),approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
     
     const result=options.mode === "assist" ? await (service as any).runAssist(runOptions) : await (service as any).runShadow(runOptions);
     
@@ -68,3 +70,17 @@ export async function runCodexCompare(task:string,options:CodexCompareCliOptions
 export async function runCodexReport(id:string,options:CodexReadOptions):Promise<void>{const report=await new CodexExecutionService().report(options.cwd,id,options.repo);if(options.json)line(JSON.stringify(report,null,2));else printReport(report);}
 export async function runCodexStatus(id:string,options:CodexReadOptions):Promise<void>{const status=await new CodexExecutionService().status(options.cwd,id,options.repo);line(options.json?JSON.stringify(status,null,2):JSON.stringify(status,null,2));}
 export async function runCodexList(options:CodexReadOptions):Promise<void>{const rows=await new CodexExecutionService().list(options.cwd,options.repo,options.limit?Number(options.limit):20);line(options.json?JSON.stringify(rows,null,2):JSON.stringify(rows,null,2));}
+
+export async function runCodexCompareReport(pairId:string,options:CodexReadOptions):Promise<void>{
+  const { CodexComparisonService } = await import("@continuum/codex-app-server");
+  const report=await new CodexComparisonService().comparisonReport(options.cwd,pairId,options.repo);
+  if(options.json){line(JSON.stringify(report));return;}
+  line(bold("CONTINUUM SHADOW/ASSIST COMPARISON"));blank();
+  kv("Pair",report.pairId);kv("Comparability",report.comparability.valid?"valid":"invalid");
+  kv("Shadow outcome",report.verifierResults.shadow.success?"passed":"failed");
+  kv("Assist outcome",report.verifierResults.assist.success?"passed":"failed");
+  section("Provider usage");line(JSON.stringify(report.providerUsage,null,2));
+  section("Measured deltas");line(JSON.stringify(report.measuredDeltas,null,2));
+  section("Assist context metrics");line(JSON.stringify(report.assistContextMetrics,null,2));
+  section("Warnings");for(const warning of report.warnings)line("  "+warning);
+}

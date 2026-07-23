@@ -10,7 +10,7 @@ import { runRunCommand } from "./commands/run.js";
 import { runReportCommand } from "./commands/report.js";
 import { runOutcomeCommand } from "./commands/outcome.js";
 import { runCompareCommand } from "./commands/compare.js";
-import { runIndexCommand } from "./commands/index-compiler.js";
+import { runIndexCommand } from "./commands/index-production.js";
 import { runContextCommand } from "./commands/context-compiler.js";
 import { runMcpCommand } from "./commands/mcp.js";
 import { runPricingSetCommand, runPricingShowCommand } from "./commands/pricing.js";
@@ -19,7 +19,7 @@ import {
   runSessionRequest, runSessionSignal, runSessionStart, runSessionStatus,
 } from "./commands/session.js";
 import { printError } from "./display.js";
-import { runCodexList, runCodexReport, runCodexShadow, runCodexStatus, runCodexCompare } from "./commands/codex.js";
+import { runCodexList, runCodexReport, runCodexShadow, runCodexStatus, runCodexCompare, runCodexCompareReport } from "./commands/codex.js";
 
 const program = new Command();
 const collect = (value: string, previous: string[] = []): string[] => [...previous, value];
@@ -267,6 +267,9 @@ codex.command("run <task>", { hidden: true }).description("Run a Codex execution
   .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
   .option("--json", "Emit structured JSON only.").option("--report <path>", "Write the JSON Flight Recorder report.")
   .option("--experimental-raw-usage", "Opt into experimental API raw-response telemetry.")
+  .option("--session-budget <integer>", "Assist session estimated-token budget (1900-20000).")
+  .option("--max-context-tool-calls <integer>", "Maximum native context-tool calls (1-50).")
+  .option("--max-context-result-tokens <integer>", "Maximum estimated tokens per tool result (250-4000).")
   .action(async(task:string,options:any)=>runCodexShadow(task,{cwd:process.cwd(),...options}));
 
 codex.command("compare <task>").description("Run shadow and assist executions sequentially, and compare verification results.")
@@ -276,6 +279,9 @@ codex.command("compare <task>").description("Run shadow and assist executions se
   .option("--json", "Emit structured JSON only.")
   .action(async(task:string,options:any)=>runCodexCompare(task,{cwd:process.cwd(),...options}));
 
+codex.command("compare-report <pair-id>").description("Render a durable matched shadow/assist comparison report.")
+  .option("--repo <path>", "Repository path.").option("--json", "Emit structured JSON only.")
+  .action(async(id:string,options:any)=>runCodexCompareReport(id,{cwd:process.cwd(),...options}));
 codex.command("report <execution-id>").description("Render a persisted Shadow Flight Recorder report.")
   .option("--repo <path>", "Repository path.").option("--json", "Emit structured JSON only.")
   .action(async(id:string,options:any)=>runCodexReport(id,{cwd:process.cwd(),...options}));
@@ -338,7 +344,7 @@ const contextActions = new Set(["search", "pack", "explain", "coverage"]);
 if (process.argv[2] === "context" && process.argv[3] && !process.argv[3].startsWith("-") && !contextActions.has(process.argv[3])) {
   process.argv.splice(3, 0, "search");
 }
-const codexActions = new Set(["report", "status", "list", "run", "compare"]);
+const codexActions = new Set(["report", "status", "list", "run", "compare", "compare-report"]);
 if (process.argv[2] === "codex" && process.argv[3] && !process.argv[3].startsWith("-") && !codexActions.has(process.argv[3])) {
   process.argv.splice(3, 0, "run");
 }

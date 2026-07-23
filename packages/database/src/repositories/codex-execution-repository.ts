@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { Db } from "../connection.js";
 import { now } from "@continuum/shared";
 
@@ -31,6 +32,8 @@ export interface ReceivedCodexEvent {
   diff?: CodexDiffInput;
 }
 
+export type AssistToolEventType = "requested"|"validated"|"delivery_created"|"response_sent"|"refused"|"failed"|"signal_received"|"signal_decision";
+export interface AssistToolEventInput { executionId:string;sessionId:string;threadId:string|null;turnId:string|null;callId:string;namespace:string|null;toolName:string;eventType:AssistToolEventType;argumentsJson?:string|null;deliveryId?:string|null;resultJson?:string|null;estimatedResultTokens?:number|null;failureCode?:string|null;failureMessage?:string|null;rawSequenceNumber?:number|null; }
 export class CodexExecutionRepository {
   constructor(private readonly db: Db) {}
   create(input: Omit<CodexExecutionRow, "codex_thread_id" | "codex_turn_id" | "final_base_commit_hash" | "final_worktree_hash" | "repository_changed" | "status" | "started_at" | "completed_at" | "failure_code" | "failure_message">): CodexExecutionRow {
@@ -59,13 +62,15 @@ export class CodexExecutionRepository {
       this.db.exec("COMMIT"); return sequence;
     } catch(error) { this.db.exec("ROLLBACK"); throw error; }
   }
-  recordAssistToolCall(executionId: string, toolName: string, argumentsJson: string, success: boolean, contentItemsJson: string): void {
+  recordAssistToolEvent(input:AssistToolEventInput):string { const id=crypto.randomUUID();const argumentsHash=input.argumentsJson?createHash("sha256").update(input.argumentsJson,"utf8").digest("hex"):null;const resultHash=input.resultJson?createHash("sha256").update(input.resultJson,"utf8").digest("hex"):null;this.db.prepare("INSERT INTO codex_assist_tool_call_events_v2(id,execution_id,session_id,thread_id,turn_id,call_id,namespace,tool_name,event_type,arguments_json,arguments_hash,delivery_id,result_json,result_hash,estimated_result_tokens,failure_code,failure_message,raw_sequence_number,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").run(id,input.executionId,input.sessionId,input.threadId,input.turnId,input.callId,input.namespace,input.toolName,input.eventType,input.argumentsJson??null,argumentsHash,input.deliveryId??null,input.resultJson??null,resultHash,input.estimatedResultTokens??null,input.failureCode??null,input.failureMessage??null,input.rawSequenceNumber??null,now());return id; }  recordAssistToolCall(executionId: string, toolName: string, argumentsJson: string, success: boolean, contentItemsJson: string): void {
     this.db.prepare("INSERT INTO codex_assist_tool_call_events(id,execution_id,tool_name,arguments_json,response_success,response_content_items_json) VALUES(?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,toolName,argumentsJson,success?1:0,contentItemsJson);
   }
   recordAssistInjection(executionId: string, sessionId: string, sequence: number, sizeBytes: number, role: string): void {
     this.db.prepare("INSERT INTO codex_assist_injections(id,execution_id,context_session_id,injection_sequence,envelope_size_bytes,source_role) VALUES(?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,sessionId,sequence,sizeBytes,role);
   }
-  listRaw(executionId:string):CodexRawEventRow[]{return this.db.prepare("SELECT * FROM codex_raw_events WHERE execution_id=? ORDER BY sequence_number").all(executionId) as unknown as CodexRawEventRow[];}
+  recordAssistInjectionDetailed(executionId:string,sessionId:string,sequence:number,serialized:string,sourceRole:string,deliveryId:string|null,estimatedTokens:number|null):void { const hash=createHash("sha256").update(serialized,"utf8").digest("hex");let schemaVersion="unknown";try{const parsed=JSON.parse(serialized) as unknown;if(parsed!==null&&typeof parsed==="object"&&"schemaVersion" in parsed&&typeof (parsed as {schemaVersion:unknown}).schemaVersion==="string")schemaVersion=(parsed as {schemaVersion:string}).schemaVersion;}catch{} this.db.prepare("INSERT INTO codex_assist_injections(id,execution_id,context_session_id,injection_sequence,envelope_size_bytes,source_role,serialized_envelope,envelope_sha256,schema_version,delivery_id,estimated_tokens,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,sessionId,sequence,Buffer.byteLength(serialized,"utf8"),sourceRole,serialized,hash,schemaVersion,deliveryId,estimatedTokens,now()); }
+  recordAssistEnvelope(executionId:string,sequence:number,serialized:string,deliveryId:string|null,estimatedTokens:number|null):void { const hash=createHash("sha256").update(serialized,"utf8").digest("hex"); this.db.prepare("UPDATE codex_assist_injections SET serialized_envelope=?,envelope_sha256=?,schema_version=?,delivery_id=?,estimated_tokens=?,created_at=? WHERE execution_id=? AND injection_sequence=?").run(serialized,hash,"continuum.assist-context.v1",deliveryId,estimatedTokens,now(),executionId,sequence); }
+    listRaw(executionId:string):CodexRawEventRow[]{return this.db.prepare("SELECT * FROM codex_raw_events WHERE execution_id=? ORDER BY sequence_number").all(executionId) as unknown as CodexRawEventRow[];}
   listNormalized(executionId:string):any[]{return this.db.prepare("SELECT * FROM codex_normalized_events WHERE execution_id=? ORDER BY raw_sequence_number,rowid").all(executionId) as any[];}
   listUsage(executionId:string):any[]{return this.db.prepare("SELECT * FROM codex_usage_snapshots WHERE execution_id=? ORDER BY raw_sequence_number,rowid").all(executionId) as any[];}
   latestDiff(executionId:string):any|undefined{return this.db.prepare("SELECT * FROM codex_turn_diffs WHERE execution_id=? ORDER BY raw_sequence_number DESC LIMIT 1").get(executionId) as any;}

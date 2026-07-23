@@ -26,6 +26,9 @@ function normalisePath(path: string): string {
   if (!value || isAbsolute(value) || value.split("/").includes("..")) throw new Error(`Invalid repository-relative path: ${path}`);
   return value;
 }
+function isContinuumStatePath(path: string): boolean {
+  return path === ".continuum" || path.startsWith(".continuum/");
+}
 
 async function gitOutput(root: string, args: string[]): Promise<string> {
   return (await execa("git", args, { cwd: root })).stdout;
@@ -53,12 +56,14 @@ export async function buildCanonicalWorktreeInventory(repositoryRoot: string): P
     if (!record || record.startsWith("! ")) continue;
     if (record.startsWith("? ")) {
       const path = normalisePath(record.slice(2));
+      if (isContinuumStatePath(path)) continue;
       entries.push({ path, recordType: "untracked", indexState: "?", worktreeState: "?", ...(await identityFor(repositoryRoot, path)) });
       continue;
     }
     const fields = record.split(" ");
     if (record.startsWith("u ")) {
       const path = normalisePath(fields.slice(10).join(" "));
+      if (isContinuumStatePath(path)) continue;
       entries.push({ path, recordType: "unmerged", indexState: fields[1]?.[0] ?? "u", worktreeState: fields[1]?.[1] ?? "u", headMode: fields[3], indexMode: fields[4], worktreeMode: fields[5], headObjectId: fields[6], indexObjectId: fields[7], ...(await identityFor(repositoryRoot, path)) });
       continue;
     }
@@ -66,6 +71,7 @@ export async function buildCanonicalWorktreeInventory(repositoryRoot: string): P
     const renameOrCopy = record.startsWith("2 ");
     const path = normalisePath(fields.slice(renameOrCopy ? 9 : 8).join(" "));
     const originalPath = renameOrCopy ? normalisePath(records[++index] ?? "") : undefined;
+    if (isContinuumStatePath(path) && (!originalPath || isContinuumStatePath(originalPath))) continue;
     entries.push({ path, ...(originalPath ? { originalPath } : {}), recordType: renameOrCopy ? "rename_or_copy" : "ordinary", indexState: fields[1]?.[0] ?? " ", worktreeState: fields[1]?.[1] ?? " ", headMode: fields[3], indexMode: fields[4], worktreeMode: fields[5], headObjectId: fields[6], indexObjectId: fields[7], ...(await identityFor(repositoryRoot, path)) });
   }
   return entries.sort((left, right) => left.path.localeCompare(right.path) || (left.originalPath ?? "").localeCompare(right.originalPath ?? "") || left.recordType.localeCompare(right.recordType));

@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CodexExecutionService, CodexIntegrationError } from "../src/index.js";
+import { openDatabase } from "@continuum/database";
 
 const here=dirname(fileURLToPath(import.meta.url));const cli=resolve(here,"../../../apps/cli/dist/main.js");let root="";
 interface Result{code:number;stdout:string;stderr:string}
@@ -44,7 +45,12 @@ describe("installed Codex App Server live smoke",()=>{
       const result=await new CodexExecutionService().runShadow({cwd:repo,task:"Fix src/add.js so `npm test` passes. Do not modify unrelated.txt.",mode:"shadow",...(model?{model}:{}),sandbox:"workspace-write",approvalPolicy:"never",timeoutMs:300000});
       
       // Skip gracefully if provider limits prevent the turn from completing
-      if(result.report.execution.status!=="completed"){const failCode=String((result.report as any).execution?.failureCode??"unknown");console.warn(`SKIP: genuine Codex smoke completed with status '${result.report.execution.status}' (failureCode: ${failCode}). Likely provider quota or model limits. Run with CONTINUUM_CODEX_LIVE_MODEL env var to select a different model.`);context.skip();return;}
+      if(result.report.execution.status!=="completed"){
+        const db=openDatabase(join(repo,".continuum","continuum.db"));let raw="";try{const row=db.prepare("SELECT raw_json FROM codex_raw_events WHERE execution_id=? AND method='turn/completed' ORDER BY sequence_number DESC LIMIT 1").get(result.executionId) as {raw_json:string}|undefined;raw=row?.raw_json??"";}finally{db.close();}
+        const allowed=/rate.?limit|quota|insufficient.?credits|authentication|model.+unavailable|requires a newer version of Codex|upgrade to the latest app or CLI/i.test(raw);
+        if(allowed){console.warn(`SKIP: genuine Codex shadow blocked by explicit provider response: ${raw}`);context.skip();return;}
+        throw new Error(`Genuine Codex shadow failed without an allowed blocked reason: ${raw||"no turn/completed evidence"}`);
+      }
       
       expect(result.report.execution.codexVersion).not.toBe("fixture");
       expect(result.authenticationMode).not.toBe("none");
