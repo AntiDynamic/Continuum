@@ -242,4 +242,14 @@ describe("Flight Recorder correctness — Phase 4A.1", () => {
     expect(report.usage.accumulated).not.toBeNull();
     expect(["measured", "partial"]).toContain(report.usage.availability);
   });
+
+  it("reports provider compaction events separately from token usage", () => {
+    const db = openDb();
+    buildFixture(db);
+    db.exec(`INSERT INTO codex_raw_events(execution_id,sequence_number,direction,message_category,method,timestamp,raw_json) VALUES('exec-1',4,'server_to_client','notification','thread/compacted','2024-01-01T00:00:04Z','{}')`);
+    db.exec(`INSERT INTO codex_normalized_events(id,execution_id,raw_sequence_number,event_type,evidence_type,confidence,payload_json,created_at) VALUES('ev-4','exec-1',4,'context_compaction','directly observed','high','{"threadId":"thread-1","turnId":"turn-1"}','2024-01-01T00:00:04Z')`);
+    const report = buildShadowReport(db, "exec-1", "/repo");
+    expect(report.compaction.count).toBe(1);
+    expect(report.compaction.events[0]).toMatchObject({ threadId: "thread-1", turnId: "turn-1", sourceEventSequence: 4 });
+  });
 });

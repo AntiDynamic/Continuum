@@ -59,6 +59,10 @@ continuum codex list --json
 
 Reports reconstruct from SQLite after process restart. Unknown notifications and malformed JSON are retained as evidence rather than discarded.
 
+## Compaction telemetry
+
+`report.compaction.count` counts provider compaction events observed during the execution, and `report.compaction.events` preserves their normalized payloads and source raw-event sequence. This measures compaction occurrence; it is not itself a token-savings claim. Provider usage and compaction cost must be compared from measured usage snapshots.
+
 ## Limitations
 
 Shadow mode does not:

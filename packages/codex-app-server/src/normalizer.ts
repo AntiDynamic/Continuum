@@ -41,6 +41,7 @@ export function normalizeCodexMessage(message:CodexRawMessage):NormalizedCodexMe
   else if(method==="thread/started")push("thread_start","directly observed","high",params);
   else if(method==="turn/started")push("turn_start","directly observed","high",params);
   else if(method==="turn/plan/updated"||item.type==="plan")push("plan_update","directly observed","high",params);
+  else if(item.type==="contextCompaction")push("context_compaction","directly observed","high",params);
   else if(item.type==="agentMessage")push("agent_message","directly observed","high",{text:item.text,phase:item.phase});
   else if(item.type==="commandExecution"&&(method==="item/completed"||method==="item/started")){
     const command=text(item.command)??"";const cwd=text(item.cwd);const exitCode=number(item.exitCode);const framework=testFramework(command);const paths=inferredPaths(command);
@@ -66,6 +67,7 @@ export function normalizeCodexMessage(message:CodexRawMessage):NormalizedCodexMe
     const changes=Array.isArray(item.changes)?item.changes:[];push("file_edit","directly observed","high",{changes,status:item.status});
   } else if(method==="turn/diff/updated")push("diff_update","diff-observed","high",{diff:params.diff});
   else if(method==="thread/tokenUsage/updated")push("token_usage_update","directly observed","high",params);
+  else if(method==="thread/compacted")push("context_compaction","directly observed","high",params);
   else if(method==="turn/completed")push("turn_completion","directly observed","high",params);
   else if(method==="error")push("error","directly observed","high",params);
   else if(method==="process/exited")push("process_exit","directly observed","high",params);

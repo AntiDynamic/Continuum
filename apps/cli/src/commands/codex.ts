@@ -3,23 +3,30 @@ import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import {
   CodexExecutionService, CodexIntegrationError,
-  type CodexApprovalDecision, type CodexApprovalPolicy, type CodexSandboxMode,
+  type CodexApprovalDecision, type CodexApprovalPolicy, type CodexAutoCompactionScope, type CodexSandboxMode,
   type CodexServerRequestContext, type ShadowFlightRecorderReport,
 } from "@continuum/codex-app-server";
 import { blank, bold, kv, line, section } from "../display.js";
 
-export interface CodexRunOptions { cwd:string; repo?:string; mode:string; model?:string; approvalPolicy?:string; sandbox?:string; json?:boolean; report?:string; timeout?:string; experimentalRawUsage?:boolean }
+export interface CodexRunOptions { cwd:string; repo?:string; mode:string; model?:string; approvalPolicy?:string; sandbox?:string; json?:boolean; report?:string; timeout?:string; experimentalRawUsage?:boolean; autoCompactTokens?:string; autoCompactScope?:string }
 export interface CodexReadOptions { cwd:string; repo?:string; json?:boolean; limit?:string }
 const approvals:CodexApprovalPolicy[]=["untrusted","on-failure","on-request","never"];
 const sandboxes:CodexSandboxMode[]=["read-only","workspace-write","danger-full-access"];
 function duration(value:string|undefined):number|undefined{if(!value)return undefined;const match=value.match(/^(\d+)(ms|s|m)?$/);if(!match)throw new Error("Invalid timeout. Use milliseconds, seconds (s), or minutes (m).");const number=Number(match[1]);return number*(match[2]==="m"?60000:match[2]==="s"?1000:1);}
+function autoCompaction(value:string|undefined,scope:string|undefined):{tokenLimit?:number;scope?:CodexAutoCompactionScope}|undefined{
+  if(!value&&!scope)return undefined;
+  const tokenLimit=value===undefined?undefined:Number(value);
+  if(tokenLimit!==undefined&&(!Number.isInteger(tokenLimit)||tokenLimit<=0))throw new Error("Invalid auto-compaction token limit. Use a positive integer.");
+  if(scope!==undefined&&scope!=="total"&&scope!=="body_after_prefix")throw new Error("Invalid auto-compaction scope. Use total or body_after_prefix.");
+  return{...(tokenLimit===undefined?{}:{tokenLimit}),...(scope===undefined?{}:{scope:scope as CodexAutoCompactionScope})};
+}
 function pct(value:number|null):string{return value===null?"n/a":(value*100).toFixed(1)+"%";}
 function printReport(report:ShadowFlightRecorderReport):void{
   line(bold("CONTINUUM SHADOW FLIGHT RECORDER"));blank();kv("Schema",report.schemaVersion);kv("Task",report.execution.task);kv("Status",report.execution.status);kv("Codex",report.execution.codexVersion);kv("Model",report.execution.model??"unavailable");kv("Duration",report.execution.durationMs+" ms");
   section("Continuum prediction");kv("Estimated initial tokens",report.prediction.estimatedTokens.toLocaleString("en-US"),"estimated");kv("Predicted items",String(report.prediction.items.length));kv("Mandatory items",String(report.prediction.items.filter(i=>i.requirementState==="required").length));
   section("Codex activity");kv("Commands",String(report.exploration.commands.length));kv("Tests",String(report.exploration.tests.length));kv("Edited files",String(report.exploration.editedPaths.length));kv("Inferred reads",String(report.exploration.commandInferredReadPaths.length));kv("Searched symbols",String(report.exploration.searchedSymbols.length));kv("Diff captured",report.outcome.diffCaptured?"yes":"no");
   section("Exploration comparison");kv("Predicted and observed",String(report.comparison.predictedAndObserved.length));kv("Predicted not observed",String(report.comparison.predictedNotObserved.length));kv("Additional exploration",String(report.comparison.observedNotPredicted.length));kv("Mandatory misses",String(report.comparison.mandatoryPredictionMisses.length));kv("Observation recall",pct(report.comparison.observationRecall),"fraction of observed paths that were predicted");kv("Prediction precision",pct(report.comparison.predictionPrecision),"fraction of predicted paths that were observed");
-  section("Usage");kv("Availability",report.usage.availability);if(report.usage.accumulated)line(JSON.stringify(report.usage.accumulated,null,2));
+  section("Usage");kv("Availability",report.usage.availability);kv("Context compactions",String(report.compaction.count));if(report.usage.accumulated)line(JSON.stringify(report.usage.accumulated,null,2));
   section("Evidence limitations");for(const warning of report.evidenceWarnings)line("  "+warning);
 }
 
@@ -36,7 +43,7 @@ export async function runCodexShadow(task:string,options:CodexRunOptions):Promis
   const service=options.mode === "assist" ? new CodexAssistExecutionService() : new CodexExecutionService();
   try{
     const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
-    const runOptions = {cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
+    const runOptions = {cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,autoCompaction:autoCompaction(options.autoCompactTokens,options.autoCompactScope),approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
     
     const result=options.mode === "assist" ? await (service as any).runAssist(runOptions) : await (service as any).runShadow(runOptions);
     
@@ -52,7 +59,7 @@ export async function runCodexCompare(task:string,options:CodexCompareCliOptions
   const service = new CodexComparisonService();
   try {
     const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
-    const result = await service.runComparison({cwd:options.cwd,repository:options.repo,task,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,verifierCommand:options.verifier,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})});
+    const result = await service.runComparison({cwd:options.cwd,repository:options.repo,task,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,autoCompaction:autoCompaction(options.autoCompactTokens,options.autoCompactScope),verifierCommand:options.verifier,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})});
     if(options.json)line(JSON.stringify(result,null,2));else{
       line(bold("CODEX COMPARISON RUN"));blank();
       kv("Shadow Execution", result.shadowExecutionId);

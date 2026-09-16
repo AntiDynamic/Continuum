@@ -9,6 +9,14 @@ export type JsonRpcMessage = JsonRpcRequest | JsonRpcNotification | JsonRpcRespo
 export type CodexApprovalPolicy = "untrusted" | "on-failure" | "on-request" | "never";
 export type CodexSandboxMode = "read-only" | "workspace-write" | "danger-full-access";
 export type CodexApprovalDecision = "accept" | "acceptForSession" | "decline" | "cancel";
+export type CodexAutoCompactionScope = "total" | "body_after_prefix";
+export interface CodexAutoCompactionOptions {
+  /** Native Codex threshold. Omit to keep the provider default. */
+  tokenLimit?: number;
+  scope?: CodexAutoCompactionScope;
+  /** Provider compact_prompt override; Continuum supplies this automatically for executions. */
+  prompt?: string;
+}
 
 export interface CodexInitializeOptions {
   clientName?: string;
@@ -17,7 +25,7 @@ export interface CodexInitializeOptions {
 }
 export interface CodexServerInfo { userAgent: string; codexHome: string; platformFamily: string; platformOs: string }
 export interface CodexAccountState { authenticated: boolean; requiresOpenaiAuth: boolean; mode: "apiKey" | "chatgpt" | "amazonBedrock" | "none" }
-export interface CodexThreadOptions { cwd: string; model?: string; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode; dynamicTools?: CodexDynamicToolSpec[] }
+export interface CodexThreadOptions { cwd: string; model?: string; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode; dynamicTools?: CodexDynamicToolSpec[]; autoCompaction?: CodexAutoCompactionOptions }
 export interface CodexThread { id: string; model: string | null; modelProvider: string | null; cwd: string }
 export interface CodexTextInput { type: "text"; text: string; text_elements: [] }
 export interface CodexTurnOptions { threadId: string; task?: string; inputs?: CodexTextInput[]; model?: string }
@@ -59,6 +67,7 @@ export interface CodexAppServerClient {
   startThread(options: CodexThreadOptions): Promise<CodexThread>;
   resumeThread(threadId: string): Promise<CodexThread>;
   startTurn(options: CodexTurnOptions): Promise<CodexTurn>;
+  compactThread(threadId: string): Promise<unknown>;
   interruptTurn(threadId: string, turnId: string): Promise<void>;
   respondToServerRequest(requestId: JsonRpcId, response: unknown): Promise<void>;
   close(): Promise<void>;

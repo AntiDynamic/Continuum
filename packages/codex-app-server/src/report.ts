@@ -195,6 +195,7 @@ export interface ShadowFlightRecorderReport {
     overlapPrecision: number | null;
   };
   usage: { accumulated: unknown | null; exactResponses: unknown[]; availability: "measured" | "partial" | "unavailable" };
+  compaction: { count: number; events: unknown[] };
   outcome: { turnStatus: string; testsObserved: boolean; testsPassed: boolean | null; diffCaptured: boolean; changedFileCount: number };
   evidenceWarnings: string[];
 }
@@ -250,6 +251,8 @@ export function buildShadowReport(db: Db, executionId: string, _repositoryRoot: 
   const commands = payloads.filter((e: any) => e.event_type === "command_execution")
     .map((e: any) => ({ ...e.payload, sourceEventSequence: e.raw_sequence_number, normalizedEventId: e.id, evidenceType: e.evidence_type, confidence: e.confidence }));
   const tests = payloads.filter((e: any) => e.event_type === "test_execution")
+    .map((e: any) => ({ ...e.payload, sourceEventSequence: e.raw_sequence_number, normalizedEventId: e.id, evidenceType: e.evidence_type, confidence: e.confidence }));
+  const compactions = payloads.filter((e: any) => e.event_type === "context_compaction")
     .map((e: any) => ({ ...e.payload, sourceEventSequence: e.raw_sequence_number, normalizedEventId: e.id, evidenceType: e.evidence_type, confidence: e.confidence }));
 
   // ─── Exploration evidence ──────────────────────────────────────────────────
@@ -549,6 +552,7 @@ export function buildShadowReport(db: Db, executionId: string, _repositoryRoot: 
       exactResponses: exact,
       availability: accumulated ? (exact.length ? "partial" : "measured") : (exact.length ? "partial" : "unavailable"),
     },
+    compaction: { count: compactions.length, events: compactions },
     outcome: {
       turnStatus: execution.status,
       testsObserved: tests.length > 0,

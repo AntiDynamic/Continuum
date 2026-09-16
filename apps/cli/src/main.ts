@@ -15,7 +15,7 @@ import { runContextCommand } from "./commands/context-compiler.js";
 import { runMcpCommand } from "./commands/mcp.js";
 import { runPricingSetCommand, runPricingShowCommand } from "./commands/pricing.js";
 import {
-  runSessionComplete, runSessionContext, runSessionList, runSessionReport,
+  runSessionComplete, runSessionContext, runSessionList, runSessionPlan, runSessionRecover, runSessionReport,
   runSessionRequest, runSessionSignal, runSessionStart, runSessionStatus,
 } from "./commands/session.js";
 import { printError } from "./display.js";
@@ -246,6 +246,14 @@ session.command("signal <session-id>").description("Report a typed context-contr
 session.command("report <session-id>").description("Report persisted context-session evidence.")
   .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
   .action(async (id: string, options: any) => runSessionReport(id, { cwd: process.cwd(), ...options }));
+session.command("plan <session-id>").description("Show a compact context delivery plan.")
+  .option("--json", "Output JSON")
+  .option("--repo <path>", "Repository path")
+  .action(async (id: string, options: any) => runSessionPlan(id, { cwd: process.cwd(), ...options }));
+
+session.command("recover <session-id>").description("Build a compact recovery packet for a session.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionRecover(id, { cwd: process.cwd(), ...options }));
 
 session.command("complete <session-id>").description("Complete a progressive context session.")
   .requiredOption("--status <status>", "completed, failed, or cancelled.")
@@ -265,6 +273,8 @@ codex.command("run <task>", { hidden: true }).description("Run a Codex execution
   .option("--approval-policy <policy>", "untrusted, on-failure, on-request, or never.", "on-request")
   .option("--sandbox <mode>", "read-only, workspace-write, or danger-full-access.", "workspace-write")
   .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
+  .option("--auto-compact-tokens <number>", "Native Codex auto-compaction threshold in tokens.")
+  .option("--auto-compact-scope <scope>", "Auto-compaction accounting scope: total or body_after_prefix.")
   .option("--json", "Emit structured JSON only.").option("--report <path>", "Write the JSON Flight Recorder report.")
   .option("--experimental-raw-usage", "Opt into experimental API raw-response telemetry.")
   .action(async(task:string,options:any)=>runCodexShadow(task,{cwd:process.cwd(),...options}));
@@ -273,6 +283,8 @@ codex.command("compare <task>").description("Run shadow and assist executions se
   .requiredOption("--verifier <command>", "The verification command (e.g. 'pnpm test').")
   .option("--repo <path>", "Repository path.").option("--model <model>", "Codex model override.")
   .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
+  .option("--auto-compact-tokens <number>", "Native Codex auto-compaction threshold in tokens.")
+  .option("--auto-compact-scope <scope>", "Auto-compaction accounting scope: total or body_after_prefix.")
   .option("--json", "Emit structured JSON only.")
   .action(async(task:string,options:any)=>runCodexCompare(task,{cwd:process.cwd(),...options}));
 

@@ -1,3 +1,4 @@
+import type { AgentUsageEvidence, RunCostEvidence } from "./context-efficiency.js";
 import type { ContextCoverageCategory, ContextPacketItem, ContextPacketOmission, TaskAnalysis } from "./context-compiler-domain.js";
 import type { IndexSnapshotIdentity } from "./context-domain.js";
 
@@ -25,12 +26,44 @@ export interface ContextSessionReport {
   snapshot: IndexSnapshotIdentity;
   budget: { maximumEstimatedTokens: number; deliveredEstimatedTokens: number; activeEstimatedTokens: number; remainingEstimatedTokens: number };
   activity: { deliveryCount: number; escalationCount: number; signalCount: number; newItemCount: number; activeReferenceCount: number; restoredItemCount: number; omittedItemCount: number };
-  context: { estimatedInitialTokens: number; estimatedEscalationTokens: number; estimatedDuplicateTokensAvoided: number };
+  context: { estimatedInitialTokens: number; estimatedEscalationTokens: number; estimatedDuplicateTokensAvoided: number; utility: { retrievedItemCount: number; newlyDeliveredItemCount: number; restoredItemCount: number; referencedItemCount: number; repeatedItemCount: number; omittedItemCount: number; actuallyUsedItemCount: number | null } };
   coverage: { added: ContextCoverageCategory[]; remaining: ContextCoverageCategory[]; complete: boolean };
-  evidence: { tokenMeasurement: "estimated"; duplicateAvoidanceMeasurement: "estimated"; providerUsageAvailable: boolean };
+  evidence: { tokenMeasurement: "estimated"; duplicateAvoidanceMeasurement: "estimated"; providerUsageAvailable: boolean; providerUsage: (AgentUsageEvidence & { provider?: string; model?: string }) | null; cost: Omit<RunCostEvidence, "runId" | "usage" | "pricingProfile"> | null };
   deliveries: ContextSessionDeliveryReport[];
   createdAt: string;
   completedAt?: string;
+}
+export const CONTEXT_RECOVERY_SCHEMA_VERSION = "continuum.context-recovery.v1" as const;
+export const CONTEXT_SESSION_PLAN_SCHEMA_VERSION = "continuum.context-session-plan.v1" as const;
+export interface ContextSessionPlan {
+  schemaVersion: typeof CONTEXT_SESSION_PLAN_SCHEMA_VERSION;
+  sessionId: string;
+  task: string;
+  taskClass: TaskAnalysis["taskClass"];
+  riskLevel: TaskAnalysis["riskLevel"];
+  snapshot: IndexSnapshotIdentity;
+  strategy: { id: string; version: string };
+  budget: { maximumEstimatedTokens: number; deliveredEstimatedTokens: number; remainingEstimatedTokens: number };
+  requiredCoverage: ContextCoverageCategory[];
+  coveredCoverage: ContextCoverageCategory[];
+  remainingCoverage: ContextCoverageCategory[];
+  activeContext: ContextReference[];
+  deliveryCount: number;
+  nextActions: string[];
+}
+export interface ContextRecoveryPacket {
+  schemaVersion: typeof CONTEXT_RECOVERY_SCHEMA_VERSION;
+  sessionId: string;
+  task: string;
+  status: ContextSessionStatus;
+  snapshot: IndexSnapshotIdentity;
+  budget: { maximumEstimatedTokens: number; deliveredEstimatedTokens: number; activeEstimatedTokens: number; remainingEstimatedTokens: number };
+  progress: { deliveryCount: number; signalCount: number; activeContextItemCount: number; lastDeliveryAt?: string };
+  activeContext: ContextReference[];
+  requiredCoverage: ContextCoverageCategory[];
+  coverageRemaining: ContextCoverageCategory[];
+  blockers: string[];
+  nextAction: string;
 }
 export interface ContextSessionAggregate {
   schemaVersion: typeof CONTEXT_SESSION_SCHEMA_VERSION;

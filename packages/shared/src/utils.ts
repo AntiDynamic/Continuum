@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { join, resolve, sep } from "node:path";
+import { join, resolve } from "node:path";
 
 /**
  * Cross-platform path utilities.
@@ -9,7 +9,9 @@ import { join, resolve, sep } from "node:path";
 
 /** Normalise to forward slashes — safe to store in the database. */
 export function normalisePath(p: string): string {
-  return p.split(sep).join("/");
+  // Accept Windows paths even when Continuum is running on POSIX (for
+  // example when reading a cross-platform repository snapshot).
+  return p.replaceAll("\\", "/");
 }
 
 /** Resolve a path relative to cwd with forward slashes. */

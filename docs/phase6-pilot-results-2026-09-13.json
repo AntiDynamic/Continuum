@@ -1,0 +1,88 @@
+{
+  "schema": "continuum.agent-effectiveness-pilot.v1",
+  "date": "2026-09-13",
+  "task": "small-local-token-refresh",
+  "repetitionsPerCell": 1,
+  "status": "preliminary",
+  "note": "All agent processes exited successfully. Independent P6-06 verifier is not implemented yet; patch review is recorded separately and these are not decision-grade results.",
+  "cells": [
+    {
+      "model": "gemini-3.8-flash-medium",
+      "treatment": "continuum_off",
+      "artifact": "/tmp/continuum-phase6-F4LfWz/artifacts/result.json",
+      "durationMs": 317460.333443,
+      "inputTokens": 382246,
+      "outputTokens": 62078,
+      "thinkingTokens": 55827,
+      "cacheReadTokens": 1846475,
+      "totalTokens": 444324,
+      "toolCalls": 110,
+      "patchProduced": true
+    },
+    {
+      "model": "gemini-3.8-flash-medium",
+      "treatment": "continuum_on_compact",
+      "artifact": "/tmp/continuum-phase6-LV5uWv/artifacts/result.json",
+      "durationMs": 213475.295358,
+      "inputTokens": 449200,
+      "outputTokens": 33884,
+      "thinkingTokens": 27541,
+      "cacheReadTokens": 2290063,
+      "totalTokens": 483084,
+      "toolCalls": 116,
+      "patchProduced": true
+    },
+    {
+      "model": "gemini-3.1-pro-low",
+      "treatment": "continuum_off",
+      "artifact": "/tmp/continuum-phase6-VtrqVZ/artifacts/result.json",
+      "durationMs": 371637.241008,
+      "inputTokens": 185192,
+      "outputTokens": 28031,
+      "thinkingTokens": 24053,
+      "cacheReadTokens": 1024197,
+      "totalTokens": 213223,
+      "toolCalls": 76,
+      "patchProduced": false
+    },
+    {
+      "model": "gemini-3.1-pro-low",
+      "treatment": "continuum_on_compact",
+      "artifact": "/tmp/continuum-phase6-fkLCle/artifacts/result.json",
+      "durationMs": 198281.047791,
+      "inputTokens": 149568,
+      "outputTokens": 11457,
+      "thinkingTokens": 8165,
+      "cacheReadTokens": 1021988,
+      "totalTokens": 161025,
+      "toolCalls": 64,
+      "patchProduced": true
+    }
+  ],
+  "pairedDeltas": [
+    {
+      "model": "gemini-3.8-flash-medium",
+      "compactVsOffPercent": {
+        "durationMs": -32.76,
+        "inputTokens": 17.52,
+        "outputTokens": -45.41,
+        "thinkingTokens": -50.67,
+        "cacheReadTokens": 24.02,
+        "totalTokens": 8.72,
+        "toolCalls": 5.45
+      }
+    },
+    {
+      "model": "gemini-3.1-pro-low",
+      "compactVsOffPercent": {
+        "durationMs": -46.66,
+        "inputTokens": -19.24,
+        "outputTokens": -59.13,
+        "thinkingTokens": -66.06,
+        "cacheReadTokens": -0.22,
+        "totalTokens": -24.48,
+        "toolCalls": -15.79
+      }
+    }
+  ]
+}

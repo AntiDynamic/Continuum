@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "clean": "rimraf dist",
     "start": "node dist/main.js",
-    "test": "vitest run --testTimeout=15000 --hookTimeout=30000"
+    "test": "vitest run --no-file-parallelism --testTimeout=15000 --hookTimeout=30000"
   },
   "dependencies": {
     "@continuum/codex-app-server": "workspace:*",

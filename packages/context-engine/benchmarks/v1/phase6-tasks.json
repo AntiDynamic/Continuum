@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "continuum.agent-effectiveness-task-set.v1",
+  "groundTruthPolicy": "Task references and required evidence are frozen before agent execution; Continuum output never defines ground truth.",
+  "tasks": [
+    { "id": "small-local-cache-timeout", "source": "cases.json", "family": "local_bug", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "small-local-token-refresh", "source": "cases.json", "family": "local_bug", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "mono-cross-user-session", "source": "cases.json", "family": "cross_package", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "mono-cross-web-contract", "source": "cases.json", "family": "cross_package", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "sql-migration-users", "source": "cases.json", "family": "database_migration", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "sql-migration-refresh", "source": "cases.json", "family": "database_migration", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "small-api-contract", "source": "cases.json", "family": "api_contract", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "mono-api-contract", "source": "cases.json", "family": "api_contract", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "small-security-token", "source": "cases.json", "family": "security", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "sql-security-refresh", "source": "cases.json", "family": "security", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "small-config-timeout", "source": "cases.json", "family": "configuration", "validation": "fixture_tests", "hiddenValidation": "required" },
+    { "id": "small-doc-mismatch", "source": "cases.json", "family": "documentation_mismatch", "validation": "fixture_tests", "hiddenValidation": "required" }
+  ]
+}

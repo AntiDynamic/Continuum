@@ -50,6 +50,16 @@ describe("Codex App Server JSONL client",()=>{
     const { stableSchemaFingerprint }=await import("../src/index.js");expect(stableSchemaFingerprint()).toMatch(/^[a-f0-9]{64}$/);
   });
 
+  it("sends native auto-compaction config and supports explicit compaction",async()=>{
+    const raw:CodexRawMessage[]=[];const notifications:string[]=[];const client=make("normal",{raw,notifications});
+    await client.initialize();
+    const thread=await client.startThread({cwd:process.cwd(),autoCompaction:{tokenLimit:120000,scope:"body_after_prefix",prompt:"Keep the next action."}});
+    const start=raw.find(message=>message.direction==="client_to_server"&&message.method==="thread/start");
+    expect((start?.parsed as any).params.config).toEqual({model_auto_compact_token_limit:120000,model_auto_compact_token_limit_scope:"body_after_prefix",compact_prompt:"Keep the next action."});
+    await client.compactThread(thread.id);
+    expect(notifications).toContain("thread/compacted");
+  });
+
   it("propagates raw-event persistence failures instead of silently continuing",async()=>{
     const client=new StdioCodexAppServerClient();clients.push(client);let fatal:Error|undefined;
     await client.start({executable:process.execPath,executableArgs:[fixture],env:{...process.env,FAKE_CODEX_SCENARIO:"normal"},requestTimeoutMs:2000,onRawMessage:()=>{throw new Error("ledger unavailable");},onFatalError:error=>{fatal=error;}});

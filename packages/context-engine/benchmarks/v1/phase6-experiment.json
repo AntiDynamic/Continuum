@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "continuum.agent-effectiveness-experiment.v1",
+  "design": "paired-2x2",
+  "models": [
+    { "id": "gemini-3.8-flash-medium", "label": "Gemini 3.8 Flash Medium" },
+    { "id": "gemini-3.1-pro-low", "label": "Gemini 3.1 Pro Low" }
+  ],
+  "treatments": ["continuum_off", "continuum_on"],
+  "pilotRepetitionsPerCell": 3,
+  "decisionRepetitionsPerCell": 5,
+  "taskSource": ["cases.json", "real-cases.json"],
+  "primaryOutcome": "verified_task_success",
+  "requiredArtifacts": [
+    "run-manifest.json",
+    "agent-output.jsonl",
+    "stdout.log",
+    "stderr.log",
+    "git-diff.patch",
+    "validation.json",
+    "continuum-session-report.json",
+    "result.json"
+  ]
+}

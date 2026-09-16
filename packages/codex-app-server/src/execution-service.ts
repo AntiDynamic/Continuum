@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { CodexExecutionRepository, migrate, openDatabase, type Db } from "@continuum/database";
+import { CodexExecutionRepository, RunRepository, migrate, openDatabase, type Db } from "@continuum/database";
 import { RepositoryContextSessionService } from "@continuum/context-engine";
 import { getRepositoryRoot, resolveSnapshotIdentity } from "@continuum/git-analyzer";
 import type { ContextSessionResult } from "@continuum/shared";
@@ -9,12 +9,14 @@ import { compatibilityFor, detectCodexVersion, resolveCodexExecutable } from "./
 import { CodexIntegrationError } from "./errors.js";
 import { isRecord, type JsonRecord } from "./json.js";
 import { normalizeCodexMessage } from "./normalizer.js";
-import type { CodexApprovalDecision, CodexApprovalPolicy, CodexProcessOptions, CodexRawMessage, CodexSandboxMode, CodexServerRequestContext } from "./protocol.js";
+import { withContinuumCompactionPrompt } from "./compaction-policy.js";
+import type { CodexApprovalDecision, CodexApprovalPolicy, CodexAutoCompactionOptions, CodexProcessOptions, CodexRawMessage, CodexSandboxMode, CodexServerRequestContext } from "./protocol.js";
 import { buildShadowReport, type ShadowFlightRecorderReport } from "./report.js";
 
 export interface CodexShadowOptions {
   cwd:string; repository?:string; task:string; mode:"shadow"; model?:string;
   approvalPolicy?:CodexApprovalPolicy; sandbox?:CodexSandboxMode; timeoutMs?:number;
+  autoCompaction?:CodexAutoCompactionOptions;
   experimentalRawUsage?:boolean; process?:CodexProcessOptions; codexVersionOverride?:string;
   approvalHandler?:(request:CodexServerRequestContext)=>Promise<CodexApprovalDecision>;
 }
@@ -36,12 +38,12 @@ export async function openCodexDatabase(cwd:string,repository?:string):Promise<{
 export class CodexExecutionService {
   async runShadow(options:CodexShadowOptions):Promise<CodexShadowResult>{
     if(options.mode!=="shadow")throw new Error("Assist mode is unavailable in Phase 4A. Use --mode shadow.");
-    const sessions=await RepositoryContextSessionService.open(options.cwd,options.repository);let db:Db|null=null;let client:StdioCodexAppServerClient|null=null;let executionId="";let sessionId="";
+    const sessions=await RepositoryContextSessionService.open(options.cwd,options.repository);let db:Db|null=null;let client:StdioCodexAppServerClient|null=null;let executionId="";let sessionId="";let runId="";
     try{
       const started=await sessions.start({task:options.task,createInitialContext:true,maximumEstimatedTokens:8000});sessionId=started.session.id;
       const opened=await openCodexDatabase(options.cwd,options.repository);db=opened.db;const executions=new CodexExecutionRepository(db);
       const executable=options.process?.executable??resolveCodexExecutable();const version=options.codexVersionOverride??(options.process?.executable?"fixture":detectCodexVersion(executable));const compatibility=version==="fixture"?{tested:true,warning:null}:compatibilityFor(version);
-      executionId=crypto.randomUUID();executions.create({id:executionId,session_id:sessionId,repository_id:sessions.repository.id,run_id:started.session.runId??null,task_text:options.task,codex_version:version,model:options.model??null,mode:"shadow",approval_configuration:options.approvalPolicy??"on-request",sandbox_configuration:options.sandbox??"workspace-write",base_commit_hash:started.session.snapshot.base_commit_hash,worktree_hash:started.session.snapshot.worktree_hash});
+      runId=crypto.randomUUID();new RunRepository(db).create({id:runId,repositoryId:sessions.repository.id,agentId:"codex-shadow",agentVersion:version,task:options.task,startingCommit:started.session.snapshot.base_commit_hash});await sessions.linkRun(sessionId,runId);executionId=crypto.randomUUID();executions.create({id:executionId,session_id:sessionId,repository_id:sessions.repository.id,run_id:runId,task_text:options.task,codex_version:version,model:options.model??null,mode:"shadow",approval_configuration:options.approvalPolicy??"on-request",sandbox_configuration:options.sandbox??"workspace-write",base_commit_hash:started.session.snapshot.base_commit_hash,worktree_hash:started.session.snapshot.worktree_hash});
       let completionResolve:(value:{status:string;params:unknown})=>void=()=>undefined;let completionReject:(error:Error)=>void=()=>undefined;
       const completion=new Promise<{status:string;params:unknown}>((resolvePromise,rejectPromise)=>{completionResolve=resolvePromise;completionReject=rejectPromise;});
       const recordRaw=async(message:CodexRawMessage):Promise<void>=>{
@@ -63,7 +65,8 @@ export class CodexExecutionService {
       }});
       await client.initialize({experimentalApi:options.experimentalRawUsage===true});const account=await client.readAccount();
       if(!account.authenticated&&account.requiresOpenaiAuth)throw new CodexIntegrationError("AUTHENTICATION_REQUIRED","Codex authentication is required. Run 'codex login' using the normal Codex CLI, then retry.");
-      const thread=await client.startThread({cwd:opened.root,model:options.model,approvalPolicy:options.approvalPolicy??"on-request",sandbox:options.sandbox??"workspace-write"});executions.setLifecycle(executionId,{threadId:thread.id,model:thread.model,status:"running"});
+      const recovery=await sessions.recover(sessionId);
+      const thread=await client.startThread({cwd:opened.root,model:options.model,approvalPolicy:options.approvalPolicy??"on-request",sandbox:options.sandbox??"workspace-write",autoCompaction:withContinuumCompactionPrompt(options.autoCompaction,recovery)});executions.setLifecycle(executionId,{threadId:thread.id,model:thread.model,status:"running"});
       const turn=await client.startTurn({threadId:thread.id,task:options.task,model:options.model});executions.setLifecycle(executionId,{turnId:turn.id,status:"running"});
       const timeoutMs=options.timeoutMs??300_000;let timer:NodeJS.Timeout|undefined;
       const timeout=new Promise<never>((_,rejectPromise)=>{timer=setTimeout(()=>rejectPromise(new CodexIntegrationError("REQUEST_TIMEOUT","Codex turn timed out.")),timeoutMs);});
@@ -71,12 +74,12 @@ export class CodexExecutionService {
       try{completed=await Promise.race([completion,timeout]);}catch(error){await client.interruptTurn(thread.id,turn.id).catch(()=>undefined);throw error;}finally{if(timer)clearTimeout(timer);}
       const finalStatus=completed.status==="completed"?"completed":completed.status==="interrupted"?"interrupted":"failed";
       const sessionResult:ContextSessionResult={status:finalStatus==="completed"?"completed":finalStatus==="interrupted"?"cancelled":"failed"};await sessions.complete(sessionId,sessionResult);
-      await client.close();client=null;const finalSnapshot=await resolveSnapshotIdentity(opened.root);executions.finish(executionId,finalStatus,finalSnapshot);
+      await client.close();client=null;const finalSnapshot=await resolveSnapshotIdentity(opened.root);executions.finish(executionId,finalStatus,finalSnapshot);new RunRepository(db).finish({id:runId,status:finalStatus==="completed"?"completed":"failed",endingCommit:finalSnapshot.base_commit_hash,exitCode:0});
       return{executionId,sessionId,report:buildShadowReport(db,executionId,opened.root),compatibilityWarning:compatibility.warning,authenticationMode:account.mode};
     }catch(error){
       if(client)await client.close().catch(()=>undefined);
       if(db&&executionId){const executions=new CodexExecutionRepository(db);const integration=error instanceof CodexIntegrationError?error:new CodexIntegrationError("TURN_FAILURE",error instanceof Error?error.message:String(error));let finalSnapshot:{base_commit_hash:string;worktree_hash:string|null};try{finalSnapshot=await resolveSnapshotIdentity(sessions.repositoryRoot);}catch{// Snapshot resolution failed — use the starting snapshot preserved in the session, never fabricate a commit hash from a database ID
-        const sessionRow=db.prepare("SELECT base_commit_hash,worktree_hash FROM context_sessions WHERE id=?").get(sessionId) as {base_commit_hash:string;worktree_hash:string|null}|undefined;finalSnapshot={base_commit_hash:sessionRow?.base_commit_hash??"SNAPSHOT_UNAVAILABLE",worktree_hash:sessionRow?.worktree_hash??null};}executions.finish(executionId,"failed",finalSnapshot,{code:integration.code,message:integration.message});}
+        const sessionRow=db.prepare("SELECT base_commit_hash,worktree_hash FROM context_sessions WHERE id=?").get(sessionId) as {base_commit_hash:string;worktree_hash:string|null}|undefined;finalSnapshot={base_commit_hash:sessionRow?.base_commit_hash??"SNAPSHOT_UNAVAILABLE",worktree_hash:sessionRow?.worktree_hash??null};}executions.finish(executionId,"failed",finalSnapshot,{code:integration.code,message:integration.message});if(runId)new RunRepository(db).finish({id:runId,status:"failed",endingCommit:finalSnapshot.base_commit_hash,exitCode:1,errorSummary:integration.message});}
       if(sessionId)await sessions.complete(sessionId,{status:"failed"}).catch(()=>undefined);
       throw error;
     }finally{db?.close();sessions.close();}

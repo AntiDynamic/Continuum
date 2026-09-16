@@ -10,9 +10,21 @@ Run `continuum init`, `continuum index`, then:
 continuum codex "Fix the failing add function test" --mode shadow --json
 ```
 
-Shadow is observation only: Continuum creates and persists its predicted orientation packet before the Codex turn, but sends Codex only the original task. It does not inject, restrict, replace, or claim to optimize Codex context. Assist mode is intentionally unavailable in Phase 4A.
+Shadow is observation only: Continuum creates and persists its predicted orientation packet before the Codex turn, but sends Codex only the original task. It does not inject, restrict, replace, or claim to optimize Codex context. Assist mode additionally exposes the persisted context request tool and recovery envelope.
 
 The command supports `--model`, `--approval-policy`, `--sandbox`, `--timeout`, `--report`, and `--json`. Default noninteractive approval handling declines command and file-change requests. TTY users may explicitly accept, accept for the session, decline, or cancel.
+
+## Native automatic compaction
+
+Every Continuum Codex execution supplies a compact recovery instruction containing the session ID, task, coverage remaining, blockers, next action, and active paths. The source contents are not copied into the compaction prompt; they remain in the persisted Continuum session and can be requested again in assist mode.
+
+Codex's native automatic compaction remains in control of when compaction occurs. To set an explicit threshold, use:
+
+```text
+continuum codex "Fix the failing test" --mode assist --auto-compact-tokens 120000 --auto-compact-scope body_after_prefix
+```
+
+The supported scopes are `total` and `body_after_prefix`. Omitting the threshold keeps Codex's provider default while still installing the Continuum recovery prompt. Compaction notifications are retained in the raw and normalized ledgers and are exposed as `report.compaction`.
 
 ## Protocol and authentication
 

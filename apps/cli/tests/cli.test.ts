@@ -282,6 +282,29 @@ describe("CLI Integration", () => {
       sessionId = started.session.id;
       expect(started.schemaVersion).toBe("continuum.context-session.v1");
 
+      const recovery = await execa("node", [cliBin, "session", "recover", sessionId, "--json"], { cwd: sessionDir, reject: false });
+      expect(recovery.exitCode).toBe(0);
+      const recovered = JSON.parse(recovery.stdout) as {
+        schemaVersion: string;
+        sessionId: string;
+        status: string;
+        progress: { activeContextItemCount: number };
+        nextAction: string;
+      };
+      expect(recovered.schemaVersion).toBe("continuum.context-recovery.v1");
+      expect(recovered.sessionId).toBe(sessionId);
+      expect(recovered.status).toBe("active");
+      expect(recovered.progress.activeContextItemCount).toBeGreaterThan(0);
+      expect(recovered.nextAction).toContain("Retrieve context");
+
+      const plan = await execa("node", [cliBin, "session", "plan", sessionId, "--json"], { cwd: sessionDir, reject: false });
+      expect(plan.exitCode).toBe(0);
+      const planned = JSON.parse(plan.stdout) as { schemaVersion: string; sessionId: string; remainingCoverage: string[]; nextActions: string[] };
+      expect(planned.schemaVersion).toBe("continuum.context-session-plan.v1");
+      expect(planned.sessionId).toBe(sessionId);
+      expect(planned.remainingCoverage.length).toBeGreaterThan(0);
+      expect(planned.nextActions.length).toBe(planned.remainingCoverage.length);
+
       const repeated = await execa("node", [cliBin, "session", "context", sessionId, "--json"], { cwd: sessionDir, reject: false });
       expect(repeated.exitCode).toBe(0);
       expect((JSON.parse(repeated.stdout) as { packet: { id: string } }).packet.id).toBe(started.initialContext.id);
@@ -295,7 +318,10 @@ describe("CLI Integration", () => {
       expect((JSON.parse(agentSignal.stdout) as { result: { trigger: string } }).result.trigger).toBe("agent_request");
 
       const report = await execa("node", [cliBin, "session", "report", sessionId, "--json"], { cwd: sessionDir, reject: false });
-      expect((JSON.parse(report.stdout) as { schemaVersion: string }).schemaVersion).toBe("continuum.context-session-report.v1");
+      const reported = JSON.parse(report.stdout) as { schemaVersion: string; context: { utility: { retrievedItemCount: number; actuallyUsedItemCount: number | null } } };
+      expect(reported.schemaVersion).toBe("continuum.context-session-report.v1");
+      expect(reported.context.utility.retrievedItemCount).toBeGreaterThan(0);
+      expect(reported.context.utility.actuallyUsedItemCount).toBeNull();
 
       const complete = await execa("node", [cliBin, "session", "complete", sessionId, "--status", "completed", "--json"], { cwd: sessionDir, reject: false });
       expect((JSON.parse(complete.stdout) as { status: string }).status).toBe("completed");

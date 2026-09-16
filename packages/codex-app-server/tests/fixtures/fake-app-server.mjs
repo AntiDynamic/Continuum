@@ -32,6 +32,10 @@ rl.on("line",line=>{
     cwd=message.params.cwd;send({method:"thread/started",params:{thread:{id:"thread-fixture"}}});
     send({id:message.id,result:{thread:{id:"thread-fixture",cwd,turns:[]},model:message.params.model??"gpt-fixture",modelProvider:"openai",cwd,instructionSources:[],approvalPolicy:message.params.approvalPolicy,approvalsReviewer:"user",sandbox:{type:"workspaceWrite"},reasoningEffort:null}});
   }else if(message.method==="thread/resume"){if(scenario!=="unexpected-exit")send({id:message.id,result:{thread:{id:message.params.threadId,cwd,turns:[]},model:"gpt-fixture",modelProvider:"openai",cwd}});}
+  else if(message.method==="thread/compact/start"){
+    send({id:message.id,result:{}});
+    send({method:"thread/compacted",params:{threadId:message.params.threadId,turnId:"turn-fixture"}});
+  }
   else if(message.method==="turn/start"){
     send({id:message.id,result:{turn:{id:"turn-fixture",status:"inProgress"}}});
     send({method:"turn/started",params:{threadId:"thread-fixture",turn:{id:"turn-fixture"}}});

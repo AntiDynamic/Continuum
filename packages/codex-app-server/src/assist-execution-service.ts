@@ -1,5 +1,5 @@
 import { resolve } from "node:path";
-import { CodexExecutionRepository } from "@continuum/database";
+import { CodexExecutionRepository, RunRepository } from "@continuum/database";
 import { RepositoryContextSessionService } from "@continuum/context-engine";
 import { resolveSnapshotIdentity } from "@continuum/git-analyzer";
 import type { ContextSessionResult } from "@continuum/shared";
@@ -13,6 +13,7 @@ import { buildShadowReport, type ShadowFlightRecorderReport } from "./report.js"
 import { openCodexDatabase, type CodexShadowOptions, type CodexShadowResult } from "./execution-service.js";
 import { buildContextEnvelope } from "./assist-context-envelope.js";
 import { AssistToolRouter } from "./assist-tool-router.js";
+import { withContinuumCompactionPrompt } from "./compaction-policy.js";
 
 const value=(record:JsonRecord,key:string):string|null=>typeof record[key]==="string"?record[key] as string:null;
 
@@ -28,6 +29,7 @@ export class CodexAssistExecutionService {
     let client: StdioCodexAppServerClient | null = null;
     let executionId = "";
     let sessionId = "";
+    let runId = "";
     try {
       const started = await sessions.start({ task: options.task, createInitialContext: true, maximumEstimatedTokens: 8000 });
       sessionId = started.session.id;
@@ -37,10 +39,13 @@ export class CodexAssistExecutionService {
       const executable = options.process?.executable ?? resolveCodexExecutable();
       const version = options.codexVersionOverride ?? (options.process?.executable ? "fixture" : detectCodexVersion(executable));
       const compatibility = version === "fixture" ? { tested: true, warning: null } : compatibilityFor(version);
+      runId = crypto.randomUUID();
+      new RunRepository(db).create({ id: runId, repositoryId: sessions.repository.id, agentId: "codex-assist", agentVersion: version, task: options.task, startingCommit: started.session.snapshot.base_commit_hash });
+      await sessions.linkRun(sessionId, runId);
       executionId = crypto.randomUUID();
       
       executions.create({
-        id: executionId, session_id: sessionId, repository_id: sessions.repository.id, run_id: started.session.runId ?? null,
+        id: executionId, session_id: sessionId, repository_id: sessions.repository.id, run_id: runId,
         task_text: options.task, codex_version: version, model: options.model ?? null, mode: "assist",
         approval_configuration: options.approvalPolicy ?? "on-request", sandbox_configuration: options.sandbox ?? "workspace-write",
         base_commit_hash: started.session.snapshot.base_commit_hash, worktree_hash: started.session.snapshot.worktree_hash
@@ -110,6 +115,7 @@ export class CodexAssistExecutionService {
       if (!account.authenticated && account.requiresOpenaiAuth) throw new CodexIntegrationError("AUTHENTICATION_REQUIRED", "Codex authentication is required. Run 'codex login' using the normal Codex CLI, then retry.");
       const thread = await client.startThread({ 
         cwd: opened.root, model: options.model, approvalPolicy: options.approvalPolicy ?? "on-request", sandbox: options.sandbox ?? "workspace-write",
+        autoCompaction: withContinuumCompactionPrompt(options.autoCompaction, await sessions.recover(sessionId)),
         dynamicTools: [{
           name: "continuum_request_context",
           description: "Request additional context packets from the repository using lexical search, path matching, and symbol resolution.",
@@ -142,7 +148,7 @@ export class CodexAssistExecutionService {
       const sessionResult: ContextSessionResult = { status: finalStatus === "completed" ? "completed" : finalStatus === "interrupted" ? "cancelled" : "failed" };
       await sessions.complete(sessionId, sessionResult);
       await client.close(); client = null;
-      const finalSnapshot = await resolveSnapshotIdentity(opened.root); executions.finish(executionId, finalStatus, finalSnapshot);
+      const finalSnapshot = await resolveSnapshotIdentity(opened.root); executions.finish(executionId, finalStatus, finalSnapshot); new RunRepository(db).finish({ id: runId, status: finalStatus === "completed" ? "completed" : "failed", endingCommit: finalSnapshot.base_commit_hash, exitCode: 0 });
       return { executionId, sessionId, report: buildShadowReport(opened.db, executionId, opened.root), compatibilityWarning: compatibility.warning, authenticationMode: account.mode };
     } catch (error) {
       if (client) await client.close().catch(() => undefined);
@@ -155,6 +161,7 @@ export class CodexAssistExecutionService {
           finalSnapshot = { base_commit_hash: sessionRow?.base_commit_hash ?? "SNAPSHOT_UNAVAILABLE", worktree_hash: sessionRow?.worktree_hash ?? null };
         }
         executions.finish(executionId, "failed", finalSnapshot, { code: integration.code, message: integration.message });
+        if (runId) new RunRepository(db).finish({ id: runId, status: "failed", endingCommit: finalSnapshot.base_commit_hash, exitCode: 1, errorSummary: integration.message });
       }
       if (sessionId) await sessions.complete(sessionId, { status: "failed" }).catch(() => undefined);
       throw error;

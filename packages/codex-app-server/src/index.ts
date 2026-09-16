@@ -8,4 +8,5 @@ export * from "./assist-context-envelope.js";
 export * from "./comparison-service.js";
 export * from "./normalizer.js";
 export * from "./protocol.js";
+export * from "./compaction-policy.js";
 export * from "./report.js";

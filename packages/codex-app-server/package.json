@@ -15,7 +15,7 @@
     "build": "tsc --project tsconfig.json",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src tests",
-    "test": "vitest run --testTimeout=30000 --hookTimeout=30000",
+    "test": "vitest run --no-file-parallelism --testTimeout=30000 --hookTimeout=30000",
     "test:live": "vitest run tests/live-smoke.test.ts --testTimeout=300000 --hookTimeout=60000",
     "clean": "rimraf dist"
   },

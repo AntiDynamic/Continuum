@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "continuum.agent-effectiveness-smoke.v1",
+  "status": "preliminary_not_decision_evidence",
+  "taskId": "small-local-token-refresh",
+  "model": "gemini-3.8-flash-medium",
+  "repetitions": 1,
+  "runs": [
+    {
+      "treatment": "continuum_off",
+      "status": "TIMEOUT",
+      "durationSeconds": 294.59,
+      "exitCode": 0,
+      "providerUsage": { "inputTokens": 358259, "outputTokens": 69945, "thinkingTokens": 66847, "cacheReadTokens": 879171, "totalTokens": 428204 },
+      "toolCalls": 158,
+      "changedExpectedFiles": false,
+      "validation": "not_configured",
+      "note": "Antigravity returned a partial result after its five-minute print timeout; no patch was produced."
+    },
+    {
+      "treatment": "continuum_on",
+      "status": "TIMEOUT",
+      "durationSeconds": 299.01,
+      "exitCode": 0,
+      "providerUsage": { "inputTokens": 437700, "outputTokens": 48670, "thinkingTokens": 42226, "cacheReadTokens": 4262771, "totalTokens": 486370 },
+      "toolCalls": 142,
+      "continuum": { "mcpCallsObserved": true, "mcpCalls": 42, "deliveryCount": 2, "newItemCount": 10, "activeReferenceCount": 7, "estimatedDuplicateTokensAvoided": 1181, "coverageComplete": true },
+      "changedExpectedFiles": true,
+      "validation": "not_configured",
+      "note": "The agent modified the expected source and test files, but the automated verifier is not implemented yet."
+    }
+  ],
+  "interpretation": "This smoke validates runner telemetry and MCP wiring only. It is not evidence of task-success improvement or cost reduction because both runs timed out and hidden validation is pending."
+}

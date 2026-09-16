@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "continuum.agent-effectiveness-compact-smoke.v1",
+  "status": "promising_single_pair",
+  "taskId": "small-local-token-refresh",
+  "model": "gemini-3.8-flash-medium",
+  "timeout": "15m",
+  "independentVerification": { "typecheck": true, "tests": 6, "testsPassed": 6 },
+  "control": {
+    "treatment": "continuum_off",
+    "durationSeconds": 344.18,
+    "providerUsage": { "inputTokens": 376359, "outputTokens": 73204, "thinkingTokens": 67996, "cacheReadTokens": 1312230, "totalTokens": 449563 },
+    "toolCalls": 88,
+    "mcpCalls": 0,
+    "independentlyVerified": true
+  },
+  "compactTreatment": {
+    "treatment": "continuum_on_compact",
+    "durationSeconds": 250.36,
+    "providerUsage": { "inputTokens": 319594, "outputTokens": 45477, "thinkingTokens": 39378, "cacheReadTokens": 2347480, "totalTokens": 365071 },
+    "toolCalls": 112,
+    "mcpCalls": 4,
+    "continuum": { "deliveryCount": 1, "newItemCount": 7, "estimatedInitialTokens": 1181, "coverageComplete": true },
+    "infrastructureFileChanged": ".gitignore",
+    "independentlyVerified": true
+  },
+  "compactTreatmentMinusControlPercent": { "inputTokens": -15.1, "outputTokens": -37.9, "thinkingTokens": -42.1, "totalTokens": -18.8, "cacheReadTokens": 78.9, "toolCalls": 27.3, "durationSeconds": -27.3 },
+  "interpretation": "The compact MCP treatment preserved independently verified task success in this one pair and reduced reported total tokens by 18.8% and duration by 27.3%. This is preliminary evidence only; cache-read tokens are not priced here, no hidden tests are present, and multiple randomized repetitions are required."
+}

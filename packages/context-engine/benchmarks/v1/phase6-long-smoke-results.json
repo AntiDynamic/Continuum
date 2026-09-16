@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "continuum.agent-effectiveness-long-smoke.v1",
+  "status": "preliminary_single_pair",
+  "taskId": "small-local-token-refresh",
+  "model": "gemini-3.8-flash-medium",
+  "timeout": "15m",
+  "independentVerification": { "typecheck": true, "tests": 6, "testsPassed": 6 },
+  "runs": [
+    {
+      "treatment": "continuum_off",
+      "status": "SUCCESS",
+      "durationSeconds": 344.18,
+      "providerUsage": { "inputTokens": 376359, "outputTokens": 73204, "thinkingTokens": 67996, "cacheReadTokens": 1312230, "totalTokens": 449563 },
+      "toolCalls": 88,
+      "mcpCalls": 0,
+      "expectedFilesChanged": ["src/auth-service.ts", "tests/auth-service.test.ts"],
+      "independentlyVerified": true
+    },
+    {
+      "treatment": "continuum_on",
+      "status": "SUCCESS",
+      "durationSeconds": 335.33,
+      "providerUsage": { "inputTokens": 541680, "outputTokens": 56953, "thinkingTokens": 49057, "cacheReadTokens": 4432229, "totalTokens": 598633 },
+      "toolCalls": 148,
+      "mcpCalls": 18,
+      "continuum": { "deliveryCount": 1, "newItemCount": 7, "activeReferenceCount": 0, "coverageComplete": true, "estimatedInitialTokens": 1181 },
+      "expectedFilesChanged": ["src/auth-service.ts", "tests/auth-service.test.ts"],
+      "infrastructureFileChanged": ".gitignore",
+      "independentlyVerified": true
+    }
+  ],
+  "pairedDifferenceOnMinusOffPercent": { "inputTokens": 43.9, "outputTokens": -22.2, "thinkingTokens": -27.9, "totalTokens": 33.2, "cacheReadTokens": 237.8, "toolCalls": 68.2, "durationSeconds": -2.6 },
+  "interpretation": "Both conditions independently passed the six available fixture tests. Continuum changed agent behavior and produced complete coverage, but this single pair increased reported total tokens and tool calls. No dollar-cost conclusion is valid until Antigravity pricing is recorded and more repetitions are run."
+}

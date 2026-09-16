@@ -85,10 +85,17 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   }
 
   async startThread(options: CodexThreadOptions): Promise<CodexThread> {
+    const autoCompaction = options.autoCompaction;
+    const config = autoCompaction ? {
+      ...(autoCompaction.prompt ? { compact_prompt: autoCompaction.prompt } : {}),
+      ...(autoCompaction.tokenLimit === undefined ? {} : { model_auto_compact_token_limit: autoCompaction.tokenLimit }),
+      ...(autoCompaction.scope ? { model_auto_compact_token_limit_scope: autoCompaction.scope } : {}),
+    } : undefined;
     const result = await this.request("thread/start", {
       cwd: options.cwd,
       ...(options.model ? { model: options.model } : {}),
       ...(options.dynamicTools ? { dynamicTools: options.dynamicTools } : {}),
+      ...(config && Object.keys(config).length > 0 ? { config } : {}),
       approvalPolicy: options.approvalPolicy ?? "on-request",
       sandbox: options.sandbox ?? "workspace-write",
       ephemeral: false,
@@ -110,6 +117,10 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
       throw new CodexIntegrationError("PROTOCOL_INCOMPATIBILITY", "Codex turn/start returned an incompatible response.");
     }
     return { id: result.turn.id, threadId: options.threadId, status: String(result.turn.status ?? "inProgress") };
+  }
+
+  async compactThread(threadId: string): Promise<unknown> {
+    return this.request("thread/compact/start", { threadId });
   }
 
   async interruptTurn(threadId: string, turnId: string): Promise<void> {
