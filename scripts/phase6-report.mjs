@@ -67,14 +67,16 @@ const metric = (result) => {
   const cachedInputTokens = usageMeasured ? usageValue(usage, ["cacheReadTokens", "cache_read_tokens", "cachedInputTokens", "cached_input_tokens"]) : null;
   const outputTokens = usageMeasured ? usageValue(usage, ["outputTokens", "output_tokens", "completionTokens", "completion_tokens"]) : null;
   const thinkingTokens = usageMeasured ? usageValue(usage, ["thinkingTokens", "thinking_tokens", "reasoningTokens", "reasoning_tokens"]) : null;
-  const providerTotal = usageMeasured ? usageValue(usage, ["totalTokens", "total_tokens", "total"]) : null;
+  const providerTotalValue = usageMeasured ? usageValue(usage, ["totalTokens", "total_tokens", "total"]) : null;
+  const providerTotal = providerTotalValue && providerTotalValue > 0 ? providerTotalValue : null;
   const totalTokens = usageMeasured ? (providerTotal ?? (inputTokens === null && outputTokens === null ? null : (inputTokens ?? 0) + (outputTokens ?? 0))) : null;
   const cost = numbers(result.agent?.cost?.total);
   const verifiedTaskSuccess = result.agent?.exitCode === 0
     && result.agent?.status !== "TIMEOUT"
     && result.git?.diffCheckExitCode === 0
     && result.validation?.status === "passed"
-    && result.validation?.scope?.status === "passed";
+    && result.validation?.scope?.status === "passed"
+    && result.hiddenValidation?.status === "passed";
   return {
     inputTokens,
     cachedInputTokens,
@@ -98,7 +100,9 @@ const records = resultEntries.map((entry) => {
     repetition: manifest.repetition,
     artifactDir: entry.artifactDir ?? null,
     validationStatus: result.validation?.status ?? "unavailable",
+    hiddenValidationStatus: result.hiddenValidation?.status ?? "unavailable",
     agentStatus: result.agent?.status ?? "unknown",
+    failureCategory: result.agent?.failureCategory ?? null,
     metric: metric(result),
   };
 });
@@ -207,6 +211,11 @@ const report = {
   } : null,
   records: records.length,
   infrastructureFailures: entries.filter((entry) => entry.status === "infrastructure_failure").length,
+  providerFailures: records.filter((record) => record.failureCategory?.startsWith("provider_")).length,
+  failureCategories: records.reduce((counts, record) => {
+    if (record.failureCategory) counts[record.failureCategory] = (counts[record.failureCategory] ?? 0) + 1;
+    return counts;
+  }, {}),
   pairedRuns: pairs.length,
   unpairedRuns: records.length - (pairs.length * 2),
   overall: {
@@ -215,8 +224,8 @@ const report = {
   },
   pairedByModel,
   limitations: [
-    "verifiedTaskSuccess uses the deterministic fixture verifier captured by each run.",
-    "No result is decision-grade until an independently maintained hidden-validation step is attached.",
+    "verifiedTaskSuccess requires both the visible scope/semantic verifier and the independent hidden verifier.",
+    "Provider quota/auth/rate-limit failures are censored and must be rerun; they are not model failures.",
     "Provider cost is measured only when a manually versioned pricing profile was supplied and usage telemetry was available.",
     "Infrastructure failures are reported separately and must be rerun under the documented policy; they are not silently counted as model failures.",
   ],
@@ -232,7 +241,7 @@ const markdown = [
   "|---|---:|---:|---:|---:|---:|---:|",
   ...pairedByModel.map((item) => `| ${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.on.verifiedSuccessRate ?? "n/a"} | ${item.deltaOnMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`),
   "",
-  "Decision-ready: **no**. The current report is an evidence aggregation layer; hidden validation and sufficient repeated runs are still required.",
+  "Decision-ready: **no**. The current report is an evidence aggregation layer; independently reviewed task coverage, sufficient repeated runs, and valid provider measurements are still required.",
   "",
   "Limitations:",
   ...report.limitations.map((item) => `- ${item}`),

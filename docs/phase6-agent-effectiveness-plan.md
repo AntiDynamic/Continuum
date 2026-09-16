@@ -204,10 +204,30 @@ without model calls unless `--execute` is supplied:
 The report emits JSON and Markdown with per-arm summaries, paired on-minus-off
 deltas, deterministic 95% bootstrap intervals, measured-token/cost coverage,
 infrastructure-failure counts, and unpaired-run counts. It intentionally marks
-`decisionReady` false until independently maintained hidden validation is
-attached and the required repeated pilot/decision policy is met. Raw benchmark
+`decisionReady` false until the required repeated pilot/decision policy is met
+and all task contracts have independently reviewed hidden coverage. Raw benchmark
 artifacts under `artifacts/` are ignored by Git; the pilot manifest and report
 paths provide the reproducibility index without committing model transcripts.
+
+Provider quota, authentication, rate-limit, and timeout failures are classified
+separately from agent/task failures. An executing pilot stops after two provider
+failures by default, preventing a depleted provider quota from consuming the
+remaining cells:
+
+    node scripts/phase6-pilot.mjs --execute --tasks representative --max-provider-failures 2
+
+Resume an interrupted or quota-stopped run after access is restored. Provider
+failures are skipped by default; explicitly retry them when the provider is
+healthy:
+
+    node scripts/phase6-pilot.mjs --resume artifacts/phase6-pilot/<run-directory> --execute
+    node scripts/phase6-pilot.mjs --resume artifacts/phase6-pilot/<run-directory> --execute --retry-provider-failures
+
+The frozen task set now includes authored acceptance criteria. Representative
+fixtures are deliberately seeded with concrete failures, and each run produces
+both visible validation and an independent hidden-validation artifact. A run is
+`verified_task_success` only when both validators pass, the patch is in scope,
+and the agent/provider execution completed successfully.
 
 ## Runner usage
 

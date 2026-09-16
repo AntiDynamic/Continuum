@@ -8,6 +8,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { performance } from "node:perf_hooks";
 import { verifyPhase6Task } from "./phase6-verifier.mjs";
+import { verifyPhase6HiddenTask } from "./phase6-hidden-verifier.mjs";
 
 const exec = promisify(execFile);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -48,8 +49,11 @@ if (pricingProfilePath) {
 }
 
 const cases = JSON.parse(await readFile(join(fixtureRoot, "cases.json"), "utf8"));
-const task = cases.cases.find((item) => item.id === taskId);
-if (!task) throw new Error(`Unknown task: ${taskId}`);
+const taskSet = JSON.parse(await readFile(join(fixtureRoot, "phase6-tasks.json"), "utf8"));
+const taskCase = cases.cases.find((item) => item.id === taskId);
+const taskSpec = taskSet.tasks.find((item) => item.id === taskId);
+if (!taskCase || !taskSpec) throw new Error(`Unknown task: ${taskId}`);
+const task = { ...taskCase, ...taskSpec };
 
 const run = async (command, commandArgs, cwd, options = {}) => {
   const started = performance.now();
@@ -77,13 +81,22 @@ const normaliseUsage = (usage) => {
     cacheReadTokens: number("cacheReadTokens", "cache_read_tokens", "cachedInputTokens", "cached_input_tokens"),
     totalTokens: number("totalTokens", "total_tokens", "total"),
   };
+  if (normalised.totalTokens === 0) normalised.totalTokens = normalised.inputTokens + normalised.outputTokens;
   return Object.values(normalised).some((value) => value > 0) ? normalised : null;
 };
 const parseAgentStream = (stdout) => {
   const events = stdout.split("\n").filter(Boolean).flatMap((line) => { try { return [JSON.parse(line)]; } catch { return []; } });
   const terminal = events.find((event) => event.event === "result")?.result;
   const usage = terminal?.usage ?? [...events].reverse().find((event) => event.step_update?.usage)?.step_update?.usage;
-  return { eventCount: events.length, toolCallCount: events.filter((event) => event.step_update?.step_type === "tool").length, status: terminal?.status ?? "partial", conversationId: terminal?.conversation_id ?? events.find((event) => event.conversation_id)?.conversation_id, usage: normaliseUsage(usage) };
+  return { eventCount: events.length, toolCallCount: events.filter((event) => event.step_update?.step_type === "tool").length, status: terminal?.status ?? "partial", error: terminal?.error ?? null, conversationId: terminal?.conversation_id ?? events.find((event) => event.conversation_id)?.conversation_id, usage: normaliseUsage(usage) };
+};
+const classifyAgentFailure = ({ agent, telemetry }) => {
+  if (agent.exitCode === 0 && telemetry.status !== "ERROR" && telemetry.status !== "TIMEOUT") return null;
+  const text = `${agent.stderr}\n${telemetry.error ?? ""}`.toLowerCase();
+  if (/quota|rate limit|too many requests|resource exhausted|limit reached/.test(text)) return "provider_quota";
+  if (/authentication|unauthorized|forbidden|sign.?in|credential/.test(text)) return "provider_auth";
+  if (telemetry.status === "TIMEOUT" || /timed out|timeout|print timeout/.test(text)) return "agent_timeout";
+  return "agent_error";
 };
 const estimateProviderCost = (usage) => {
   if (!pricingProfile || !usage) return null;
@@ -129,7 +142,7 @@ const restoreMcpConfig = async (snapshot) => {
 const prepareMcpTreatment = async (treatment, artifactDir) => {
   const original = await readOptional(mcpConfigPath);
   const snapshot = { path: mcpConfigPath, content: original };
-  const setup = { treatment, serverName: mcpServerName, configPath: mcpConfigPath, originalExists: original !== null, originalHash: original === null ? null : hash(original), originalServerNames: mcpServerNames(original), commands: [] };
+  const setup = { status: "pending", treatment, serverName: mcpServerName, configPath: mcpConfigPath, originalExists: original !== null, originalHash: original === null ? null : hash(original), originalServerNames: mcpServerNames(original), commands: [] };
   const record = async (command, commandArgs) => {
     const result = await run(agy, commandArgs, root);
     setup.commands.push({ command, args: commandArgs, exitCode: result.exitCode, durationMs: result.durationMs, stdout: result.stdout.trim(), stderr: result.stderr.trim() });
@@ -140,12 +153,15 @@ const prepareMcpTreatment = async (treatment, artifactDir) => {
   // is harmless; restoration returns the user's original configuration.
   await record("remove", ["mcp", "remove", mcpServerName]);
   if (treatment === "continuum_on") {
-    await record("add", ["mcp", "add", "--env", "CONTINUUM_MCP_COMPACT=1", mcpServerName, process.execPath, cli, "mcp"]);
-    await record("enable", ["mcp", "enable", mcpServerName]);
+    const added = await record("add", ["mcp", "add", "--env", "CONTINUUM_MCP_COMPACT=1", mcpServerName, process.execPath, cli, "mcp"]);
+    const enabled = await record("enable", ["mcp", "enable", mcpServerName]);
+    setup.commandFailure = added.exitCode !== 0 || enabled.exitCode !== 0;
   }
   const configured = await readOptional(mcpConfigPath);
   setup.configuredHash = configured === null ? null : hash(configured);
   setup.configuredServerNames = mcpServerNames(configured);
+  setup.status = setup.commandFailure || (treatment === "continuum_on" && !setup.configuredServerNames.includes(mcpServerName)) || (treatment === "continuum_off" && setup.configuredServerNames.includes(mcpServerName)) ? "failed" : "ready";
+  if (setup.status === "failed") setup.error = "MCP registry did not reach the requested treatment state";
   await writeFile(join(artifactDir, "continuum-setup.json"), JSON.stringify(setup, null, 2) + "\n");
 
   let restored = false;
@@ -175,6 +191,7 @@ const makePrompt = (repository) => [
   `Work only in ${repository}`,
   "Do not inspect or modify /home/anti, the benchmark source tree, or any other repository. Do not create dependencies or node_modules; use only the files already in the task repository.",
   "Do not modify files unrelated to the task. At the end, summarize changed files, validation commands, and remaining uncertainty.",
+  `Acceptance criteria:\n${(task.acceptanceCriteria ?? []).map((criterion) => `- ${criterion}`).join("\n") || "- Satisfy the task text and its authored validation contract."}`,
   treatment === "continuum_on" ? "Continuum is in compact treatment mode. Call continuum_start_context_session exactly once with this task and createInitialContext=true. Use the returned initial context, then edit immediately. Do not call broad search, web search, packet, explain, or unrelated exploration tools. Continue only if validation fails or required coverage is missing." : "Do not use any Continuum tools or precomputed Continuum context for this run.",
 ].join("\n\n");
 
@@ -217,8 +234,10 @@ const runOne = async (repetition) => {
       initialized = await continuum(repository, "init", "--non-interactive");
       indexed = initialized.exitCode === 0 ? await continuum(repository, "index") : initialized;
       await writeFile(join(artifactDir, "continuum-initialization.json"), JSON.stringify({ initialized, indexed }, null, 2) + "\n");
+      if (initialized.exitCode !== 0 || indexed.exitCode !== 0) throw new Error("Continuum initialization or indexing failed");
     }
     mcpGuard = await prepareMcpTreatment(treatment, artifactDir);
+    if (mcpGuard.setup.status !== "ready") throw new Error(mcpGuard.setup.error);
     const before = await git(repository, "status", "--short");
     const beforeHead = await git(repository, "rev-parse", "HEAD");
     const agent = await run(agy, ["--model", model, "--mode", "accept-edits", "--dangerously-skip-permissions", "--add-dir", repository, "--output-format", "stream-json", "--print-timeout", timeoutText, `--print=${prompt}`], repository, { timeout: timeoutMs + 30_000 });
@@ -242,6 +261,7 @@ const runOne = async (repetition) => {
     await writeFile(join(artifactDir, "git-untracked.txt"), untracked.stdout);
     const telemetry = parseAgentStream(agent.stdout);
     if (agent.stderr.includes("print timeout")) telemetry.status = "TIMEOUT";
+    const failureCategory = classifyAgentFailure({ agent, telemetry });
     const providerCost = estimateProviderCost(telemetry.usage);
     await writeFile(join(artifactDir, "provider-usage.json"), JSON.stringify({ schemaVersion: "continuum.provider-usage.v1", measured: telemetry.usage !== null, usage: telemetry.usage, source: "antigravity-stream-json-result" }, null, 2) + "\n");
     await writeFile(join(artifactDir, "provider-cost.json"), JSON.stringify({ schemaVersion: "continuum.provider-cost.v1", measured: providerCost !== null, pricingProfile: manifest.controls.pricingProfile, cost: providerCost }, null, 2) + "\n");
@@ -258,14 +278,17 @@ const runOne = async (repetition) => {
       }
     }
     const validation = await verifyPhase6Task({ repository, task: { ...task, id: taskId }, status: after.stdout });
+    const hiddenValidation = await verifyPhase6HiddenTask({ repository, taskId });
     await writeFile(join(artifactDir, "validation.json"), JSON.stringify(validation, null, 2) + "\n");
+    await writeFile(join(artifactDir, "hidden-validation.json"), JSON.stringify(hiddenValidation, null, 2) + "\n");
     const restoration = await mcpGuard.restore();
   const result = {
       schemaVersion: "continuum.agent-effectiveness-run.v2",
       manifest: { ...manifest, completedAt: new Date().toISOString() },
-      agent: { exitCode: agent.exitCode, durationMs: agent.durationMs, stdoutBytes: Buffer.byteLength(agent.stdout), stderrBytes: Buffer.byteLength(agent.stderr), ...telemetry, cost: providerCost },
+      agent: { exitCode: agent.exitCode, durationMs: agent.durationMs, stdoutBytes: Buffer.byteLength(agent.stdout), stderrBytes: Buffer.byteLength(agent.stderr), ...telemetry, failureCategory, cost: providerCost },
       git: { baseCommit: beforeHead.stdout.trim(), finalHead: afterHead.stdout.trim(), before: before.stdout, after: after.stdout, diffCheckExitCode: diffCheck.exitCode, changed: relevantPaths.length > 0, changedPaths: relevantPaths, infrastructurePaths, diffStat: diffStat.stdout, changedFiles: diffNames.stdout, untrackedFiles: untracked.stdout },
       validation,
+      hiddenValidation,
       evidence: {
         providerUsage: telemetry.usage ? "measured" : "unavailable",
         providerUsageArtifact: "provider-usage.json",
@@ -274,6 +297,7 @@ const runOne = async (repetition) => {
         cliEvents: { artifact: "agent-output.jsonl", eventCount: telemetry.eventCount, toolCallCount: telemetry.toolCallCount },
         git: { statusBefore: "git-status-before.txt", statusAfter: "git-status-after.txt", patch: "git-diff.patch", diffCheckExitCode: diffCheck.exitCode },
         validation: "validation.json",
+        hiddenValidation: "hidden-validation.json",
         continuumInitialization: treatment === "continuum_on" ? "continuum-initialization.json" : "not_applicable",
         context: treatment === "continuum_on" ? "continuum_session_report" : "not_applicable",
       },

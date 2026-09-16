@@ -108,6 +108,11 @@ export async function verifyPhase6Task({ repository, task, status }) {
   const semantic = await verifySemanticRules(repository, task.id);
   result.checks.push(...semantic.checks);
   const failed = result.checks.some((check) => check.status === "failed") || semantic.status === "failed";
+  result.failureCategories = [
+    ...(result.scope.status === "failed" ? ["scope_violation"] : []),
+    ...(missingRequiredChanges.length > 0 ? ["missing_required_changes"] : []),
+    ...(semantic.status === "failed" ? ["semantic_requirement_failed"] : []),
+  ];
   result.status = failed ? "failed" : semantic.status === "not_configured" ? "partial" : "passed";
   return result;
 }
