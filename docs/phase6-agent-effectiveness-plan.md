@@ -175,12 +175,15 @@ important regression in correctness, scope safety, or completion time.
   deterministic run manifests.
 - [x] P6-03 Add Antigravity headless runner with structured output capture. The
   runner captures stream-JSON stdout, stderr, timing, and git diff evidence.
-- [ ] P6-04 Add isolated Continuum MCP treatment configuration.
-- [ ] P6-05 Capture provider usage, CLI events, git evidence, tests, and
-  Continuum session reports into one result schema.
+- [x] P6-04 Add isolated Continuum MCP treatment configuration. The runner
+  snapshots the Antigravity MCP registry, configures the cell, and restores the
+  exact original bytes after the run without writing the snapshot to artifacts.
+- [x] P6-05 Capture provider usage, CLI events, git evidence, tests, and
+  Continuum session reports into one versioned result schema. Optional pricing
+  profiles produce measured provider-cost artifacts without inventing prices.
 - [x] P6-06 Implement deterministic verifier and out-of-scope patch checks for
-  the first pilot task. Additional task-specific semantic verifiers remain
-  required before the full 12-task decision set.
+  all 12 frozen tasks. The verifier is fixture-semantic evidence, not a
+  substitute for an external hidden test service.
 - [x] P6-07 Run a one-task smoke across all four cells. One complete
   repetition was run on 2026-09-13; the artifact is preliminary because the
   deterministic verifier is still pending.
@@ -197,9 +200,19 @@ Execute only after the runner and treatment configuration are verified:
 
     node scripts/phase6-agent-runner.mjs --execute --keep --task small-local-token-refresh --model gemini-3.8-flash-medium --treatment continuum_off
 
-The current runner intentionally reports validation as `not_configured` until
-P6-06 adds task-specific visible/hidden verification. Its output must not be
-called a successful benchmark result yet.
+To calculate provider cost, supply a manually versioned pricing profile. The
+runner records the profile ID and hash alongside the raw usage snapshot:
+
+    node scripts/phase6-agent-runner.mjs --execute --keep --pricing-profile pricing/gemini-2026-09.json --task small-local-token-refresh --model gemini-3.8-flash-medium --treatment continuum_on
+
+The profile uses `inputPerMillion`, `cachedInputPerMillion`,
+`outputPerMillion`, `thinkingPerMillion`, `currency`, and an optional `id`.
+
+The runner now emits `continuum.agent-effectiveness-run.v2` with raw CLI event
+files, provider usage/cost artifacts, before/after Git evidence, validation,
+MCP setup/restoration evidence, and the Continuum session report. A result is
+still not decision-grade until the pilot has repeated cells and an external
+hidden-validation policy is applied.
 
 The first preliminary smoke is recorded in
 `packages/context-engine/benchmarks/v1/phase6-smoke-results.json`. Both arms
