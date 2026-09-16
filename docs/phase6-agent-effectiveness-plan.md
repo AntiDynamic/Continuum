@@ -190,6 +190,25 @@ important regression in correctness, scope safety, or completion time.
 - [ ] P6-08 Run the pilot and generate paired effectiveness/cost report.
 - [ ] P6-09 Run the decision set and publish limitations and raw-artifact index.
 
+The execution and analysis tooling for P6-08/P6-09 is now available. The batch
+runner launches cells sequentially because Antigravity's MCP registry is global,
+randomizes the cell order from a recorded seed, and stores every cell under a
+caller-owned artifact root. The default pilot uses four representative tasks;
+`--tasks all` selects the complete frozen 12-task corpus. A pilot is previewed
+without model calls unless `--execute` is supplied:
+
+    node scripts/phase6-pilot.mjs --tasks representative --repetitions 3 --seed 20260916 --output-root artifacts/phase6-pilot/20260916
+    node scripts/phase6-pilot.mjs --execute --keep --tasks representative --repetitions 3 --seed 20260916 --pricing-profile pricing/gemini-2026-09.json --output-root artifacts/phase6-pilot/20260916
+    node scripts/phase6-report.mjs --input artifacts/phase6-pilot/20260916/<run-directory>/pilot-index.json
+
+The report emits JSON and Markdown with per-arm summaries, paired on-minus-off
+deltas, deterministic 95% bootstrap intervals, measured-token/cost coverage,
+infrastructure-failure counts, and unpaired-run counts. It intentionally marks
+`decisionReady` false until independently maintained hidden validation is
+attached and the required repeated pilot/decision policy is met. Raw benchmark
+artifacts under `artifacts/` are ignored by Git; the pilot manifest and report
+paths provide the reproducibility index without committing model transcripts.
+
 ## Runner usage
 
 Preview a run without using model quota:

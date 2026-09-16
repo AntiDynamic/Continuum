@@ -15,6 +15,8 @@
     "benchmark:retrieval-real": "node scripts/retrieval-benchmark-real.mjs",
     "test:gemini-smoke": "pnpm --filter @continuum/gemini-adapter test:smoke",
     "test:phase6-recovery": "pnpm --filter @continuum/context-engine build && pnpm --filter @continuum/mcp-server build && pnpm --filter @continuum/cli build && node scripts/phase6-recovery-smoke.mjs",
+    "benchmark:phase6-pilot": "node scripts/phase6-pilot.mjs",
+    "benchmark:phase6-report": "node scripts/phase6-report.mjs",
     "clean": "pnpm -r clean"
   },
   "devDependencies": {

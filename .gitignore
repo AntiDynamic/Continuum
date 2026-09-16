@@ -27,3 +27,6 @@ pnpm-debug.log*
 # Test coverage
 coverage/
 temp-schemas/**
+
+# Benchmark run evidence (raw artifacts are kept outside version control)
+artifacts/

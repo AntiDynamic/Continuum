@@ -28,6 +28,7 @@ const repetitions = Number(value("--repetitions", "1"));
 const timeoutText = value("--timeout", "5m");
 const execute = has("--execute");
 const keep = has("--keep");
+const artifactRootArgument = value("--artifact-root", null);
 const pricingProfilePath = value("--pricing-profile", process.env.CONTINUUM_PHASE6_PRICING_FILE ?? null);
 
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
@@ -35,6 +36,8 @@ if (!["continuum_off", "continuum_on"].includes(treatment)) throw new Error("--t
 const timeoutMatch = /^(\d+)(s|m|h)$/.exec(timeoutText);
 if (!timeoutMatch) throw new Error("--timeout must use a duration such as 5m or 15m");
 const timeoutMs = Number(timeoutMatch[1]) * ({ s: 1_000, m: 60_000, h: 3_600_000 }[timeoutMatch[2]]);
+const artifactRoot = artifactRootArgument ? resolve(artifactRootArgument) : null;
+if (artifactRoot) await mkdir(artifactRoot, { recursive: true });
 
 let pricingProfile = null;
 if (pricingProfilePath) {
@@ -159,7 +162,8 @@ const makePrompt = (repository) => [
 ].join("\n\n");
 
 const runOne = async (repetition) => {
-  const scratch = await mkdtemp(join(tmpdir(), "continuum-phase6-"));
+  const scratchParent = artifactRoot ?? tmpdir();
+  const scratch = await mkdtemp(join(scratchParent, "continuum-phase6-"));
   const repository = join(scratch, task.repositoryFixture);
   const prompt = makePrompt(repository);
   const artifactDir = join(scratch, "artifacts");
