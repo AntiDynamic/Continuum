@@ -62,12 +62,13 @@ const usageValue = (usage, keys) => {
 };
 const metric = (result) => {
   const usage = result.agent?.usage ?? null;
-  const inputTokens = usageValue(usage, ["inputTokens", "promptTokens"]);
-  const cachedInputTokens = usageValue(usage, ["cacheReadTokens", "cachedInputTokens"]);
-  const outputTokens = usageValue(usage, ["outputTokens", "completionTokens"]);
-  const thinkingTokens = usageValue(usage, ["thinkingTokens", "reasoningTokens"]);
-  const totalTokens = usageValue(usage, ["totalTokens", "total"])
-    ?? (inputTokens === null && outputTokens === null ? null : (inputTokens ?? 0) + (outputTokens ?? 0));
+  const usageMeasured = usage && ["inputTokens", "input_tokens", "outputTokens", "output_tokens", "thinkingTokens", "thinking_tokens", "cacheReadTokens", "cache_read_tokens", "totalTokens", "total_tokens", "total"].some((key) => numbers(usage[key]) > 0);
+  const inputTokens = usageMeasured ? usageValue(usage, ["inputTokens", "input_tokens", "promptTokens", "prompt_tokens"]) : null;
+  const cachedInputTokens = usageMeasured ? usageValue(usage, ["cacheReadTokens", "cache_read_tokens", "cachedInputTokens", "cached_input_tokens"]) : null;
+  const outputTokens = usageMeasured ? usageValue(usage, ["outputTokens", "output_tokens", "completionTokens", "completion_tokens"]) : null;
+  const thinkingTokens = usageMeasured ? usageValue(usage, ["thinkingTokens", "thinking_tokens", "reasoningTokens", "reasoning_tokens"]) : null;
+  const providerTotal = usageMeasured ? usageValue(usage, ["totalTokens", "total_tokens", "total"]) : null;
+  const totalTokens = usageMeasured ? (providerTotal ?? (inputTokens === null && outputTokens === null ? null : (inputTokens ?? 0) + (outputTokens ?? 0))) : null;
   const cost = numbers(result.agent?.cost?.total);
   const verifiedTaskSuccess = result.agent?.exitCode === 0
     && result.agent?.status !== "TIMEOUT"
@@ -80,7 +81,7 @@ const metric = (result) => {
     outputTokens,
     thinkingTokens,
     totalTokens,
-    tokenSource: usage?.totalTokens === undefined && usage?.total === undefined ? "input_plus_output_fallback" : "provider_total",
+    tokenSource: !usageMeasured ? "unavailable" : usage?.totalTokens === undefined && usage?.total_tokens === undefined && usage?.total === undefined ? "input_plus_output_fallback" : "provider_total",
     cost,
     durationMs: numbers(result.agent?.durationMs),
     verifiedTaskSuccess,

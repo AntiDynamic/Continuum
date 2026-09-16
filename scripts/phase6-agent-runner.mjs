@@ -62,11 +62,28 @@ const run = async (command, commandArgs, cwd, options = {}) => {
 };
 
 const hash = (input) => createHash("sha256").update(input).digest("hex");
+const normaliseUsage = (usage) => {
+  if (!usage) return null;
+  const number = (...keys) => {
+    for (const key of keys) {
+      if (usage[key] !== undefined && Number.isFinite(Number(usage[key]))) return Number(usage[key]);
+    }
+    return 0;
+  };
+  const normalised = {
+    inputTokens: number("inputTokens", "input_tokens", "promptTokens", "prompt_tokens"),
+    outputTokens: number("outputTokens", "output_tokens", "completionTokens", "completion_tokens"),
+    thinkingTokens: number("thinkingTokens", "thinking_tokens", "reasoningTokens", "reasoning_tokens"),
+    cacheReadTokens: number("cacheReadTokens", "cache_read_tokens", "cachedInputTokens", "cached_input_tokens"),
+    totalTokens: number("totalTokens", "total_tokens", "total"),
+  };
+  return Object.values(normalised).some((value) => value > 0) ? normalised : null;
+};
 const parseAgentStream = (stdout) => {
   const events = stdout.split("\n").filter(Boolean).flatMap((line) => { try { return [JSON.parse(line)]; } catch { return []; } });
   const terminal = events.find((event) => event.event === "result")?.result;
   const usage = terminal?.usage ?? [...events].reverse().find((event) => event.step_update?.usage)?.step_update?.usage;
-  return { eventCount: events.length, toolCallCount: events.filter((event) => event.step_update?.step_type === "tool").length, status: terminal?.status ?? "partial", conversationId: terminal?.conversation_id ?? events.find((event) => event.conversation_id)?.conversation_id, usage: usage ?? null };
+  return { eventCount: events.length, toolCallCount: events.filter((event) => event.step_update?.step_type === "tool").length, status: terminal?.status ?? "partial", conversationId: terminal?.conversation_id ?? events.find((event) => event.conversation_id)?.conversation_id, usage: normaliseUsage(usage) };
 };
 const estimateProviderCost = (usage) => {
   if (!pricingProfile || !usage) return null;
