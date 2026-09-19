@@ -75,6 +75,19 @@ tool calls, and zero token usage. This does not measure Continuum and is not a
 model-quality result; it indicates that this free model/provider path was not
 responsive through the current OpenCode CLI invocation.
 
+## 2026-09-20 — Small free-model gate
+
+To limit quota use, only two cells were run: one task, one repetition, and
+`opencode/mimo-v2.5-free` in `continuum_off` and `continuum_preflight`.
+
+Both cells timed out after 30 seconds with zero JSON events, zero tool calls,
+and no provider usage. Preflight generation and MCP restoration passed. No
+larger OpenCode model matrix should be run until a simple OpenCode request
+returns events successfully.
+
+Artifacts:
+`artifacts/opencode-small-gate-20260920/20260919212129-seed-20260920/`
+
 ## Earlier Phase 6 evidence
 
 The repository contains preliminary smoke and pilot artifacts under

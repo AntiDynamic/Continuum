@@ -162,12 +162,13 @@ for (const [index, cell] of order.entries()) {
     });
     const payload = JSON.parse(result.stdout);
     const providerFailure = payload.result?.agent?.failureCategory?.startsWith("provider_") ?? false;
+    const agentFailure = Boolean(payload.result?.agent?.failureCategory) && !providerFailure;
     entry = {
       ...cell,
       order: index + 1,
       startedAt,
       completedAt: new Date().toISOString(),
-      status: providerFailure ? "provider_failure" : payload.result ? "completed" : "preview",
+      status: providerFailure ? "provider_failure" : agentFailure ? "agent_failure" : payload.result ? "completed" : "preview",
       artifactDir: payload.artifactDir ?? null,
       repository: payload.repository ?? null,
       result: payload.result ?? null,
