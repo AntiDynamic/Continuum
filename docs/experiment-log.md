@@ -47,6 +47,24 @@ the provider was unavailable for all model arms. Rerun the same manifest with
 `--resume ... --execute --retry-provider-failures` after quota access is
 restored.
 
+## 2026-09-20 — OpenCode adapter smoke
+
+Implementation: Phase 6 now accepts `--agent opencode` and model IDs such as
+`opencode/big-pickle`. It parses OpenCode JSON events, records provider usage
+when `step_finish` token data is present, and configures Continuum in a
+disposable project-local `opencode.json`.
+
+Dry-run validation passed for all three treatments. A live
+`opencode/big-pickle` baseline and a 30-second MCP-on smoke both started the
+OpenCode process, but emitted no JSON events and timed out. The MCP-on smoke
+verified project configuration creation and restoration; no model usage or
+cost was measured.
+
+Artifacts:
+
+- `artifacts/opencode-qualification-20260920/`
+- `artifacts/opencode-mcp-smoke-20260920/`
+
 ## Earlier Phase 6 evidence
 
 The repository contains preliminary smoke and pilot artifacts under

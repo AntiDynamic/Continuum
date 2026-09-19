@@ -257,6 +257,16 @@ from both `continuum_off` and tool-invoked `continuum_on`:
 
     node scripts/phase6-agent-runner.mjs --execute --keep --task small-local-token-refresh --model gemini-3.8-flash-medium --treatment continuum_preflight
 
+OpenCode can be selected with the same runner and is isolated through a
+project-local configuration:
+
+    node scripts/phase6-agent-runner.mjs --execute --keep --agent opencode --model opencode/big-pickle --task small-local-token-refresh --treatment continuum_preflight
+
+The pilot also accepts `--agent opencode`. OpenCode emits JSON events and its
+MCP configuration uses `mcp.servers`; the runner does not modify the user's
+global OpenCode configuration. A provider credential and a responding model
+are still required for measured runs.
+
 The runner now emits `continuum.agent-effectiveness-run.v2` with raw CLI event
 files, provider usage/cost artifacts, before/after Git evidence, validation,
 MCP setup/restoration evidence, and the Continuum session report. A result is

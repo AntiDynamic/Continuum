@@ -18,6 +18,7 @@ const value = (name, fallback) => {
 const has = (name) => args.includes(name);
 
 const outputRoot = resolve(value("--output-root", join(root, "artifacts/phase6-pilot")));
+const agent = value("--agent", "agy");
 const models = value("--models", "gemini-3.8-flash-medium,gemini-3.1-pro-low").split(",").filter(Boolean);
 const treatments = value("--treatments", "continuum_off,continuum_on").split(",").filter(Boolean);
 const repetitions = Number(value("--repetitions", "3"));
@@ -32,6 +33,7 @@ let keep = has("--keep") || execute;
 const retryProviderFailures = has("--retry-provider-failures");
 
 if (models.length === 0) throw new Error("--models must contain at least one model");
+if (!["agy", "opencode"].includes(agent)) throw new Error("--agent must be agy or opencode");
 if (treatments.length === 0 || treatments.some((item) => !["continuum_off", "continuum_on", "continuum_preflight"].includes(item))) throw new Error("--treatments must contain continuum_off, continuum_on, and/or continuum_preflight");
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
 if (!Number.isInteger(seed) || seed < 0) throw new Error("--seed must be a non-negative integer");
@@ -116,6 +118,7 @@ if (resumeArgument) {
     seed,
     repetitionsPerTaskModelTreatment: repetitions,
     models,
+    agent,
     treatments,
     taskIds,
     taskHashes: Object.fromEntries(taskIds.map((taskId) => [taskId, taskHash(taskId)])),
@@ -137,6 +140,7 @@ for (const [index, cell] of order.entries()) {
   completed = completed.filter((entry) => cellKey(entry) !== cellKey(cell));
   const commandArgs = [
     runner,
+    "--agent", agent,
     "--task", cell.taskId,
     "--model", cell.model,
     "--treatment", cell.treatment,

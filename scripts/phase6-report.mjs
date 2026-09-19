@@ -95,6 +95,7 @@ const records = resultEntries.map((entry) => {
   const manifest = result.manifest;
   return {
     taskId: manifest.taskId,
+    agent: manifest.agent ?? "agy",
     model: manifest.model,
     treatment: manifest.treatment,
     repetition: manifest.repetition,
@@ -169,7 +170,7 @@ const difference = (pairs, field) => {
 
 const grouped = new Map();
 for (const record of records) {
-  const key = `${record.model}\u0000${record.taskId}\u0000${record.repetition}`;
+  const key = `${record.agent}\u0000${record.model}\u0000${record.taskId}\u0000${record.repetition}`;
   if (!grouped.has(key)) grouped.set(key, {});
   grouped.get(key)[record.treatment] = record;
 }
@@ -179,13 +180,15 @@ const pairs = [...grouped.values()]
 const preflightPairs = [...grouped.values()]
   .filter((group) => group.continuum_off && group.continuum_preflight)
   .map((group) => ({ off: group.continuum_off, on: group.continuum_preflight }));
-const models = [...new Set(records.map((record) => record.model))];
-const pairedByModel = models.map((model) => {
-  const modelPairs = pairs.filter((pair) => pair.off.model === model);
+const modelArms = [...new Set(records.map((record) => `${record.agent}\u0000${record.model}`))];
+const pairedByModel = modelArms.map((arm) => {
+  const [agent, model] = arm.split("\u0000");
+  const modelPairs = pairs.filter((pair) => pair.off.agent === agent && pair.off.model === model);
   const off = modelPairs.map((pair) => pair.off);
   const on = modelPairs.map((pair) => pair.on);
   const successValues = modelPairs.map((pair) => Number(pair.on.metric.verifiedTaskSuccess) - Number(pair.off.metric.verifiedTaskSuccess));
   return {
+    agent,
     model,
     pairs: modelPairs.length,
     off: summary(off),
@@ -199,12 +202,14 @@ const pairedByModel = models.map((model) => {
     successDeltaBootstrap95: bootstrapInterval(successValues, hashSeed(`${model}:success`)),
   };
 });
-const preflightPairedByModel = models.map((model) => {
-  const modelPairs = preflightPairs.filter((pair) => pair.off.model === model);
+const preflightPairedByModel = modelArms.map((arm) => {
+  const [agent, model] = arm.split("\u0000");
+  const modelPairs = preflightPairs.filter((pair) => pair.off.agent === agent && pair.off.model === model);
   const off = modelPairs.map((pair) => pair.off);
   const on = modelPairs.map((pair) => pair.on);
   const successValues = modelPairs.map((pair) => Number(pair.on.metric.verifiedTaskSuccess) - Number(pair.off.metric.verifiedTaskSuccess));
   return {
+    agent,
     model,
     pairs: modelPairs.length,
     off: summary(off),
@@ -228,6 +233,7 @@ const report = {
     seed: source.seed,
     execute: source.execute,
     taskIds: source.taskIds,
+    agent: source.agent,
     models: source.models,
     treatments: source.treatments,
   } : null,
@@ -264,8 +270,8 @@ const markdown = [
   "",
   "| Model | Paired runs | Off success | On success | Token Δ (on−off) | Cost Δ (on−off) | Duration Δ (on−off) |",
   "|---|---:|---:|---:|---:|---:|---:|",
-  ...pairedByModel.map((item) => `| ${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.on.verifiedSuccessRate ?? "n/a"} | ${item.deltaOnMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`),
-  ...(preflightPairs.length ? ["", "| Model | Preflight pairs | Off success | Preflight success | Token Δ (preflight−off) | Cost Δ (preflight−off) | Duration Δ (preflight−off) |", "|---|---:|---:|---:|---:|---:|---:|", ...preflightPairedByModel.map((item) => `| ${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.preflight.verifiedSuccessRate ?? "n/a"} | ${item.deltaPreflightMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaPreflightMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaPreflightMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`)] : []),
+  ...pairedByModel.map((item) => `| ${item.agent}/${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.on.verifiedSuccessRate ?? "n/a"} | ${item.deltaOnMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`),
+  ...(preflightPairs.length ? ["", "| Agent/model | Preflight pairs | Off success | Preflight success | Token Δ (preflight−off) | Cost Δ (preflight−off) | Duration Δ (preflight−off) |", "|---|---:|---:|---:|---:|---:|---:|", ...preflightPairedByModel.map((item) => `| ${item.agent}/${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.preflight.verifiedSuccessRate ?? "n/a"} | ${item.deltaPreflightMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaPreflightMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaPreflightMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`)] : []),
   "",
   "Decision-ready: **no**. The current report is an evidence aggregation layer; independently reviewed task coverage, sufficient repeated runs, and valid provider measurements are still required.",
   "",

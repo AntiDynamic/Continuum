@@ -22,7 +22,9 @@ const mcpServerName = "continuum";
 const args = process.argv.slice(2);
 const value = (name, fallback) => { const index = args.indexOf(name); return index >= 0 ? args[index + 1] : fallback; };
 const has = (name) => args.includes(name);
-const model = value("--model", "gemini-3.8-flash-medium");
+const agentId = value("--agent", "agy");
+const isOpenCode = agentId === "opencode";
+const model = value("--model", isOpenCode ? "opencode/big-pickle" : "gemini-3.8-flash-medium");
 const treatment = value("--treatment", "continuum_off");
 const taskId = value("--task", "small-local-token-refresh");
 const repetitions = Number(value("--repetitions", "1"));
@@ -31,9 +33,11 @@ const execute = has("--execute");
 const keep = has("--keep");
 const artifactRootArgument = value("--artifact-root", null);
 const pricingProfilePath = value("--pricing-profile", process.env.CONTINUUM_PHASE6_PRICING_FILE ?? null);
+const agentCommand = isOpenCode ? (process.env.OPENCODE_BIN ?? "opencode") : agy;
 
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
 if (!["continuum_off", "continuum_on", "continuum_preflight"].includes(treatment)) throw new Error("--treatment must be continuum_off, continuum_on, or continuum_preflight");
+if (!["agy", "opencode"].includes(agentId)) throw new Error("--agent must be agy or opencode");
 const timeoutMatch = /^(\d+)(s|m|h)$/.exec(timeoutText);
 if (!timeoutMatch) throw new Error("--timeout must use a duration such as 5m or 15m");
 const timeoutMs = Number(timeoutMatch[1]) * ({ s: 1_000, m: 60_000, h: 3_600_000 }[timeoutMatch[2]]);
@@ -90,12 +94,22 @@ const parseAgentStream = (stdout) => {
   const usage = terminal?.usage ?? [...events].reverse().find((event) => event.step_update?.usage)?.step_update?.usage;
   return { eventCount: events.length, toolCallCount: events.filter((event) => event.step_update?.step_type === "tool").length, status: terminal?.status ?? "partial", error: terminal?.error ?? null, conversationId: terminal?.conversation_id ?? events.find((event) => event.conversation_id)?.conversation_id, usage: normaliseUsage(usage) };
 };
+const parseOpenCodeStream = (stdout) => {
+  const events = stdout.split("\n").filter(Boolean).flatMap((line) => { try { return [JSON.parse(line)]; } catch { return []; } });
+  const finishes = events.filter((event) => event.type === "step_finish" && event.part);
+  const finish = finishes.at(-1)?.part;
+  const errors = events.filter((event) => event.type === "error" || event.error).map((event) => event.error?.data?.message ?? event.error?.message ?? event.error ?? event.message).filter(Boolean);
+  const tokens = finish?.tokens;
+  const usage = tokens ? normaliseUsage({ inputTokens: tokens.input, outputTokens: tokens.output, thinkingTokens: tokens.reasoning, cacheReadTokens: tokens.cache?.read, totalTokens: (tokens.input ?? 0) + (tokens.output ?? 0) + (tokens.reasoning ?? 0) }) : null;
+  return { eventCount: events.length, toolCallCount: events.filter((event) => event.type === "tool_use" || event.part?.type === "tool").length, status: errors.length ? "ERROR" : finish ? "completed" : "partial", error: errors.at(-1) ?? null, conversationId: events.find((event) => event.sessionID)?.sessionID ?? events.find((event) => event.sessionId)?.sessionId, usage, reportedCost: finish?.cost ?? null };
+};
+const parseAgentOutput = (stdout) => isOpenCode ? parseOpenCodeStream(stdout) : parseAgentStream(stdout);
 const classifyAgentFailure = ({ agent, telemetry }) => {
   if (agent.exitCode === 0 && telemetry.status !== "ERROR" && telemetry.status !== "TIMEOUT") return null;
   const text = `${agent.stderr}\n${telemetry.error ?? ""}`.toLowerCase();
   if (/quota|rate limit|too many requests|resource exhausted|limit reached/.test(text)) return "provider_quota";
   if (/authentication|unauthorized|forbidden|sign.?in|credential/.test(text)) return "provider_auth";
-  if (telemetry.status === "TIMEOUT" || /timed out|timeout|print timeout/.test(text)) return "agent_timeout";
+  if (telemetry.status === "TIMEOUT" || /timed out|timeout|print timeout/.test(text) || agent.durationMs >= timeoutMs) return "agent_timeout";
   return "agent_error";
 };
 const estimateProviderCost = (usage) => {
@@ -121,7 +135,7 @@ const mcpServerNames = (content) => {
   if (!content) return [];
   try {
     const parsed = JSON.parse(content);
-    return Object.keys(parsed.mcpServers ?? {}).sort();
+    return Object.keys(parsed.mcpServers ?? parsed.mcp?.servers ?? {}).sort();
   } catch { return []; }
 };
 
@@ -139,10 +153,11 @@ const restoreMcpConfig = async (snapshot) => {
  * restore it after every run so a treatment cannot leak servers or credentials
  * into the next cell. The snapshot contents are never written to artifacts.
  */
-const prepareMcpTreatment = async (treatment, artifactDir) => {
-  const original = await readOptional(mcpConfigPath);
-  const snapshot = { path: mcpConfigPath, content: original };
-  const setup = { status: "pending", treatment, serverName: mcpServerName, configPath: mcpConfigPath, originalExists: original !== null, originalHash: original === null ? null : hash(original), originalServerNames: mcpServerNames(original), commands: [] };
+const prepareMcpTreatment = async (treatment, artifactDir, repository) => {
+  const configPath = isOpenCode ? join(repository, "opencode.json") : mcpConfigPath;
+  const original = await readOptional(configPath);
+  const snapshot = { path: configPath, content: original };
+  const setup = { status: "pending", treatment, agent: agentId, serverName: mcpServerName, configPath, originalExists: original !== null, originalHash: original === null ? null : hash(original), originalServerNames: mcpServerNames(original), commands: [] };
   const record = async (command, commandArgs) => {
     const result = await run(agy, commandArgs, root);
     setup.commands.push({ command, args: commandArgs, exitCode: result.exitCode, durationMs: result.durationMs, stdout: result.stdout.trim(), stderr: result.stderr.trim() });
@@ -151,13 +166,29 @@ const prepareMcpTreatment = async (treatment, artifactDir) => {
 
   // Remove any same-name server before configuring the cell. A missing server
   // is harmless; restoration returns the user's original configuration.
-  await record("remove", ["mcp", "remove", mcpServerName]);
-  if (treatment !== "continuum_off") {
-    const added = await record("add", ["mcp", "add", "--env", "CONTINUUM_MCP_COMPACT=1", mcpServerName, process.execPath, cli, "mcp"]);
-    const enabled = await record("enable", ["mcp", "enable", mcpServerName]);
-    setup.commandFailure = added.exitCode !== 0 || enabled.exitCode !== 0;
+  if (isOpenCode) {
+    let parsed = {};
+    try { parsed = original ? JSON.parse(original) : {}; } catch { parsed = {}; }
+    const servers = { ...(parsed.mcp?.servers ?? {}) };
+    delete servers[mcpServerName];
+    if (treatment !== "continuum_off") {
+      servers[mcpServerName] = { type: "local", command: [process.execPath, cli, "mcp"], cwd: repository, environment: { CONTINUUM_MCP_COMPACT: "1" }, codemode: false };
+    }
+    if (Object.keys(servers).length > 0 || parsed.mcp?.timeout || original !== null) {
+      const next = { ...parsed, $schema: parsed.$schema ?? "https://opencode.ai/config.json", mcp: { ...(parsed.mcp ?? {}), servers } };
+      if (Object.keys(servers).length === 0 && !parsed.mcp?.timeout) delete next.mcp;
+      await writeFile(configPath, JSON.stringify(next, null, 2) + "\n");
+      setup.commands.push({ command: "project-config", args: [configPath], exitCode: 0, durationMs: 0, stdout: "OpenCode project MCP configuration prepared", stderr: "" });
+    }
+  } else {
+    await record("remove", ["mcp", "remove", mcpServerName]);
+    if (treatment !== "continuum_off") {
+      const added = await record("add", ["mcp", "add", "--env", "CONTINUUM_MCP_COMPACT=1", mcpServerName, process.execPath, cli, "mcp"]);
+      const enabled = await record("enable", ["mcp", "enable", mcpServerName]);
+      setup.commandFailure = added.exitCode !== 0 || enabled.exitCode !== 0;
+    }
   }
-  const configured = await readOptional(mcpConfigPath);
+  const configured = await readOptional(configPath);
   setup.configuredHash = configured === null ? null : hash(configured);
   setup.configuredServerNames = mcpServerNames(configured);
   setup.status = setup.commandFailure || (treatment !== "continuum_off" && !setup.configuredServerNames.includes(mcpServerName)) || (treatment === "continuum_off" && setup.configuredServerNames.includes(mcpServerName)) ? "failed" : "ready";
@@ -170,10 +201,10 @@ const prepareMcpTreatment = async (treatment, artifactDir) => {
     async restore() {
       if (restored) return { status: "already_restored" };
       await restoreMcpConfig(snapshot);
-      const current = await readOptional(mcpConfigPath);
+      const current = await readOptional(configPath);
       const restoration = {
         status: current === original ? "restored" : "restore_mismatch",
-        configPath: mcpConfigPath,
+        configPath,
         restoredHash: current === null ? null : hash(current),
         restoredServerNames: mcpServerNames(current),
       };
@@ -212,10 +243,10 @@ const runOne = async (repetition) => {
   const base = await git(repository, "rev-parse", "HEAD");
   const manifest = {
     schemaVersion: "continuum.agent-run-manifest.v1",
-    taskId, task: task.task, repositoryFixture: task.repositoryFixture, model, treatment,
+    taskId, task: task.task, repositoryFixture: task.repositoryFixture, agent: agentId, model, treatment,
     repetition, baseCommit: base.stdout.trim(), promptHash: hash(prompt),
     taskDefinitionHash: hash(JSON.stringify(task)),
-    cli: agy, continuumVersion: "source-worktree",
+    cli: agentCommand, continuumVersion: "source-worktree",
     startedAt: new Date().toISOString(),
     controls: { timeout: timeoutText, freshRepository: true, humanIntervention: false, randomizedOrder: false, mcpIsolation: "snapshot_restore", pricingProfile: pricingProfile ? { id: pricingProfile.id ?? hash(JSON.stringify(pricingProfile)), path: pricingProfilePath, hash: hash(JSON.stringify(pricingProfile)) } : null },
   };
@@ -249,11 +280,14 @@ const runOne = async (repetition) => {
       manifest.promptHash = hash(prompt);
       await writeFile(join(artifactDir, "run-manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
     }
-    mcpGuard = await prepareMcpTreatment(treatment, artifactDir);
+    mcpGuard = await prepareMcpTreatment(treatment, artifactDir, repository);
     if (mcpGuard.setup.status !== "ready") throw new Error(mcpGuard.setup.error);
     const before = await git(repository, "status", "--short");
     const beforeHead = await git(repository, "rev-parse", "HEAD");
-    const agent = await run(agy, ["--model", model, "--mode", "accept-edits", "--dangerously-skip-permissions", "--add-dir", repository, "--output-format", "stream-json", "--print-timeout", timeoutText, `--print=${prompt}`], repository, { timeout: timeoutMs + 30_000 });
+    const agentArgs = isOpenCode
+      ? ["run", "--model", model, "--format", "json", "--dir", repository, "--auto", prompt]
+      : ["--model", model, "--mode", "accept-edits", "--dangerously-skip-permissions", "--add-dir", repository, "--output-format", "stream-json", "--print-timeout", timeoutText, `--print=${prompt}`];
+    const agent = await run(agentCommand, agentArgs, repository, { timeout: timeoutMs + 30_000 });
     await writeFile(join(artifactDir, "agent-output.jsonl"), agent.stdout);
     await writeFile(join(artifactDir, "agent-stderr.log"), agent.stderr);
     const after = await git(repository, "status", "--short");
@@ -264,7 +298,7 @@ const runOne = async (repetition) => {
     const untracked = await git(repository, "ls-files", "--others", "--exclude-standard");
     const diffCheck = await git(repository, "diff", "--check");
     const statusPaths = after.stdout.split("\n").filter(Boolean).map((line) => line.slice(3).split(" -> ").at(-1));
-    const infrastructurePaths = statusPaths.filter((path) => path === ".gitignore" || path.startsWith(".continuum/"));
+    const infrastructurePaths = statusPaths.filter((path) => path === ".gitignore" || path === "opencode.json" || path.startsWith(".continuum/"));
     const relevantPaths = statusPaths.filter((path) => !infrastructurePaths.includes(path));
     await writeFile(join(artifactDir, "git-status-before.txt"), before.stdout);
     await writeFile(join(artifactDir, "git-status-after.txt"), after.stdout);
@@ -272,11 +306,11 @@ const runOne = async (repetition) => {
     await writeFile(join(artifactDir, "git-diff-stat.txt"), diffStat.stdout);
     await writeFile(join(artifactDir, "git-diff-name-status.txt"), diffNames.stdout);
     await writeFile(join(artifactDir, "git-untracked.txt"), untracked.stdout);
-    const telemetry = parseAgentStream(agent.stdout);
+    const telemetry = parseAgentOutput(agent.stdout);
     if (agent.stderr.includes("print timeout")) telemetry.status = "TIMEOUT";
     const failureCategory = classifyAgentFailure({ agent, telemetry });
     const providerCost = estimateProviderCost(telemetry.usage);
-    await writeFile(join(artifactDir, "provider-usage.json"), JSON.stringify({ schemaVersion: "continuum.provider-usage.v1", measured: telemetry.usage !== null, usage: telemetry.usage, source: "antigravity-stream-json-result" }, null, 2) + "\n");
+    await writeFile(join(artifactDir, "provider-usage.json"), JSON.stringify({ schemaVersion: "continuum.provider-usage.v1", measured: telemetry.usage !== null, usage: telemetry.usage, reportedCost: telemetry.reportedCost ?? null, source: isOpenCode ? "opencode-json-events" : "antigravity-stream-json-result" }, null, 2) + "\n");
     await writeFile(join(artifactDir, "provider-cost.json"), JSON.stringify({ schemaVersion: "continuum.provider-cost.v1", measured: providerCost !== null, pricingProfile: manifest.controls.pricingProfile, cost: providerCost }, null, 2) + "\n");
     let continuumSession = null;
     if (treatment !== "continuum_off") {

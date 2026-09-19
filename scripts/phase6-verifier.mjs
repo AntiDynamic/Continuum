@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const infrastructurePaths = new Set([".gitignore"]);
+const infrastructurePaths = new Set([".gitignore", "opencode.json"]);
 
 const normalise = (path) => path.replaceAll("\\", "/").replace(/^\.\//, "");
 
