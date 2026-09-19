@@ -76,6 +76,7 @@ export async function runSessionStart(task:string,options:SessionStartOptions):P
 }
 export async function runSessionStatus(id:string,options:SessionBaseOptions):Promise<void>{const result=await use(options,s=>s.status(id));if(options.json)return output(result,true);printAggregate(result);}
 export async function runSessionContext(id:string,options:SessionBaseOptions):Promise<void>{const result=await use(options,s=>s.initialContext(id));if(options.json)return output({schemaVersion:"continuum.context-session.v1",sessionId:id,packet:result},true);printDelta(result);}
+export async function runSessionHandoff(id:string,options:SessionBaseOptions):Promise<void>{const result=await use(options,s=>s.handoff(id));if(options.json)return output(result,true);line(result.prompt);}
 export async function runSessionRequest(id:string,query:string,options:SessionRequestOptions):Promise<void>{const result=await use(options,s=>s.request(id,{query,requestedSymbols:options.symbol,requestedPaths:options.path,requestedCoverage:validateCoverage(options.coverage)}));if(options.json)return output({schemaVersion:"continuum.context-session.v1",sessionId:id,packet:result},true);printDelta(result);}
 export async function runSessionSignal(id:string,options:SessionSignalOptions):Promise<void>{
   let signal:ContextControlSignal;

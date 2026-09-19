@@ -32,7 +32,7 @@ let keep = has("--keep") || execute;
 const retryProviderFailures = has("--retry-provider-failures");
 
 if (models.length === 0) throw new Error("--models must contain at least one model");
-if (treatments.length === 0 || treatments.some((item) => !["continuum_off", "continuum_on"].includes(item))) throw new Error("--treatments must contain continuum_off and/or continuum_on");
+if (treatments.length === 0 || treatments.some((item) => !["continuum_off", "continuum_on", "continuum_preflight"].includes(item))) throw new Error("--treatments must contain continuum_off, continuum_on, and/or continuum_preflight");
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
 if (!Number.isInteger(seed) || seed < 0) throw new Error("--seed must be a non-negative integer");
 if (!Number.isInteger(maxProviderFailures) || maxProviderFailures < 1) throw new Error("--max-provider-failures must be a positive integer");

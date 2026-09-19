@@ -176,6 +176,9 @@ for (const record of records) {
 const pairs = [...grouped.values()]
   .filter((group) => group.continuum_off && group.continuum_on)
   .map((group) => ({ off: group.continuum_off, on: group.continuum_on }));
+const preflightPairs = [...grouped.values()]
+  .filter((group) => group.continuum_off && group.continuum_preflight)
+  .map((group) => ({ off: group.continuum_off, on: group.continuum_preflight }));
 const models = [...new Set(records.map((record) => record.model))];
 const pairedByModel = models.map((model) => {
   const modelPairs = pairs.filter((pair) => pair.off.model === model);
@@ -194,6 +197,25 @@ const pairedByModel = models.map((model) => {
       durationMs: difference(modelPairs, "durationMs"),
     },
     successDeltaBootstrap95: bootstrapInterval(successValues, hashSeed(`${model}:success`)),
+  };
+});
+const preflightPairedByModel = models.map((model) => {
+  const modelPairs = preflightPairs.filter((pair) => pair.off.model === model);
+  const off = modelPairs.map((pair) => pair.off);
+  const on = modelPairs.map((pair) => pair.on);
+  const successValues = modelPairs.map((pair) => Number(pair.on.metric.verifiedTaskSuccess) - Number(pair.off.metric.verifiedTaskSuccess));
+  return {
+    model,
+    pairs: modelPairs.length,
+    off: summary(off),
+    preflight: summary(on),
+    deltaPreflightMinusOff: {
+      verifiedSuccessRate: difference(modelPairs.map((pair) => ({ off: { metric: { verifiedTaskSuccess: Number(pair.off.metric.verifiedTaskSuccess) } }, on: { metric: { verifiedTaskSuccess: Number(pair.on.metric.verifiedTaskSuccess) } } })), "verifiedTaskSuccess"),
+      totalTokens: difference(modelPairs, "totalTokens"),
+      cost: difference(modelPairs, "cost"),
+      durationMs: difference(modelPairs, "durationMs"),
+    },
+    successDeltaBootstrap95: bootstrapInterval(successValues, hashSeed(`${model}:preflight-success`)),
   };
 });
 
@@ -217,12 +239,15 @@ const report = {
     return counts;
   }, {}),
   pairedRuns: pairs.length,
+  preflightPairedRuns: preflightPairs.length,
   unpairedRuns: records.length - (pairs.length * 2),
   overall: {
     continuum_off: summary(records.filter((record) => record.treatment === "continuum_off")),
     continuum_on: summary(records.filter((record) => record.treatment === "continuum_on")),
+    continuum_preflight: summary(records.filter((record) => record.treatment === "continuum_preflight")),
   },
   pairedByModel,
+  preflightPairedByModel,
   limitations: [
     "verifiedTaskSuccess requires both the visible scope/semantic verifier and the independent hidden verifier.",
     "Provider quota/auth/rate-limit failures are censored and must be rerun; they are not model failures.",
@@ -240,6 +265,7 @@ const markdown = [
   "| Model | Paired runs | Off success | On success | Token Δ (on−off) | Cost Δ (on−off) | Duration Δ (on−off) |",
   "|---|---:|---:|---:|---:|---:|---:|",
   ...pairedByModel.map((item) => `| ${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.on.verifiedSuccessRate ?? "n/a"} | ${item.deltaOnMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaOnMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`),
+  ...(preflightPairs.length ? ["", "| Model | Preflight pairs | Off success | Preflight success | Token Δ (preflight−off) | Cost Δ (preflight−off) | Duration Δ (preflight−off) |", "|---|---:|---:|---:|---:|---:|---:|", ...preflightPairedByModel.map((item) => `| ${item.model} | ${item.pairs} | ${item.off.verifiedSuccessRate ?? "n/a"} | ${item.preflight.verifiedSuccessRate ?? "n/a"} | ${item.deltaPreflightMinusOff.totalTokens.medianOnMinusOff ?? "n/a"} | ${item.deltaPreflightMinusOff.cost.medianOnMinusOff ?? "n/a"} | ${item.deltaPreflightMinusOff.durationMs.medianOnMinusOff ?? "n/a"} |`)] : []),
   "",
   "Decision-ready: **no**. The current report is an evidence aggregation layer; independently reviewed task coverage, sufficient repeated runs, and valid provider measurements are still required.",
   "",

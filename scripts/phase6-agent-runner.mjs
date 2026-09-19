@@ -33,7 +33,7 @@ const artifactRootArgument = value("--artifact-root", null);
 const pricingProfilePath = value("--pricing-profile", process.env.CONTINUUM_PHASE6_PRICING_FILE ?? null);
 
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
-if (!["continuum_off", "continuum_on"].includes(treatment)) throw new Error("--treatment must be continuum_off or continuum_on");
+if (!["continuum_off", "continuum_on", "continuum_preflight"].includes(treatment)) throw new Error("--treatment must be continuum_off, continuum_on, or continuum_preflight");
 const timeoutMatch = /^(\d+)(s|m|h)$/.exec(timeoutText);
 if (!timeoutMatch) throw new Error("--timeout must use a duration such as 5m or 15m");
 const timeoutMs = Number(timeoutMatch[1]) * ({ s: 1_000, m: 60_000, h: 3_600_000 }[timeoutMatch[2]]);
@@ -152,7 +152,7 @@ const prepareMcpTreatment = async (treatment, artifactDir) => {
   // Remove any same-name server before configuring the cell. A missing server
   // is harmless; restoration returns the user's original configuration.
   await record("remove", ["mcp", "remove", mcpServerName]);
-  if (treatment === "continuum_on") {
+  if (treatment !== "continuum_off") {
     const added = await record("add", ["mcp", "add", "--env", "CONTINUUM_MCP_COMPACT=1", mcpServerName, process.execPath, cli, "mcp"]);
     const enabled = await record("enable", ["mcp", "enable", mcpServerName]);
     setup.commandFailure = added.exitCode !== 0 || enabled.exitCode !== 0;
@@ -160,7 +160,7 @@ const prepareMcpTreatment = async (treatment, artifactDir) => {
   const configured = await readOptional(mcpConfigPath);
   setup.configuredHash = configured === null ? null : hash(configured);
   setup.configuredServerNames = mcpServerNames(configured);
-  setup.status = setup.commandFailure || (treatment === "continuum_on" && !setup.configuredServerNames.includes(mcpServerName)) || (treatment === "continuum_off" && setup.configuredServerNames.includes(mcpServerName)) ? "failed" : "ready";
+  setup.status = setup.commandFailure || (treatment !== "continuum_off" && !setup.configuredServerNames.includes(mcpServerName)) || (treatment === "continuum_off" && setup.configuredServerNames.includes(mcpServerName)) ? "failed" : "ready";
   if (setup.status === "failed") setup.error = "MCP registry did not reach the requested treatment state";
   await writeFile(join(artifactDir, "continuum-setup.json"), JSON.stringify(setup, null, 2) + "\n");
 
@@ -184,7 +184,7 @@ const prepareMcpTreatment = async (treatment, artifactDir) => {
   };
 };
 
-const makePrompt = (repository) => [
+const makePrompt = (repository, preflight = null) => [
   "You are participating in a controlled coding-agent benchmark.",
   `Task: ${task.task}`,
   "Implement the requested change in the repository, preserve existing behavior, add or update tests when appropriate, and run the available validation.",
@@ -192,14 +192,15 @@ const makePrompt = (repository) => [
   "Do not inspect or modify /home/anti, the benchmark source tree, or any other repository. Do not create dependencies or node_modules; use only the files already in the task repository.",
   "Do not modify files unrelated to the task. At the end, summarize changed files, validation commands, and remaining uncertainty.",
   `Acceptance criteria:\n${(task.acceptanceCriteria ?? []).map((criterion) => `- ${criterion}`).join("\n") || "- Satisfy the task text and its authored validation contract."}`,
-  treatment === "continuum_on" ? "Continuum is in compact treatment mode. Call continuum_start_context_session exactly once with this task and createInitialContext=true. Use the returned initial context, then edit immediately. Do not call broad search, web search, packet, explain, or unrelated exploration tools. Continue only if validation fails or required coverage is missing." : "Do not use any Continuum tools or precomputed Continuum context for this run.",
+  treatment === "continuum_on" ? "Continuum is in compact treatment mode. Call continuum_start_context_session exactly once with this task and createInitialContext=true. Use the returned initial context, then edit immediately. Do not call broad search, web search, packet, explain, or unrelated exploration tools. Continue only if validation fails or required coverage is missing." : treatment === "continuum_preflight" ? "Continuum preflight context follows this instruction. Start from that context and edit immediately. Use Continuum MCP only for targeted deltas after a validation failure or when the packet declares required coverage remaining; do not do broad exploration." : "Do not use any Continuum tools or precomputed Continuum context for this run.",
+  ...(preflight ? ["", preflight] : []),
 ].join("\n\n");
 
 const runOne = async (repetition) => {
   const scratchParent = artifactRoot ?? tmpdir();
   const scratch = await mkdtemp(join(scratchParent, "continuum-phase6-"));
   const repository = join(scratch, task.repositoryFixture);
-  const prompt = makePrompt(repository);
+  let prompt = makePrompt(repository);
   const artifactDir = join(scratch, "artifacts");
   await cp(join(fixtureRoot, "repositories", task.repositoryFixture), repository, { recursive: true });
   await mkdir(artifactDir, { recursive: true });
@@ -230,11 +231,23 @@ const runOne = async (repetition) => {
   try {
     let initialized = null;
     let indexed = null;
-    if (treatment === "continuum_on") {
+    if (treatment !== "continuum_off") {
       initialized = await continuum(repository, "init", "--non-interactive");
       indexed = initialized.exitCode === 0 ? await continuum(repository, "index") : initialized;
       await writeFile(join(artifactDir, "continuum-initialization.json"), JSON.stringify({ initialized, indexed }, null, 2) + "\n");
       if (initialized.exitCode !== 0 || indexed.exitCode !== 0) throw new Error("Continuum initialization or indexing failed");
+    }
+    if (treatment === "continuum_preflight") {
+      const started = await continuum(repository, "session", "start", task.task, "--initial-context", "--json");
+      if (started.exitCode !== 0) throw new Error("Continuum preflight session start failed: " + started.stderr);
+      const session = JSON.parse(started.stdout);
+      const handoff = await continuum(repository, "session", "handoff", session.session.id, "--json");
+      if (handoff.exitCode !== 0) throw new Error("Continuum preflight handoff failed: " + handoff.stderr);
+      const payload = JSON.parse(handoff.stdout);
+      await writeFile(join(artifactDir, "continuum-preflight.json"), JSON.stringify({ started: session, handoff: payload }, null, 2) + "\n");
+      prompt = makePrompt(repository, payload.prompt);
+      manifest.promptHash = hash(prompt);
+      await writeFile(join(artifactDir, "run-manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
     }
     mcpGuard = await prepareMcpTreatment(treatment, artifactDir);
     if (mcpGuard.setup.status !== "ready") throw new Error(mcpGuard.setup.error);
@@ -266,7 +279,7 @@ const runOne = async (repetition) => {
     await writeFile(join(artifactDir, "provider-usage.json"), JSON.stringify({ schemaVersion: "continuum.provider-usage.v1", measured: telemetry.usage !== null, usage: telemetry.usage, source: "antigravity-stream-json-result" }, null, 2) + "\n");
     await writeFile(join(artifactDir, "provider-cost.json"), JSON.stringify({ schemaVersion: "continuum.provider-cost.v1", measured: providerCost !== null, pricingProfile: manifest.controls.pricingProfile, cost: providerCost }, null, 2) + "\n");
     let continuumSession = null;
-    if (treatment === "continuum_on") {
+    if (treatment !== "continuum_off") {
       const listed = await continuum(repository, "session", "list", "--json");
       let sessions = [];
       try { sessions = listed.exitCode === 0 ? JSON.parse(listed.stdout).sessions ?? [] : []; } catch { sessions = []; }
@@ -298,8 +311,8 @@ const runOne = async (repetition) => {
         git: { statusBefore: "git-status-before.txt", statusAfter: "git-status-after.txt", patch: "git-diff.patch", diffCheckExitCode: diffCheck.exitCode },
         validation: "validation.json",
         hiddenValidation: "hidden-validation.json",
-        continuumInitialization: treatment === "continuum_on" ? "continuum-initialization.json" : "not_applicable",
-        context: treatment === "continuum_on" ? "continuum_session_report" : "not_applicable",
+        continuumInitialization: treatment !== "continuum_off" ? "continuum-initialization.json" : "not_applicable",
+        context: treatment === "continuum_preflight" ? "continuum-preflight.json + continuum_session_report" : treatment === "continuum_on" ? "continuum_session_report" : "not_applicable",
       },
       mcp: { setup: mcpGuard.setup, restoration },
       continuumSession,

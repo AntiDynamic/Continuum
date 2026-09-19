@@ -247,6 +247,16 @@ runner records the profile ID and hash alongside the raw usage snapshot:
 The profile uses `inputPerMillion`, `cachedInputPerMillion`,
 `outputPerMillion`, `thinkingPerMillion`, `currency`, and an optional `id`.
 
+The runner also supports `continuum_preflight`. Unlike `continuum_on`, which
+requires the agent to ask the MCP server for its initial packet, preflight
+creates `continuum session handoff` before the first agent request and appends
+the deterministic packet to that request. MCP remains available only for
+targeted deltas. This is the treatment that tests whether earlier context
+delivery reduces native repository exploration; it must be compared separately
+from both `continuum_off` and tool-invoked `continuum_on`:
+
+    node scripts/phase6-agent-runner.mjs --execute --keep --task small-local-token-refresh --model gemini-3.8-flash-medium --treatment continuum_preflight
+
 The runner now emits `continuum.agent-effectiveness-run.v2` with raw CLI event
 files, provider usage/cost artifacts, before/after Git evidence, validation,
 MCP setup/restoration evidence, and the Continuum session report. A result is

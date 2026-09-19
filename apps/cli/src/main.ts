@@ -15,7 +15,7 @@ import { runContextCommand } from "./commands/context-compiler.js";
 import { runMcpCommand } from "./commands/mcp.js";
 import { runPricingSetCommand, runPricingShowCommand } from "./commands/pricing.js";
 import {
-  runSessionComplete, runSessionContext, runSessionList, runSessionPlan, runSessionRecover, runSessionReport,
+  runSessionComplete, runSessionContext, runSessionHandoff, runSessionList, runSessionPlan, runSessionRecover, runSessionReport,
   runSessionRequest, runSessionSignal, runSessionStart, runSessionStatus,
 } from "./commands/session.js";
 import { printError } from "./display.js";
@@ -222,6 +222,10 @@ session.command("status <session-id>").description("Show context session status.
 session.command("context <session-id>").description("Get the idempotent initial context delivery.")
   .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
   .action(async (id: string, options: any) => runSessionContext(id, { cwd: process.cwd(), ...options }));
+
+session.command("handoff <session-id>").description("Create a deterministic prompt-ready preflight context handoff.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async (id: string, options: any) => runSessionHandoff(id, { cwd: process.cwd(), ...options }));
 
 session.command("request <session-id> <query>").description("Request a progressive context delta.")
   .option("--symbol <symbol>", "Requested symbol.", collect, [])

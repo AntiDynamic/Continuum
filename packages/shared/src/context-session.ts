@@ -18,6 +18,7 @@ export interface ContextControlDecision { sessionId: string; signalType: Context
 export interface AdaptiveContextController { createSession(input: CreateContextSessionInput): Promise<ContextSession>; createInitialDelivery(sessionId: string): Promise<DeltaContextPacket>; requestContext(sessionId: string, request: AgentContextRequest): Promise<DeltaContextPacket>; reportSignal(sessionId: string, signal: ContextControlSignal): Promise<DeltaContextPacket | ContextControlDecision>; completeSession(sessionId: string, result: ContextSessionResult): Promise<ContextSession>; }
 
 export const CONTEXT_SESSION_SCHEMA_VERSION = "continuum.context-session.v1" as const;
+export const CONTEXT_PREFLIGHT_HANDOFF_SCHEMA_VERSION = "continuum.context-preflight-handoff.v1" as const;
 export const CONTEXT_SESSION_REPORT_SCHEMA_VERSION = "continuum.context-session-report.v1" as const;
 export interface ContextSessionDeliveryReport { id: string; sequenceNumber: number; stage: string; trigger: unknown; reason: string; estimatedNewTokens: number; estimatedRestoredTokens: number; estimatedDuplicateTokensAvoided: number; coverageAdded: ContextCoverageCategory[]; coverageRemaining: ContextCoverageCategory[]; newItemCount: number; activeReferenceCount: number; restoredItemCount: number; omittedItemCount: number; createdAt: string; }
 export interface ContextSessionReport {
@@ -74,5 +75,7 @@ export interface ContextSessionAggregate {
 }
 export interface StartContextSessionInput { task: string; maximumEstimatedTokens?: number; runId?: string; createInitialContext?: boolean }
 export interface StartContextSessionResult { schemaVersion: typeof CONTEXT_SESSION_SCHEMA_VERSION; session: ContextSession; requiredCoverage: ContextCoverageCategory[]; initialContext?: DeltaContextPacket }
+/** A deterministic prompt-ready packet for integrations that inject context before the first model turn. */
+export interface ContextPreflightHandoff { schemaVersion: typeof CONTEXT_PREFLIGHT_HANDOFF_SCHEMA_VERSION; sessionId: string; task: string; snapshot: IndexSnapshotIdentity; budget: { estimatedTokens: number; itemCount: number }; requiredCoverage: ContextCoverageCategory[]; coverageRemaining: ContextCoverageCategory[]; incomplete: boolean; prompt: string; }
 export interface ContextSessionListResult { schemaVersion: typeof CONTEXT_SESSION_SCHEMA_VERSION; repositoryId: number; sessions: ContextSessionAggregate[] }
 export function snapshotsEqual(left: IndexSnapshotIdentity, right: IndexSnapshotIdentity): boolean { if (left.snapshot_kind !== right.snapshot_kind || left.base_commit_hash !== right.base_commit_hash) return false; return left.snapshot_kind === "commit" ? left.worktree_hash === null && right.worktree_hash === null : Boolean(left.worktree_hash) && left.worktree_hash === right.worktree_hash; }

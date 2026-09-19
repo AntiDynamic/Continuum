@@ -7,12 +7,12 @@ import {
 } from "@continuum/database";
 import { getRepositoryRoot } from "@continuum/git-analyzer";
 import {
-  CONTEXT_RECOVERY_SCHEMA_VERSION, CONTEXT_SESSION_PLAN_SCHEMA_VERSION, CONTEXT_SESSION_REPORT_SCHEMA_VERSION, CONTEXT_SESSION_SCHEMA_VERSION,
+  CONTEXT_PREFLIGHT_HANDOFF_SCHEMA_VERSION, CONTEXT_RECOVERY_SCHEMA_VERSION, CONTEXT_SESSION_PLAN_SCHEMA_VERSION, CONTEXT_SESSION_REPORT_SCHEMA_VERSION, CONTEXT_SESSION_SCHEMA_VERSION,
   type AgentContextRequest, type ContextCandidate, type ContextControlDecision,
   type ContextControlSignal, type ContextCoverageCategory, type ContextItemVersion,
   type ContextPacketItem, type ContextPacketOmission, type ContextReference,
   type ContextRecoveryPacket, type ContextSession, type ContextSessionAggregate, type ContextSessionListResult, type ContextSessionPlan,
-  type ContextSessionReport, type ContextSessionResult, type DeltaContextPacket,
+  type ContextSessionReport, type ContextSessionResult, type ContextPreflightHandoff, type DeltaContextPacket,
   type IndexSnapshotIdentity, type StartContextSessionInput, type StartContextSessionResult,
 } from "@continuum/shared";
 import { DeterministicAdaptiveContextController } from "./controller.js";
@@ -26,6 +26,7 @@ export interface ContextSessionService {
   linkRun(sessionId: string, runId: string): Promise<ContextSession>;
   status(sessionId: string): Promise<ContextSessionAggregate>;
   initialContext(sessionId: string): Promise<DeltaContextPacket>;
+  handoff(sessionId: string): Promise<ContextPreflightHandoff>;
   request(sessionId: string, request: AgentContextRequest): Promise<DeltaContextPacket>;
   signal(sessionId: string, signal: ContextControlSignal): Promise<DeltaContextPacket | ContextControlDecision>;
   complete(sessionId: string, result: ContextSessionResult): Promise<ContextSession>;
@@ -84,6 +85,12 @@ export class RepositoryContextSessionService implements ContextSessionService {
   }
   async linkRun(id:string,runId:string):Promise<ContextSession>{this.ownedRow(id);return domainFrom(this.sessions.linkRun(id,runId));}
   async initialContext(id:string):Promise<DeltaContextPacket>{this.ownedRow(id);const found=this.sessions.listDeliveries(id).find(d=>d.stage==="orientation");return found?this.packetFromDelivery(found):this.controller.createInitialDelivery(id);}
+  async handoff(id:string):Promise<ContextPreflightHandoff>{
+    const session=domainFrom(this.ownedRow(id)),packet=await this.initialContext(id),required=session.task.requiredCoverage.filter(item=>item.required).map(item=>item.category);
+    const items=packet.newItems.map(item=>`PATH: ${item.candidate.item.source_path}${item.candidate.item.symbol_name?`\nSYMBOL: ${item.candidate.item.symbol_name}`:""}\n${item.content}`).join("\n\n---\n\n");
+    const prompt=["CONTINUUM PREFLIGHT CONTEXT v1","This deterministic repository context was compiled before the first agent turn. Treat it as authoritative for the listed files; edit promptly and request a targeted MCP delta only when validation fails or explicitly required coverage remains.",`SESSION: ${session.id}`,`TASK: ${session.task.originalTask}`,`REQUIRED COVERAGE: ${required.join(", ")||"none"}`,`REMAINING COVERAGE: ${packet.coverageRemaining.join(", ")||"none"}`,"",items||"No indexed context matched this task."].join("\n");
+    return{schemaVersion:CONTEXT_PREFLIGHT_HANDOFF_SCHEMA_VERSION,sessionId:id,task:session.task.originalTask,snapshot:session.snapshot,budget:{estimatedTokens:packet.estimatedNewTokens,itemCount:packet.newItems.length},requiredCoverage:required,coverageRemaining:packet.coverageRemaining,incomplete:packet.incomplete,prompt};
+  }
   async request(id:string,request:AgentContextRequest):Promise<DeltaContextPacket>{this.ownedRow(id);return this.controller.requestContext(id,request);}
   async signal(id:string,signal:ContextControlSignal):Promise<DeltaContextPacket|ContextControlDecision>{this.ownedRow(id);return this.controller.reportSignal(id,signal);}
   async complete(id:string,result:ContextSessionResult):Promise<ContextSession>{this.ownedRow(id);return this.controller.completeSession(id,result);}

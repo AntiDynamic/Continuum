@@ -37,6 +37,12 @@ tests, decisions, and failure history required for a correct verified task.
 - [ ] P5-07 Add cache-aware packing and adaptive budgets.
   - Acceptance: stable prefixes remain cacheable and budgets vary by task risk
     without dropping required context silently.
+  - Progress: adaptive `lean` (1,000), `standard` (1,250), `complex` (1,450),
+    and `critical` (1,500) estimated-token first-delivery profiles are now
+    selected from task analysis. `continuum session handoff` also emits a
+    deterministic first-turn packet so an integration can place context before
+    the agent's first request. Actual provider cache reads remain unproven until
+    an adapter exposes cached-input telemetry and repeated runs confirm it.
 - [ ] P5-08 Run cross-agent evaluation.
   - Acceptance: Codex, Gemini, Claude, Qwen, and at least one MCP-capable IDE
     are compared using the same task corpus and cost-per-verified-task metric.
