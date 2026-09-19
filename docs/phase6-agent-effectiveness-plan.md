@@ -267,6 +267,12 @@ MCP configuration uses `mcp.servers`; the runner does not modify the user's
 global OpenCode configuration. A provider credential and a responding model
 are still required for measured runs.
 
+For cost-controlled experiments, the OpenCode runner allowlists only the free
+models exposed by the current OpenCode catalog: Big Pickle, Jev 1.13 Free,
+Ling 3.0 Flash Fin Free, MiMo V2.5 Free, Muse Spark 1.2/1.3 Contributor Free,
+and Nemotron 3 Ultra/3.5 Lightning Free. Any other OpenCode model ID is
+rejected before a model call.
+
 The runner now emits `continuum.agent-effectiveness-run.v2` with raw CLI event
 files, provider usage/cost artifacts, before/after Git evidence, validation,
 MCP setup/restoration evidence, and the Continuum session report. A result is

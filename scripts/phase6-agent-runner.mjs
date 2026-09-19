@@ -34,10 +34,21 @@ const keep = has("--keep");
 const artifactRootArgument = value("--artifact-root", null);
 const pricingProfilePath = value("--pricing-profile", process.env.CONTINUUM_PHASE6_PRICING_FILE ?? null);
 const agentCommand = isOpenCode ? (process.env.OPENCODE_BIN ?? "opencode") : agy;
+const FREE_OPENCODE_MODELS = new Set([
+  "opencode/big-pickle",
+  "opencode/jev-1.13-free",
+  "opencode/ling-3.0-flash-fin-free",
+  "opencode/mimo-v2.5-free",
+  "opencode/muse-spark-1.2-contributor-free",
+  "opencode/muse-spark-1.3-contributor-free",
+  "opencode/nemotron-3-ultra-free",
+  "opencode/nemotron-3.5-lightning-free",
+]);
 
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
 if (!["continuum_off", "continuum_on", "continuum_preflight"].includes(treatment)) throw new Error("--treatment must be continuum_off, continuum_on, or continuum_preflight");
 if (!["agy", "opencode"].includes(agentId)) throw new Error("--agent must be agy or opencode");
+if (isOpenCode && !FREE_OPENCODE_MODELS.has(model)) throw new Error(`Only allowlisted free OpenCode models may be used: ${[...FREE_OPENCODE_MODELS].join(", ")}`);
 const timeoutMatch = /^(\d+)(s|m|h)$/.exec(timeoutText);
 if (!timeoutMatch) throw new Error("--timeout must use a duration such as 5m or 15m");
 const timeoutMs = Number(timeoutMatch[1]) * ({ s: 1_000, m: 60_000, h: 3_600_000 }[timeoutMatch[2]]);

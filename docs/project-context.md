@@ -65,9 +65,9 @@ final product result.
 3. Provider cache-read telemetry is not consistently available through the
    Antigravity path.
 4. Phase 5 cache-aware packing and cross-agent evaluation remain incomplete.
-5. OpenCode is installed locally (`1.18.31`), but its provider credential store
-   currently has zero configured credentials; the first live smoke timed out
-   without model telemetry.
+5. OpenCode is installed locally (`1.18.31`) and OpenCode Zen is now connected.
+   The benchmark is restricted to the locally exposed free model IDs; the
+   first pre-auth smoke timed out without model telemetry.
 
 ## Working rule for future changes
 

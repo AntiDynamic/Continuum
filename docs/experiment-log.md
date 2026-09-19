@@ -65,6 +65,16 @@ Artifacts:
 - `artifacts/opencode-qualification-20260920/`
 - `artifacts/opencode-mcp-smoke-20260920/`
 
+Provider state after this smoke: OpenCode Zen is connected with one local
+credential. The benchmark is intentionally restricted to the free model IDs
+shown by `/models`; paid model IDs are rejected before execution.
+
+After authentication, a free `opencode/big-pickle` baseline smoke was
+attempted. It timed out after two minutes with zero JSON events, zero model
+tool calls, and zero token usage. This does not measure Continuum and is not a
+model-quality result; it indicates that this free model/provider path was not
+responsive through the current OpenCode CLI invocation.
+
 ## Earlier Phase 6 evidence
 
 The repository contains preliminary smoke and pilot artifacts under
