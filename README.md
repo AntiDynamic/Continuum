@@ -19,6 +19,12 @@ The long-term goal:
 
 V1 is the observation and evidence foundation.  It collects trustworthy raw data that future optimisation can use.
 
+Project memory and current work are maintained in:
+
+- [Project context](docs/project-context.md) — current architecture, status, and known gaps.
+- [Decision log](docs/decision-log.md) — durable design decisions and their reasons.
+- [Experiment log](docs/experiment-log.md) — validation evidence and the next controlled runs.
+
 ---
 
 ## What Continuum is NOT
