@@ -20,6 +20,33 @@ Validation:
 Result: implementation is ready for live qualification. No provider tokens or
 dollars were consumed by the dry-run.
 
+## 2026-09-20 — Three-arm live qualification attempt
+
+Configuration: one fixed task (`small-local-token-refresh`), one model
+(`gemini-3.8-flash-medium`), one repetition, and three treatments:
+
+- `continuum_off`
+- `continuum_on`
+- `continuum_preflight`
+
+Artifact index:
+`artifacts/phase6-qualification-20260920/20260919204017-seed-1789850417517/`
+
+Outcome:
+
+- 3/3 provider calls classified as `provider_quota`.
+- 0 infrastructure failures.
+- 0 measured usage records and 0 measured cost records.
+- All three MCP setup/restore cycles completed with `restored` status.
+- The preflight handoff artifact was generated successfully before its model
+  call.
+- `decisionReady: false`; no effectiveness or savings claim is valid.
+
+Interpretation: the test harness and new preflight path are operational, but
+the provider was unavailable for all model arms. Rerun the same manifest with
+`--resume ... --execute --retry-provider-failures` after quota access is
+restored.
+
 ## Earlier Phase 6 evidence
 
 The repository contains preliminary smoke and pilot artifacts under
