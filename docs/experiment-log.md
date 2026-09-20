@@ -99,6 +99,33 @@ not pass the responsiveness gate.
 Artifact:
 `artifacts/opencode-retry-20260920/continuum-phase6-wzqDtn/`
 
+## 2026-09-20 — Low Antigravity paired gate
+
+Account: newly authenticated Antigravity account.
+
+Configuration: `gemini-3.6-flash-low`, one task, one repetition, and a paired
+`continuum_off` versus `continuum_preflight` comparison with a two-minute
+agent limit.
+
+| Metric | Baseline | Preflight | Change |
+|---|---:|---:|---:|
+| Provider input tokens | 52,603 | 42,485 | -19.2% |
+| Provider total tokens | 53,672 | 43,837 | -18.3% |
+| Cache-read tokens | 117,670 | 125,995 | +7.1% |
+| Tool calls | 22 | 18 | -18.2% |
+| Stream events | 37 | 31 | -16.2% |
+| Duration | 130.5s | 131.5s | +1.0s |
+| Verified task success | no | no | unchanged |
+
+Both cells timed out before producing the required patch, so this is
+preliminary efficiency evidence only. Provider usage was measured, but cost
+was not because no pricing profile was supplied. The result suggests that
+preflight reduces exploration/input usage for this low model, but it does not
+yet demonstrate cost-per-success improvement.
+
+Report:
+`artifacts/agy-low-gate-20260920/phase6-report.json`
+
 ## Earlier Phase 6 evidence
 
 The repository contains preliminary smoke and pilot artifacts under
