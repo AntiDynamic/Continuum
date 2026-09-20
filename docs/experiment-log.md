@@ -88,6 +88,17 @@ returns events successfully.
 Artifacts:
 `artifacts/opencode-small-gate-20260920/20260919212129-seed-20260920/`
 
+## 2026-09-20 — Free-model retry
+
+One additional baseline cell was attempted with
+`opencode/muse-spark-1.2-contributor-free`, using the same task and a
+30-second agent limit. It also timed out with zero JSON events, zero tool
+calls, and no usage. No matching preflight cell was run because the model did
+not pass the responsiveness gate.
+
+Artifact:
+`artifacts/opencode-retry-20260920/continuum-phase6-wzqDtn/`
+
 ## Earlier Phase 6 evidence
 
 The repository contains preliminary smoke and pilot artifacts under
