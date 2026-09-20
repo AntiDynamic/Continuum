@@ -24,6 +24,7 @@ Project memory and current work are maintained in:
 - [Project context](docs/project-context.md) — current architecture, status, and known gaps.
 - [Decision log](docs/decision-log.md) — durable design decisions and their reasons.
 - [Experiment log](docs/experiment-log.md) — validation evidence and the next controlled runs.
+- [Effectiveness gate plan](docs/effectiveness-gate-plan.md) — pass/fail criteria and staged low-cost testing.
 
 ---
 
