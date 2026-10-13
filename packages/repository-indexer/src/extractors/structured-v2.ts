@@ -1,35 +1,36 @@
-import yaml from "yaml";
+import ts from "typescript";
+import { parseDocument, isMap } from "yaml";
 import type { ExtractedSymbol, Extractor } from "./types.js";
-
-function lineFor(lines: string[], key: string, format: "json" | "yaml"): number {
-  const pattern = format === "json" ? `"${key}"` : `${key}:`;
-  const index = lines.findIndex((line) => line.includes(pattern));
-  return index < 0 ? 1 : index + 1;
-}
-
-function sections(value: unknown, lines: string[], format: "json" | "yaml", prefix = "", depth = 0): ExtractedSymbol[] {
-  if (!value || typeof value !== "object" || Array.isArray(value) || depth > 3) return [];
-  const result: ExtractedSymbol[] = [];
-  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
-    const name = prefix ? `${prefix}.${key}` : key;
-    const structured = child && typeof child === "object";
-    if (!structured && depth > 0) continue;
-    const startLine = lineFor(lines, key, format);
-    const rendered = format === "json" ? JSON.stringify({ [key]: child }, null, 2) : yaml.stringify({ [key]: child }).trimEnd();
-    result.push({ name, kind: format === "json" ? "json_key" : "yaml_key", content: rendered, startLine, endLine: startLine + rendered.split(/\r?\n/).length - 1, metadata: { configurationPath: name.split("."), sectionKind: ["scripts", "dependencies", "devDependencies", "workspaces"].includes(key) ? key : "configuration" } });
-    if (structured && !Array.isArray(child)) result.push(...sections(child, lines, format, name, depth + 1));
-  }
-  return result;
-}
-
+const lineAt=(content:string,offset:number)=>content.slice(0,offset).split(/\r?\n/).length;
 export class JsonConfigurationExtractor implements Extractor {
-  extract(_absolutePath: string, content: string): ExtractedSymbol[] {
-    try { return sections(JSON.parse(content), content.split(/\r?\n/), "json"); } catch { return []; }
+  extract(path:string,content:string):ExtractedSymbol[] {
+    const source=ts.parseJsonText(path,content),results:ExtractedSymbol[]=[];
+    const visit=(node:ts.Node,prefix:string[]=[])=>{
+      if(ts.isObjectLiteralExpression(node))for(const property of node.properties){
+        if(!ts.isPropertyAssignment(property))continue;
+        const key=property.name.getText(source).replace(/^"|"$/g,""),names=[...prefix,key],start=property.getStart(source),end=property.getEnd();
+        results.push({name:names.join("."),kind:"json_key",content:content.slice(start,end),startLine:lineAt(content,start),endLine:lineAt(content,end),metadata:{configurationPath:names,sourceRepresentation:"exact",parseConfidence:"high"}});
+        visit(property.initializer,names);
+      }
+    };
+    for(const statement of source.statements) if(ts.isExpressionStatement(statement))visit(statement.expression);
+    return results;
   }
 }
-
 export class YamlConfigurationExtractor implements Extractor {
-  extract(_absolutePath: string, content: string): ExtractedSymbol[] {
-    try { return sections(yaml.parse(content), content.split(/\r?\n/), "yaml"); } catch { return []; }
+  extract(_path:string,content:string):ExtractedSymbol[]{
+    const document=parseDocument(content),results:ExtractedSymbol[]=[];
+    if(document.errors.length)return [];
+    const visit=(node:unknown,prefix:string[]=[])=>{
+      if(!isMap(node))return;
+      for(const pair of node.items){
+        const key=pair.key as {value?:unknown;range?:number[]},value=pair.value as {range?:number[]}|null;
+        if(!key?.range)continue;
+        const names=[...prefix,String(key.value)],start=key.range[0]!,end=value?.range?.[1]??key.range[1]!;
+        results.push({name:names.join("."),kind:"yaml_key",content:content.slice(start,end).trimEnd(),startLine:lineAt(content,start),endLine:lineAt(content,Math.max(start,end-1)),metadata:{configurationPath:names,sourceRepresentation:"exact",parseConfidence:"high"}});
+        visit(pair.value,names);
+      }
+    };
+    visit(document.contents);return results;
   }
 }

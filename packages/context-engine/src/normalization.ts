@@ -18,6 +18,8 @@ export function normalizeRetrievalTerms(value: string): string[] {
   for (const token of tokens) { const normalized = singular(token); if (normalized) terms.add(normalized); }
   for (let index = 0; index < tokens.length - 1; index += 1) terms.add(tokens[index]! + tokens[index + 1]!);
   if (tokens.length > 1) terms.add(tokens.join(""));
+  const aliases: Record<string,string[]> = {authentication:["auth"],authorization:["auth","permission"],validation:["validate"],configuration:["config"],migration:["migrate"]};
+  for(const term of [...terms])for(const alias of aliases[term]??[])terms.add(alias);
   return [...terms].filter((term) => term.length > 1);
 }
 export function normalizedRetrievalQuery(value: string): string { return normalizeRetrievalTerms(value).join(" "); }

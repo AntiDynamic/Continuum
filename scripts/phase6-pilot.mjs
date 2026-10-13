@@ -20,7 +20,7 @@ const has = (name) => args.includes(name);
 const outputRoot = resolve(value("--output-root", join(root, "artifacts/phase6-pilot")));
 const agent = value("--agent", "agy");
 const models = value("--models", "gemini-3.8-flash-medium,gemini-3.1-pro-low").split(",").filter(Boolean);
-const treatments = value("--treatments", "continuum_off,continuum_on").split(",").filter(Boolean);
+const treatments = value("--treatments", "continuum_off,continuum_preflight_only").split(",").filter(Boolean);
 const repetitions = Number(value("--repetitions", "3"));
 const timeout = value("--timeout", "15m");
 const seed = Number(value("--seed", String(Date.now())));
@@ -34,7 +34,7 @@ const retryProviderFailures = has("--retry-provider-failures");
 
 if (models.length === 0) throw new Error("--models must contain at least one model");
 if (!["agy", "opencode"].includes(agent)) throw new Error("--agent must be agy or opencode");
-if (treatments.length === 0 || treatments.some((item) => !["continuum_off", "continuum_on", "continuum_preflight"].includes(item))) throw new Error("--treatments must contain continuum_off, continuum_on, and/or continuum_preflight");
+if (treatments.length === 0 || treatments.some((item) => !["continuum_off", "continuum_on", "continuum_preflight", "continuum_preflight_only"].includes(item))) throw new Error("--treatments must contain continuum_off, continuum_on, continuum_preflight, and/or continuum_preflight_only");
 if (!Number.isInteger(repetitions) || repetitions < 1) throw new Error("--repetitions must be a positive integer");
 if (!Number.isInteger(seed) || seed < 0) throw new Error("--seed must be a non-negative integer");
 if (!Number.isInteger(maxProviderFailures) || maxProviderFailures < 1) throw new Error("--max-provider-failures must be a positive integer");
@@ -123,6 +123,7 @@ if (resumeArgument) {
     taskIds,
     taskHashes: Object.fromEntries(taskIds.map((taskId) => [taskId, taskHash(taskId)])),
     timeout,
+    randomizedOrder: true,
     pricingProfile,
     maxProviderFailures,
     runRoot,
@@ -147,6 +148,7 @@ for (const [index, cell] of order.entries()) {
     "--repetitions", "1",
     "--timeout", timeout,
     "--artifact-root", runRoot,
+    "--randomized-order",
   ];
   if (execute) commandArgs.push("--execute");
   if (keep) commandArgs.push("--keep");

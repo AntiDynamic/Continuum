@@ -1,0 +1,100 @@
+{
+  "mode": "offline fake protocol; no inference",
+  "receipts": [
+    {
+      "strategy": "initial_packet",
+      "renderedBytes": 3049,
+      "serializedBytes": 3174,
+      "unicodeCharacters": 3049,
+      "estimatedTokens": 1017,
+      "tokenMeasurement": "locally_estimated",
+      "contentHash": "7729f642697e7c480797241ab5de8758b4fae84f7abb8328c03a4fd71f660337",
+      "sources": [
+        {
+          "id": "bc55c032-4259-4e06-8a4c-ff5510a8d0e4",
+          "path": "README.md",
+          "symbol": "Small service"
+        },
+        {
+          "id": "dc74c3cc-f61a-4bd2-a53d-47a84a7ff310",
+          "path": "docs/authentication.md",
+          "symbol": "Authentication"
+        },
+        {
+          "id": "84682aca-8dd9-472b-88c7-48097caa365b",
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken"
+        },
+        {
+          "id": "df128deb-fede-4c1c-91b7-e7be6d69fb42",
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy"
+        },
+        {
+          "id": "84f820d2-c15e-4e3e-87a0-eab491d45c1a",
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest"
+        },
+        {
+          "id": "9f45df64-3672-4e7d-9fa9-f067cd294319",
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service"
+        }
+      ],
+      "omissions": [],
+      "repositoryBodiesPreloaded": true,
+      "coverage": "see packet coverage",
+      "status": "prepared",
+      "executionId": "f790824f-6f77-4b05-bfa5-2770efa78f07",
+      "threadId": "strategy-initial_packet"
+    },
+    {
+      "strategy": "initial_packet",
+      "renderedBytes": 3049,
+      "serializedBytes": 3174,
+      "unicodeCharacters": 3049,
+      "estimatedTokens": 1017,
+      "tokenMeasurement": "locally_estimated",
+      "contentHash": "7729f642697e7c480797241ab5de8758b4fae84f7abb8328c03a4fd71f660337",
+      "sources": [
+        {
+          "id": "bc55c032-4259-4e06-8a4c-ff5510a8d0e4",
+          "path": "README.md",
+          "symbol": "Small service"
+        },
+        {
+          "id": "dc74c3cc-f61a-4bd2-a53d-47a84a7ff310",
+          "path": "docs/authentication.md",
+          "symbol": "Authentication"
+        },
+        {
+          "id": "84682aca-8dd9-472b-88c7-48097caa365b",
+          "path": "src/auth-service.ts",
+          "symbol": "AuthService.refreshToken"
+        },
+        {
+          "id": "df128deb-fede-4c1c-91b7-e7be6d69fb42",
+          "path": "SECURITY.md",
+          "symbol": "Token trust policy"
+        },
+        {
+          "id": "84f820d2-c15e-4e3e-87a0-eab491d45c1a",
+          "path": "tests/auth-service.test.ts",
+          "symbol": "rejectsEmptyTokenTest"
+        },
+        {
+          "id": "9f45df64-3672-4e7d-9fa9-f067cd294319",
+          "path": "tests/auth-service.test.ts",
+          "symbol": "import ../src/auth-service"
+        }
+      ],
+      "omissions": [],
+      "repositoryBodiesPreloaded": true,
+      "coverage": "see packet coverage",
+      "status": "acknowledged",
+      "executionId": "f790824f-6f77-4b05-bfa5-2770efa78f07",
+      "threadId": "strategy-initial_packet",
+      "turnId": "turn-fixture"
+    }
+  ]
+}

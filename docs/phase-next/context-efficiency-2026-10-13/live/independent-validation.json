@@ -1,0 +1,28 @@
+{
+  "visible": {
+    "status": "passed",
+    "taskId": "small-security-token",
+    "checks": [
+      {
+        "name": "fixture-behavior",
+        "status": "passed"
+      }
+    ],
+    "behavioral": true,
+    "validator": "executable-behavior-v1",
+    "output": "Executable behavior passed"
+  },
+  "hidden": {
+    "status": "passed",
+    "taskId": "small-security-token",
+    "checks": [
+      {
+        "name": "independent-behavior",
+        "status": "passed"
+      }
+    ],
+    "behavioral": true,
+    "validator": "executable-behavior-v1",
+    "output": "Executable behavior passed"
+  }
+}

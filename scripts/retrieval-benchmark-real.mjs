@@ -69,6 +69,9 @@ const compositionFor = (packet, item) => {
 const repositoryResults = [];
 try {
   for (const repositoryCase of dataset.repositories) {
+    const override=process.env["CONTINUUM_BENCHMARK_REPO_"+repositoryCase.id.toUpperCase().replace(/[^A-Z0-9]/g,"_")];
+    repositoryCase.sourcePath=override??(repositoryCase.id==="continuum"?root:repositoryCase.sourcePath);
+    if(!override&&/^[A-Z]:[\\/]/i.test(repositoryCase.sourcePath)&&process.platform!=="win32")throw new Error("Set CONTINUUM_BENCHMARK_REPO_"+repositoryCase.id.toUpperCase()+" to a frozen local repository path.");
     console.error("[real benchmark] preparing " + repositoryCase.id);
     const repo = join(scratch, repositoryCase.id);
     await cp(repositoryCase.sourcePath, repo, { recursive: true, filter: keep });

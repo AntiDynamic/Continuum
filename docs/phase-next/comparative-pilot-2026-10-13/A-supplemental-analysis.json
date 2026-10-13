@@ -1,0 +1,32 @@
+{
+  "treatment": "A",
+  "producer": "post-hoc deterministic analysis of unchanged frozen traces and SQLite; includes tool deliveries omitted from initial receipt-only audit",
+  "sources": [],
+  "toolReplies": [],
+  "sourceFragmentsSupplied": 0,
+  "exactRepeatedSourceCount": 0,
+  "memory": null,
+  "nativeUsageMatchesThreadCounter": true,
+  "sameNativeThread": true,
+  "turnTimeline": [
+    {
+      "timestamp": "2026-10-13T14:00:06.148Z",
+      "threadId": "01a13590-324a-72c2-8348-049e0abe1497",
+      "inputTextHashes": [
+        "08aeeb2f87a39c3e7c57fbbd70c827bd6e44434b10ac8cf27a67b63f4f8bfa75"
+      ]
+    },
+    {
+      "timestamp": "2026-10-13T14:00:50.036Z",
+      "threadId": "01a13590-324a-72c2-8348-049e0abe1497",
+      "inputTextHashes": [
+        "bf8d2cc6bc1146b81065cc03e0c7f3bb1250113bd3dfb8717cff68e738d60ef9"
+      ]
+    }
+  ],
+  "limits": [
+    "Exact repetition is transmission, not attributed billing waste.",
+    "Historical source references are not proven stale-context errors.",
+    "No active occupancy or actual billing is available."
+  ]
+}

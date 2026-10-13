@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "build": "PASS",
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "workspacePassed": 233,
+  "workspaceProviderSkipped": 4,
+  "scriptPassed": 100,
+  "failed": 0,
+  "totalUniquePassed": 333,
+  "priorFailure": "Freshness regression initially edited a nonexistent expression; corrected to alter actual expiry code, regression and full script suite then passed. Original failed log preserved.",
+  "inferenceRequestsDuringValidation": 0,
+  "finalTargetedTests": "Final adaptive suite includes one additional passing scope regression: unrelated passing test commands do not clear earlier failures. All affected tests pass."
+}

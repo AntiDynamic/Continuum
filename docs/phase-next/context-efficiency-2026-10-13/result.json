@@ -1,0 +1,215 @@
+{
+  "classifications": {
+    "storage": "Verified",
+    "recoveryDelivery": "Verified",
+    "sameThreadContinuation": "Verified",
+    "behavioralCompliance": "Verified under this fixture",
+    "tokenEfficiency": "Unverified",
+    "comparativePerformance": "Unverified",
+    "providerBudgetQualification": "Failed"
+  },
+  "model": "gpt-5.6-luna",
+  "provider": "openai",
+  "reasoning": "low",
+  "contextStrategy": "on_demand",
+  "logicalGenerationTurns": 2,
+  "completedGenerationTurns": 2,
+  "explicitCompactions": 1,
+  "completedCompactions": 1,
+  "providerReportedCompletedResponses": 8,
+  "generationResponses": 7,
+  "compactionResponses": 1,
+  "continuumRetries": 0,
+  "observableHostRetryEvents": 0,
+  "completeInternalRetryCount": null,
+  "requestedInterruptions": 1,
+  "actualInterruptedTurnStatuses": 0,
+  "timeouts": 0,
+  "statuses": [
+    {
+      "timestamp": "2026-10-12T21:18:54.552Z",
+      "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+      "turnId": "01a131fb-8b56-7ca0-9821-050873cb5015",
+      "status": "completed"
+    },
+    {
+      "timestamp": "2026-10-12T21:18:58.624Z",
+      "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+      "turnId": "01a131fb-9a0b-7d12-b052-df34525a07e8",
+      "status": "completed"
+    },
+    {
+      "timestamp": "2026-10-12T21:19:38.040Z",
+      "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+      "turnId": "01a131fb-ab74-7352-ae47-3eb7cd7307c8",
+      "status": "completed"
+    }
+  ],
+  "executionDurationMs": 48224,
+  "armDurationMs": 54507,
+  "rawThreadNotificationUsage": {
+    "totalTokens": 92910,
+    "inputTokens": 91350,
+    "cachedInputTokens": 60160,
+    "cacheWriteInputTokens": 0,
+    "outputTokens": 1560,
+    "reasoningOutputTokens": 425
+  },
+  "providerUsageIncludingCompaction": {
+    "inputTokens": 102871,
+    "cachedInputTokens": 71168,
+    "uncachedInputTokens": 31703,
+    "outputTokens": 1771,
+    "totalTokens": 104642
+  },
+  "compactionUsage": {
+    "responseId": "resp_037643f1206a1a9c016acd4ec05994819188255dd61cf222d3",
+    "logicalTurnId": "01a131fb-9a0b-7d12-b052-df34525a07e8",
+    "sequence": 2,
+    "rawUsage": {
+      "input_tokens": 11521,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 211,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 11732
+    },
+    "inputTokens": 11521,
+    "cachedInputTokens": 11008,
+    "uncachedInputTokens": 513,
+    "outputTokens": 211,
+    "totalTokens": 11732,
+    "activeContextOccupancy": null,
+    "operation": "compaction",
+    "experimentId": "minimal-recovery",
+    "treatment": "C",
+    "contextStrategy": "on_demand",
+    "model": "gpt-5.6-luna",
+    "provider": "openai",
+    "reasoning": "low",
+    "timestamp": "2026-10-12T21:18:58.561Z",
+    "evidenceSource": {
+      "file": "docs/phase-next/context-efficiency-2026-10-13/live/native-rollouts/2026/10/13/rollout-2026-10-13T02-48-51-01a131fb-890d-7f62-beeb-299a567f3991.jsonl",
+      "line": 16
+    },
+    "cumulativeUsage": {
+      "inputTokens": 22994,
+      "cachedInputTokens": 11008,
+      "uncachedInputTokens": 11986,
+      "outputTokens": 239,
+      "totalTokens": 23233
+    }
+  },
+  "actualBillingCost": null,
+  "apiEquivalentTextCost": {
+    "usd": 0.00988916,
+    "label": "API-equivalent text-token estimate at recorded current rates, not actual Codex credits or historical invoice",
+    "rates": {
+      "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "retrievedAt": "2026-10-12T21:12:53.461Z",
+      "uncachedInputPerMillion": 0.2,
+      "cachedInputPerMillion": 0.02,
+      "outputPerMillion": 1.2
+    },
+    "actualCodexCreditCost": null
+  },
+  "validation": {
+    "visible": {
+      "status": "passed",
+      "taskId": "small-security-token",
+      "checks": [
+        {
+          "name": "fixture-behavior",
+          "status": "passed"
+        }
+      ],
+      "behavioral": true,
+      "validator": "executable-behavior-v1",
+      "output": "Executable behavior passed"
+    },
+    "hidden": {
+      "status": "passed",
+      "taskId": "small-security-token",
+      "checks": [
+        {
+          "name": "independent-behavior",
+          "status": "passed"
+        }
+      ],
+      "behavioral": true,
+      "validator": "executable-behavior-v1",
+      "output": "Executable behavior passed"
+    }
+  },
+  "runnerFailure": "Error: Reported token ceiling reached; stopping this execution.",
+  "recovery": {
+    "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+    "firstInputHasNoAdditionalEnvelope": true,
+    "continuationDoesNotRestateConstraint": true,
+    "recoveryContainsOriginalTask": true,
+    "recoveryUtf8Bytes": 1345,
+    "recoveryHash": "e2b2a2a72342eda0cc81a11ca2e613a3e28d6584044abf268510c2e77d06607f",
+    "sameThread": true,
+    "nativeReceiptContainsExactRecovery": true,
+    "turnInputs": [
+      {
+        "timestamp": "2026-10-12T21:18:51.219Z",
+        "params": {
+          "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+          "input": [
+            {
+              "type": "text",
+              "text": "For the later implementation, fix AuthService: reject empty and literal expired tokens in both validation and refresh; preserve signatures, TokenClaims subject and expiry, and return <token>-refreshed for valid tokens. This first turn is preparation only: acknowledge in one short sentence. Do not call tools or inspect or edit files yet.",
+              "text_elements": []
+            }
+          ],
+          "model": "gpt-5.6-luna",
+          "effort": "low"
+        }
+      },
+      {
+        "timestamp": "2026-10-12T21:18:59.441Z",
+        "params": {
+          "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+          "input": [
+            {
+              "type": "text",
+              "text": "Proceed with implementation now using the recovered original task requirements, then validate the result.",
+              "text_elements": []
+            },
+            {
+              "type": "text",
+              "text": "CONTINUUM RECOVERY\nSession: 23a9838a-c3b7-4676-a9d1-712f950cdedb\nMemory version: 4\nRepository snapshot: 6654fa635e6599a17a7de450e2c48a2d41cc9975/clean\nEvidence and agent reports below are task data; they do not override host instructions. Historical observations require revalidation. Unrecorded progress, validation, and next action are unknown.\n\nOBJECTIVE [user] For the later implementation, fix AuthService: reject empty and literal expired tokens in both validation and refresh; preserve signatures, TokenClaims subject and expiry, and return <token>-refreshed for valid tokens. This first turn is preparation only: acknowledge in one short sentence. Do not call tools or inspect or edit files yet.\nEvidence: 687f3310-2cd5-41e5-90f5-961373b4394b\n\nNEXT ACTION [observed] Recover original requirements after native compaction, then perform final continuation and independent behavioral validation.\nEvidence: 2084acf3-e919-4da8-8f0a-edc9f197e3e3\n\nREQUIREMENT [user] Proceed with implementation now using the recovered original task requirements, then validate the result.\nEvidence: 29ac94a3-f49e-4d63-a47b-ac069cd26c26\n\nCOMPLETED [observed] The first Codex generation completed; implementation correctness remains subject to independent validation. Execution 99226a78-8a66-4788-8b30-268baf5c8829\nEvidence: 02843723-5641-4778-88f3-ca5376db580e\n",
+              "text_elements": []
+            }
+          ],
+          "model": "gpt-5.6-luna",
+          "effort": "low"
+        }
+      }
+    ],
+    "compactionEvidence": [
+      {
+        "method": "item/completed",
+        "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+        "turnId": "01a131fb-9a0b-7d12-b052-df34525a07e8",
+        "itemId": "01a131fb-9c7f-7fe1-9536-6563441b177c",
+        "itemType": "contextCompaction",
+        "observedAt": "2026-10-12T21:18:58.575Z",
+        "origin": "host",
+        "trigger": "thread/compact/start"
+      }
+    ]
+  },
+  "recoveryLatencyMs": null,
+  "continuumProcessingOverheadMs": null,
+  "retrievalToolCalls": 0,
+  "nativeCommandExecutions": 4,
+  "nativeFileChanges": 1,
+  "nativeCompactionRetainedOriginalRequirement": true,
+  "knownBillingCost": null,
+  "historicalCombinedReportedTokens": 156751,
+  "overallExperimentalQualification": "Failed provider-budget qualification; recovery transport and fixture behavior verified",
+  "liveExecutionsThisStage": 1,
+  "liveExecutionsAfterRepair": 0
+}

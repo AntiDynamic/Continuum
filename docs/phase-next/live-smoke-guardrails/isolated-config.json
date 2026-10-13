@@ -1,0 +1,63 @@
+{
+  "codexVersion": "0.162.1",
+  "observed": {
+    "model": "gpt-5.6-luna",
+    "reasoning": "low",
+    "provider": null,
+    "features": {
+      "multi_agent_v2": false,
+      "goals": false,
+      "multi_agent": false,
+      "multi_agent_v2_dynamic_tools": false,
+      "unbounded_connection_retries": false
+    }
+  },
+  "verifiedFeatureConfiguration": true,
+  "classification": "real isolated host configuration read; no thread or inference started; configured provider is not proof of effective thread provider",
+  "initialDiagnosticFailure": "Strict config/read comparison failed; investigation records actual fields rather than assuming defaults.",
+  "inferenceRequests": 0,
+  "trace": [
+    {
+      "direction": "client_to_server",
+      "method": "initialize",
+      "requestId": 1,
+      "timestamp": "2026-10-12T18:45:29.463Z"
+    },
+    {
+      "direction": "server_stderr",
+      "method": null,
+      "requestId": null,
+      "timestamp": "2026-10-12T18:45:29.475Z"
+    },
+    {
+      "direction": "server_to_client",
+      "method": null,
+      "requestId": 1,
+      "timestamp": "2026-10-12T18:45:29.561Z"
+    },
+    {
+      "direction": "client_to_server",
+      "method": "initialized",
+      "requestId": null,
+      "timestamp": "2026-10-12T18:45:29.561Z"
+    },
+    {
+      "direction": "client_to_server",
+      "method": "config/read",
+      "requestId": 2,
+      "timestamp": "2026-10-12T18:45:29.561Z"
+    },
+    {
+      "direction": "server_to_client",
+      "method": "remoteControl/status/changed",
+      "requestId": null,
+      "timestamp": "2026-10-12T18:45:29.562Z"
+    },
+    {
+      "direction": "server_to_client",
+      "method": null,
+      "requestId": 2,
+      "timestamp": "2026-10-12T18:45:29.567Z"
+    }
+  ]
+}

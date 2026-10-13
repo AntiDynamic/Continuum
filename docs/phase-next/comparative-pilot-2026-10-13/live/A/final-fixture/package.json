@@ -1,0 +1,1 @@
+{"name":"warehouse-reservations","version":"1.0.0","type":"module","private":true,"scripts":{"test":"node --test tests/public.test.mjs"},"engines":{"node":">=24"}}

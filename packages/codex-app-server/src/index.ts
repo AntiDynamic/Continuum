@@ -10,3 +10,5 @@ export * from "./normalizer.js";
 export * from "./protocol.js";
 export * from "./compaction-policy.js";
 export * from "./report.js";
+
+export * from "./context-delivery-strategy.js";

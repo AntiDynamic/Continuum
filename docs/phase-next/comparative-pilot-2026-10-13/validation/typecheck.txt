@@ -1,0 +1,24 @@
+$ pnpm -r typecheck
+Scope: 11 of 12 workspace projects
+packages/shared typecheck$ tsc --project tsconfig.json --noEmit
+packages/shared typecheck: Done
+packages/database typecheck$ tsc --project tsconfig.json --noEmit
+packages/gemini-adapter typecheck$ tsc --project tsconfig.json --noEmit
+packages/git-analyzer typecheck$ tsc --project tsconfig.json --noEmit
+packages/git-analyzer typecheck: Done
+packages/database typecheck: Done
+packages/gemini-adapter typecheck: Done
+packages/agent-core typecheck$ tsc --project tsconfig.json --noEmit
+packages/evaluator typecheck$ tsc --project tsconfig.json --noEmit
+packages/repository-indexer typecheck$ tsc --project tsconfig.json --noEmit
+packages/evaluator typecheck: Done
+packages/agent-core typecheck: Done
+packages/repository-indexer typecheck: Done
+packages/context-engine typecheck$ tsc --project tsconfig.json --noEmit
+packages/context-engine typecheck: Done
+packages/codex-app-server typecheck$ tsc --project tsconfig.json --noEmit
+packages/mcp-server typecheck$ tsc --project tsconfig.json --noEmit
+packages/mcp-server typecheck: Done
+packages/codex-app-server typecheck: Done
+apps/cli typecheck$ tsc --project tsconfig.json --noEmit
+apps/cli typecheck: Done

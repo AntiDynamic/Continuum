@@ -1,0 +1,10 @@
+✔ real frozen source audit includes dynamic delivery and requires output after delivery (47.321584ms)
+✔ actual rejected C argument payload is normalized offline into exactly one callback (16.111627ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233.019844

@@ -88,6 +88,7 @@ export interface TokenUsageEvent extends EventHeader {
     inputTokens?: number | undefined;
     outputTokens?: number | undefined;
     cachedTokens?: number | undefined;
+    cacheCreationInputTokens?: number | undefined;
     totalTokens?: number | undefined;
     /** Model identifier as reported by the agent. */
     model?: string | undefined;
@@ -103,8 +104,10 @@ export interface AgentUsageEvent extends EventHeader {
   model?: string;
   inputTokens?: number;
   cachedInputTokens?: number;
+  cacheCreationInputTokens?: number;
   outputTokens?: number;
   reasoningTokens?: number;
+  totalTokens?: number;
   toolCalls?: number;
   measurement:
     | "provider_reported"

@@ -10,6 +10,7 @@ import {
   RepositoryRepository,
   RunRepository,
   UsageEvidenceRepository,
+  UsageSnapshotRepository,
   getSchemaVersion,
   migrate,
   openDatabase,
@@ -60,7 +61,7 @@ describe("context efficiency repositories", () => {
   });
 
   it("applies the current schema and versions pricing profiles append-only", () => {
-    expect(getSchemaVersion(db)).toBe(9);
+    expect(getSchemaVersion(db)).toBe(14);
     const pricing = new PricingProfileRepository(db);
     pricing.set({
       provider: "continuum",
@@ -89,10 +90,13 @@ describe("context efficiency repositories", () => {
       model: "fake-1.0",
       inputCreditsPerMillionTokens: 2,
       outputCreditsPerMillionTokens: 4,
+      cacheCreationInputCreditsPerMillionTokens: 3,
       source: "user_configured",
     });
     const usage = {
       inputTokens: 100,
+      cacheCreationInputTokens: 25,
+      totalTokens: 175,
       outputTokens: 50,
       measurement: "agent_reported" as const,
     };
@@ -102,14 +106,44 @@ describe("context efficiency repositories", () => {
       provider: "continuum",
       model: "fake-1.0",
       usage,
+      sourceEventId: "usage-event-one",
+      sourceSequenceNumber: 6,
     });
     const cost = calculateRunCostEvidence("run-one", usage, pricing);
     const costs = new CostEvidenceRepository(db);
     costs.upsert(cost, pricing.id);
 
     expect(usageRepository.findByRunId("run-one")?.usage).toEqual(usage);
+    expect(usageRepository.findByRunId("run-one")?.sourceEventId).toBe("usage-event-one");
     expect(costs.findByRunId("run-one", usage)?.measurement).toBe("derived");
     expect(costs.findByRunId("run-one", usage)?.totalCredits).toBeCloseTo(0.0004);
+  });
+
+  it("keeps append-only per-event usage snapshots linked to their source", () => {
+    const snapshots = new UsageSnapshotRepository(db);
+    snapshots.append({
+      runId: "run-one",
+      sourceEventId: "usage-event-one",
+      sequenceNumber: 4,
+      observedAt: "2026-09-20T00:00:00.000Z",
+      provider: "continuum",
+      model: "fake-1.0",
+      usage: {
+        inputTokens: 10,
+        totalTokens: 15,
+        measurement: "provider_reported",
+      },
+      rawProviderPayload: "{\"type\":\"usage\"}",
+    });
+
+    const stored = snapshots.listByRunId("run-one");
+    expect(stored).toHaveLength(1);
+    expect(stored[0]).toMatchObject({
+      sourceEventId: "usage-event-one",
+      sequenceNumber: 4,
+      usage: { inputTokens: 10, totalTokens: 15 },
+    });
+    expect(stored[0]?.rawProviderPayload).toBe("{\"type\":\"usage\"}");
   });
 
   it("suppresses exact and file-after-symbol duplicates and tracks presence", () => {
@@ -191,8 +225,9 @@ describe("context efficiency repositories", () => {
 
     ledger.setPresence(first.delivery.deliveryId, "checkpointed", "checkpoint-1");
     const entries = ledger.findByRunId("run-one");
-    expect(entries[0]?.presenceState).toBe("checkpointed");
-    expect(entries[0]?.supersededByCheckpointId).toBe("checkpoint-1");
+    const checkpointed = entries.find((entry) => entry.deliveryId === first.delivery.deliveryId);
+    expect(checkpointed?.presenceState).toBe("checkpointed");
+    expect(checkpointed?.supersededByCheckpointId).toBe("checkpoint-1");
   });
 
   it("rejects cross-repository context deliveries", () => {

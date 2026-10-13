@@ -3,7 +3,9 @@
  * Continuum CLI entry point.
  */
 
+import { CONTINUUM_VERSION } from "@continuum/shared";
 import { Command } from "commander";
+import { runTaskMemory } from "./commands/task-memory.js";
 import { runDoctorCommand } from "./commands/doctor.js";
 import { runInitCommand } from "./commands/init.js";
 import { runRunCommand } from "./commands/run.js";
@@ -15,7 +17,7 @@ import { runContextCommand } from "./commands/context-compiler.js";
 import { runMcpCommand } from "./commands/mcp.js";
 import { runPricingSetCommand, runPricingShowCommand } from "./commands/pricing.js";
 import {
-  runSessionComplete, runSessionContext, runSessionHandoff, runSessionList, runSessionPlan, runSessionRecover, runSessionReport,
+  runSessionRefresh, runSessionCheckpoint, runSessionComplete, runSessionContext, runSessionHandoff, runSessionList, runSessionPlan, runSessionRecover, runSessionReport,
   runSessionRequest, runSessionSignal, runSessionStart, runSessionStatus,
 } from "./commands/session.js";
 import { printError } from "./display.js";
@@ -29,7 +31,7 @@ program
   .description(
     "Vendor-neutral context observability and optimisation system for AI coding agents.",
   )
-  .version("0.1.0");
+  .version(CONTINUUM_VERSION);
 
 // doctor
 program
@@ -215,6 +217,13 @@ session.command("start <task>").description("Start a progressive context session
   .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
   .action(async (task: string, options: any) => runSessionStart(task, { cwd: process.cwd(), ...options }));
 
+session.command("refresh <session-id>").description("Refresh changed source and advance the task snapshot.")
+  .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
+  .action(async(id:string,options:any)=>runSessionRefresh(id,{cwd:process.cwd(),...options}));
+session.command("checkpoint <session-id>").description("Mark delivered source as evicted after context compaction.")
+  .option("--repo <path>", "Repository path.")
+  .action(async(id:string,options:any)=>runSessionCheckpoint(id,{cwd:process.cwd(),...options}));
+
 session.command("status <session-id>").description("Show context session status.")
   .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
   .action(async (id: string, options: any) => runSessionStatus(id, { cwd: process.cwd(), ...options }));
@@ -269,10 +278,26 @@ session.command("list").description("List recent sessions for this repository.")
   .option("--json", "Emit structured JSON.").option("--repo <path>", "Repository path.")
   .action(async (options: any) => runSessionList({ cwd: process.cwd(), ...options }));
 
+session.command("memory <session-id>").description("Read durable task memory, record a user correction, recover, or checkpoint. All output is JSON.")
+  .option("--kind <kind>", "objective, requirement, constraint, decision, completed, pending, question, failure, next_action, or source.")
+  .option("--text <text>", "Record a user-authored memory entry.")
+  .option("--supersedes <id>", "Explicitly supersede an active entry of the same kind.")
+  .option("--query <query>", "Retrieve original evidence by ID, kind, or exact text fragment.")
+  .option("--recover", "Render bounded durable recovery.")
+  .option("--checkpoint <boundary-key>", "Write an atomic, idempotent recovery checkpoint.")
+  .option("--budget <tokens>", "Maximum estimated tokens in rendered recovery or retrieval.", "1500")
+  .option("--repo <path>", "Repository path.")
+  .action(async(id:string,options:any)=>runTaskMemory(id,{cwd:process.cwd(),...options}));
+
 const codex = program.command("codex").description("Run Codex in shadow mode, or inspect persisted executions.");
 
-codex.command("run <task>", { hidden: true }).description("Run a Codex execution (shadow or assist).")
+codex.command("run <task>").description("Run a Codex execution (shadow or assist). This starts model inference.")
   .option("--mode <mode>", "shadow or assist.", "shadow")
+  .option("--context-strategy <strategy>", "Assist delivery: initial_packet (default), minimal_manifest, on_demand, adaptive (experimental).")
+  .option("--durable-memory", "Keep an assist session open and restore durable requirements at continuation boundaries.")
+  .option("--resume-session <id>", "Resume the Codex thread bound to this Continuum session; requires durable memory.")
+  .option("--supersedes-memory <id>", "Treat this continuation as a user correction explicitly superseding that memory entry.")
+  .option("--reasoning-effort <effort>", "Explicit reasoning configuration. Durable sessions require low.")
   .option("--repo <path>", "Repository path.").option("--model <model>", "Codex model override.")
   .option("--approval-policy <policy>", "untrusted, on-failure, on-request, or never.", "on-request")
   .option("--sandbox <mode>", "read-only, workspace-write, or danger-full-access.", "workspace-write")
@@ -284,6 +309,7 @@ codex.command("run <task>", { hidden: true }).description("Run a Codex execution
   .action(async(task:string,options:any)=>runCodexShadow(task,{cwd:process.cwd(),...options}));
 
 codex.command("compare <task>").description("Run shadow and assist executions sequentially, and compare verification results.")
+  .option("--preparation-command <command>", "Prepare dependencies and build in each isolated workspace.")
   .requiredOption("--verifier <command>", "The verification command (e.g. 'pnpm test').")
   .option("--repo <path>", "Repository path.").option("--model <model>", "Codex model override.")
   .option("--timeout <duration>", "Turn timeout, for example 5m or 300s.")
@@ -324,6 +350,7 @@ pricing
   .option("--version <version>", "Pricing or model version label.")
   .option("--input <credits>", "Input credits per million tokens.")
   .option("--cached-input <credits>", "Cached-input credits per million tokens.")
+  .option("--cache-creation-input <credits>", "Cache-creation input credits per million tokens.")
   .option("--output <credits>", "Output credits per million tokens.")
   .option("--effective-from <iso-date>", "ISO-8601 effective timestamp.")
   .action(async (model: string, options: {
@@ -331,6 +358,7 @@ pricing
     version?: string;
     input?: string;
     cachedInput?: string;
+    cacheCreationInput?: string;
     output?: string;
     effectiveFrom?: string;
   }) => {

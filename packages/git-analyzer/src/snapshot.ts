@@ -44,31 +44,27 @@ async function identityFor(root: string, path: string): Promise<Pick<CanonicalWo
   }
 }
 
-/** Parse Git porcelain v2 NUL records into sorted, fixed-shape current-state entries. */
-export async function buildCanonicalWorktreeInventory(repositoryRoot: string): Promise<CanonicalWorktreeEntry[]> {
-  const records = (await gitOutput(repositoryRoot, ["status", "--porcelain=v2", "-z", "--untracked-files=all"])).split("\0");
-  const entries: CanonicalWorktreeEntry[] = [];
-  for (let index = 0; index < records.length; index += 1) {
+/** Parse porcelain v2 without guessing field counts or splitting paths on whitespace. */
+export function parsePorcelainInventory(output: string): CanonicalWorktreeEntry[] {
+  const nul = output.includes("\0"), records = output.split(nul ? "\0" : "\n"), entries: CanonicalWorktreeEntry[] = [];
+  for (let index = 0; index < records.length; index++) {
     const record = records[index];
-    if (!record || record.startsWith("! ")) continue;
-    if (record.startsWith("? ")) {
-      const path = normalisePath(record.slice(2));
-      entries.push({ path, recordType: "untracked", indexState: "?", worktreeState: "?", ...(await identityFor(repositoryRoot, path)) });
-      continue;
-    }
-    const fields = record.split(" ");
-    if (record.startsWith("u ")) {
-      const path = normalisePath(fields.slice(10).join(" "));
-      entries.push({ path, recordType: "unmerged", indexState: fields[1]?.[0] ?? "u", worktreeState: fields[1]?.[1] ?? "u", headMode: fields[3], indexMode: fields[4], worktreeMode: fields[5], headObjectId: fields[6], indexObjectId: fields[7], ...(await identityFor(repositoryRoot, path)) });
-      continue;
-    }
-    if (!record.startsWith("1 ") && !record.startsWith("2 ")) continue;
-    const renameOrCopy = record.startsWith("2 ");
-    const path = normalisePath(fields.slice(renameOrCopy ? 9 : 8).join(" "));
-    const originalPath = renameOrCopy ? normalisePath(records[++index] ?? "") : undefined;
-    entries.push({ path, ...(originalPath ? { originalPath } : {}), recordType: renameOrCopy ? "rename_or_copy" : "ordinary", indexState: fields[1]?.[0] ?? " ", worktreeState: fields[1]?.[1] ?? " ", headMode: fields[3], indexMode: fields[4], worktreeMode: fields[5], headObjectId: fields[6], indexObjectId: fields[7], ...(await identityFor(repositoryRoot, path)) });
+    if (!record || record.startsWith("#") || record.startsWith("!")) continue;
+    if (record.startsWith("? ")) { entries.push({ path: normalisePath(record.slice(2)), recordType: "untracked", indexState: "?", worktreeState: "?" }); continue; }
+    const fields = record.split(" "), type = fields[0];
+    if (!["1", "2", "u"].includes(type ?? "")) continue;
+    const offset = type === "1" ? 8 : type === "2" ? 9 : 10;
+    const rawPath = fields.slice(offset).join(" ");
+    const [path, textOriginal] = nul ? [rawPath, undefined] : rawPath.split("\t");
+    const originalPath = type === "2" ? (nul ? records[++index] : textOriginal) : undefined;
+    entries.push({ path: normalisePath(path ?? ""), ...(originalPath ? { originalPath: normalisePath(originalPath) } : {}), recordType: type === "u" ? "unmerged" : type === "2" ? "rename_or_copy" : "ordinary", indexState: fields[1]?.[0] ?? " ", worktreeState: fields[1]?.[1] ?? " ", headMode: fields[3], indexMode: fields[4], worktreeMode: fields[5], headObjectId: fields[6], indexObjectId: fields[7] });
   }
-  return entries.sort((left, right) => left.path.localeCompare(right.path) || (left.originalPath ?? "").localeCompare(right.originalPath ?? "") || left.recordType.localeCompare(right.recordType));
+  return entries.sort((a,b) => a.path.localeCompare(b.path));
+}
+
+export async function buildCanonicalWorktreeInventory(repositoryRoot: string): Promise<CanonicalWorktreeEntry[]> {
+  const entries = parsePorcelainInventory(await gitOutput(repositoryRoot, ["status", "--porcelain=v2", "-z", "--untracked-files=all"]));
+  return Promise.all(entries.map(async entry => ({ ...entry, ...(await identityFor(repositoryRoot, entry.path)) })));
 }
 
 export function serializeCanonicalWorktreeInventory(entries: CanonicalWorktreeEntry[]): string {

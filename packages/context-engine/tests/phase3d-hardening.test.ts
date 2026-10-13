@@ -84,7 +84,7 @@ describe("Phase 3D deterministic hardening", () => {
       const item = isolatedRepository.upsertContextItem(1, "constant", "config/app.yaml:timeoutMs");
       isolatedRepository.insertContextItemVersion({ id: "config", context_item_id: item.id, content: "timeoutMs: 1000", contextual_header: "File: config/app.yaml", compiled_content: "timeoutMs: 1000", title: "timeoutMs", source_path: "config/app.yaml", source_start_line: 1, source_end_line: 1, symbol_name: "timeoutMs", language: "yaml", content_hash: "config-hash", source_blob_hash: "config-blob", valid_from_commit: "phase3d", valid_to_commit_exclusive: null, indexed_at: new Date().toISOString(), provenance_json: JSON.stringify({ repositoryId: 1, sourcePath: "config/app.yaml", sourceStartLine: 1, sourceEndLine: 1, extractor: "fixture", snapshot, confidence: "high" }), staleness_status: "current", staleness_reason: null, metadata_json: JSON.stringify({ declarationKind: "constant" }) });
       const configPacket = await new ContextEngine(isolated, 1, snapshot).packet("Fix configuration timeoutMs in config/app.yaml");
-      expect(configPacket.coverage.coverageEvidence.find((entry) => entry.category === "tests")?.state).toBe("unavailable");
+      expect(configPacket.coverage.coverageEvidence.find((entry) => entry.category === "tests")?.availability).toBe("not_found");
       expect(configPacket.coverage.complete).toBe(true);
     } finally { isolated.close(); try { unlinkSync(isolatedPath); } catch { /* Windows may briefly retain SQLite. */ } }
   });

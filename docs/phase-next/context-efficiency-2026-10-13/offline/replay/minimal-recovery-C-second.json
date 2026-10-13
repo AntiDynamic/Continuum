@@ -1,0 +1,212 @@
+{
+  "executionId": "713ec841-795e-41df-bcc6-753b5f476d06",
+  "sessionId": "cea383d0-b03b-408c-85b7-41e98c47b4c7",
+  "report": {
+    "schemaVersion": "continuum.shadow-flight-recorder.v2",
+    "execution": {
+      "executionId": "713ec841-795e-41df-bcc6-753b5f476d06",
+      "sessionId": "cea383d0-b03b-408c-85b7-41e98c47b4c7",
+      "repositoryId": "1",
+      "task": "Proceed with implementation now using the recovered original task requirements, then validate the result.",
+      "snapshot": {
+        "snapshot_kind": "commit",
+        "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+        "worktree_hash": null,
+        "dirty": false
+      },
+      "finalSnapshot": {
+        "available": true,
+        "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+        "worktree_hash": null,
+        "error": null
+      },
+      "codexVersion": "fixture",
+      "model": "gpt-5.6-luna",
+      "status": "completed",
+      "durationMs": 340
+    },
+    "prediction": {
+      "estimatedTokens": 0,
+      "items": [],
+      "mandatoryCoverage": [
+        {
+          "category": "implementation",
+          "state": "required",
+          "required": true,
+          "reason": "Security-sensitive implementation is required."
+        },
+        {
+          "category": "tests",
+          "state": "recommended",
+          "required": false,
+          "reason": "Security regression tests are required when applicable indexed evidence exists."
+        },
+        {
+          "category": "security_constraint",
+          "state": "required",
+          "required": true,
+          "reason": "Repository security constraints are required."
+        },
+        {
+          "category": "public_contract",
+          "state": "required",
+          "required": true,
+          "reason": "Public security contracts are required."
+        },
+        {
+          "category": "architecture",
+          "state": "recommended",
+          "required": false,
+          "reason": "Architecture boundaries may apply."
+        }
+      ]
+    },
+    "exploration": {
+      "directlyObservedReadPaths": [],
+      "commandInferredReadPaths": [],
+      "searchedPaths": [],
+      "searchedSymbols": [],
+      "editedPaths": [
+        "src/add.ts"
+      ],
+      "diffPaths": [
+        "src/add.ts"
+      ],
+      "testRelatedPaths": [],
+      "unknownReferencedPaths": [],
+      "observedActivityPaths": [
+        "src/add.ts"
+      ],
+      "evidenceRecords": [
+        {
+          "path": "src/add.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 21,
+          "normalizedEventId": "395f9b99-abd2-4b73-84b0-36cb626ed3ce",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "src/add.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 22,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        }
+      ],
+      "commands": [
+        {
+          "command": "pnpm test",
+          "cwd": "/tmp/continuum-recovery-benchmark-POij1X/minimal-recovery-C",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "agent",
+          "sourceEventSequence": 19,
+          "normalizedEventId": "dd591737-22c3-430f-9c1d-fb2c449a9ae0",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "pnpm test",
+          "cwd": "/tmp/continuum-recovery-benchmark-POij1X/minimal-recovery-C",
+          "exitCode": 0,
+          "durationMs": 42,
+          "status": "completed",
+          "source": "agent",
+          "sourceEventSequence": 20,
+          "normalizedEventId": "209457be-badf-4e23-ba98-73fcae1b4215",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        }
+      ],
+      "tests": [
+        {
+          "command": "pnpm test",
+          "cwd": "/tmp/continuum-recovery-benchmark-POij1X/minimal-recovery-C",
+          "exitCode": 0,
+          "durationMs": 42,
+          "framework": "pnpm",
+          "status": "passed",
+          "sourceEventSequence": 20,
+          "normalizedEventId": "5989a658-e616-4a68-8250-46f25a215d77",
+          "evidenceType": "command-inferred",
+          "confidence": "medium"
+        }
+      ],
+      "changedPaths": [
+        "src/add.ts"
+      ],
+      "inferredPaths": [],
+      "directlyObservedPaths": [
+        "src/add.ts"
+      ]
+    },
+    "comparison": {
+      "predictedAndObserved": [],
+      "predictedNotObserved": [],
+      "observedNotPredicted": [
+        {
+          "path": "src/add.ts",
+          "evidence": "file_edit"
+        }
+      ],
+      "requiredPredictionsWithoutObservedActivity": [],
+      "mandatoryPredictionMisses": [],
+      "predictedActivityCoverage": 0,
+      "predictionActivityPrecision": null,
+      "editPredictionCoverage": 0,
+      "diffPredictionCoverage": 0,
+      "requiredActivityObservationRate": null,
+      "observationRecall": 0,
+      "predictionPrecision": null,
+      "overlapRecall": 0,
+      "overlapPrecision": null
+    },
+    "usage": {
+      "accumulated": {
+        "id": "f64d0045-3635-41ac-a1d9-2c8f8300616e",
+        "execution_id": "713ec841-795e-41df-bcc6-753b5f476d06",
+        "raw_sequence_number": 23,
+        "source": "codex.thread/tokenUsage/updated",
+        "input_tokens": 100,
+        "cached_input_tokens": 20,
+        "output_tokens": 50,
+        "reasoning_tokens": 10,
+        "total_tokens": 150,
+        "accumulation": "accumulated",
+        "measurement": "measured",
+        "timestamp": "2026-10-12T21:12:24.100Z",
+        "raw_provider_payload_json": "{\"total\":{\"totalTokens\":150,\"inputTokens\":100,\"cachedInputTokens\":20,\"outputTokens\":50,\"reasoningOutputTokens\":10},\"last\":{\"totalTokens\":60,\"inputTokens\":40,\"cachedInputTokens\":10,\"outputTokens\":20,\"reasoningOutputTokens\":5},\"modelContextWindow\":200000}"
+      },
+      "exactResponses": [],
+      "availability": "measured"
+    },
+    "compaction": {
+      "count": 0,
+      "events": []
+    },
+    "outcome": {
+      "turnStatus": "completed",
+      "testsObserved": true,
+      "testsPassed": true,
+      "diffCaptured": true,
+      "changedFileCount": 1
+    },
+    "evidenceWarnings": [
+      "Shadow mode did not restrict Codex or inject Continuum prediction content.",
+      "Command-inferred paths are not proof that a file was read — they are shell command arguments.",
+      "The Codex App Server schema does not expose direct file-read events; directlyObservedReadPaths will always be empty.",
+      "Absence from activity evidence does not prove that the model did not read or receive an item.",
+      "Observed-not-predicted paths are additional exploration, not automatically unnecessary.",
+      "Continuum packet tokens are estimated; no token-savings claim is made."
+    ]
+  },
+  "compatibilityWarning": null,
+  "authenticationMode": "chatgpt"
+}

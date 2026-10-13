@@ -1,0 +1,105 @@
+{
+  "budget": {
+    "deliveredItemEstimate": 622,
+    "handoffLayerEstimate": 622,
+    "fullHandoffEstimate": 622,
+    "initialProfileCeiling": 1500
+  },
+  "tinyBudget": {
+    "accepted": false,
+    "error": "Context budget too small for the delivery envelope: need 61 estimated tokens, available 1."
+  },
+  "dirtyAttribution": {
+    "expectedPath": "src/auth-service.ts",
+    "parsedPaths": [
+      ".gitignore",
+      "src/auth-service.ts"
+    ],
+    "detectsDirtySource": true
+  },
+  "afterEditRequest": {
+    "accepted": true
+  },
+  "emptyCoverage": {
+    "complete": false,
+    "missing": [
+      "implementation",
+      "security_constraint",
+      "public_contract"
+    ],
+    "evidence": [
+      {
+        "category": "implementation",
+        "state": "required"
+      },
+      {
+        "category": "tests",
+        "state": "recommended"
+      },
+      {
+        "category": "security_constraint",
+        "state": "required"
+      },
+      {
+        "category": "public_contract",
+        "state": "required"
+      },
+      {
+        "category": "architecture",
+        "state": "recommended"
+      }
+    ]
+  },
+  "staleSearch": {
+    "returnedItems": 8,
+    "returnedOldContent": false
+  },
+  "rawStorage": {
+    "sharedRedactorWouldRemoveSentinel": true,
+    "sentinelPersistedUnchanged": false
+  },
+  "adapterException": {
+    "persistedStatus": "failed"
+  },
+  "compare": {
+    "accepted": true
+  },
+  "forgedPatch": {
+    "visible": "failed",
+    "hidden": "failed",
+    "wrongImplementation": "readCache always returns WRONG_STALE_VALUE",
+    "outcome": {
+      "patchValidated": false,
+      "visibleValidationPassed": false,
+      "hiddenValidationPassed": false,
+      "diffCheckPassed": true,
+      "agentFinishedWithinTimeout": true,
+      "timedOut": false,
+      "providerTimeout": false,
+      "providerFailure": false,
+      "failureCategory": null,
+      "verifiedTaskSuccess": false
+    }
+  },
+  "unpricedReport": {
+    "inputCost": null,
+    "reportedCost": {
+      "median": null,
+      "measured": 0
+    },
+    "costPerVerifiedSuccess": null,
+    "preflightOnlyPairedRuns": 1,
+    "unpairedRuns": 0,
+    "hasPurePreflightComparison": true
+  },
+  "openCodeUsage": {
+    "expectedPerStepInputSum": 300,
+    "parsedInputTokens": 300
+  },
+  "emptyPricingProfile": null,
+  "testCounts": {
+    "expectedPassedTests": 10,
+    "reportedPassedCount": 10,
+    "confidence": "high"
+  }
+}

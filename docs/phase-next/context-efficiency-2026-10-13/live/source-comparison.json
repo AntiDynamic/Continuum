@@ -1,0 +1,33 @@
+{
+  "before": {
+    ".gitignore": "522b8609693e7c32e8ba8ec9831d6b57e25b184b9bdeac2d5e2ae442cf1ca8e3",
+    "README.md": "6951aea94e5b8574e20fe2190788dd1d32bf3a4e9640ea0e1c6218bdfbc2ab4e",
+    "SECURITY.md": "732347c82e26ea3c62025d3bab620ce8858055d65b4247fc9ad2d8291781c0ae",
+    "config/app.yaml": "e66d8ff8f32ac079c663873b4f5b1d211789a2b4abe7c4ce3a5511c7fa67da70",
+    "docs/authentication.md": "e5b79d379c9d386b07563ca23a435ab4fd38baed408959ac003f4fa4539f0796",
+    "src/analytics.ts": "fdd1bf0f3adbba8f7dac60a3d57607009fff4ceabc3f86877874313606342bb4",
+    "src/api.ts": "851e732bbc98349b013ed54f9f01fc591f58d68640c8d16bf2aa81f129bcc70c",
+    "src/app-config.ts": "2f47ee95f03c07adf0cbee190daec65caeef54d444145b40a6dfe40c9a6f027e",
+    "src/auth-service.ts": "0613c68cf34d000cc6792a86005be0c46b7e0535bd4312f67c153e5e37c09182",
+    "src/cache.ts": "156f9cae58c1d55620e6cf38445122dab6cca8438b3ab6a9180fb663af9527a3",
+    "tests/auth-service.test.ts": "653bbe38a2e23e3c6bce7eee062566d972736c9028ae9ffc4d080167d92f6708",
+    "tests/cache.test.ts": "dfba72f304246498008a1a39e714540fc9bec47c6ac043b96248b1d916d9a640"
+  },
+  "after": {
+    ".gitignore": "522b8609693e7c32e8ba8ec9831d6b57e25b184b9bdeac2d5e2ae442cf1ca8e3",
+    "README.md": "6951aea94e5b8574e20fe2190788dd1d32bf3a4e9640ea0e1c6218bdfbc2ab4e",
+    "SECURITY.md": "732347c82e26ea3c62025d3bab620ce8858055d65b4247fc9ad2d8291781c0ae",
+    "config/app.yaml": "e66d8ff8f32ac079c663873b4f5b1d211789a2b4abe7c4ce3a5511c7fa67da70",
+    "docs/authentication.md": "e5b79d379c9d386b07563ca23a435ab4fd38baed408959ac003f4fa4539f0796",
+    "src/analytics.ts": "fdd1bf0f3adbba8f7dac60a3d57607009fff4ceabc3f86877874313606342bb4",
+    "src/api.ts": "851e732bbc98349b013ed54f9f01fc591f58d68640c8d16bf2aa81f129bcc70c",
+    "src/app-config.ts": "2f47ee95f03c07adf0cbee190daec65caeef54d444145b40a6dfe40c9a6f027e",
+    "src/auth-service.ts": "4c43eaaa5c87a8b7891e5d414fc00f4dd6b09dbb34b772f300a37bcff320ed95",
+    "src/cache.ts": "156f9cae58c1d55620e6cf38445122dab6cca8438b3ab6a9180fb663af9527a3",
+    "tests/auth-service.test.ts": "653bbe38a2e23e3c6bce7eee062566d972736c9028ae9ffc4d080167d92f6708",
+    "tests/cache.test.ts": "dfba72f304246498008a1a39e714540fc9bec47c6ac043b96248b1d916d9a640"
+  },
+  "changed": [
+    "src/auth-service.ts"
+  ]
+}

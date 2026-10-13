@@ -1,0 +1,212 @@
+{
+  "executionId": "9e0297eb-085a-4479-983a-3952ffedb576",
+  "sessionId": "cea383d0-b03b-408c-85b7-41e98c47b4c7",
+  "report": {
+    "schemaVersion": "continuum.shadow-flight-recorder.v2",
+    "execution": {
+      "executionId": "9e0297eb-085a-4479-983a-3952ffedb576",
+      "sessionId": "cea383d0-b03b-408c-85b7-41e98c47b4c7",
+      "repositoryId": "1",
+      "task": "For the later implementation, fix AuthService: reject empty and literal expired tokens in both validation and refresh; preserve signatures, TokenClaims subject and expiry, and return <token>-refreshed for valid tokens. This first turn is preparation only: acknowledge in one short sentence. Do not call tools or inspect or edit files yet.",
+      "snapshot": {
+        "snapshot_kind": "commit",
+        "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+        "worktree_hash": null,
+        "dirty": false
+      },
+      "finalSnapshot": {
+        "available": true,
+        "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+        "worktree_hash": null,
+        "error": null
+      },
+      "codexVersion": "fixture",
+      "model": "gpt-5.6-luna",
+      "status": "completed",
+      "durationMs": 326
+    },
+    "prediction": {
+      "estimatedTokens": 0,
+      "items": [],
+      "mandatoryCoverage": [
+        {
+          "category": "implementation",
+          "state": "required",
+          "required": true,
+          "reason": "Security-sensitive implementation is required."
+        },
+        {
+          "category": "tests",
+          "state": "recommended",
+          "required": false,
+          "reason": "Security regression tests are required when applicable indexed evidence exists."
+        },
+        {
+          "category": "security_constraint",
+          "state": "required",
+          "required": true,
+          "reason": "Repository security constraints are required."
+        },
+        {
+          "category": "public_contract",
+          "state": "required",
+          "required": true,
+          "reason": "Public security contracts are required."
+        },
+        {
+          "category": "architecture",
+          "state": "recommended",
+          "required": false,
+          "reason": "Architecture boundaries may apply."
+        }
+      ]
+    },
+    "exploration": {
+      "directlyObservedReadPaths": [],
+      "commandInferredReadPaths": [],
+      "searchedPaths": [],
+      "searchedSymbols": [],
+      "editedPaths": [
+        "src/add.ts"
+      ],
+      "diffPaths": [
+        "src/add.ts"
+      ],
+      "testRelatedPaths": [],
+      "unknownReferencedPaths": [],
+      "observedActivityPaths": [
+        "src/add.ts"
+      ],
+      "evidenceRecords": [
+        {
+          "path": "src/add.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 22,
+          "normalizedEventId": "5be99668-a05a-4ded-85ea-9f789b3eccea",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "src/add.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 23,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        }
+      ],
+      "commands": [
+        {
+          "command": "pnpm test",
+          "cwd": "/tmp/continuum-recovery-benchmark-POij1X/minimal-recovery-C",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "agent",
+          "sourceEventSequence": 20,
+          "normalizedEventId": "8b2d271f-7dd4-4070-ba0a-b24333883eb0",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "pnpm test",
+          "cwd": "/tmp/continuum-recovery-benchmark-POij1X/minimal-recovery-C",
+          "exitCode": 0,
+          "durationMs": 42,
+          "status": "completed",
+          "source": "agent",
+          "sourceEventSequence": 21,
+          "normalizedEventId": "035e49ec-d9ba-413e-a2fc-0725dccf0d93",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        }
+      ],
+      "tests": [
+        {
+          "command": "pnpm test",
+          "cwd": "/tmp/continuum-recovery-benchmark-POij1X/minimal-recovery-C",
+          "exitCode": 0,
+          "durationMs": 42,
+          "framework": "pnpm",
+          "status": "passed",
+          "sourceEventSequence": 21,
+          "normalizedEventId": "06e5853e-a6a9-4008-aa67-2d0a96d802fc",
+          "evidenceType": "command-inferred",
+          "confidence": "medium"
+        }
+      ],
+      "changedPaths": [
+        "src/add.ts"
+      ],
+      "inferredPaths": [],
+      "directlyObservedPaths": [
+        "src/add.ts"
+      ]
+    },
+    "comparison": {
+      "predictedAndObserved": [],
+      "predictedNotObserved": [],
+      "observedNotPredicted": [
+        {
+          "path": "src/add.ts",
+          "evidence": "file_edit"
+        }
+      ],
+      "requiredPredictionsWithoutObservedActivity": [],
+      "mandatoryPredictionMisses": [],
+      "predictedActivityCoverage": 0,
+      "predictionActivityPrecision": null,
+      "editPredictionCoverage": 0,
+      "diffPredictionCoverage": 0,
+      "requiredActivityObservationRate": null,
+      "observationRecall": 0,
+      "predictionPrecision": null,
+      "overlapRecall": 0,
+      "overlapPrecision": null
+    },
+    "usage": {
+      "accumulated": {
+        "id": "6b078714-67ee-4822-b19f-4cb53fc6119b",
+        "execution_id": "9e0297eb-085a-4479-983a-3952ffedb576",
+        "raw_sequence_number": 24,
+        "source": "codex.thread/tokenUsage/updated",
+        "input_tokens": 100,
+        "cached_input_tokens": 20,
+        "output_tokens": 50,
+        "reasoning_tokens": 10,
+        "total_tokens": 150,
+        "accumulation": "accumulated",
+        "measurement": "measured",
+        "timestamp": "2026-10-12T21:12:23.502Z",
+        "raw_provider_payload_json": "{\"total\":{\"totalTokens\":150,\"inputTokens\":100,\"cachedInputTokens\":20,\"outputTokens\":50,\"reasoningOutputTokens\":10},\"last\":{\"totalTokens\":60,\"inputTokens\":40,\"cachedInputTokens\":10,\"outputTokens\":20,\"reasoningOutputTokens\":5},\"modelContextWindow\":200000}"
+      },
+      "exactResponses": [],
+      "availability": "measured"
+    },
+    "compaction": {
+      "count": 0,
+      "events": []
+    },
+    "outcome": {
+      "turnStatus": "completed",
+      "testsObserved": true,
+      "testsPassed": true,
+      "diffCaptured": true,
+      "changedFileCount": 1
+    },
+    "evidenceWarnings": [
+      "Shadow mode did not restrict Codex or inject Continuum prediction content.",
+      "Command-inferred paths are not proof that a file was read — they are shell command arguments.",
+      "The Codex App Server schema does not expose direct file-read events; directlyObservedReadPaths will always be empty.",
+      "Absence from activity evidence does not prove that the model did not read or receive an item.",
+      "Observed-not-predicted paths are additional exploration, not automatically unnecessary.",
+      "Continuum packet tokens are estimated; no token-savings claim is made."
+    ]
+  },
+  "compatibilityWarning": null,
+  "authenticationMode": "chatgpt"
+}

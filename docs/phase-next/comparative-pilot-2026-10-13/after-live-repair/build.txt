@@ -1,0 +1,24 @@
+$ pnpm -r build
+Scope: 11 of 12 workspace projects
+packages/shared build$ tsc --project tsconfig.json
+packages/shared build: Done
+packages/database build$ tsc --project tsconfig.json
+packages/gemini-adapter build$ tsc --project tsconfig.json
+packages/git-analyzer build$ tsc --project tsconfig.json
+packages/git-analyzer build: Done
+packages/database build: Done
+packages/gemini-adapter build: Done
+packages/agent-core build$ tsc --project tsconfig.json
+packages/evaluator build$ tsc --project tsconfig.json
+packages/repository-indexer build$ tsc --project tsconfig.json
+packages/evaluator build: Done
+packages/agent-core build: Done
+packages/repository-indexer build: Done
+packages/context-engine build$ tsc --project tsconfig.json
+packages/context-engine build: Done
+packages/codex-app-server build$ tsc --project tsconfig.json
+packages/mcp-server build$ tsc --project tsconfig.json
+packages/codex-app-server build: Done
+packages/mcp-server build: Done
+apps/cli build$ tsc --project tsconfig.json
+apps/cli build: Done

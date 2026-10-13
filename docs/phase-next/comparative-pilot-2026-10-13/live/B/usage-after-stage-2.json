@@ -1,0 +1,210 @@
+{
+  "providerResponses": [
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39b257f08191bcdb2b412bf179d9",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 1,
+      "rawUsage": {
+        "input_tokens": 13054,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 112,
+        "reasoning_output_tokens": 19,
+        "total_tokens": 13166
+      },
+      "inputTokens": 13054,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 13054,
+      "outputTokens": 112,
+      "totalTokens": 13166,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39b52b6081919e5c2629ec3c79ca",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 2,
+      "rawUsage": {
+        "input_tokens": 13632,
+        "cached_input_tokens": 12032,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 101,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 13733
+      },
+      "inputTokens": 13632,
+      "cachedInputTokens": 12032,
+      "uncachedInputTokens": 1600,
+      "outputTokens": 101,
+      "totalTokens": 13733,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39b790ac8191bd15b2d0128dfd50",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 3,
+      "rawUsage": {
+        "input_tokens": 14868,
+        "cached_input_tokens": 13056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1613,
+        "reasoning_output_tokens": 108,
+        "total_tokens": 16481
+      },
+      "inputTokens": 14868,
+      "cachedInputTokens": 13056,
+      "uncachedInputTokens": 1812,
+      "outputTokens": 1613,
+      "totalTokens": 16481,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39c269e08191b8e8444f302544ae",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 4,
+      "rawUsage": {
+        "input_tokens": 16551,
+        "cached_input_tokens": 14080,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1268,
+        "reasoning_output_tokens": 36,
+        "total_tokens": 17819
+      },
+      "inputTokens": 16551,
+      "cachedInputTokens": 14080,
+      "uncachedInputTokens": 2471,
+      "outputTokens": 1268,
+      "totalTokens": 17819,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39ca4e508191915fb74c5dd05fb7",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 5,
+      "rawUsage": {
+        "input_tokens": 17843,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 68,
+        "reasoning_output_tokens": 7,
+        "total_tokens": 17911
+      },
+      "inputTokens": 17843,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 17843,
+      "outputTokens": 68,
+      "totalTokens": 17911,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39cccaac8191b72239e79e23a31f",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 6,
+      "rawUsage": {
+        "input_tokens": 17948,
+        "cached_input_tokens": 17152,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 136,
+        "reasoning_output_tokens": 8,
+        "total_tokens": 18084
+      },
+      "inputTokens": 17948,
+      "cachedInputTokens": 17152,
+      "uncachedInputTokens": 796,
+      "outputTokens": 136,
+      "totalTokens": 18084,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39cf41ec81919e94b833ba18ea02",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 7,
+      "rawUsage": {
+        "input_tokens": 19885,
+        "cached_input_tokens": 17152,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 238,
+        "reasoning_output_tokens": 81,
+        "total_tokens": 20123
+      },
+      "inputTokens": 19885,
+      "cachedInputTokens": 17152,
+      "uncachedInputTokens": 2733,
+      "outputTokens": 238,
+      "totalTokens": 20123,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39dbd8588191a7ba33242e9d57c6",
+      "logicalTurnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "sequence": 8,
+      "rawUsage": {
+        "input_tokens": 22449,
+        "cached_input_tokens": 19200,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 171,
+        "reasoning_output_tokens": 44,
+        "total_tokens": 22620
+      },
+      "inputTokens": 22449,
+      "cachedInputTokens": 19200,
+      "uncachedInputTokens": 3249,
+      "outputTokens": 171,
+      "totalTokens": 22620,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39dea7d881918e3a72ef307a915b",
+      "logicalTurnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "sequence": 9,
+      "rawUsage": {
+        "input_tokens": 22644,
+        "cached_input_tokens": 22272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 121,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 22765
+      },
+      "inputTokens": 22644,
+      "cachedInputTokens": 22272,
+      "uncachedInputTokens": 372,
+      "outputTokens": 121,
+      "totalTokens": 22765,
+      "activeContextOccupancy": null
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39e0da68819183cdf7adecf4fa85",
+      "logicalTurnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "sequence": 10,
+      "rawUsage": {
+        "input_tokens": 22853,
+        "cached_input_tokens": 22272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 90,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 22943
+      },
+      "inputTokens": 22853,
+      "cachedInputTokens": 22272,
+      "uncachedInputTokens": 581,
+      "outputTokens": 90,
+      "totalTokens": 22943,
+      "activeContextOccupancy": null
+    }
+  ],
+  "totals": {
+    "inputTokens": 181727,
+    "cachedInputTokens": 137216,
+    "uncachedInputTokens": 44511,
+    "outputTokens": 3918,
+    "totalTokens": 185645
+  },
+  "rawThreadUsage": {
+    "totalTokens": 185645,
+    "inputTokens": 181727,
+    "cachedInputTokens": 137216,
+    "cacheWriteInputTokens": 0,
+    "outputTokens": 3918,
+    "reasoningOutputTokens": 303
+  },
+  "activeContextOccupancy": null
+}

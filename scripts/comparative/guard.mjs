@@ -1,0 +1,18 @@
+import {readFile} from 'node:fs/promises';
+import {resolve,sep} from 'node:path';
+import {normalizeResponseLedger} from '../recovery-usage-ledger.mjs';
+import {assertEffective} from '../recovery-safety.mjs';
+export class ComparativeGuard {
+ constructor({workspace,maxTurns=2,maxCompactions=0,threshold,log=()=>{}}){if(!Number.isSafeInteger(threshold)||threshold<1||!Number.isInteger(maxTurns)||maxTurns<1||maxTurns>8)throw new Error('Invalid limits');Object.assign(this,{workspace:resolve(workspace),maxTurns,maxCompactions,threshold,log});this.requests=new Map();this.turns=0;this.compactions=0;this.active=false;this.threadId=null;this.nativePath=null;this.responses=[];this.rawThreadUsage=null;this.stopped=false;}
+ async refresh(){if(!this.nativePath)return;let text;try{text=await readFile(this.nativePath,'utf8');}catch(e){if(e.code==='ENOENT')return;throw e;}const lines=text.split('\n');lines.pop();const rows=lines.filter(Boolean).map(JSON.parse);this.responses=normalizeResponseLedger(rows);this.nativeRecords=rows;}
+ get usage(){return this.responses.length?this.responses.reduce((a,r)=>{for(const k of Object.keys(a))a[k]+=r[k];return a;},{inputTokens:0,cachedInputTokens:0,uncachedInputTokens:0,outputTokens:0,totalTokens:0}):null;}
+ async beforeNext(){await this.refresh();if(this.turns&&!this.usage)throw new Error('Missing provider per-response telemetry; further inference blocked');if(this.stopped||this.usage?.totalTokens>=this.threshold||this.rawThreadUsage?.totalTokens>=this.threshold)throw new Error('Reported provider budget reached; no further operations');}
+ async observe(message){const p=message.parsed;if(!p)return;
+  if(message.direction==='client_to_server'&&p.method){this.requests.set(p.id,p.method);if(['turn/start','thread/compact/start'].includes(p.method)){await this.beforeNext();if(this.active)throw new Error('Concurrent operation blocked');if(!this.threadId)throw new Error('Effective configuration unverified');if(p.params.threadId!==this.threadId)throw new Error('Wrong thread');if(p.method==='turn/start'){if(this.turns>=this.maxTurns||p.params.model!=='gpt-5.6-luna'||p.params.effort!=='low')throw new Error('Unexpected generation or configuration');this.turns++;}else{if(this.compactions>=this.maxCompactions)throw new Error('Unexpected explicit compaction');this.compactions++;}this.active=true;}}
+  if(message.direction==='server_to_client'&&p.id!==undefined&&p.result&&['thread/start','thread/resume'].includes(this.requests.get(p.id))){assertEffective({...p.result,id:p.result.thread?.id},this.threadId);this.threadId=p.result.thread.id;const path=resolve(p.result.thread.path??'');const allowed=resolve(this.workspace,'.continuum/codex-host/sessions')+sep;if(!path.startsWith(allowed))throw new Error('Native usage path outside own isolated history');this.nativePath=path;await this.log({event:'effective-configuration',thread:{id:this.threadId,model:p.result.model,modelProvider:p.result.modelProvider,reasoningEffort:p.result.reasoningEffort}});}
+  if(p.method==='model/rerouted')throw new Error('Model rerouting forbidden');
+  if(p.method==='thread/tokenUsage/updated'){this.rawThreadUsage=p.params.tokenUsage?.total??null;await this.refresh();if(this.usage?.totalTokens>=this.threshold||this.rawThreadUsage?.totalTokens>=this.threshold){this.stopped=true;throw new Error('Reactive reported-provider threshold reached');}}
+  if(p.method==='turn/completed'){this.active=false;await this.refresh();if(p.params?.turn?.status!=='completed')this.stopped=true;}
+  if(p.method==='item/completed'&&p.params?.item?.type==='contextCompaction'){await this.refresh();}
+ }
+}

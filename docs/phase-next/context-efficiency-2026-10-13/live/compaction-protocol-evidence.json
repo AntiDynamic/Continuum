@@ -1,0 +1,88 @@
+{
+  "request": [
+    {
+      "direction": "client_to_server",
+      "category": "request",
+      "raw": "{\"id\":3,\"method\":\"thread/compact/start\",\"params\":{\"threadId\":\"01a131fb-890d-7f62-beeb-299a567f3991\"}}",
+      "parsed": {
+        "id": 3,
+        "method": "thread/compact/start",
+        "params": {
+          "threadId": "01a131fb-890d-7f62-beeb-299a567f3991"
+        }
+      },
+      "method": "thread/compact/start",
+      "requestId": 3,
+      "timestamp": "2026-10-12T21:18:54.985Z"
+    }
+  ],
+  "completion": [
+    {
+      "method": "item/completed",
+      "threadId": "01a131fb-890d-7f62-beeb-299a567f3991",
+      "turnId": "01a131fb-9a0b-7d12-b052-df34525a07e8",
+      "itemId": "01a131fb-9c7f-7fe1-9536-6563441b177c",
+      "itemType": "contextCompaction",
+      "observedAt": "2026-10-12T21:18:58.575Z",
+      "origin": "host",
+      "trigger": "thread/compact/start"
+    }
+  ],
+  "nativeRecordSource": {
+    "file": "live/native-rollouts/2026/10/13/rollout-2026-10-13T02-48-51-01a131fb-890d-7f62-beeb-299a567f3991.jsonl",
+    "line": 17
+  },
+  "nativeTimestamp": "2026-10-12T21:18:58.564Z",
+  "compactionResponseId": "resp_037643f1206a1a9c016acd4ec05994819188255dd61cf222d3",
+  "windowNumber": 1,
+  "latestTokenUsageRecord": {
+    "thread_id": "01a131fb-890d-7f62-beeb-299a567f3991",
+    "turn_id": "01a131fb-9a0b-7d12-b052-df34525a07e8",
+    "session_id": "01a131fb-890d-7f62-beeb-299a567f3991",
+    "root_turn_id": "01a131fb-9a0b-7d12-b052-df34525a07e8",
+    "response_id": "resp_037643f1206a1a9c016acd4ec05994819188255dd61cf222d3",
+    "usage": {
+      "input_tokens": 11521,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 211,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 11732
+    },
+    "turn_token_usage": {
+      "input_tokens": 11521,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 211,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 11732
+    },
+    "thread_token_usage": {
+      "input_tokens": 22994,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 239,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 23233
+    }
+  },
+  "originalTaskRetainedInNativeReplacementHistory": true,
+  "replacementHistoryItems": [
+    {
+      "type": "message",
+      "role": "developer"
+    },
+    {
+      "type": "message",
+      "role": "user"
+    },
+    {
+      "type": "message",
+      "role": "user"
+    },
+    {
+      "type": "compaction",
+      "role": null
+    }
+  ]
+}

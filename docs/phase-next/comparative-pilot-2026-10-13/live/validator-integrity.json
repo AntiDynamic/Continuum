@@ -1,0 +1,233 @@
+{
+  "baseline": {
+    "status": "failed",
+    "checks": [
+      {
+        "id": "async-api",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'undefined'\n- 'function'\n"
+      },
+      {
+        "id": "receipt-compatibility",
+        "status": "passed"
+      },
+      {
+        "id": "integer-pricing",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 7500\n"
+      },
+      {
+        "id": "tenant-stock-isolation",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n5 !== 7\n"
+      },
+      {
+        "id": "invalid-quantities",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'undefined'\n- 'function'\n"
+      },
+      {
+        "id": "empty-items",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Missing expected rejection."
+      },
+      {
+        "id": "unknown-sku-atomicity",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n9 !== 10\n"
+      },
+      {
+        "id": "overbooking-atomicity",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Missing expected rejection."
+      },
+      {
+        "id": "repeated-sku",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n7 !== 14000\n"
+      },
+      {
+        "id": "durable-idempotency",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n8 !== 10\n"
+      },
+      {
+        "id": "tenant-request-isolation",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 4000\n"
+      },
+      {
+        "id": "cancel-once",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n"
+      },
+      {
+        "id": "new-fee-policy",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n50 !== 25\n"
+      },
+      {
+        "id": "legacy-receipt-stability",
+        "status": "passed"
+      },
+      {
+        "id": "schema-uniqueness",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Missing expected exception."
+      },
+      {
+        "id": "rollback-preservation",
+        "status": "failed",
+        "error": "Error: no such table: inventory"
+      }
+    ],
+    "passed": 2,
+    "total": 16,
+    "behavioralCheckSuccessPercent": 12.5
+  },
+  "oracle": {
+    "status": "passed",
+    "checks": [
+      {
+        "id": "async-api",
+        "status": "passed"
+      },
+      {
+        "id": "receipt-compatibility",
+        "status": "passed"
+      },
+      {
+        "id": "integer-pricing",
+        "status": "passed"
+      },
+      {
+        "id": "tenant-stock-isolation",
+        "status": "passed"
+      },
+      {
+        "id": "invalid-quantities",
+        "status": "passed"
+      },
+      {
+        "id": "empty-items",
+        "status": "passed"
+      },
+      {
+        "id": "unknown-sku-atomicity",
+        "status": "passed"
+      },
+      {
+        "id": "overbooking-atomicity",
+        "status": "passed"
+      },
+      {
+        "id": "repeated-sku",
+        "status": "passed"
+      },
+      {
+        "id": "durable-idempotency",
+        "status": "passed"
+      },
+      {
+        "id": "tenant-request-isolation",
+        "status": "passed"
+      },
+      {
+        "id": "cancel-once",
+        "status": "passed"
+      },
+      {
+        "id": "new-fee-policy",
+        "status": "passed"
+      },
+      {
+        "id": "legacy-receipt-stability",
+        "status": "passed"
+      },
+      {
+        "id": "schema-uniqueness",
+        "status": "passed"
+      },
+      {
+        "id": "rollback-preservation",
+        "status": "passed"
+      }
+    ],
+    "passed": 16,
+    "total": 16,
+    "behavioralCheckSuccessPercent": 100
+  },
+  "negative": {
+    "status": "failed",
+    "checks": [
+      {
+        "id": "async-api",
+        "status": "passed"
+      },
+      {
+        "id": "receipt-compatibility",
+        "status": "passed"
+      },
+      {
+        "id": "integer-pricing",
+        "status": "passed"
+      },
+      {
+        "id": "tenant-stock-isolation",
+        "status": "passed"
+      },
+      {
+        "id": "invalid-quantities",
+        "status": "passed"
+      },
+      {
+        "id": "empty-items",
+        "status": "passed"
+      },
+      {
+        "id": "unknown-sku-atomicity",
+        "status": "passed"
+      },
+      {
+        "id": "overbooking-atomicity",
+        "status": "passed"
+      },
+      {
+        "id": "repeated-sku",
+        "status": "passed"
+      },
+      {
+        "id": "durable-idempotency",
+        "status": "passed"
+      },
+      {
+        "id": "tenant-request-isolation",
+        "status": "passed"
+      },
+      {
+        "id": "cancel-once",
+        "status": "passed"
+      },
+      {
+        "id": "new-fee-policy",
+        "status": "failed",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n50 !== 25\n"
+      },
+      {
+        "id": "legacy-receipt-stability",
+        "status": "passed"
+      },
+      {
+        "id": "schema-uniqueness",
+        "status": "passed"
+      },
+      {
+        "id": "rollback-preservation",
+        "status": "passed"
+      }
+    ],
+    "passed": 15,
+    "total": 16,
+    "behavioralCheckSuccessPercent": 93.75
+  }
+}

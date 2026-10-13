@@ -10,6 +10,7 @@ export class CoherentMarkdownExtractor implements Extractor {
       const match = line.match(/^(#{1,6})\s+(.+?)\s*$/);
       if (match?.[1] && match[2]) headings.push({ level: match[1].length, title: match[2], line: index });
     });
+    if (!headings.length && content.trim()) return [{name:"Document",kind:"heading",content,startLine:1,endLine:lines.length,metadata:{headingPath:[],parseConfidence:"high"}}];
     return headings.map((heading, index) => {
       const end = headings[index + 1]?.line ?? lines.length;
       const stack = headings.slice(0, index + 1).filter((candidate, candidateIndex, all) => candidate.level <= heading.level && !all.slice(candidateIndex + 1).some((later) => later.level <= candidate.level && later.line < heading.line));

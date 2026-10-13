@@ -2,6 +2,13 @@
 
 Updated: 2026-09-20
 
+2026-10-12 extension: the [autonomous recovery phase](phase-next/implementation.md)
+adds native A / retrieval B / durable recovery C preparation with paid runs
+blocked pending approval. Its development fixtures, mocked compaction,
+filesystem probes, and persistence tests establish infrastructure behavior.
+They do not satisfy the live effectiveness gates below. Historical pattern-only
+success labels require executable behavioral revalidation.
+
 ## Decision we need to make
 
 Does Continuum reduce provider context/exploration cost while preserving the
@@ -36,16 +43,24 @@ timeout, and fresh repository:
   request its initial context.
 - `continuum_preflight`: Continuum context is injected before the first model
   turn; MCP remains available for targeted deltas.
+- `continuum_preflight_only`: the default low-cost pure-preflight arm with the
+  same injected context but no MCP registry, isolating prompt delivery from
+  MCP tool-schema overhead.
 
-The main causal comparison is `continuum_preflight` versus
-`continuum_off`. The `continuum_on` arm explains whether late model-invoked MCP
-is weaker or stronger than preflight delivery.
+The main causal comparison is `continuum_preflight_only` versus
+`continuum_off`. The MCP-enabled `continuum_preflight` arm is a secondary
+diagnostic comparison used to measure whether targeted MCP adds value after
+the handoff. The `continuum_on` arm explains whether late model-invoked MCP is
+weaker or stronger than preflight delivery.
 
 ## Metrics
 
 ### Correctness gate
 
 - verified task success;
+- validated patch rate, even when the provider times out afterward;
+- agent-finished-within-timeout rate;
+- provider timeout rate;
 - visible and hidden validation status;
 - patch-scope status;
 - required-path changes;
@@ -81,14 +96,14 @@ testing and fix authentication, connectivity, or adapter behavior.
 ### Gate 1 — mechanism qualification
 
 Use one low model and one representative task. Run one matched
-`continuum_off`/`continuum_preflight` pair. This is the stage already completed:
-it showed approximately 19% lower input tokens, but both runs failed, so it
-remains inconclusive.
+`continuum_off`/`continuum_preflight_only` pair. Existing preflight evidence is
+diagnostic only: it showed lower token counts, but the low model did not
+complete the task reliably, so it remains inconclusive.
 
 ### Gate 2 — small qualification set
 
 Run two repetitions across three task families with only
-`continuum_off` and `continuum_preflight`:
+`continuum_off` and `continuum_preflight_only`:
 
 - local bug;
 - security-sensitive or cross-file change;

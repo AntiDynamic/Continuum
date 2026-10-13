@@ -1,5 +1,5 @@
 import type { Db } from "../connection.js";
-import { now } from "@continuum/shared";
+import { now, redactString, redactValue, type CapturePolicy } from "@continuum/shared";
 
 export interface CodexExecutionRow {
   id: string; session_id: string; repository_id: number; run_id: string | null; task_text: string;
@@ -32,8 +32,9 @@ export interface ReceivedCodexEvent {
 }
 
 export class CodexExecutionRepository {
-  constructor(private readonly db: Db) {}
+  constructor(private readonly db: Db, private readonly policy: CapturePolicy = {}) {}
   create(input: Omit<CodexExecutionRow, "codex_thread_id" | "codex_turn_id" | "final_base_commit_hash" | "final_worktree_hash" | "repository_changed" | "status" | "started_at" | "completed_at" | "failure_code" | "failure_message">): CodexExecutionRow {
+    input={...input,task_text:redactString(input.task_text,this.policy.redactPatterns)};
     const started = now();
     this.db.prepare(`INSERT INTO codex_executions(id,session_id,repository_id,run_id,task_text,codex_thread_id,codex_turn_id,codex_version,model,mode,approval_configuration,sandbox_configuration,base_commit_hash,worktree_hash,final_base_commit_hash,final_worktree_hash,repository_changed,status,started_at,completed_at,failure_code,failure_message) VALUES(?,?,?,?,?,NULL,NULL,?,?,?,?,?,?,?,NULL,NULL,0,'starting',?,NULL,NULL,NULL)`).run(input.id,input.session_id,input.repository_id,input.run_id,input.task_text,input.codex_version,input.model,input.mode,input.approval_configuration,input.sandbox_configuration,input.base_commit_hash,input.worktree_hash,started);
     return this.findRequired(input.id);
@@ -46,9 +47,16 @@ export class CodexExecutionRepository {
   }
   finish(id:string,status:string,finalSnapshot:{base_commit_hash:string;worktree_hash:string|null},failure?:{code:string;message:string}):void {
     const start=this.findRequired(id); const changed=start.base_commit_hash!==finalSnapshot.base_commit_hash||start.worktree_hash!==finalSnapshot.worktree_hash;
-    this.db.prepare("UPDATE codex_executions SET status=?,completed_at=?,failure_code=?,failure_message=?,final_base_commit_hash=?,final_worktree_hash=?,repository_changed=? WHERE id=?").run(status,now(),failure?.code??null,failure?.message??null,finalSnapshot.base_commit_hash,finalSnapshot.worktree_hash,changed?1:0,id);
+    this.db.prepare("UPDATE codex_executions SET status=?,completed_at=?,failure_code=?,failure_message=?,final_base_commit_hash=?,final_worktree_hash=?,repository_changed=? WHERE id=?").run(status,now(),failure?.code??null,failure?redactString(failure.message,this.policy.redactPatterns):null,finalSnapshot.base_commit_hash,finalSnapshot.worktree_hash,changed?1:0,id);
   }
   recordReceived(input:ReceivedCodexEvent):number {
+    input = {
+      ...input,
+      raw: { ...input.raw, raw_json: this.policy.captureRawOutput === false ? JSON.stringify({ captureDisabled: true }) : redactString(input.raw.raw_json, this.policy.redactPatterns) },
+      normalized: input.normalized?.map(event => ({ ...event, payload: redactValue(event.payload, this.policy.redactPatterns).value })),
+      usage: input.usage ? { ...input.usage, rawProviderPayload: this.policy.captureRawOutput === false ? { captureDisabled: true } : redactValue(input.usage.rawProviderPayload, this.policy.redactPatterns).value } : undefined,
+      diff: this.policy.captureRawOutput === false ? undefined : input.diff ? { ...input.diff, diff: redactString(input.diff.diff, this.policy.redactPatterns) } : undefined,
+    };
     this.db.exec("BEGIN");
     try {
       const sequence=((this.db.prepare("SELECT COALESCE(MAX(sequence_number),0)+1 n FROM codex_raw_events WHERE execution_id=?").get(input.raw.execution_id) as {n:number}).n);
@@ -60,6 +68,8 @@ export class CodexExecutionRepository {
     } catch(error) { this.db.exec("ROLLBACK"); throw error; }
   }
   recordAssistToolCall(executionId: string, toolName: string, argumentsJson: string, success: boolean, contentItemsJson: string): void {
+    argumentsJson = this.policy.captureRawOutput === false ? "{}" : redactString(argumentsJson, this.policy.redactPatterns);
+    contentItemsJson = this.policy.captureRawOutput === false ? "[]" : redactString(contentItemsJson, this.policy.redactPatterns);
     this.db.prepare("INSERT INTO codex_assist_tool_call_events(id,execution_id,tool_name,arguments_json,response_success,response_content_items_json) VALUES(?,?,?,?,?,?)").run(crypto.randomUUID(),executionId,toolName,argumentsJson,success?1:0,contentItemsJson);
   }
   recordAssistInjection(executionId: string, sessionId: string, sequence: number, sizeBytes: number, role: string): void {

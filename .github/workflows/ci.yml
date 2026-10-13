@@ -11,32 +11,45 @@ jobs:
     name: Build & Test (Node ${{ matrix.node-version }} on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [22, 24]
-
+    env:
+      CONTINUUM_DISABLE_CODEX_LIVE: '1'
     steps:
     - uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        
-    - name: Enable Corepack
-      run: corepack enable
-
+        cache: pnpm
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
     - name: Lint
       run: pnpm lint
-
-    - name: Typecheck
-      run: pnpm typecheck
-
     - name: Build
       run: pnpm build
+    - name: Typecheck
+      run: pnpm typecheck
+    - name: Portable workspace tests
+      run: pnpm -r --workspace-concurrency=1 test
 
-    - name: Test
-      run: pnpm test
+  offline-scripts:
+    name: Offline benchmark regressions (Linux / Node 24)
+    runs-on: ubuntu-latest
+    env:
+      CONTINUUM_DISABLE_CODEX_LIVE: '1'
+      # These runtime-dependent helper/preflight tests require the reviewed local Codex package.
+      # They passed on the development host; skip explicitly rather than simulate it.
+      CONTINUUM_SKIP_LOCAL_CODEX_RUNTIME: '1'
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: pnpm
+    - run: pnpm install --frozen-lockfile
+    - run: pnpm build
+    - run: pnpm test:scripts

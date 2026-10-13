@@ -14,6 +14,10 @@ describe("redactString", () => {
     const result = redactString(input);
     expect(result).not.toContain("sk-abcde");
     expect(result).toContain("[REDACTED:OPENAI_KEY]");
+    for (const prefix of ["sk-proj-", "sk-svcacct-"]) {
+      const key = prefix + "aB_cD-012345678901234567890123456789";
+      expect(redactString(key)).not.toContain(key);
+    }
   });
 
   it("redacts a bearer token", () => {

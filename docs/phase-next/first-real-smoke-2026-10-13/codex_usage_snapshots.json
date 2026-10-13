@@ -1,0 +1,17 @@
+[
+  {
+    "id": "0850b4f6-76bc-4573-a701-7a6af7802b31",
+    "execution_id": "32fbfe2b-2b5d-4785-8dba-40971dfb6bd0",
+    "raw_sequence_number": 55,
+    "source": "codex.thread/tokenUsage/updated",
+    "input_tokens": 12784,
+    "cached_input_tokens": 0,
+    "output_tokens": 177,
+    "reasoning_tokens": 15,
+    "total_tokens": 12961,
+    "accumulation": "accumulated",
+    "measurement": "measured",
+    "timestamp": "2026-10-12T19:24:50.909Z",
+    "raw_provider_payload_json": "{\"total\":{\"totalTokens\":12961,\"inputTokens\":12784,\"cachedInputTokens\":0,\"cacheWriteInputTokens\":0,\"outputTokens\":177,\"reasoningOutputTokens\":15},\"last\":{\"totalTokens\":12961,\"inputTokens\":12784,\"cachedInputTokens\":0,\"cacheWriteInputTokens\":0,\"outputTokens\":177,\"reasoningOutputTokens\":15},\"modelContextWindow\":258400}"
+  }
+]

@@ -19,6 +19,7 @@ interface PricingProfileRow {
   version: string | null;
   input_credits_per_million_tokens: number | null;
   cached_input_credits_per_million_tokens: number | null;
+  cache_creation_input_credits_per_million_tokens: number | null;
   output_credits_per_million_tokens: number | null;
   source: ModelPricingProfile["source"];
   effective_from: string;
@@ -48,6 +49,10 @@ export class PricingProfileRepository {
       profile.cachedInputCreditsPerMillionTokens,
     );
     validateRate(
+      "cacheCreationInputCreditsPerMillionTokens",
+      profile.cacheCreationInputCreditsPerMillionTokens,
+    );
+    validateRate(
       "outputCreditsPerMillionTokens",
       profile.outputCreditsPerMillionTokens,
     );
@@ -64,9 +69,10 @@ export class PricingProfileRepository {
         id, provider, model, version,
         input_credits_per_million_tokens,
         cached_input_credits_per_million_tokens,
+        cache_creation_input_credits_per_million_tokens,
         output_credits_per_million_tokens,
         source, effective_from, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).run(
       stored.id,
       stored.provider,
@@ -74,6 +80,7 @@ export class PricingProfileRepository {
       stored.version ?? null,
       stored.inputCreditsPerMillionTokens ?? null,
       stored.cachedInputCreditsPerMillionTokens ?? null,
+      stored.cacheCreationInputCreditsPerMillionTokens ?? null,
       stored.outputCreditsPerMillionTokens ?? null,
       stored.source,
       stored.effectiveFrom,
@@ -123,6 +130,9 @@ export class PricingProfileRepository {
       cachedInputCreditsPerMillionTokens: optionalNumber(
         row.cached_input_credits_per_million_tokens,
       ),
+      cacheCreationInputCreditsPerMillionTokens: optionalNumber(
+        row.cache_creation_input_credits_per_million_tokens,
+      ),
       outputCreditsPerMillionTokens: optionalNumber(
         row.output_credits_per_million_tokens,
       ),
@@ -139,6 +149,8 @@ export interface StoredUsageEvidence {
   model?: string;
   usage: AgentUsageEvidence;
   recordedAt: string;
+  sourceEventId?: string;
+  sourceSequenceNumber?: number;
 }
 
 interface UsageEvidenceRow {
@@ -147,11 +159,15 @@ interface UsageEvidenceRow {
   model: string | null;
   input_tokens: number | null;
   cached_input_tokens: number | null;
+  cache_creation_input_tokens: number | null;
   output_tokens: number | null;
   reasoning_tokens: number | null;
+  total_tokens: number | null;
   tool_calls: number | null;
   measurement: AgentUsageEvidence["measurement"];
   recorded_at: string;
+  source_event_id: string | null;
+  source_sequence_number: number | null;
 }
 
 export class UsageEvidenceRepository {
@@ -162,33 +178,45 @@ export class UsageEvidenceRepository {
     provider?: string;
     model?: string;
     usage: AgentUsageEvidence;
+    sourceEventId?: string;
+    sourceSequenceNumber?: number;
   }): void {
     this.db.prepare(
       `INSERT INTO agent_usage_evidence (
         run_id, provider, model, input_tokens, cached_input_tokens,
-        output_tokens, reasoning_tokens, tool_calls, measurement, recorded_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        cache_creation_input_tokens, output_tokens, reasoning_tokens,
+        total_tokens, tool_calls, measurement, recorded_at, source_event_id,
+        source_sequence_number
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(run_id) DO UPDATE SET
         provider = excluded.provider,
         model = excluded.model,
         input_tokens = excluded.input_tokens,
         cached_input_tokens = excluded.cached_input_tokens,
+        cache_creation_input_tokens = excluded.cache_creation_input_tokens,
         output_tokens = excluded.output_tokens,
         reasoning_tokens = excluded.reasoning_tokens,
+        total_tokens = excluded.total_tokens,
         tool_calls = excluded.tool_calls,
         measurement = excluded.measurement,
-        recorded_at = excluded.recorded_at`,
+        recorded_at = excluded.recorded_at,
+        source_event_id = excluded.source_event_id,
+        source_sequence_number = excluded.source_sequence_number`,
     ).run(
       params.runId,
       params.provider ?? null,
       params.model ?? null,
       params.usage.inputTokens ?? null,
       params.usage.cachedInputTokens ?? null,
+      params.usage.cacheCreationInputTokens ?? null,
       params.usage.outputTokens ?? null,
       params.usage.reasoningTokens ?? null,
+      params.usage.totalTokens ?? null,
       params.usage.toolCalls ?? null,
       params.usage.measurement,
       now(),
+      params.sourceEventId ?? null,
+      params.sourceSequenceNumber ?? null,
     );
   }
 
@@ -205,13 +233,97 @@ export class UsageEvidenceRepository {
       usage: {
         inputTokens: optionalNumber(row.input_tokens),
         cachedInputTokens: optionalNumber(row.cached_input_tokens),
+        cacheCreationInputTokens: optionalNumber(row.cache_creation_input_tokens),
         outputTokens: optionalNumber(row.output_tokens),
         reasoningTokens: optionalNumber(row.reasoning_tokens),
+        totalTokens: optionalNumber(row.total_tokens),
         toolCalls: optionalNumber(row.tool_calls),
         measurement: row.measurement,
       },
       recordedAt: row.recorded_at,
+      ...(row.source_event_id ? { sourceEventId: row.source_event_id } : {}),
+      ...(row.source_sequence_number !== null ? { sourceSequenceNumber: row.source_sequence_number } : {}),
     };
+  }
+}
+
+export interface UsageSnapshot {
+  id: string;
+  runId: string;
+  sourceEventId: string;
+  sequenceNumber: number;
+  observedAt: string;
+  provider?: string;
+  model?: string;
+  usage: AgentUsageEvidence;
+  rawProviderPayload: string;
+}
+
+export class UsageSnapshotRepository {
+  constructor(private readonly db: Db) {}
+
+  append(params: Omit<UsageSnapshot, "id">): UsageSnapshot {
+    const snapshot: UsageSnapshot = { ...params, id: crypto.randomUUID() };
+    this.db.prepare(
+      `INSERT INTO agent_usage_snapshots (
+        id, run_id, source_event_id, sequence_number, observed_at, provider,
+        model, input_tokens, cached_input_tokens, cache_creation_input_tokens,
+        output_tokens, reasoning_tokens, total_tokens, tool_calls, measurement,
+        raw_provider_payload_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).run(
+      snapshot.id,
+      snapshot.runId,
+      snapshot.sourceEventId,
+      snapshot.sequenceNumber,
+      snapshot.observedAt,
+      snapshot.provider ?? null,
+      snapshot.model ?? null,
+      snapshot.usage.inputTokens ?? null,
+      snapshot.usage.cachedInputTokens ?? null,
+      snapshot.usage.cacheCreationInputTokens ?? null,
+      snapshot.usage.outputTokens ?? null,
+      snapshot.usage.reasoningTokens ?? null,
+      snapshot.usage.totalTokens ?? null,
+      snapshot.usage.toolCalls ?? null,
+      snapshot.usage.measurement,
+      snapshot.rawProviderPayload,
+    );
+    return snapshot;
+  }
+
+  listByRunId(runId: string): UsageSnapshot[] {
+    const rows = this.db.prepare(
+      "SELECT * FROM agent_usage_snapshots WHERE run_id = ? ORDER BY sequence_number",
+    ).all(runId) as Array<{
+      id: string; run_id: string; source_event_id: string; sequence_number: number;
+      observed_at: string; provider: string | null; model: string | null;
+      input_tokens: number | null; cached_input_tokens: number | null;
+      cache_creation_input_tokens: number | null; output_tokens: number | null;
+      reasoning_tokens: number | null; total_tokens: number | null;
+      tool_calls: number | null; measurement: AgentUsageEvidence["measurement"];
+      raw_provider_payload_json: string;
+    }>;
+    return rows.map((row) => ({
+      id: row.id,
+      runId: row.run_id,
+      sourceEventId: row.source_event_id,
+      sequenceNumber: row.sequence_number,
+      observedAt: row.observed_at,
+      ...(row.provider ? { provider: row.provider } : {}),
+      ...(row.model ? { model: row.model } : {}),
+      usage: {
+        inputTokens: optionalNumber(row.input_tokens),
+        cachedInputTokens: optionalNumber(row.cached_input_tokens),
+        cacheCreationInputTokens: optionalNumber(row.cache_creation_input_tokens),
+        outputTokens: optionalNumber(row.output_tokens),
+        reasoningTokens: optionalNumber(row.reasoning_tokens),
+        totalTokens: optionalNumber(row.total_tokens),
+        toolCalls: optionalNumber(row.tool_calls),
+        measurement: row.measurement,
+      },
+      rawProviderPayload: row.raw_provider_payload_json,
+    }));
   }
 }
 
@@ -220,6 +332,7 @@ interface CostEvidenceRow {
   pricing_profile_id: string | null;
   input_credits: number | null;
   cached_input_credits: number | null;
+  cache_creation_input_credits: number | null;
   output_credits: number | null;
   total_credits: number | null;
   measurement: RunCostEvidence["measurement"];
@@ -232,12 +345,14 @@ export class CostEvidenceRepository {
     this.db.prepare(
       `INSERT INTO run_cost_evidence (
         run_id, pricing_profile_id, input_credits, cached_input_credits,
-        output_credits, total_credits, measurement, calculated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        cache_creation_input_credits, output_credits, total_credits,
+        measurement, calculated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(run_id) DO UPDATE SET
         pricing_profile_id = excluded.pricing_profile_id,
         input_credits = excluded.input_credits,
         cached_input_credits = excluded.cached_input_credits,
+        cache_creation_input_credits = excluded.cache_creation_input_credits,
         output_credits = excluded.output_credits,
         total_credits = excluded.total_credits,
         measurement = excluded.measurement,
@@ -247,6 +362,7 @@ export class CostEvidenceRepository {
       pricingProfileId ?? null,
       evidence.inputCredits ?? null,
       evidence.cachedInputCredits ?? null,
+      evidence.cacheCreationInputCredits ?? null,
       evidence.outputCredits ?? null,
       evidence.totalCredits ?? null,
       evidence.measurement,
@@ -265,6 +381,7 @@ export class CostEvidenceRepository {
       usage,
       inputCredits: optionalNumber(row.input_credits),
       cachedInputCredits: optionalNumber(row.cached_input_credits),
+      cacheCreationInputCredits: optionalNumber(row.cache_creation_input_credits),
       outputCredits: optionalNumber(row.output_credits),
       totalCredits: optionalNumber(row.total_credits),
       measurement: row.measurement,

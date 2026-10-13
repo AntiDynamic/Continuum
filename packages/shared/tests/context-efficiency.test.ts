@@ -39,6 +39,7 @@ describe("context efficiency evidence", () => {
       model: "model",
       inputCreditsPerMillionTokens: 2,
       cachedInputCreditsPerMillionTokens: 1,
+      cacheCreationInputCreditsPerMillionTokens: 3,
       outputCreditsPerMillionTokens: 4,
       source: "user_configured" as const,
     };
@@ -48,13 +49,16 @@ describe("context efficiency evidence", () => {
       {
         inputTokens: 1_000_000,
         cachedInputTokens: 500_000,
+        cacheCreationInputTokens: 250_000,
         outputTokens: 250_000,
+        totalTokens: 1_750_000,
         measurement: "provider_reported",
       },
       pricing,
     );
     expect(derived.measurement).toBe("derived");
-    expect(derived.totalCredits).toBe(3.5);
+    expect(derived.cacheCreationInputCredits).toBe(0.75);
+    expect(derived.totalCredits).toBe(4.25);
 
     const estimated = calculateRunCostEvidence(
       "run-estimated",
@@ -71,5 +75,10 @@ describe("context efficiency evidence", () => {
     );
     expect(unavailable.measurement).toBe("unavailable");
     expect(unavailable.totalCredits).toBeUndefined();
+    const partial = calculateRunCostEvidence("partial", {
+      inputTokens: 100, outputTokens: 20, measurement: "provider_reported",
+    }, { ...pricing, outputCreditsPerMillionTokens: undefined });
+    expect(partial.measurement).toBe("unavailable");
+    expect(partial.totalCredits).toBeUndefined();
   });
 });

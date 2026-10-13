@@ -15,7 +15,7 @@ const continuum=(cwd:string,...args:string[])=>run(process.execPath,[cli,...args
 const structured=<T>(value:Awaited<ReturnType<Client["callTool"]>>):T=>value.structuredContent as T;
 describe("CLI/MCP progressive context product",()=>{
  let repository:string,client:Client,transport:StdioClientTransport,sessionId:string;
- async function connectMcp(){transport=new StdioClientTransport({command:process.execPath,args:[cli,"mcp"],cwd:repository,stderr:"pipe"});client=new Client({name:"product-test",version:"1.0.0"},{capabilities:{}});await client.connect(transport);}
+ async function connectMcp(){transport=new StdioClientTransport({command:process.execPath,args:[cli,"mcp"],cwd:repository,env:{...process.env,CONTINUUM_MCP_AUDIT:"1"} as Record<string,string>,stderr:"pipe"});client=new Client({name:"product-test",version:"1.0.0"},{capabilities:{}});await client.connect(transport);}
  async function restartMcp(){await client.close();await connectMcp();}
  beforeAll(async()=>{
   repository=await mkdtemp(join(tmpdir(),"continuum-session-product-"));await git(repository,"init");await git(repository,"config","user.name","Test");await git(repository,"config","user.email","test@example.test");
@@ -63,5 +63,16 @@ describe("CLI/MCP progressive context product",()=>{
   const invalid=await continuum(repository,"session","start","Task","--budget-tokens","0");expect(invalid.exitCode).not.toBe(0);expect(invalid.stderr).toContain("positive integer");
   await connectMcp();
   const malformed=await client.callTool({name:"continuum_report_context_signal",arguments:{sessionId,signal:{type:"test-failure",failingTests:[]}}});expect(malformed.isError).toBe(true);
+ },30000);
+ it("keeps partial source delivery usable and exposes incomplete memory recovery without duplicating source",async()=>{
+  expect((await continuum(repository,"index")).exitCode).toBe(0);
+  await client.close();
+  transport=new StdioClientTransport({command:process.execPath,args:[cli,"mcp"],cwd:repository,env:{...process.env,CONTINUUM_MCP_AUDIT:"0"} as Record<string,string>,stderr:"pipe"});
+  client=new Client({name:"memory-budget-test",version:"1.0.0"},{capabilities:{}});await client.connect(transport);
+  const packet=await client.callTool({name:"continuum_get_context_packet",arguments:{query:"Add a database migration with safe rollback"}});
+  expect(packet.isError,JSON.stringify(packet)).not.toBe(true);expect(packet.structuredContent).toBeUndefined();
+  const started=structured<any>(await client.callTool({name:"continuum_start_context_session",arguments:{task:"Preserve the original compatibility constraint"}}));
+  const recovery=await client.callTool({name:"continuum_recover_task_memory",arguments:{sessionId:started.session.id,budgetTokens:1}});
+  expect(recovery.isError).toBe(true);expect((recovery.structuredContent as any).incomplete).toBe(true);expect((recovery.structuredContent as any).renderedContent).toBeUndefined();
  },30000);
 });

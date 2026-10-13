@@ -16,11 +16,18 @@ interface PendingRequest {
   timer: NodeJS.Timeout;
 }
 
+interface CompactionWaiter {
+  resolve: (params: unknown) => void;
+  reject: (error: Error) => void;
+  timer: NodeJS.Timeout;
+}
+
 const timestamp = (): string => new Date().toISOString();
 export class StdioCodexAppServerClient implements CodexAppServerClient {
   private child: ChildProcessWithoutNullStreams | null = null;
   private options: CodexProcessOptions = {};
   private readonly pending = new Map<JsonRpcId, PendingRequest>();
+  private readonly compactionWaiters = new Map<string, CompactionWaiter>();
   private nextId = 1;
   private stdoutBuffer = "";
   private stderrBuffer = "";
@@ -30,7 +37,9 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   private inboundChain: Promise<void> = Promise.resolve();
   private callbackFailure: Error | null = null;
   private closed = false;
+  private outputBytes = 0;
   version: string | null = null;
+  get processId(): number | null { return this.child?.pid ?? null; }
 
   async start(options: CodexProcessOptions = {}): Promise<void> {
     if (this.child) return;
@@ -46,6 +55,7 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
         stdio: ["pipe", "pipe", "pipe"],
         windowsHide: true,
         shell: false,
+        detached: options.terminateProcessGroup === true && process.platform !== "win32",
       });
     } catch (error) {
       throw new CodexIntegrationError("APP_SERVER_UNAVAILABLE", "Codex App Server could not be started.", error);
@@ -84,13 +94,24 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
     return { authenticated: account !== null || result.requiresOpenaiAuth === false, requiresOpenaiAuth: result.requiresOpenaiAuth === true, mode };
   }
 
+  async readConfiguration(): Promise<unknown> {
+    return this.request("config/read", { includeLayers: false });
+  }
+
+  /** Local sandbox execution only; command/exec does not create a model turn. */
+  async executePreflightCommand(command: string[], cwd: string): Promise<unknown> {
+    return this.request("command/exec", {command,cwd,timeoutMs:3000,outputBytesCap:4096,sandboxPolicy:{type:"workspaceWrite",writableRoots:[cwd],networkAccess:false}});
+  }
+
   async startThread(options: CodexThreadOptions): Promise<CodexThread> {
     const autoCompaction = options.autoCompaction;
-    const config = autoCompaction ? {
-      ...(autoCompaction.prompt ? { compact_prompt: autoCompaction.prompt } : {}),
-      ...(autoCompaction.tokenLimit === undefined ? {} : { model_auto_compact_token_limit: autoCompaction.tokenLimit }),
-      ...(autoCompaction.scope ? { model_auto_compact_token_limit_scope: autoCompaction.scope } : {}),
-    } : undefined;
+    const config = {
+      ...options.configOverrides,
+      ...(options.reasoningEffort?{model_reasoning_effort:options.reasoningEffort}:{}),
+      ...(autoCompaction?.prompt ? { compact_prompt: autoCompaction.prompt } : {}),
+      ...(autoCompaction?.tokenLimit === undefined ? {} : { model_auto_compact_token_limit: autoCompaction.tokenLimit }),
+      ...(autoCompaction?.scope ? { model_auto_compact_token_limit_scope: autoCompaction.scope } : {}),
+    };
     const result = await this.request("thread/start", {
       cwd: options.cwd,
       ...(options.model ? { model: options.model } : {}),
@@ -103,8 +124,8 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
     return this.threadFrom(result);
   }
 
-  async resumeThread(threadId: string): Promise<CodexThread> {
-    return this.threadFrom(await this.request("thread/resume", { threadId }));
+  async resumeThread(threadId: string,options:Partial<CodexThreadOptions>={}): Promise<CodexThread> {
+    return this.threadFrom(await this.request("thread/resume", { threadId,...(options.model?{model:options.model}:{}),...(options.cwd?{cwd:options.cwd}:{}),...(options.approvalPolicy?{approvalPolicy:options.approvalPolicy}:{}),...(options.sandbox?{sandbox:options.sandbox}:{}),config:{...options.configOverrides,...(options.reasoningEffort?{model_reasoning_effort:options.reasoningEffort}:{})} }));
   }
 
   async startTurn(options: CodexTurnOptions): Promise<CodexTurn> {
@@ -112,6 +133,7 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
       threadId: options.threadId,
       input: options.inputs ?? [{ type: "text", text: options.task ?? "", text_elements: [] }],
       ...(options.model ? { model: options.model } : {}),
+      ...(options.reasoningEffort ? { effort: options.reasoningEffort } : {}),
     });
     if (!isRecord(result) || !isRecord(result.turn) || typeof result.turn.id !== "string") {
       throw new CodexIntegrationError("PROTOCOL_INCOMPATIBILITY", "Codex turn/start returned an incompatible response.");
@@ -120,11 +142,37 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   }
 
   async compactThread(threadId: string): Promise<unknown> {
-    return this.request("thread/compact/start", { threadId });
+    if(this.compactionWaiters.has(threadId))throw new Error("Compaction is already pending for this thread.");
+    // Codex acknowledges the request before emitting the completion
+    // notification. Wait for that specific notification so callers do not
+    // observe a successful request before completion evidence is available.
+    const timeoutMs = this.options.requestTimeoutMs ?? 30_000;
+    let waiter: CompactionWaiter | undefined;
+    const completed = new Promise<unknown>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.compactionWaiters.delete(threadId);
+        reject(new CodexIntegrationError("REQUEST_TIMEOUT", `Codex compaction timed out: ${threadId}`));
+      }, timeoutMs);
+      waiter = { resolve, reject, timer };
+      this.compactionWaiters.set(threadId, waiter);
+    });
+    void completed.catch(()=>undefined); // Completion may time out before the RPC acknowledgement.
+    try {
+      const result = await this.request("thread/compact/start", { threadId });
+      await completed;
+      return result;
+    } catch (error) {
+      const current = this.compactionWaiters.get(threadId);
+      if (current && current === waiter) {
+        clearTimeout(current.timer);
+        this.compactionWaiters.delete(threadId);
+      }
+      throw error;
+    }
   }
 
   async interruptTurn(threadId: string, turnId: string): Promise<void> {
-    await this.request("turn/interrupt", { threadId, turnId });
+    await this.request("turn/interrupt", { threadId, turnId }, Math.min(this.options.requestTimeoutMs ?? 30000, 5000));
   }
 
   async respondToServerRequest(requestId: JsonRpcId, response: unknown): Promise<void> {
@@ -135,32 +183,46 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
     if (!this.child) return;
     this.closed = true;
     const child = this.child;
-    if (child.exitCode === null && !child.killed) {
+    if (child.exitCode === null && child.signalCode === null) {
       child.stdin.end();
       const timeout = this.options.shutdownTimeoutMs ?? 2_000;
-      const exited = await new Promise<boolean>((resolve) => {
-        const timer = setTimeout(() => resolve(false), timeout);
-        child.once("exit", () => { clearTimeout(timer); resolve(true); });
-      });
-      if (!exited && child.exitCode === null) child.kill();
+      if (!await this.waitForExit(child, timeout)) {
+        this.signalChild(child, "SIGTERM");
+        if (!await this.waitForExit(child, timeout)) {
+          this.signalChild(child, "SIGKILL");
+          if (!await this.waitForExit(child, timeout)) throw new Error("Codex child did not exit after SIGKILL.");
+        }
+      }
     }
     this.rejectAll(new CodexIntegrationError("UNEXPECTED_PROCESS_EXIT", "Codex App Server client closed."));
-    await this.inboundChain;
-    await this.callbackChain;
+    // A stuck external callback must not keep cancellation pending indefinitely.
+    let drainTimer: NodeJS.Timeout | undefined;
+    try { await Promise.race([Promise.all([this.inboundChain,this.callbackChain]),new Promise<never>((_,reject)=>{drainTimer=setTimeout(()=>reject(new Error("Codex trace drain timed out.")),this.options.shutdownTimeoutMs??2000);})]); }
+    finally {if(drainTimer)clearTimeout(drainTimer);this.child=null;}
     this.child = null;
+  }
+
+  private signalChild(child: ChildProcessWithoutNullStreams, signal: NodeJS.Signals): void {
+    try {if(this.options.terminateProcessGroup&&process.platform!=="win32"&&child.pid)process.kill(-child.pid,signal);else child.kill(signal);}
+    catch(error){if(!(isRecord(error)&&error["code"]==="ESRCH"))throw error;}
+  }
+
+  private waitForExit(child: ChildProcessWithoutNullStreams, timeout: number): Promise<boolean> {
+    if(child.exitCode!==null||child.signalCode!==null)return Promise.resolve(true);
+    return new Promise(resolve=>{const onExit=()=>{clearTimeout(timer);resolve(true);};const timer=setTimeout(()=>{child.removeListener("exit",onExit);resolve(false);},timeout);child.once("exit",onExit);});
   }
 
   private threadFrom(value: unknown): CodexThread {
     if (!isRecord(value) || !isRecord(value.thread) || typeof value.thread.id !== "string") {
       throw new CodexIntegrationError("PROTOCOL_INCOMPATIBILITY", "Codex thread response is incompatible.");
     }
-    return { id: value.thread.id, model: typeof value.model === "string" ? value.model : null, modelProvider: typeof value.modelProvider === "string" ? value.modelProvider : null, cwd: String(value.cwd ?? value.thread.cwd ?? "") };
+    return { id: value.thread.id, model: typeof value.model === "string" ? value.model : null, modelProvider: typeof value.modelProvider === "string" ? value.modelProvider : null, cwd: String(value.cwd ?? value.thread.cwd ?? ""),...(typeof value["reasoningEffort"]==="string"?{reasoningEffort:value["reasoningEffort"]}:{}) };
   }
 
-  private async request(method: string, params: unknown): Promise<unknown> {
+  private async request(method: string, params: unknown, requestTimeoutMs?: number): Promise<unknown> {
     if (!this.child || this.child.exitCode !== null) throw new CodexIntegrationError("APP_SERVER_UNAVAILABLE", "Codex App Server is not running.");
     const id = this.nextId++;
-    const timeoutMs = this.options.requestTimeoutMs ?? 30_000;
+    const timeoutMs = requestTimeoutMs ?? this.options.requestTimeoutMs ?? 30_000;
     const promise = new Promise<unknown>((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
@@ -168,6 +230,10 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
       }, timeoutMs);
       this.pending.set(id, { method, resolve, reject, timer });
     });
+    // The raw-event callback can reject before write() returns. rejectAll may
+    // already have rejected this request by then; handle that rejection now,
+    // while preserving it for the caller when the request is awaited below.
+    void promise.catch(() => undefined);
     try { await this.write({ id, method, params }); }
     catch (error) {
       const abandoned=this.pending.get(id);if(abandoned){clearTimeout(abandoned.timer);this.pending.delete(id);abandoned.resolve(undefined);}
@@ -187,6 +253,7 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   }
 
   private consumeStdout(text: string): void {
+    if(!this.allowOutput(text))return;
     this.stdoutBuffer += text;
     let newline = this.stdoutBuffer.indexOf("\n");
     while (newline >= 0) {
@@ -198,6 +265,7 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   }
 
   private consumeStderr(text: string): void {
+    if(!this.allowOutput(text))return;
     this.stderrBuffer += text;
     let newline = this.stderrBuffer.indexOf("\n");
     while (newline >= 0) {
@@ -206,6 +274,16 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
       if (line) this.enqueueOperation(() => this.emitRaw({ direction: "server_stderr", category: "stderr", raw: line, parsed: null, method: null, requestId: null, timestamp: timestamp() }));
       newline = this.stderrBuffer.indexOf("\n");
     }
+  }
+
+  private allowOutput(text:string):boolean {
+    this.outputBytes+=Buffer.byteLength(text,"utf8");
+    if(this.options.maximumOutputBytes&&this.outputBytes>this.options.maximumOutputBytes){
+      const error=new Error("Codex process output byte limit exceeded (not a provider token cap).");
+      this.rejectAll(error);void this.options.onFatalError?.(error);
+      if(this.child)this.signalChild(this.child,"SIGKILL");return false;
+    }
+    return true;
   }
 
   private async handleLine(raw: string): Promise<void> {
@@ -260,7 +338,19 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
 
   private dispatchNotification(method: string, params: unknown): Promise<void> {
     const callback = this.options.onNotification;
-    return callback ? this.queueCallback(() => callback(method, params)) : Promise.resolve();
+    const isCompaction = isRecord(params) && typeof params.threadId === "string" && (method === "thread/compacted" || (method === "item/completed" && isRecord(params.item) && params.item.type === "contextCompaction"));
+    if (!callback && !isCompaction) return Promise.resolve();
+    return this.queueCallback(async () => {
+      if (callback) await callback(method, params);
+      if (isCompaction) {
+        const waiter = this.compactionWaiters.get(params.threadId as string);
+        if (waiter) {
+          clearTimeout(waiter.timer);
+          this.compactionWaiters.delete(params.threadId as string);
+          waiter.resolve(params);
+        }
+      }
+    });
   }
 
   private emitRaw(message: CodexRawMessage): Promise<void> {
@@ -301,5 +391,10 @@ export class StdioCodexAppServerClient implements CodexAppServerClient {
   private rejectAll(error: Error): void {
     for (const request of this.pending.values()) { clearTimeout(request.timer); request.reject(error); }
     this.pending.clear();
+    for (const [threadId, waiter] of this.compactionWaiters) {
+      clearTimeout(waiter.timer);
+      waiter.reject(error);
+      this.compactionWaiters.delete(threadId);
+    }
   }
 }

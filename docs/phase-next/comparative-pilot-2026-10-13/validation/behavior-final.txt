@@ -1,0 +1,11 @@
+✔ medium fixture baseline fails, oracle passes all checks, negative controls fail independently (1204.126803ms)
+✔ short, long and controlled-compaction workloads have failing starts and passing independent references (2429.896494ms)
+✔ medium two-stage requirements fit bounded recovery for all Continuum pilot treatments (13960.613486ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17759.567031

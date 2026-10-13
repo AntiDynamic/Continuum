@@ -15,6 +15,7 @@ export interface PricingCommandOptions {
   provider?: string;
   input?: string;
   cachedInput?: string;
+  cacheCreationInput?: string;
   output?: string;
   version?: string;
   effectiveFrom?: string;
@@ -78,6 +79,9 @@ export async function runPricingShowCommand(
         `    cached input: ${profile.cachedInputCreditsPerMillionTokens ?? "unavailable"} credits / 1M tokens`,
       );
       line(
+        `    cache creation: ${profile.cacheCreationInputCreditsPerMillionTokens ?? "unavailable"} credits / 1M tokens`,
+      );
+      line(
         `    output: ${profile.outputCreditsPerMillionTokens ?? "unavailable"} credits / 1M tokens`,
       );
       blank();
@@ -105,6 +109,10 @@ export async function runPricingSetCommand(
       "--cached-input",
       options.cachedInput,
     ),
+    cacheCreationInputCreditsPerMillionTokens: parseOptionalRate(
+      "--cache-creation-input",
+      options.cacheCreationInput,
+    ),
     outputCreditsPerMillionTokens: parseOptionalRate("--output", options.output),
     source: "user_configured",
     effectiveFrom: options.effectiveFrom,
@@ -113,6 +121,7 @@ export async function runPricingSetCommand(
   if (
     profile.inputCreditsPerMillionTokens === undefined &&
     profile.cachedInputCreditsPerMillionTokens === undefined &&
+    profile.cacheCreationInputCreditsPerMillionTokens === undefined &&
     profile.outputCreditsPerMillionTokens === undefined
   ) {
     throw new Error("At least one pricing rate must be supplied.");

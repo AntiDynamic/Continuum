@@ -61,6 +61,7 @@ export class FakeAdapter implements AgentAdapter {
       telemetry: {
         reportsInputTokens: true,
         reportsCachedInputTokens: true,
+        reportsCacheCreationInputTokens: false,
         reportsOutputTokens: true,
         reportsReasoningTokens: true,
         reportsToolUsage: true,

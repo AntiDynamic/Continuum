@@ -1,0 +1,283 @@
+{
+  "status": "PASS offline helper/runtime readiness",
+  "recordedAt": "2026-10-12T20:13:08.677941+00:00",
+  "codexVersion": "0.162.1",
+  "discovery": {
+    "sourceRelease": "rust-v0.162.1",
+    "order": [
+      "package codex-resources/codex-code-mode-host if present",
+      "package bin/codex-code-mode-host",
+      "legacy standalone/current executable sibling fallback"
+    ],
+    "installedLocation": "bin/codex-code-mode-host",
+    "launch": "lazy process-owned local host; no CLI args, piped stdin/stdout/stderr; V1 u32 little-endian JSON frames",
+    "previousFailure": "Only codex was relocated; package metadata and helper omitted, causing fallback to a missing sibling.",
+    "repair": "Read-only runtime bin/resources/path/metadata mounts preserve package layout; user home, evaluator, recorder and host temporary artifacts remain hidden."
+  },
+  "checks": {
+    "requiredAssetsAndDependencies": "PASS",
+    "realHelperOperationNoInference": "PASS",
+    "nativeSandboxCommandNoInference": "PASS",
+    "environmentAndConfiguration": "PASS",
+    "hiddenArtifactsAndHistories": "PASS",
+    "missingDependencyFailClosed": "PASS",
+    "failureAndStallCancellation": "PASS",
+    "noLeftoverProcesses": "PASS",
+    "providerUsageBeforeObserverStop": "PASS",
+    "gracefulInterruptCallbackPath": "PASS"
+  },
+  "preflightEvidence": {
+    "passed": true,
+    "inferenceRequests": 0,
+    "environment": {
+      "HOME": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host",
+      "CODEX_HOME": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host",
+      "SHELL": "/bin/bash",
+      "PATH": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host/runtime/tools:/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host/runtime/codex-path:/usr/local/bin:/usr/bin:/bin"
+    },
+    "runtimeChecks": [
+      {
+        "program": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host/runtime/codex-path/rg",
+        "output": "ripgrep 15.2.0 (rev e89fff89ac)\n\nfeatures:+pcre2\nsimd(compile):+SSE2,-SSSE3,-AVX2\nsimd(runtime):+SSE2,+SSSE3,+AVX2\n\nPCRE2 10.45 is available (JIT is available)"
+      },
+      {
+        "program": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host/runtime/codex-resources/bwrap",
+        "output": "bubblewrap built for Codex"
+      },
+      {
+        "program": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host/runtime/codex-resources/zsh/bin/zsh",
+        "output": "zsh 5.9.0.3-test (x86_64-pc-linux-gnu)"
+      },
+      {
+        "program": "/tmp/continuum-recovery-benchmark-v1fY9g/authentication-compatibility-C/.continuum/codex-host/runtime/tools/node",
+        "output": "v24.20.0"
+      }
+    ],
+    "helperOperation": {
+      "output": "continuum-helper-ok:42",
+      "trace": [
+        {
+          "direction": "client_to_host",
+          "value": {
+            "type": "connection/hello",
+            "supportedVersions": [
+              1
+            ],
+            "requiredCapabilities": [],
+            "optionalCapabilities": []
+          }
+        },
+        {
+          "direction": "host_to_client",
+          "value": {
+            "type": "connection/ready",
+            "selectedVersion": 1,
+            "capabilities": []
+          }
+        },
+        {
+          "direction": "client_to_host",
+          "value": {
+            "type": "operation/request",
+            "id": 1,
+            "request": {
+              "method": "session/open",
+              "sessionId": "continuum-offline-preflight"
+            }
+          }
+        },
+        {
+          "direction": "host_to_client",
+          "value": {
+            "type": "operation/response",
+            "id": 1,
+            "result": {
+              "status": "ok",
+              "value": {
+                "type": "session/ready",
+                "sessionId": "continuum-offline-preflight"
+              }
+            }
+          }
+        },
+        {
+          "direction": "client_to_host",
+          "value": {
+            "type": "operation/request",
+            "id": 2,
+            "request": {
+              "method": "session/execute",
+              "sessionId": "continuum-offline-preflight",
+              "request": {
+                "tool_call_id": "continuum-offline-only",
+                "enabled_tools": [],
+                "source": "text('continuum-helper-ok:'+(6*7));",
+                "yield_time_ms": 1000,
+                "max_output_tokens": 256
+              }
+            }
+          }
+        },
+        {
+          "direction": "host_to_client",
+          "value": {
+            "type": "operation/response",
+            "id": 2,
+            "result": {
+              "status": "ok",
+              "value": {
+                "type": "execution/started",
+                "cellId": "1"
+              }
+            }
+          }
+        },
+        {
+          "direction": "host_to_client",
+          "value": {
+            "type": "execute/initialResponse",
+            "id": 2,
+            "result": {
+              "status": "ok",
+              "value": {
+                "Result": {
+                  "cell_id": "1",
+                  "content_items": [
+                    {
+                      "type": "input_text",
+                      "text": "continuum-helper-ok:42"
+                    }
+                  ],
+                  "error_text": null,
+                  "code_mode_host_duration_ns": 6754734
+                }
+              }
+            }
+          }
+        },
+        {
+          "direction": "client_to_host",
+          "value": {
+            "type": "operation/request",
+            "id": 3,
+            "request": {
+              "method": "session/shutdown",
+              "sessionId": "continuum-offline-preflight"
+            }
+          }
+        },
+        {
+          "direction": "host_to_client",
+          "value": {
+            "type": "cell/closed",
+            "sessionId": "continuum-offline-preflight",
+            "cellId": "1"
+          }
+        },
+        {
+          "direction": "host_to_client",
+          "value": {
+            "type": "operation/response",
+            "id": 3,
+            "result": {
+              "status": "ok",
+              "value": {
+                "type": "session/closed",
+                "sessionId": "continuum-offline-preflight"
+              }
+            }
+          }
+        }
+      ],
+      "stderr": "",
+      "inferenceRequests": 0,
+      "cleanup": {
+        "exited": true,
+        "pid": 1141137,
+        "groupGone": true
+      }
+    },
+    "networkDisabledDuringPreflight": true,
+    "configuration": {
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "features": {
+        "multi_agent": false,
+        "multi_agent_v2": false,
+        "multi_agent_v2_dynamic_tools": false,
+        "goals": false,
+        "unbounded_connection_retries": false
+      }
+    },
+    "sandboxCommand": {
+      "exitCode": 0,
+      "stdout": "continuum-command-ok:42\n",
+      "stderr": ""
+    },
+    "appServerCleanup": {
+      "pid": 1141150,
+      "groupGone": true
+    }
+  },
+  "validation": {
+    "build": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "workspacePassed": 232,
+    "scriptPassed": 67,
+    "totalPassed": 299,
+    "failed": 0,
+    "skipped": 4,
+    "newTests": 12,
+    "initialTestDefects": [
+      "The mount point directory exists even when original history content is hidden; changed absence probe to the actual sessions/auth artifacts.",
+      "Process-group exit can lag the parent exit event; cleanup now waits within a bounded interval and escalates only for its own group.",
+      "New mock recovery tests initially reused a unique thread binding; fixture now supports distinct test thread IDs."
+    ]
+  },
+  "usageAnalysis": "usage-analysis.json",
+  "monitoringChanges": [
+    "Provider snapshots are persisted before external raw-event observers can reject them.",
+    "Normal reported-token stop sets safety stopped state without poisoning raw callbacks; the existing service requests bounded interruption.",
+    "No hard provider token/billing cap is asserted; host internally can issue another response before client-side stopping takes effect."
+  ],
+  "liveInferenceTestsThisTurn": 0,
+  "modelDrivenBenchmarkExecutionsThisTurn": 0,
+  "historicalLiveSmokeExperiments": 1,
+  "historicalReportedThreadTokens": 26052,
+  "overallDevelopmentCost": null,
+  "billingNote": "No live model inference requested during this repair. Overall development-session credit/cost telemetry unavailable.",
+  "previousEvidenceUnchanged": true,
+  "previousEvidenceFilesVerified": 54,
+  "exclusiveExecutionLockPreserved": true,
+  "futureLiveTestAuthorized": false,
+  "remainingLimitations": [
+    "No genuine model-driven tool dispatch, native compaction or recovery continuation was retested.",
+    "Full provider request text/token attribution and billing rates are unavailable.",
+    "The pre-existing visible authentication validator scope issue (unrelated cache test) remains unchanged; this report does not declare the entire end-to-end benchmark ready.",
+    "The version-scoped runtime repair is for Linux Codex 0.162.1; other layouts/versions fail closed."
+  ],
+  "runtimeAssetSha256": {
+    "bin/codex": "628e35487d888a28f0427fc37501da529dd3d81fcbad7a2c3421c1e8670d92e1",
+    "bin/codex-code-mode-host": "ec71830690a7c0024916ee0c99fbdc635bc6e747ff665ea4f03a8389bbcb6b30",
+    "codex-resources/bwrap": "01fb705f067bd5365b63d8ad2323a61c8d007733ca5e649437e086f3fb9935d8",
+    "codex-resources/zsh/bin/zsh": "67faaaa89242c4a332e16e508a1977cffc24bf7fca31d4411cdfd101f3831ef3",
+    "codex-path/rg": "e62198eb19b136b88c330af83647b5a962cb99b6b1f066758568f12de1974849",
+    "codex-package.json": "f05ebff6db98bd613dd5654461985090c6416b41ad67902243d83a53b305ac05"
+  },
+  "implementationSha256": {
+    "scripts/recovery-isolation.mjs": "1801c87ef89ca9bc795a1ccaa30d32927aa1fa5a029156ba4a765c1db2c14b37",
+    "scripts/recovery-isolation.test.mjs": "86f3b23e95bc0d1f220c12ee36f0e0e51001371acc7a45a886680d71023898b4",
+    "scripts/recovery-helper-preflight.mjs": "d05b457187f23ed6dabd1e77447bc2fdc1d4f8c2d54b2d0e77b908ccea888e7b",
+    "scripts/recovery-safety.mjs": "9a7a0cb553105747af2766b346e7cc1d03d2e2a7cebac22a2eb7b08056cd411c",
+    "scripts/recovery-safety.test.mjs": "b9324ce771f59bdbe359d8b6003b9cb87a06e85eabdc95dd92f4e2002d3d54b4",
+    "scripts/recovery-usage-analysis.mjs": "98b0061feec16cc3452bef43651cca9f5cb533aec0b92ea0dc56960daea29484",
+    "scripts/recovery-usage-analysis.test.mjs": "76f210a3c8d375e67cdc162a4cacc0892617600f56af2e72b98684c7cfd6c02f",
+    "scripts/recovery-benchmark.mjs": "a13a4056e192d0491f875d84f476b5a2fb620de8ccea4aaa0f305bd171890fb2",
+    "scripts/durable-recovery.test.mjs": "5cfd4ab9044f2dd92bea0ac8ed902da57752edecb1e52f0860285484bcd265ec",
+    "packages/codex-app-server/src/client.ts": "726e8d77ace98a2d87eb20a04989b70532d517694a3c822da831f2ea540cd583",
+    "packages/codex-app-server/src/assist-execution-service.ts": "4120d189ee0142750f9283edb4b55dab7c793a2b56f2191002a72331054e4115",
+    "packages/codex-app-server/tests/fixtures/fake-app-server.mjs": "fb7a9ef6603f84b76afa4ce9246d310d335af5c142f5e8f3ba5b2436b2e6b788"
+  }
+}

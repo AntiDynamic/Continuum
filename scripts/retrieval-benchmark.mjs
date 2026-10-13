@@ -13,6 +13,9 @@ import { resolveSnapshotIdentity } from "../packages/git-analyzer/dist/index.js"
 const exec = promisify(execFile);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const fixtureRoot = join(root, "packages", "context-engine", "benchmarks", "v1");
+const outputFlag = process.argv.indexOf("--output");
+if (outputFlag >= 0 && !process.argv[outputFlag + 1]) throw new Error("--output requires a path");
+const outputPath = outputFlag >= 0 ? resolve(process.argv[outputFlag + 1]) : join(fixtureRoot, "results.json");
 const cli = join(root, "apps", "cli", "dist", "main.js");
 const dataset = JSON.parse(await readFile(join(fixtureRoot, "cases.json"), "utf8"));
 const scratch = await mkdtemp(join(tmpdir(), "continuum-retrieval-benchmark-"));
@@ -164,8 +167,12 @@ try {
     };
     caseRows.push(row);
     for (const mode of modes) {
-      const modeRanked = rerank(candidates, mode);
-      ablationRows[mode].push(metricsFor(modeRanked, benchmarkCase, packet, latencyMs));
+      const modeEngine = new ContextEngine(state.db, state.engine.repositoryId, state.engine.snapshot, undefined, undefined, {graph:mode.includes("graph")||mode==="full",coverage:mode.includes("coverage")||mode==="full"});
+      const modeStarted=performance.now();
+      const modeCandidates=await modeEngine.search(benchmarkCase.task,{limit:100});
+      const modePacket=await modeEngine.packet(benchmarkCase.task);
+      const modeLatency=performance.now()-modeStarted;
+      ablationRows[mode].push(metricsFor(modeCandidates, benchmarkCase, modePacket, modeLatency));
     }
   }
 
@@ -202,8 +209,8 @@ try {
     cases: caseRows,
     failures: caseRows.map(failureFor).filter(Boolean),
   };
-  await writeFile(join(fixtureRoot, "results.json"), JSON.stringify(result, null, 2) + "\n", "utf8");
-  console.log(JSON.stringify({ schemaVersion: result.schemaVersion, aggregate: result.aggregate, ablations: result.ablations, failureCount: result.failures.length, resultsFile: slash(join(fixtureRoot, "results.json")) }, null, 2));
+  await writeFile(outputPath, JSON.stringify(result, null, 2) + "\n", "utf8");
+  console.log(JSON.stringify({ schemaVersion: result.schemaVersion, aggregate: result.aggregate, ablations: result.ablations, failureCount: result.failures.length, resultsFile: slash(outputPath) }, null, 2));
 } finally {
   for (const state of fixtureState.values()) state.db.close();
   if (process.env.CONTINUUM_BENCHMARK_KEEP_TEMP === "1") console.error("[benchmark] retained temp " + scratch);

@@ -13,7 +13,7 @@ afterAll(async()=>{if(root)await rm(root,{recursive:true,force:true,maxRetries:5
 
 describe("installed Codex App Server live smoke",()=>{
   it("runs a genuine isolated shadow turn",async(context)=>{
-    if(process.env["CONTINUUM_DISABLE_CODEX_LIVE"]==="1"){console.warn("SKIP: CONTINUUM_DISABLE_CODEX_LIVE=1 explicitly disabled the genuine Codex smoke test.");context.skip();return;}
+    if(process.env["CONTINUUM_CODEX_LIVE"]!=="1"||process.env["CONTINUUM_DISABLE_CODEX_LIVE"]==="1"){console.warn("SKIP: CONTINUUM_DISABLE_CODEX_LIVE=1 explicitly disabled the genuine Codex smoke test.");context.skip();return;}
     root=await mkdtemp(join(tmpdir(),"continuum-codex-live-"));
     const repo=join(root,"repository");
     await mkdir(repo);
@@ -43,9 +43,8 @@ describe("installed Codex App Server live smoke",()=>{
       const model=process.env["CONTINUUM_CODEX_LIVE_MODEL"]??undefined;// Do not default to a specific model — use installed Codex default
       const result=await new CodexExecutionService().runShadow({cwd:repo,task:"Fix src/add.js so `npm test` passes. Do not modify unrelated.txt.",mode:"shadow",...(model?{model}:{}),sandbox:"workspace-write",approvalPolicy:"never",timeoutMs:300000});
       
-      // Skip gracefully if provider limits prevent the turn from completing
-      if(result.report.execution.status!=="completed"){const failCode=String((result.report as any).execution?.failureCode??"unknown");console.warn(`SKIP: genuine Codex smoke completed with status '${result.report.execution.status}' (failureCode: ${failCode}). Likely provider quota or model limits. Run with CONTINUUM_CODEX_LIVE_MODEL env var to select a different model.`);context.skip();return;}
-      
+      expect(result.report.execution.status).toBe("completed");
+
       expect(result.report.execution.codexVersion).not.toBe("fixture");
       expect(result.authenticationMode).not.toBe("none");
       
@@ -53,7 +52,11 @@ describe("installed Codex App Server live smoke",()=>{
       const postTest = await run(npmCmd, ["test"], repo);
       expect(postTest.code).toBe(0);
       
-      expect(await readFile(join(repo,"src","add.js"),"utf8")).toContain("a + b");
+      const implementation = await readFile(join(repo,"src","add.js"),"utf8");
+      // Accept harmless parameter-renaming/style choices; the real npm test
+      // above is the semantic correctness check for this live smoke.
+      expect(implementation).toContain("+");
+      expect(implementation).not.toMatch(/=>\s*0/);
       expect(await readFile(join(repo,"unrelated.txt"),"utf8")).toBe("do not change\n");
       console.log(JSON.stringify({executionId:result.executionId,codexVersion:result.report.execution.codexVersion,authenticationMode:result.authenticationMode,status:result.report.execution.status,changedFiles:result.report.outcome.changedFileCount,testsObserved:result.report.outcome.testsObserved,usageAvailability:result.report.usage.availability,durationMs:result.report.execution.durationMs}));
     }catch(error){

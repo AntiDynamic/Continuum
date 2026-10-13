@@ -1,0 +1,38 @@
+{
+  "mode": "offline fake protocol; no inference",
+  "receipts": [
+    {
+      "strategy": "minimal_manifest",
+      "renderedBytes": 690,
+      "serializedBytes": 754,
+      "unicodeCharacters": 690,
+      "estimatedTokens": 230,
+      "tokenMeasurement": "locally_estimated",
+      "contentHash": "22ce57fd8221a17131e8d7788d66023a900bd2d76313d940283606daa31b55b2",
+      "sources": [],
+      "omissions": [],
+      "repositoryBodiesPreloaded": false,
+      "coverage": "repository excerpts intentionally omitted; retrieval available",
+      "status": "prepared",
+      "executionId": "69e76b76-f036-4ac6-8157-ba958c792cdd",
+      "threadId": "strategy-minimal_manifest"
+    },
+    {
+      "strategy": "minimal_manifest",
+      "renderedBytes": 690,
+      "serializedBytes": 754,
+      "unicodeCharacters": 690,
+      "estimatedTokens": 230,
+      "tokenMeasurement": "locally_estimated",
+      "contentHash": "22ce57fd8221a17131e8d7788d66023a900bd2d76313d940283606daa31b55b2",
+      "sources": [],
+      "omissions": [],
+      "repositoryBodiesPreloaded": false,
+      "coverage": "repository excerpts intentionally omitted; retrieval available",
+      "status": "acknowledged",
+      "executionId": "69e76b76-f036-4ac6-8157-ba958c792cdd",
+      "threadId": "strategy-minimal_manifest",
+      "turnId": "turn-fixture"
+    }
+  ]
+}

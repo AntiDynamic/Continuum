@@ -1,0 +1,297 @@
+{
+  "schemaVersion": "continuum.recovery-benchmark.v1",
+  "records": [
+    {
+      "caseId": "minimal-recovery",
+      "repetition": 1,
+      "treatment": "C",
+      "initialCommit": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+      "task": "For the later implementation, fix AuthService: reject empty and literal expired tokens in both validation and refresh; preserve signatures, TokenClaims subject and expiry, and return <token>-refreshed for valid tokens. This first turn is preparation only: acknowledge in one short sentence. Do not call tools or inspect or edit files yet.",
+      "continuation": "Proceed with implementation now using the recovered original task requirements, then validate the result.",
+      "configuration": {
+        "model": "gpt-5.6-luna",
+        "reasoningEffort": "low",
+        "contextStrategy": "on_demand",
+        "approvalPolicy": "never",
+        "sandbox": "workspace-write",
+        "timeoutMs": 60000,
+        "maximumReportedTokens": 85000,
+        "persistentSession": true,
+        "contextEnabled": true,
+        "durableMemory": true,
+        "nativeCompactionPrompt": true,
+        "configOverrides": {
+          "model_provider": "openai",
+          "features.multi_agent": false,
+          "features.multi_agent_v2": false,
+          "features.multi_agent_v2_dynamic_tools": false,
+          "features.goals": false,
+          "features.unbounded_connection_retries": false
+        }
+      },
+      "transition": "compaction",
+      "mode": "dry-run",
+      "baseline": {
+        "status": "failed",
+        "taskId": "small-security-token",
+        "checks": [
+          {
+            "name": "independent-behavior",
+            "status": "failed",
+            "error": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception.\n    at evaluate (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:82:12)\n    at async file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:132:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: undefined,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.20.0\n"
+          }
+        ],
+        "behavioral": true,
+        "validator": "executable-behavior-v1"
+      },
+      "setupVerified": true,
+      "setupDurationMs": 4490,
+      "behavioralSuccess": null,
+      "agentCompleted": null,
+      "criticalRequirementRetention": null,
+      "exactEvidenceRecovery": null,
+      "retrievalMisses": null,
+      "staleContextErrors": null,
+      "repeatedExploration": null,
+      "modelCalls": null,
+      "inputTokens": null,
+      "cachedInputTokens": null,
+      "outputTokens": null,
+      "recoveryEstimatedTokens": null,
+      "totalAttributableCost": null,
+      "costMeasurement": "unavailable",
+      "genuineCompactions": 0,
+      "simulatedCompactions": 0,
+      "compactionEvidence": [],
+      "generationTurnRequests": 0,
+      "compactionRequests": 0,
+      "usageIncludesCompaction": null,
+      "hiddenValidatorIsolation": {
+        "mode": "bubblewrap",
+        "evaluatorRootHidden": true,
+        "hostTmpHidden": true,
+        "recorderDatabaseHidden": true,
+        "hostCodexHistoryHidden": true,
+        "otherUserAgentHistoriesHidden": true,
+        "credentialsCopied": false,
+        "appliedToAgentProcess": false
+      },
+      "decisionReady": false,
+      "codexVersion": "0.162.1",
+      "runtimePreflight": {
+        "passed": true,
+        "inferenceRequests": 0,
+        "environment": {
+          "HOME": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host",
+          "CODEX_HOME": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host",
+          "SHELL": "/bin/bash",
+          "PATH": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host/runtime/tools:/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host/runtime/codex-path:/usr/local/bin:/usr/bin:/bin"
+        },
+        "runtimeChecks": [
+          {
+            "program": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host/runtime/codex-path/rg",
+            "output": "ripgrep 15.2.0 (rev e89fff89ac)\n\nfeatures:+pcre2\nsimd(compile):+SSE2,-SSSE3,-AVX2\nsimd(runtime):+SSE2,+SSSE3,+AVX2\n\nPCRE2 10.45 is available (JIT is available)"
+          },
+          {
+            "program": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host/runtime/codex-resources/bwrap",
+            "output": "bubblewrap built for Codex"
+          },
+          {
+            "program": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host/runtime/codex-resources/zsh/bin/zsh",
+            "output": "zsh 5.9.0.3-test (x86_64-pc-linux-gnu)"
+          },
+          {
+            "program": "/tmp/continuum-recovery-benchmark-xpODry/minimal-recovery-C/.continuum/codex-host/runtime/tools/node",
+            "output": "v24.20.0"
+          }
+        ],
+        "helperOperation": {
+          "output": "continuum-helper-ok:42",
+          "trace": [
+            {
+              "direction": "client_to_host",
+              "value": {
+                "type": "connection/hello",
+                "supportedVersions": [
+                  1
+                ],
+                "requiredCapabilities": [],
+                "optionalCapabilities": []
+              }
+            },
+            {
+              "direction": "host_to_client",
+              "value": {
+                "type": "connection/ready",
+                "selectedVersion": 1,
+                "capabilities": []
+              }
+            },
+            {
+              "direction": "client_to_host",
+              "value": {
+                "type": "operation/request",
+                "id": 1,
+                "request": {
+                  "method": "session/open",
+                  "sessionId": "continuum-offline-preflight"
+                }
+              }
+            },
+            {
+              "direction": "host_to_client",
+              "value": {
+                "type": "operation/response",
+                "id": 1,
+                "result": {
+                  "status": "ok",
+                  "value": {
+                    "type": "session/ready",
+                    "sessionId": "continuum-offline-preflight"
+                  }
+                }
+              }
+            },
+            {
+              "direction": "client_to_host",
+              "value": {
+                "type": "operation/request",
+                "id": 2,
+                "request": {
+                  "method": "session/execute",
+                  "sessionId": "continuum-offline-preflight",
+                  "request": {
+                    "tool_call_id": "continuum-offline-only",
+                    "enabled_tools": [],
+                    "source": "text('continuum-helper-ok:'+(6*7));",
+                    "yield_time_ms": 1000,
+                    "max_output_tokens": 256
+                  }
+                }
+              }
+            },
+            {
+              "direction": "host_to_client",
+              "value": {
+                "type": "operation/response",
+                "id": 2,
+                "result": {
+                  "status": "ok",
+                  "value": {
+                    "type": "execution/started",
+                    "cellId": "1"
+                  }
+                }
+              }
+            },
+            {
+              "direction": "host_to_client",
+              "value": {
+                "type": "execute/initialResponse",
+                "id": 2,
+                "result": {
+                  "status": "ok",
+                  "value": {
+                    "Result": {
+                      "cell_id": "1",
+                      "content_items": [
+                        {
+                          "type": "input_text",
+                          "text": "continuum-helper-ok:42"
+                        }
+                      ],
+                      "error_text": null,
+                      "code_mode_host_duration_ns": 6807434
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "direction": "client_to_host",
+              "value": {
+                "type": "operation/request",
+                "id": 3,
+                "request": {
+                  "method": "session/shutdown",
+                  "sessionId": "continuum-offline-preflight"
+                }
+              }
+            },
+            {
+              "direction": "host_to_client",
+              "value": {
+                "type": "cell/closed",
+                "sessionId": "continuum-offline-preflight",
+                "cellId": "1"
+              }
+            },
+            {
+              "direction": "host_to_client",
+              "value": {
+                "type": "operation/response",
+                "id": 3,
+                "result": {
+                  "status": "ok",
+                  "value": {
+                    "type": "session/closed",
+                    "sessionId": "continuum-offline-preflight"
+                  }
+                }
+              }
+            }
+          ],
+          "stderr": "",
+          "inferenceRequests": 0,
+          "cleanup": {
+            "exited": true,
+            "pid": 1385307,
+            "groupGone": true
+          }
+        },
+        "networkDisabledDuringPreflight": true,
+        "configuration": {
+          "model": "gpt-5.6-luna",
+          "provider": "openai",
+          "reasoning": "low",
+          "features": {
+            "multi_agent": false,
+            "multi_agent_v2": false,
+            "multi_agent_v2_dynamic_tools": false,
+            "goals": false,
+            "unbounded_connection_retries": false
+          }
+        },
+        "sandboxCommand": {
+          "exitCode": 0,
+          "stdout": "continuum-command-ok:42\n",
+          "stderr": ""
+        },
+        "appServerCleanup": {
+          "pid": 1385339,
+          "groupGone": true
+        }
+      },
+      "hostRetries": {
+        "version": "0.162.1",
+        "verified": false,
+        "controlled": false,
+        "reason": "Codex 0.162.1 merge_configured_model_providers ignores overrides of built-in openai (entry.or_insert); default HTTP/stream retries and separate unauthorized recovery cannot be disabled through those overrides.",
+        "sources": [
+          "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/model-provider-info/src/lib.rs#L699",
+          "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/client.rs#L1795",
+          "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/responses_retry.rs#L99"
+        ]
+      },
+      "offlineRequirements": {
+        "sessionId": "96d00886-8506-4929-8f4e-babc03e0a940",
+        "originalEvidencePreserved": true,
+        "recoverable": true,
+        "incomplete": false
+      }
+    }
+  ],
+  "liveTreatmentRuns": 0,
+  "paidInferenceUsage": "no paid inference requested",
+  "decisionReady": false
+}

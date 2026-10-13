@@ -600,4 +600,120 @@ export const MIGRATIONS: Migration[] = [
       );
     `,
   },
+  {
+    version: 10,
+    description: "Phase 0 usage snapshots, source linkage, and cache-write pricing",
+    sql: `
+      ALTER TABLE pricing_profiles ADD COLUMN cache_creation_input_credits_per_million_tokens REAL;
+      ALTER TABLE agent_usage_evidence ADD COLUMN cache_creation_input_tokens INTEGER;
+      ALTER TABLE agent_usage_evidence ADD COLUMN total_tokens INTEGER;
+      ALTER TABLE agent_usage_evidence ADD COLUMN source_event_id TEXT;
+      ALTER TABLE agent_usage_evidence ADD COLUMN source_sequence_number INTEGER;
+      ALTER TABLE run_cost_evidence ADD COLUMN cache_creation_input_credits REAL;
+
+      CREATE TABLE agent_usage_snapshots (
+        id TEXT PRIMARY KEY,
+        run_id TEXT NOT NULL REFERENCES agent_runs(id),
+        source_event_id TEXT NOT NULL UNIQUE,
+        sequence_number INTEGER NOT NULL,
+        observed_at TEXT NOT NULL,
+        provider TEXT,
+        model TEXT,
+        input_tokens INTEGER,
+        cached_input_tokens INTEGER,
+        cache_creation_input_tokens INTEGER,
+        output_tokens INTEGER,
+        reasoning_tokens INTEGER,
+        total_tokens INTEGER,
+        tool_calls INTEGER,
+        measurement TEXT NOT NULL,
+        raw_provider_payload_json TEXT NOT NULL,
+        CHECK (measurement IN ('provider_reported', 'agent_reported', 'estimated', 'unavailable'))
+      );
+      CREATE INDEX idx_agent_usage_snapshots_run
+        ON agent_usage_snapshots(run_id, sequence_number);
+    `,
+  },
+  {
+    version: 11,
+    description: "Persist cache-layer delivery receipts",
+    sql: `
+      ALTER TABLE context_session_deliveries ADD COLUMN cache_delivery_json TEXT;
+    `,
+  },
+  {
+    version: 12,
+    description: "Snapshot membership, session epochs and exact delivery receipts",
+    sql: `
+      CREATE TABLE context_snapshot_versions (
+        index_run_id TEXT NOT NULL REFERENCES repository_index_runs(id),
+        context_item_version_id TEXT NOT NULL REFERENCES context_item_versions(id),
+        PRIMARY KEY(index_run_id,context_item_version_id)
+      );
+      CREATE TABLE context_session_epochs (
+        session_id TEXT NOT NULL REFERENCES context_sessions(id),
+        epoch_number INTEGER NOT NULL,
+        index_run_id TEXT NOT NULL REFERENCES repository_index_runs(id),
+        snapshot_json TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        PRIMARY KEY(session_id,epoch_number)
+      );
+      ALTER TABLE context_sessions ADD COLUMN epoch_number INTEGER NOT NULL DEFAULT 0;
+      ALTER TABLE context_session_deliveries ADD COLUMN epoch_number INTEGER NOT NULL DEFAULT 0;
+      ALTER TABLE context_session_deliveries ADD COLUMN rendered_content TEXT;
+      ALTER TABLE context_session_deliveries ADD COLUMN rendered_hash TEXT;
+      ALTER TABLE context_session_deliveries ADD COLUMN rendered_estimated_tokens INTEGER;
+      ALTER TABLE context_session_deliveries ADD COLUMN decision_json TEXT;
+    `,
+  },
+  {
+    version: 13,
+    description: "Persist comparison evidence from isolated executions",
+    sql: `
+      CREATE TABLE codex_external_reports(execution_id TEXT PRIMARY KEY,repository_id INTEGER NOT NULL REFERENCES repositories(id),report_json TEXT NOT NULL,created_at TEXT NOT NULL);
+      CREATE TABLE codex_comparison_runs_new (
+        id TEXT PRIMARY KEY, repository_id INTEGER NOT NULL REFERENCES repositories(id), task_text TEXT NOT NULL,
+        shadow_execution_id TEXT, assist_execution_id TEXT, verifier_command TEXT NOT NULL,
+        shadow_exit_code INTEGER, assist_exit_code INTEGER, shadow_stdout_path TEXT, shadow_stderr_path TEXT,
+        assist_stdout_path TEXT, assist_stderr_path TEXT, outcome TEXT NOT NULL, created_at TEXT NOT NULL
+      );
+      INSERT INTO codex_comparison_runs_new SELECT * FROM codex_comparison_runs;
+      DROP TABLE codex_comparison_runs;
+      ALTER TABLE codex_comparison_runs_new RENAME TO codex_comparison_runs;
+    `,
+  },
+  {
+    version: 14,
+    description: "Append-only task evidence, versioned memory, recovery checkpoints and Codex continuation bindings",
+    sql: `
+      CREATE TABLE task_evidence (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id),
+        text TEXT NOT NULL, authority TEXT NOT NULL CHECK(authority IN ('user','observed','agent_reported')),
+        snapshot_json TEXT, source_version_id TEXT REFERENCES context_item_versions(id),
+        metadata_json TEXT NOT NULL, created_at TEXT NOT NULL
+      );
+      CREATE TABLE task_memory (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id),
+        version INTEGER NOT NULL, kind TEXT NOT NULL, text TEXT NOT NULL,
+        authority TEXT NOT NULL, critical INTEGER NOT NULL CHECK(critical IN (0,1)),
+        evidence_id TEXT NOT NULL REFERENCES task_evidence(id),
+        supersedes TEXT REFERENCES task_memory(id), operation_key TEXT,
+        UNIQUE(session_id,version), UNIQUE(session_id,operation_key), UNIQUE(supersedes)
+      );
+      CREATE INDEX task_evidence_session ON task_evidence(session_id);
+      CREATE TABLE task_checkpoints (
+        id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES context_sessions(id),
+        boundary_key TEXT NOT NULL, memory_version INTEGER NOT NULL,
+        snapshot_json TEXT NOT NULL, state_json TEXT NOT NULL, recovery_json TEXT NOT NULL,
+        status TEXT NOT NULL CHECK(status IN ('pending','delivered')), created_at TEXT NOT NULL,
+        UNIQUE(session_id,boundary_key)
+      );
+      CREATE TABLE codex_session_bindings (
+        session_id TEXT PRIMARY KEY REFERENCES context_sessions(id), thread_id TEXT NOT NULL UNIQUE,
+        model TEXT NOT NULL, reasoning_effort TEXT NOT NULL, approval_policy TEXT NOT NULL,
+        sandbox TEXT NOT NULL, recovery_pending INTEGER NOT NULL DEFAULT 0,
+        last_checkpoint_id TEXT REFERENCES task_checkpoints(id), configuration_json TEXT NOT NULL DEFAULT '{}'
+      );
+    `,
+  },
 ];

@@ -3,6 +3,12 @@ node_modules/
 dist/
 *.tsbuildinfo
 
+# TypeScript test output belongs in dist, never beside source tests.
+packages/**/tests/**/*.test.js
+packages/**/tests/**/*.test.js.map
+packages/**/tests/**/*.test.d.ts
+packages/**/tests/**/*.test.d.ts.map
+
 # Continuum runtime data
 .continuum/
 

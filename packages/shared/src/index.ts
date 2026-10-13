@@ -68,6 +68,10 @@ export {
   NotInitialisedError,
 } from "./errors.js";
 export * from "./context-efficiency.js";
+export * from "./context-delivery.js";
+export * from "./capture-policy.js";
+export * from "./provider-usage.js";
+export * from "./context-renderer.js";
 
 // Redaction
 export {
@@ -78,8 +82,6 @@ export {
 } from "./redaction.js";
 export type { RedactedCommand, RedactionResult } from "./redaction.js";
 export * from "./context-domain.js";
-export * from "./ranking.js";
-export * from "./packing.js";
 export * from "./context-compiler-domain.js";
 
 // Logger
@@ -99,3 +101,6 @@ export {
 } from "./utils.js";
 
 export * from "./context-session.js";
+export * from "./task-memory.js";
+
+export const CONTINUUM_VERSION = "0.1.0";

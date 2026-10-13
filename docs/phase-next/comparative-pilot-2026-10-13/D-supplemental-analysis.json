@@ -1,0 +1,63 @@
+{
+  "treatment": "D",
+  "producer": "post-hoc deterministic analysis of unchanged frozen traces and SQLite; includes tool deliveries omitted from initial receipt-only audit",
+  "sources": [],
+  "toolReplies": [],
+  "sourceFragmentsSupplied": 0,
+  "exactRepeatedSourceCount": 0,
+  "memory": {
+    "originalFullRequirementPreserved": true,
+    "activeCriticalRequirements": [
+      {
+        "kind": "objective",
+        "text": "Repair this warehouse reservation service across API, service, pricing, catalog, persistence and SQL migration modules. Preserve createApi(db), reserve(db,input), cancel(db,tenantId,requestId), and existing receipt fields exactly: reservationId, totalCents, feeCents. Both API methods must return promises. Reservation IDs are r-<tenantId>-<requestId>.\nTenant and SKU isolation are mandatory. Quantities must be positive integers; reject empty items, invalid quantities, unknown SKUs and insufficient stock. Reservations must atomically debit every line or change nothing. Support multiple lines including repeated SKUs. Compute exact integer merchandise cents from quantities and inventory unit prices.\nIdempotency is durable per (tenantId,requestId): a retry returns the original stored receipt without further debit, even if prices change. Cancellation restores original quantities exactly once; return true only when an active reservation was cancelled, false for unknown/already cancelled requests. A tenant cannot cancel another tenant's request.\nMigration 002 must enforce tenant/request uniqueness. Its down section removes only reservation schema and preserves inventory data and indexes. Preserve migration markers and column names. Do not weaken the public test, rename public contracts or change build tooling. Additional tests are allowed. No dependencies are needed: use node --test tests/public.test.mjs. Finish implementation and validate it.",
+        "evidence_id": "a51b4547-3336-4d4c-812e-7ca68c5a56c3"
+      },
+      {
+        "kind": "constraint",
+        "text": "Pricing correction: for NEW reservations, charge 25 cents when merchandise subtotal is below 10000 cents, and zero at or above 10000 cents. This supersedes the fixed 50-cent policy. Existing stored receipts must remain stable. Complete the original repair and validate it.",
+        "evidence_id": "1838421f-582b-46a3-9c95-5fe51753bb2c"
+      }
+    ],
+    "binding": [
+      {
+        "session_id": "b7f827ee-357b-4e8d-9e93-76350f1000bd",
+        "thread_id": "01a13594-152f-78c2-a229-ac3bb7282e6f",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low",
+        "approval_policy": "never",
+        "sandbox": "workspace-write",
+        "recovery_pending": 1,
+        "last_checkpoint_id": "4e2d3b76-779f-4f97-b210-4bd90571b3e8",
+        "configuration_json": "{\"contextEnabled\":true,\"durableMemory\":true,\"nativeCompactionPrompt\":true,\"configOverrides\":{\"model_provider\":\"openai\",\"features.multi_agent\":false,\"features.multi_agent_v2\":false,\"features.multi_agent_v2_dynamic_tools\":false,\"features.goals\":false,\"features.unbounded_connection_retries\":false},\"contextStrategy\":\"adaptive\"}"
+      }
+    ],
+    "adaptiveFailureSignals": 0,
+    "continuationRecoveryActuallySent": true,
+    "supersededRecords": 2
+  },
+  "nativeUsageMatchesThreadCounter": true,
+  "sameNativeThread": true,
+  "turnTimeline": [
+    {
+      "timestamp": "2026-10-13T14:04:19.706Z",
+      "threadId": "01a13594-152f-78c2-a229-ac3bb7282e6f",
+      "inputTextHashes": [
+        "08aeeb2f87a39c3e7c57fbbd70c827bd6e44434b10ac8cf27a67b63f4f8bfa75"
+      ]
+    },
+    {
+      "timestamp": "2026-10-13T14:05:10.221Z",
+      "threadId": "01a13594-152f-78c2-a229-ac3bb7282e6f",
+      "inputTextHashes": [
+        "bf8d2cc6bc1146b81065cc03e0c7f3bb1250113bd3dfb8717cff68e738d60ef9",
+        "e3a0aadcf7c7d60ac081b98aa4d33112a0233e9d25064ffbc49403e72ad2cdb6"
+      ]
+    }
+  ],
+  "limits": [
+    "Exact repetition is transmission, not attributed billing waste.",
+    "Historical source references are not proven stale-context errors.",
+    "No active occupancy or actual billing is available."
+  ]
+}

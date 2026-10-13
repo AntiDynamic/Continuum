@@ -1,0 +1,32 @@
+{
+  "observedLiveBudgetControl": "FAIL compaction excluded from app-server notifications; native total exceeded frozen 85000",
+  "functionalRecovery": "VERIFIED genuine compaction, exact recovery receipt, two completed native generation turns",
+  "behavior": "VERIFIED visible and hidden validators pass; no final-code repair",
+  "attributableUsageMonitorFix": "PASS offline, unverified live",
+  "nativeCompactionLedgerRegressionTests": 24,
+  "additionalLiveRunsAfterRepair": 0,
+  "nextLiveExperimentAuthorized": false,
+  "originalReportPreserved": true,
+  "sourceSha256AfterFix": {
+    "packages/codex-app-server/src/assist-execution-service.ts": "27800172fa58d6874bff2917029f644ed1b9e0211d67d7dca3101e957f04e5c2",
+    "scripts/context-strategy.test.mjs": "f6bd269fd4f2c75134c2e924c024275b3b8efa429caee43d5035897708586d5a",
+    "scripts/context-delivery-audit.mjs": "5be93a017b0fcdf3aa503d536ee62d5325920edeafb4c076f2eda892d00886b0",
+    "scripts/context-delivery-audit.test.mjs": "62807c4d249dc67c2229c1adbda7c47c185057ee23896c0a6c8c4c4b6bfd4946",
+    "scripts/recovery-compaction-usage.mjs": "464556fef659fa1d84c8786dc6f248bb6dd5efb14687a49fbcdabe888084be9f",
+    "scripts/recovery-compaction-usage.test.mjs": "66a0b01e7142a78d691c53f442ac0b2e552625dc8c4d5474fd67348c1bb0b49a",
+    "scripts/recovery-safety.mjs": "0e7a945d327e953bbbfefdbee525dd2826ca60705190401dead7c27bd9733f0e",
+    "scripts/recovery-benchmark.mjs": "ad490730e52062d204d8c4d957b48be17765af95d38e3429a7fcc467a7524fb0",
+    "scripts/recovery-usage-ledger.mjs": "4099b8148102a5afa5ffdd2aef6a69f773e5a1d67c90466770b982cc7ed1c271",
+    "scripts/recovery-usage-ledger.test.mjs": "52aa35b9650d6e4312a09b445e78bca8db71fd1b954fd6cc79a12af6baebe77b"
+  },
+  "finalBuild": "PASS",
+  "finalTypecheck": "PASS",
+  "finalLint": "PASS",
+  "latestSnapshotAndStrategyTests": 9,
+  "latestAccountingAndAuditTests": 26,
+  "recoveryTimingInstrumentation": "Added prospectively; unavailable for completed live attempt",
+  "resumeSnapshotDefect": "Fixed and regression tested offline; selected live run had unchanged source before resume",
+  "finalAccountingAndAuditTests": 26,
+  "auditMeasurementProvenanceRegression": "PASS recorder/native/captured sizes kept separate",
+  "failedBenchmarkExitStatus": "PASS offline regression using preserved real failure"
+}

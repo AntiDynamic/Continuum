@@ -1,0 +1,53 @@
+{
+  "status": "blocked-before-inference",
+  "recordedAt": "2026-10-12T18:16:06.560426+00:00",
+  "authorizedTreatment": "C",
+  "authorizedModel": "gpt-5.6-luna",
+  "authorizedReasoning": "low",
+  "metadataOnlyRequests": [
+    "initialize",
+    "model/list",
+    "config/read",
+    "account/read (refreshToken=false)"
+  ],
+  "liveExperiments": 0,
+  "generationTurns": 0,
+  "explicitCompactions": 0,
+  "retries": 0,
+  "effectiveInferenceConfigurationVerified": false,
+  "preflightTelemetryVerified": false,
+  "blockers": [
+    "Usage telemetry presence is checked only after the first generation; no pre-inference proof of live telemetry delivery was established. Protocol support is not proof of successful delivery.",
+    "Generation timeout awaits turn/interrupt RPC and subsequent shutdown; current implementation does not enforce a hard 60-second execution cutoff.",
+    "Provider HTTP and stream retry counts are not explicitly configured to zero. Official configuration reference documents nonzero defaults.",
+    "No supported generation output-token limit was found in the installed TurnStartParams schema or official configuration reference; the reported usage ceiling is reactive.",
+    "Separate compaction resume does not validate returned effective model/provider/reasoning."
+  ],
+  "additionalTraceGaps": [
+    "Compaction client does not record a full raw execution trace.",
+    "A first-turn exception can lose the report session identifier and undercount generation requests."
+  ],
+  "actualInputTokens": null,
+  "actualCachedInputTokens": null,
+  "actualOutputTokens": null,
+  "liveExecutionElapsedMs": null,
+  "knownTestingCost": null,
+  "costNote": "No benchmark inference requested. Overall session cost and metadata credit accounting are unavailable.",
+  "compactionResult": "not executed",
+  "recoveredContinuation": "not executed",
+  "requirementsRetention": "not live-tested",
+  "independentBehavioralValidation": "not run for this approval",
+  "isolation": "Existing isolation implementation inspected; no new live workspace created because preflight failed.",
+  "originalRequirements": "Existing fixture task inspected; no live task session created.",
+  "sources": [
+    "https://learn.chatgpt.com/docs/app-server",
+    "https://learn.chatgpt.com/docs/config-file/config-reference"
+  ],
+  "inspectedFileSha256": {
+    "scripts/recovery-benchmark.mjs": "68df562210af1717ce3680a2cfd7a185babd26e5e10a5847d99c7ace20a51a55",
+    "scripts/recovery-isolation.mjs": "57c57dff54a5e67f1c2d234a95939be0807ba913eae7d5c2766d51f7f62dbf69",
+    "scripts/codex-model-inspect.mjs": "1cc2988caafb53a2065b498754415c261b70012eed39bc15fbc398f919949ecc",
+    "packages/codex-app-server/src/client.ts": "dfc68e58852a176033f21c32299589263ec3ba3c68c99b95211d677b94517cb8",
+    "packages/codex-app-server/src/assist-execution-service.ts": "c69dc16c28e0d2de69fef9a33ee972aa9e9700819347f3b2d278842cc261aef7"
+  }
+}

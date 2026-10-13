@@ -1,0 +1,45 @@
+✔ pilot guard forbids parallel, extra turns, compaction, drift and missing telemetry (4.480687ms)
+✔ native response accounting deduplicates notifications and includes compaction consumption (20.996141ms)
+✔ real native compaction record proves omitted usage and binds response to correct thread (57.371713ms)
+✔ included, excluded, ambiguous and missing accounting fail or reconcile correctly (1.77812ms)
+✔ attributable usage including compaction stops replay earlier; repeated accounting is idempotent (1.432391ms)
+✔ the preserved failed live report produces a nonzero benchmark status; negative mock behavior is not presented as agent success (9.083624ms)
+✔ real helper executes V1 JavaScript inside the actual isolated filesystem with no inference (2080.512792ms)
+✔ real metadata-only host preflight verifies environment, exact configuration and dependencies (0.638051ms)
+✔ hidden validators, previous reports, recorder data and other user histories remain inaccessible (135.051954ms)
+✔ real helper tool failure leaves no running process group (29.916553ms)
+✔ real stalled helper is cancelled and terminated without leaving processes (1052.782513ms)
+✔ missing helper rejects preflight before credentials or inference (90.720395ms)
+✔ non-executable helper rejects preflight before credentials or inference (75.053216ms)
+✔ an executable with a missing interpreter fails the real operation preflight (251.576088ms)
+✔ safe metadata transient retries once, then succeeds and logs attempts (7.491771ms)
+✔ retry exhaustion is four total metadata attempts with 2/4/8 second backoff (1.784384ms)
+✔ authentication, configuration, credit, validation and behavior failures never retry (1.933144ms)
+✔ rate limit respects provider permission and Retry-After without extending deadline (1.239218ms)
+✔ ambiguous completion or billing prevents retry, and inference methods cannot use retry loop (1.107437ms)
+✔ missing telemetry blocks compaction and further generation (2.573772ms)
+✔ effective model, provider, reasoning and thread drift are rejected (0.837799ms)
+✔ unexpected third turn and second compaction are blocked (1.007775ms)
+✔ concurrent operations and parallel experiment lock acquisition fail (26.146425ms)
+✔ compaction failure or simulated evidence stops continuation (1.211563ms)
+✔ recovery injection failure, missing originals and incomplete packet block second turn (0.641856ms)
+✔ reported 20000-token threshold stops before another operation; no billing cap claimed (0.452087ms)
+✔ raw usage stop preserves the callback pipeline for graceful interruption (1.09031ms)
+✔ installed provider retry limitation and unknown host versions fail closed (0.854341ms)
+✔ host multi-agent tools, goals and unbounded connection retries are explicitly disabled (0.252447ms)
+✔ compaction without reported usage cannot authorize continuation (0.430155ms)
+✔ raw protocol observer blocks omitted recovery before second request is written (0.588868ms)
+✔ response IDs deduplicate; conflicting evidence fails; cached is subset (4.127581ms)
+✔ both actual historical experiments total 52109 without adding cumulative notifications (35.012832ms)
+✔ API-equivalent estimates require cache-write evidence and never imply Codex billing (13.806318ms)
+✔ real compaction is included once even though app-server cumulative snapshots omit it (17.988665ms)
+✔ authentication validators reject baseline and counterfeit fixes but ignore unrelated cache failure (6066.745485ms)
+✔ independent authentication validator rejects expired claims for valid input (1028.232697ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7948.376823

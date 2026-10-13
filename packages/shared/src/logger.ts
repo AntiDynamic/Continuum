@@ -1,3 +1,4 @@
+import { redactString, redactValue } from "./redaction.js";
 /**
  * Structured logger for Continuum internals.
  *
@@ -43,6 +44,8 @@ function write(
   message: string,
   extra?: Record<string, unknown>,
 ): void {
+  message = redactString(message);
+  if (extra) extra = redactValue(extra).value as Record<string, unknown>;
   const minLevel = resolveMinLevel();
   if (LEVELS[level] < LEVELS[minLevel]) return;
 

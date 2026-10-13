@@ -51,14 +51,32 @@ describe("ContextEngine", () => {
     expect(packet.coverage.covered).toEqual(expect.arrayContaining(["implementation", "tests"]));
     expect(packet.coverage.missing, JSON.stringify(packet.coverage)).toEqual([]);
     expect(packet.totalEstimatedTokens).toBeLessThanOrEqual(packet.budget.maxEstimatedTokens);
+    expect(packet.cachePlan.stablePrefix.role).toBe("stable_prefix");
+    expect(packet.cachePlan.taskDelta.role).toBe("task_delta");
+    expect(packet.cachePlan.taskDelta.itemIds).toContain("impl");
+    expect(packet.cachePlan.stablePrefix.contentHash).toMatch(/^[a-f0-9]{64}$/);
     expect(db.prepare("SELECT COUNT(*) AS count FROM context_retrieval_evidence").get()).toMatchObject({ count: expect.any(Number) });
   });
 
-  it("reports unavailable rollback explicitly when no indexed evidence exists", async () => {
+  it("retains sibling implementation dependencies for security-sensitive fixes", async () => {
+    const authService = add("auth-service", "AuthService", "src/auth-service.ts", "export class AuthService {}", "class");
+    const validate = add("validate", "AuthService.validateToken", "src/auth-service.ts", "validateToken(token: string) { if (!token) throw new Error('missing'); return token; }", "method");
+    const refresh = add("refresh", "AuthService.refreshToken", "src/auth-service.ts", "refreshToken(token: string) { return this.validateToken(token); }", "method");
+    add("security", "Token trust policy", "SECURITY.md", "Refresh must not weaken token validation.", "heading");
+    add("refresh-test", "rejectsEmptyRefreshTokenTest", "tests/auth-service.test.ts", "test('refresh rejects empty token', () => new AuthService().refreshToken(''));", "test");
+    repository.upsertRelationship({ id: "contains-validate", sourceContextItemId: authService, targetContextItemId: validate, kind: "contains", confidence: "high", evidence: { sourcePath: "src/auth-service.ts", description: "Class contains validation method." } });
+    repository.upsertRelationship({ id: "contains-refresh", sourceContextItemId: authService, targetContextItemId: refresh, kind: "contains", confidence: "high", evidence: { sourcePath: "src/auth-service.ts", description: "Class contains refresh method." } });
+    const packet = await new ContextEngine(db, 1, snapshot).packet("Fix refreshToken validation error with regression test");
+    const delivered = [packet.orientation, packet.exactImplementation!, packet.mandatoryContext!, packet.directlyRelatedTests!, packet.optionalContext!].flatMap((section) => section.items.map((item) => item.candidate.item.id));
+    expect(delivered).toContain("refresh");
+    expect(delivered).toContain("validate");
+  });
+
+  it("keeps missing required rollback incomplete", async () => {
     add("migration", "migrations/1.sql:migration", "migration", "migrations/1.sql", "CREATE TABLE users(id TEXT PRIMARY KEY);", "migration");
     const packet = await new ContextEngine(db, 1, snapshot).packet("Add schema migration with rollback");
-    expect(packet.complete).toBe(true);
-    expect(packet.coverage.missing).not.toContain("rollback");
-    expect(packet.coverage.coverageEvidence).toContainEqual(expect.objectContaining({ category: "rollback", state: "unavailable", matchingIndexedCandidateCount: 0, remainingRequirement: false }));
+    expect(packet.complete).toBe(false);
+    expect(packet.coverage.missing).toContain("rollback");
+    expect(packet.coverage.coverageEvidence).toContainEqual(expect.objectContaining({ category: "rollback", state: "required", availability: "not_found", matchingIndexedCandidateCount: 0, remainingRequirement: true }));
   });
 });

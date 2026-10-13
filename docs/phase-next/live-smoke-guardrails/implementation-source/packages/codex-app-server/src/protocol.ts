@@ -1,0 +1,77 @@
+import type { CodexDynamicToolSpec } from "./protocol-adapters/0.133.0/dynamic-tools.js";
+
+export type JsonRpcId = string | number;
+export interface JsonRpcRequest { id: JsonRpcId; method: string; params?: unknown }
+export interface JsonRpcNotification { method: string; params?: unknown }
+export interface JsonRpcResponse { id: JsonRpcId; result?: unknown; error?: { code: number; message: string; data?: unknown } }
+export type JsonRpcMessage = JsonRpcRequest | JsonRpcNotification | JsonRpcResponse;
+
+export type CodexApprovalPolicy = "untrusted" | "on-failure" | "on-request" | "never";
+export type CodexSandboxMode = "read-only" | "workspace-write" | "danger-full-access";
+export type CodexApprovalDecision = "accept" | "acceptForSession" | "decline" | "cancel";
+export type CodexAutoCompactionScope = "total" | "body_after_prefix";
+export interface CodexAutoCompactionOptions {
+  /** Native Codex threshold. Omit to keep the provider default. */
+  tokenLimit?: number;
+  scope?: CodexAutoCompactionScope;
+  /** Provider compact_prompt override; Continuum supplies this automatically for executions. */
+  prompt?: string;
+}
+
+export interface CodexInitializeOptions {
+  clientName?: string;
+  clientVersion?: string;
+  experimentalApi?: boolean;
+}
+export interface CodexServerInfo { userAgent: string; codexHome: string; platformFamily: string; platformOs: string }
+export interface CodexAccountState { authenticated: boolean; requiresOpenaiAuth: boolean; mode: "apiKey" | "chatgpt" | "amazonBedrock" | "none" }
+export interface CodexThreadOptions { cwd: string; model?: string; reasoningEffort?:string; configOverrides?:Record<string,unknown>; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode; dynamicTools?: CodexDynamicToolSpec[]; autoCompaction?: CodexAutoCompactionOptions }
+export interface CodexThread { id: string; model: string | null; modelProvider: string | null; cwd: string; reasoningEffort?:string }
+export interface CodexTextInput { type: "text"; text: string; text_elements: [] }
+export interface CodexTurnOptions { threadId: string; task?: string; inputs?: CodexTextInput[]; model?: string; reasoningEffort?:string }
+export interface CodexTurn { id: string; threadId: string; status: string }
+
+export interface CodexRawMessage {
+  direction: "client_to_server" | "server_to_client" | "server_stderr";
+  category: "request" | "response" | "notification" | "server_request" | "malformed" | "stderr";
+  raw: string;
+  parsed: unknown | null;
+  method: string | null;
+  requestId: JsonRpcId | null;
+  timestamp: string;
+}
+
+export interface CodexServerRequestContext {
+  id: JsonRpcId;
+  method: string;
+  params: unknown;
+}
+
+export interface CodexProcessOptions {
+  executable?: string;
+  executableArgs?: string[];
+  cwd?: string;
+  env?: NodeJS.ProcessEnv;
+  requestTimeoutMs?: number;
+  shutdownTimeoutMs?: number;
+  /** Kill the isolated process group after a bounded graceful shutdown (POSIX only). */
+  terminateProcessGroup?: boolean;
+  maximumOutputBytes?: number;
+  onRawMessage?: (message: CodexRawMessage) => void | Promise<void>;
+  onNotification?: (method: string, params: unknown) => void | Promise<void>;
+  onServerRequest?: (request: CodexServerRequestContext) => Promise<unknown>;
+  onFatalError?: (error: Error) => void | Promise<void>;
+}
+
+export interface CodexAppServerClient {
+  start(options?: CodexProcessOptions): Promise<void>;
+  initialize(options?: CodexInitializeOptions): Promise<CodexServerInfo>;
+  readAccount(): Promise<CodexAccountState>;
+  startThread(options: CodexThreadOptions): Promise<CodexThread>;
+  resumeThread(threadId: string,options?:Partial<CodexThreadOptions>): Promise<CodexThread>;
+  startTurn(options: CodexTurnOptions): Promise<CodexTurn>;
+  compactThread(threadId: string): Promise<unknown>;
+  interruptTurn(threadId: string, turnId: string): Promise<void>;
+  respondToServerRequest(requestId: JsonRpcId, response: unknown): Promise<void>;
+  close(): Promise<void>;
+}

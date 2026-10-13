@@ -25,6 +25,10 @@ Project memory and current work are maintained in:
 - [Decision log](docs/decision-log.md) — durable design decisions and their reasons.
 - [Experiment log](docs/experiment-log.md) — validation evidence and the next controlled runs.
 - [Effectiveness gate plan](docs/effectiveness-gate-plan.md) — pass/fail criteria and staged low-cost testing.
+- [Production roadmap](docs/production-roadmap.md) — staged product work, integration requirements, and release gates.
+- [Repository audit](docs/repository-audit-2026-10-12.md) — confirmed correctness, measurement, and integration defects with offline reproductions and an ordered repair plan.
+- [Audit implementation](docs/audit/implementation-2026-10-12.md) — implemented repairs, regression evidence, and remaining qualification gates.
+- [Autonomous recovery implementation](docs/phase-next/implementation.md) — durable requirements, checkpointing, Codex continuation, offline evidence, and the credit-limited live test awaiting approval.
 
 ---
 
@@ -65,8 +69,8 @@ continuum mcp
 
 ### Prerequisites
 
-- Node.js ≥ 18
-- pnpm ≥ 8
+- Node.js ≥ 22.13
+- pnpm 11.3 (pinned in package.json)
 - Git ≥ 2.x
 - Gemini CLI (`npm install -g @google/gemini-cli@latest`)
 
@@ -413,3 +417,31 @@ continuum codex report <execution-id> --json
 ```
 
 See [Codex integration](docs/codex-integration.md) and the [Shadow Flight Recorder](docs/shadow-flight-recorder.md). Shadow mode does not restrict Codex or prove provider savings; Continuum context tokens remain estimated.
+
+### Codex context delivery strategies
+
+Assist mode accepts `--context-strategy initial_packet|minimal_manifest|on_demand`.
+The existing `.continuum/config.json` also accepts
+`"contextDelivery": {"strategy": "on_demand"}`. The CLI flag overrides configuration.
+`initial_packet` remains the default. A manifest supplies bounded evidence references;
+on-demand mode sends no additional initial repository excerpts. Retrieval remains shared.
+Use the existing `--durable-memory` option for automatic recovery on continuation.
+
+The [context efficiency audit and real recovery report](docs/phase-next/context-efficiency-2026-10-13/report.md)
+records genuine compaction, same-thread recovery delivery and passing fixture validators.
+It also exposes a provider-budget defect: native thread notifications omitted compaction usage.
+The correction is tested offline; comparative token/cost benefit remains unproven.
+
+### Comparative Codex pilot
+
+The frozen four-treatment warehouse benchmark uses native Codex, full Continuum,
+minimal manifests, and an experimental deterministic adaptive policy. Defaults
+remain unchanged. See [design and safeguards](docs/phase-next/comparative-pilot-2026-10-13/design.md).
+
+```sh
+pnpm test:comparative
+pnpm benchmark:comparative --dry-run --output /tmp/continuum-comparison-preflight
+```
+
+Dry runs never request inference. Paid runs require explicit authorization,
+clean committed source, isolated fixtures, model locking and watchdog checks.

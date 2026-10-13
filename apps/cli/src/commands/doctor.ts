@@ -11,12 +11,12 @@ import {
 import { isInitialised, getContinuumDir } from "../config-helpers.js";
 import { access, constants } from "node:fs/promises";
 
-const NODE_VERSION_MINIMUM = 18;
+const NODE_VERSION_MINIMUM = "22.13.0";
 
 async function checkNodeVersion(): Promise<boolean> {
   const ver = process.version; // "v24.13.0"
-  const major = parseInt(ver.slice(1).split(".")[0] ?? "0", 10);
-  if (major >= NODE_VERSION_MINIMUM) {
+  const [major = 0, minor = 0] = ver.slice(1).split(".").map(Number);
+  if (major > 22 || (major === 22 && minor >= 13)) {
     pass(`Node.js ${ver}`, `minimum v${NODE_VERSION_MINIMUM.toString()}`);
     return true;
   } else {

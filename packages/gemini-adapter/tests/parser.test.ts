@@ -83,7 +83,7 @@ describe("parseGeminiLine — usage event", () => {
   it("parses token usage", () => {
     const ctx = makeCtx();
     const event = parseGeminiLine(
-      '{"type":"usage","inputTokens":450,"outputTokens":120,"cachedInputTokens":0}',
+      '{"type":"usage","inputTokens":450,"outputTokens":120,"cachedInputTokens":0,"cacheCreationInputTokens":30,"totalTokens":570}',
       ctx,
     );
     expect(event.eventType).toBe("agent_usage");
@@ -91,6 +91,8 @@ describe("parseGeminiLine — usage event", () => {
       expect(event.inputTokens).toBe(450);
       expect(event.outputTokens).toBe(120);
       expect(event.cachedInputTokens).toBe(0);
+      expect(event.cacheCreationInputTokens).toBe(30);
+      expect(event.totalTokens).toBe(570);
       expect(event.measurement).toBe("agent_reported");
     }
   });

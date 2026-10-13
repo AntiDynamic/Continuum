@@ -9,20 +9,20 @@
     "build": "tsc --project tsconfig.json",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src",
-    "clean": "rimraf dist",
+    "clean": "node -e \"require('node:fs').rmSync('dist', {recursive:true,force:true})\"",
     "test": "vitest run"
   },
   "dependencies": {
-    "@continuum/database": "workspace:*",
     "@continuum/git-analyzer": "workspace:*",
     "@continuum/shared": "workspace:*",
     "execa": "^9.6.1",
     "ignore": "^7.0.6",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "typescript": "^5.7.3",
+    "@continuum/database": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.7.3",
     "vitest": "^3.0.4"
   }
 }

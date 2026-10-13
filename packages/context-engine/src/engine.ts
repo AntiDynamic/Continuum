@@ -1,3 +1,7 @@
+import { renderContextDelivery } from "@continuum/shared";
+import { IndexRunRepository } from "@continuum/database";
+import { resolveSnapshotIdentity } from "@continuum/git-analyzer";
+import { snapshotsEqual } from "@continuum/shared";
 import { ContextRepository, type Db } from "@continuum/database";
 import {
   CharacterRatioTokenEstimator,
@@ -19,6 +23,7 @@ import {
 import { DisabledSemanticRetriever, normalizeFtsBm25 } from "./semantic.js";
 import { DeterministicTaskAnalyzer } from "./task-analyzer.js";
 import { normalizeRetrievalTerms, splitIdentifierTerms, RETRIEVAL_NORMALIZATION_VERSION } from "./normalization.js";
+import { buildContextCachePlan } from "./cache-plan.js";
 
 export const CONTEXT_COMPILER_STRATEGY = "context-compiler-v2-budgeted";
 export const DEFAULT_PACKET_BUDGET: ContextPacketBudget = { maxEstimatedTokens: 1900, maxItems: 12, maxEstimatedTokensPerItem: 1800, orientationReserveRatio: 0.13, requiredCoverageReserveRatio: 0.37, orientationCeiling: 250, exactImplementationCeiling: 700, mandatoryContextReserve: 350, directTestReserve: 350, optionalContextCeiling: 250 };
@@ -40,7 +45,7 @@ function categories(version: ContextItemVersion): ContextCoverageCategory[] {
   const result = new Set<ContextCoverageCategory>();
   const path = version.source_path.toLowerCase();
   const kind = version.metadata_json ? metadata(version)["constraintKind"] : undefined;
-  if (version.symbol_name || /function|class|method|type|interface/.test(version.language)) result.add("implementation");
+  if (!/(?:^|\/)(?:tests?|__tests__)(?:\/|$)|\.(?:test|spec)\./.test(path) && (version.symbol_name || /function|class|method|type|interface/.test(version.language))) result.add("implementation");
   if (["interface", "type", "export"].includes((metadata(version)["declarationKind"] as string | undefined) ?? "")) result.add("public_contract");
   if (/test|spec/.test(path) || version.title?.toLowerCase().includes("test")) result.add("tests");
   if (/package\.json|\.ya?ml$|config/.test(path)) result.add("configuration");
@@ -72,11 +77,18 @@ export class ContextEngine {
     private readonly snapshot: IndexSnapshotIdentity,
     private readonly estimator: TokenEstimator = new CharacterRatioTokenEstimator(),
     private readonly semantic: SemanticRetriever = new DisabledSemanticRetriever(),
+    private readonly features: {graph?:boolean;coverage?:boolean} = {},
   ) { this.repository = new ContextRepository(db); }
 
   analyze(task: string): TaskAnalysis { return this.analyzer.analyze(task); }
 
   async search(task: string, options: ContextSearchOptions = {}): Promise<ContextCandidate[]> {
+    const indexed = new IndexRunRepository(this.db).findLatestSuccessful(this.repositoryId);
+    if (indexed) {
+      const row = this.db.prepare("SELECT canonical_path FROM repositories WHERE id=?").get(this.repositoryId) as {canonical_path:string};
+      const current = await resolveSnapshotIdentity(row.canonical_path);
+      if (!snapshotsEqual(current,{snapshot_kind:indexed.snapshot_kind as "commit"|"worktree",base_commit_hash:indexed.base_commit_hash,worktree_hash:indexed.worktree_hash,dirty:indexed.snapshot_kind==="worktree"})) throw new Error("Repository context requires refresh. Run continuum index before searching.");
+    }
     let stageStarted = performance.now();
     const analysis = this.analyze(task);
     addTiming(options.profile, "taskAnalysis", elapsed(stageStarted));
@@ -100,16 +112,9 @@ export class ContextEngine {
     for (const version of exactPool) {
       if (!byId.has(version.id)) byId.set(version.id, { version, score: 0.15, rawScore: 0.15, backend: "fallback_lexical" });
     }
-    for (const version of exactPool) {
-      const path = version.source_path.toLowerCase();
-      const symbol = version.symbol_name?.toLowerCase() ?? "";
-      const symbolTerms = normalizeRetrievalTerms(version.symbol_name ?? "");
-      const exact = analysis.mentionedPaths.some((value) => path.endsWith(value.toLowerCase())) || analysis.mentionedSymbols.some((value) => symbol === value.toLowerCase()) || analysis.keywords.some((value) => symbolTerms.includes(value)) || analysis.mentionedPackages.some((value) => path.includes(value.replace(/^@continuum\//, "").toLowerCase()));
-      if (exact && !byId.has(version.id)) byId.set(version.id, { version, score: 0, rawScore: 0, backend: "fallback_lexical" });
-    }
     const coverageCompleted = new Set<string>();
     const seededCoverage = new Set([...byId.values()].flatMap((result) => categories(result.version)));
-    for (const requirement of analysis.requiredCoverage.filter((item) => item.required && !seededCoverage.has(item.category))) {
+    for (const requirement of (this.features.coverage === false ? [] : analysis.requiredCoverage).filter((item) => item.required && !seededCoverage.has(item.category))) {
       const matches = exactPool.filter((version) => {
         if (!categories(version).includes(requirement.category)) return false;
         const searchable = `${version.title ?? ""} ${version.symbol_name ?? ""} ${version.source_path} ${version.contextual_header ?? ""} ${version.content}`.toLowerCase();
@@ -124,11 +129,21 @@ export class ContextEngine {
     const candidates: ContextCandidate[] = [];
     const graphExpanded = new Set<string>();
     stageStarted = performance.now();
-    for (const seed of [...byId.values()].slice(0, 6)) {
-      for (const related of this.repository.listRelatedVersions(seed.version.context_item_id, 3)) {
-        graphExpanded.add(related.id);
-        if (byId.has(related.id)) continue;
-        byId.set(related.id, { version: related, score: 0, rawScore: 0, backend: "fallback_lexical" });
+    const expandedContexts = new Set<string>();
+    for (const seed of (this.features.graph === false ? [] : [...byId.values()].slice(0, 6))) {
+      const queue: Array<{ version: ContextItemVersion; depth: number }> = [{ version: seed.version, depth: 0 }];
+      while (queue.length > 0) {
+        const current = queue.shift()!;
+        if (expandedContexts.has(current.version.context_item_id)) continue;
+        expandedContexts.add(current.version.context_item_id);
+        for (const related of this.repository.listRelatedVersions(current.version.context_item_id, current.depth === 0 ? 3 : 8)) {
+          graphExpanded.add(related.id);
+          if (!byId.has(related.id)) byId.set(related.id, { version: related, score: 0, rawScore: 0, backend: "fallback_lexical" });
+          // A method often relates to its containing class, while the method it
+          // calls is a sibling of that class. One bounded second hop preserves
+          // edit-critical dependencies without turning retrieval into a repo scan.
+          if (current.depth === 0) queue.push({ version: related, depth: 1 });
+        }
       }
     }
     const relationshipMs = elapsed(stageStarted);
@@ -155,7 +170,6 @@ export class ContextEngine {
       if (title.length >= 4 && lowerTask.includes(title)) { components.exactTitle = 1.5; reasons.push(`Exact title match: ${version.title}`); }
       if (analysis.mentionedPaths.some((value) => path.endsWith(value.toLowerCase()))) { components.exactPath = 4; reasons.push(`Exact path match: ${version.source_path}`); }
       if (coverageCompleted.has(version.id)) {
-        components.riskCoverage += 1;
         reasons.push("Added to complete a required task-coverage category.");
       }
       const rawScore = result.rawScore ?? -Math.max(0, result.score);
@@ -187,6 +201,7 @@ export class ContextEngine {
       const declarationKind = String(metadata(version)["declarationKind"] ?? "");
       if (coverage.includes("implementation") && !["import", "constant", "variable"].includes(declarationKind)) components.taskClassRelevance += 0.5;
       if (analysis.keywords.some((keyword) => keyword.length >= 4 && path.includes(keyword))) { components.dependencyRelation += 0.75; reasons.push("Source path matches a task keyword."); }
+      if(this.features.coverage === false){components.riskCoverage=0;components.taskClassRelevance=0;}
       components.currentSnapshot = version.staleness_status === "current" ? 1 : 0;
       components.uncommittedPenalty = version.staleness_status === "uncommitted" ? -0.25 : 0;
       components.stalenessPenalty = version.staleness_status === "possibly_stale" || version.staleness_status === "stale" ? -2 : 0;
@@ -210,10 +225,11 @@ export class ContextEngine {
     const evidence = analysis.requiredCoverage.map((requirement) => {
       const matches = availableCandidates.filter((item) => item.coverageCategories.includes(requirement.category));
       const ids = items.filter((item) => item.coverageCategories.includes(requirement.category)).map((item) => item.item.id);
-      const state = matches.length === 0 ? "unavailable" : requirement.state;
-      const remainingRequirement = state === "required" && ids.length === 0;
-      const additionalEstimatedBudgetRequired = remainingRequirement ? Math.min(...matches.map((item) => item.estimatedTokens)) : 0;
-      return { category: requirement.category, state, reason: matches.length === 0 ? `No indexed ${requirement.category} candidate applies to this task.` : requirement.reason, matchingIndexedCandidateCount: matches.length, contextItemVersionIds: ids, remainingRequirement, additionalEstimatedBudgetRequired, explanation: ids.length ? `${ids.length} selected item(s) cover ${requirement.category}.` : state === "unavailable" ? `No indexed ${requirement.category} evidence is available.` : `No verified ${requirement.category} context selected.` };
+      const state = requirement.state;
+      const availability = matches.length === 0 ? "not_found" as const : "found" as const;
+      const remainingRequirement = requirement.required && ids.length === 0;
+      const additionalEstimatedBudgetRequired = remainingRequirement && matches.length > 0 ? Math.min(...matches.map((item) => item.estimatedTokens)) : 0;
+      return { category: requirement.category, state, availability, reason: matches.length === 0 ? `No indexed ${requirement.category} evidence was found; applicability is unchanged.` : requirement.reason, matchingIndexedCandidateCount: matches.length, contextItemVersionIds: ids, remainingRequirement, additionalEstimatedBudgetRequired, explanation: ids.length ? `${ids.length} selected item(s) cover ${requirement.category}.` : `No verified ${requirement.category} context selected.` };
     });
     const covered = evidence.filter((item) => item.contextItemVersionIds.length).map((item) => item.category);
     const missing = evidence.filter((item) => item.remainingRequirement).map((item) => item.category);
@@ -237,11 +253,10 @@ export class ContextEngine {
     const add = (candidate: ContextCandidate, section: keyof typeof sections, mandatory: boolean, strictSection = false): boolean => {
       if (selectedIds.has(candidate.item.id) || hashes.has(candidate.item.content_hash)) { omit(candidate, "duplicate"); return false; }
       const samePath = paths.get(candidate.item.source_path) ?? [];
-      const fileScoped = !candidate.item.symbol_name;
-      const contained = samePath.find((entry) => Boolean(entry.item.symbol_name) !== Boolean(candidate.item.symbol_name));
+      const contained = samePath.find(entry => entry.item.content.includes(candidate.item.content) || candidate.item.content.includes(entry.item.content));
       if (contained && !candidate.coverageCategories.some((category) => !contained.coverageCategories.includes(category))) { omit(candidate, "diversity"); return false; }
       if (candidate.estimatedTokens > budget.maxEstimatedTokensPerItem) { omit(candidate, "oversized"); return false; }
-      if (total + candidate.estimatedTokens > hardCeiling || selectedIds.size >= budget.maxItems) { omit(candidate, "budget"); return false; }
+      if (total + candidate.estimatedTokens > Math.max(0,hardCeiling-400) || selectedIds.size >= budget.maxItems) { omit(candidate, "budget"); return false; }
       if (sectionTokens[section] + candidate.estimatedTokens > ceilings[section] && (strictSection || !mandatory)) { omit(candidate, "budget"); return false; }
       sections[section].push({ candidate, content: candidate.item.compiled_content ?? candidate.item.content, truncated: false });
       sectionTokens[section] += candidate.estimatedTokens; total += candidate.estimatedTokens; selectedIds.add(candidate.item.id); hashes.add(candidate.item.content_hash); paths.set(candidate.item.source_path, [...samePath, candidate]);
@@ -250,7 +265,7 @@ export class ContextEngine {
     const exactScore = (candidate: ContextCandidate) => candidate.components.exactSymbol + candidate.components.exactTitle + candidate.components.exactPath;
     const exact = candidates.filter((candidate) => exactScore(candidate) > 0).sort((left, right) => Number(left.coverageCategories.includes("tests")) - Number(right.coverageCategories.includes("tests")) || right.score - left.score);
     for (const candidate of exact) add(candidate, "exact", true);
-    const requiredCategories = analysis.requiredCoverage.filter((item) => item.state === "required").map((item) => item.category);
+    const requiredCategories = (this.features.coverage === false ? [] : analysis.requiredCoverage).filter((item) => item.state === "required").map((item) => item.category);
     for (const category of requiredCategories) {
       if ([...selectedIds].some((id) => candidates.find((candidate) => candidate.item.id === id)?.coverageCategories.includes(category))) continue;
       const match = candidates.filter((candidate) => candidate.coverageCategories.includes(category)).sort((left, right) => right.score - left.score || left.estimatedTokens - right.estimatedTokens)[0];
@@ -269,7 +284,17 @@ export class ContextEngine {
     const coverage = this.coverageFor(analysis, selected.map((item) => item.candidate), candidates);
     const implementationItems = [...sections.exact, ...sections.mandatory, ...sections.tests, ...sections.optional];
     const asSection = (items: ContextPacketItem[]) => ({ items, estimatedTokens: items.reduce((sum, item) => sum + item.candidate.estimatedTokens, 0) });
-    const packet: CompiledContextPacket = { id: crypto.randomUUID(), repositoryId: this.repositoryId, snapshot: this.snapshot, task: analysis, budget: { ...budget, maxEstimatedTokens: hardCeiling, ...{ orientationCeiling: ceilings.orientation, exactImplementationCeiling: ceilings.exact, mandatoryContextReserve: ceilings.mandatory, directTestReserve: ceilings.tests, optionalContextCeiling: ceilings.optional } }, orientation: asSection(sections.orientation), exactImplementation: asSection(sections.exact), mandatoryContext: asSection(sections.mandatory), directlyRelatedTests: asSection(sections.tests), optionalContext: asSection(sections.optional), implementation: asSection(implementationItems), escalationCandidates: { items: escalation, estimatedTokens: 0 }, coverage, totalEstimatedTokens: total, omittedItems: omissions, complete: coverage.complete, incompleteReasons: coverage.missing.map((category) => `Missing required category: ${category}`), strategyVersion: CONTEXT_COMPILER_STRATEGY, generatedAt: new Date().toISOString() };
+    const orientation = asSection(sections.orientation);
+    const exactImplementation = asSection(sections.exact);
+    const mandatoryContext = asSection(sections.mandatory);
+    const directlyRelatedTests = asSection(sections.tests);
+    const optionalContext = asSection(sections.optional);
+    const implementation = asSection(implementationItems);
+    const cachePlan = buildContextCachePlan(this.repositoryId, this.snapshot, CONTEXT_COMPILER_STRATEGY, { task: analysis, orientation, implementation, omittedItems: omissions, coverage }, this.repository.listCurrentVersions(this.repositoryId,Number.MAX_SAFE_INTEGER), this.estimator);
+    const packet: CompiledContextPacket = { id: crypto.randomUUID(), repositoryId: this.repositoryId, snapshot: this.snapshot, task: analysis, budget: { ...budget, maxEstimatedTokens: hardCeiling, ...{ orientationCeiling: ceilings.orientation, exactImplementationCeiling: ceilings.exact, mandatoryContextReserve: ceilings.mandatory, directTestReserve: ceilings.tests, optionalContextCeiling: ceilings.optional } }, orientation, exactImplementation, mandatoryContext, directlyRelatedTests, optionalContext, implementation, escalationCandidates: { items: escalation, estimatedTokens: 0 }, coverage, cachePlan, totalEstimatedTokens: total, omittedItems: omissions, complete: coverage.complete, incompleteReasons: coverage.missing.map((category) => `Missing required category: ${category}`), strategyVersion: CONTEXT_COMPILER_STRATEGY, generatedAt: new Date().toISOString() };
+    const renderedContent = renderContextDelivery({sessionId:packet.id,newItems:[...packet.orientation.items,...packet.implementation.items],restoredItems:[],activeReferences:[],coverageRemaining:packet.coverage.missing,cacheDelivery:{schemaVersion:"continuum.context-cache-delivery.v1",stablePrefix:packet.cachePlan.stablePrefix,taskDelta:{...packet.cachePlan.taskDelta}}});
+    if (this.estimator.estimate(renderedContent) > hardCeiling) throw new Error("Context budget too small for the serialized packet.");
+    Object.assign(packet,{renderedContent,renderedEstimatedTokens:this.estimator.estimate(renderedContent)});
     this.repository.recordCompilerRetrieval({ id: crypto.randomUUID(), query: task, strategy: CONTEXT_COMPILER_STRATEGY, taskAnalysisJson: JSON.stringify(analysis), packetJson: JSON.stringify(packet), candidates, includedVersionIds: [...selectedIds] });
     addTiming(profile, "packetAssembly", elapsed(stageStarted));
     return packet;

@@ -67,6 +67,9 @@ export class TypeScriptCompilerApiExtractor implements Extractor {
       } else if (ts.isMethodDeclaration(node)) {
         const name = propertyName(node.name, sourceFile);
         if (name) add(node, `${parentSymbol ? `${parentSymbol}.` : ""}${name}`, "method", parentSymbol, { parameters: node.parameters.map((parameter) => parameter.getText(sourceFile)), returnType: node.type?.getText(sourceFile) });
+      } else if (ts.isPropertyDeclaration(node)) {
+        const name = propertyName(node.name,sourceFile);
+        if(name)add(node,`${parentSymbol?parentSymbol+".":""}${name}`,"constant",parentSymbol,{declarationKind:"class_property"});
       } else if (ts.isInterfaceDeclaration(node)) {
         add(node, node.name.text, "interface", parentSymbol);
       } else if (ts.isTypeAliasDeclaration(node)) {

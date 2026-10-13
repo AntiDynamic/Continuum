@@ -1,3 +1,4 @@
+import { parsePorcelainInventory } from "./snapshot.js";
 /**
  * Git repository inspection using real Git commands through Execa.
  *
@@ -98,7 +99,7 @@ export async function getCurrentCommit(root: string): Promise<string | null> {
  * This format is stable across git versions and includes rename detection.
  */
 export async function getPorcelainStatus(root: string): Promise<string> {
-  return gitOptional(root, ["status", "--porcelain=v2", "--branch", "--untracked-files=all"]);
+  return gitOptional(root, ["status", "--porcelain=v2", "-z", "--branch", "--untracked-files=all"]);
 }
 
 /** Return true when the working tree has no uncommitted changes. */
@@ -200,13 +201,7 @@ function parseDiffNumstatLine(
  * that would not appear in a diff against a commit (e.g. new untracked files).
  */
 function parsePorcelainForNewFiles(porcelain: string): string[] {
-  const untracked: string[] = [];
-  for (const line of porcelain.split("\n")) {
-    if (line.startsWith("? ")) {
-      untracked.push(line.slice(2).trim());
-    }
-  }
-  return untracked;
+  return parsePorcelainInventory(porcelain).filter(entry => entry.recordType === "untracked").map(entry => entry.path);
 }
 
 /**
@@ -318,30 +313,9 @@ export async function computeDelta(
  */
 export function extractDirtyPaths(porcelain: string): Set<string> {
   const paths = new Set<string>();
-  for (const line of porcelain.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-
-    // Porcelain v1 format: XY path
-    // Porcelain v2 starts with "1 ", "2 ", "u ", "? " or "#"
-    if (trimmed.startsWith("# ") || trimmed.startsWith("? ")) {
-      if (trimmed.startsWith("? ")) {
-        paths.add(trimmed.slice(2).trim());
-      }
-      continue;
-    }
-
-    // v2 changed entries
-    const v2Match = trimmed.match(/^[12u]\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+(.+)$/);
-    if (v2Match?.[1]) {
-      paths.add(v2Match[1].trim());
-      continue;
-    }
-
-    // v1 format fallback
-    if (trimmed.length > 3) {
-      paths.add(trimmed.slice(3).trim());
-    }
+  for (const entry of parsePorcelainInventory(porcelain)) {
+    paths.add(entry.path);
+    if (entry.originalPath) paths.add(entry.originalPath);
   }
   return paths;
 }

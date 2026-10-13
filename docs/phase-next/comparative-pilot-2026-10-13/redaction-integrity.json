@@ -1,0 +1,81 @@
+{
+  "publicRedactionPreservesTaskAndUsage": [
+    {
+      "arm": "B",
+      "table": "task_evidence",
+      "preserved": true
+    },
+    {
+      "arm": "B",
+      "table": "task_memory",
+      "preserved": true
+    },
+    {
+      "arm": "B",
+      "table": "task_checkpoints",
+      "preserved": true
+    },
+    {
+      "arm": "B",
+      "table": "codex_session_bindings",
+      "preserved": true
+    },
+    {
+      "arm": "B",
+      "table": "codex_usage_snapshots",
+      "preserved": true
+    },
+    {
+      "arm": "C",
+      "table": "task_evidence",
+      "preserved": true
+    },
+    {
+      "arm": "C",
+      "table": "task_memory",
+      "preserved": true
+    },
+    {
+      "arm": "C",
+      "table": "task_checkpoints",
+      "preserved": true
+    },
+    {
+      "arm": "C",
+      "table": "codex_session_bindings",
+      "preserved": true
+    },
+    {
+      "arm": "C",
+      "table": "codex_usage_snapshots",
+      "preserved": true
+    },
+    {
+      "arm": "D",
+      "table": "task_evidence",
+      "preserved": true
+    },
+    {
+      "arm": "D",
+      "table": "task_memory",
+      "preserved": true
+    },
+    {
+      "arm": "D",
+      "table": "task_checkpoints",
+      "preserved": true
+    },
+    {
+      "arm": "D",
+      "table": "codex_session_bindings",
+      "preserved": true
+    },
+    {
+      "arm": "D",
+      "table": "codex_usage_snapshots",
+      "preserved": true
+    }
+  ],
+  "originalRawManifestUnchanged": true,
+  "inferenceRequests": 0
+}

@@ -12,6 +12,7 @@ export interface ModelPricingProfile {
 
   inputCreditsPerMillionTokens?: number;
   cachedInputCreditsPerMillionTokens?: number;
+  cacheCreationInputCreditsPerMillionTokens?: number;
   outputCreditsPerMillionTokens?: number;
 
   source: "provider_reported" | "user_configured" | "unknown";
@@ -27,8 +28,10 @@ export interface StoredModelPricingProfile extends ModelPricingProfile {
 export interface AgentUsageEvidence {
   inputTokens?: number;
   cachedInputTokens?: number;
+  cacheCreationInputTokens?: number;
   outputTokens?: number;
   reasoningTokens?: number;
+  totalTokens?: number;
   toolCalls?: number;
 
   measurement:
@@ -69,6 +72,7 @@ export interface RunCostEvidence {
 
   inputCredits?: number;
   cachedInputCredits?: number;
+  cacheCreationInputCredits?: number;
   outputCredits?: number;
   totalCredits?: number;
 
@@ -82,6 +86,7 @@ export interface RunCostEvidence {
 export interface AgentTelemetryCapabilities {
   reportsInputTokens: boolean;
   reportsCachedInputTokens: boolean;
+  reportsCacheCreationInputTokens: boolean;
   reportsOutputTokens: boolean;
   reportsReasoningTokens: boolean;
   reportsToolUsage: boolean;
@@ -230,6 +235,18 @@ export function calculateRunCostEvidence(
     };
   }
 
+  const chargedFields = [
+    [usage.inputTokens, pricingProfile.inputCreditsPerMillionTokens],
+    [usage.cachedInputTokens, pricingProfile.cachedInputCreditsPerMillionTokens],
+    [usage.cacheCreationInputTokens, pricingProfile.cacheCreationInputCreditsPerMillionTokens],
+    [usage.outputTokens, pricingProfile.outputCreditsPerMillionTokens],
+  ];
+  if (chargedFields.some(([count, rate]) => count !== undefined &&
+    (!Number.isFinite(count) || count < 0 || (count > 0 &&
+      (rate === undefined || !Number.isFinite(rate) || rate < 0))))) {
+    return { runId, usage, pricingProfile, measurement: "unavailable" };
+  }
+
   const inputCredits = creditsFor(
     usage.inputTokens,
     pricingProfile.inputCreditsPerMillionTokens,
@@ -238,11 +255,15 @@ export function calculateRunCostEvidence(
     usage.cachedInputTokens,
     pricingProfile.cachedInputCreditsPerMillionTokens,
   );
+  const cacheCreationInputCredits = creditsFor(
+    usage.cacheCreationInputTokens,
+    pricingProfile.cacheCreationInputCreditsPerMillionTokens,
+  );
   const outputCredits = creditsFor(
     usage.outputTokens,
     pricingProfile.outputCreditsPerMillionTokens,
   );
-  const parts = [inputCredits, cachedInputCredits, outputCredits].filter(
+  const parts = [inputCredits, cachedInputCredits, cacheCreationInputCredits, outputCredits].filter(
     (value): value is number => value !== undefined,
   );
 
@@ -261,6 +282,7 @@ export function calculateRunCostEvidence(
     pricingProfile,
     inputCredits,
     cachedInputCredits,
+    cacheCreationInputCredits,
     outputCredits,
     totalCredits: parts.reduce((total, value) => total + value, 0),
     measurement: usage.measurement === "estimated" ? "estimated" : "derived",

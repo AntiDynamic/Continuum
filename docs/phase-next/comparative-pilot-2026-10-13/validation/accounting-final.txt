@@ -1,0 +1,18 @@
+✔ pilot guard forbids parallel, extra turns, compaction, drift and missing telemetry (6.303975ms)
+✔ native response accounting deduplicates notifications and includes compaction consumption (23.942962ms)
+✔ effective model/provider/reasoning and native-history ownership are locked before inference (2.393783ms)
+✔ comparative command help and invalid flags never start inference (284.572016ms)
+✔ native control uses one user input and no Continuum tools, resumes identical thread (226.147103ms)
+✔ native control timeout requests interruption and terminates stalled child (194.583173ms)
+✔ response IDs deduplicate; conflicting evidence fails; cached is subset (4.659225ms)
+✔ both actual historical experiments total 52109 without adding cumulative notifications (35.650836ms)
+✔ API-equivalent estimates require cache-write evidence and never imply Codex billing (12.027933ms)
+✔ real compaction is included once even though app-server cumulative snapshots omit it (52.933363ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1389.333057

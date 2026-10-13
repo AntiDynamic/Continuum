@@ -1,0 +1,151 @@
+{
+  "treatment": "C",
+  "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+  "fixtureCommit": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+  "model": "gpt-5.6-luna",
+  "provider": "openai",
+  "reasoning": "low",
+  "status": "completed",
+  "turns": [
+    {
+      "stage": 1,
+      "status": "completed",
+      "threadId": "01a13592-2e0a-7ea0-85a1-4630227552e8",
+      "sessionId": "9e2a8192-d4c6-43d0-863d-372ce65cbeb1",
+      "executionId": "6c07e142-0758-4ed4-863d-46f76fdd29b6",
+      "durationMs": 103334
+    },
+    {
+      "stage": 2,
+      "status": "completed",
+      "threadId": "01a13592-2e0a-7ea0-85a1-4630227552e8",
+      "sessionId": "9e2a8192-d4c6-43d0-863d-372ce65cbeb1",
+      "executionId": "804be332-3933-45e0-a8d9-d6517bfbea15",
+      "durationMs": 17172
+    }
+  ],
+  "continuumRetries": 0,
+  "observableRetries": 0,
+  "completeInternalRetryCount": null,
+  "explicitCompactions": 0,
+  "actualCreditCost": null,
+  "startedAt": "2026-10-13T14:02:11.301Z",
+  "endedAt": "2026-10-13T14:04:14.509Z",
+  "durationMs": 123208,
+  "generationTurnRequests": 2,
+  "cancellation": false,
+  "cleanup": [
+    {
+      "pid": 262139,
+      "groupGone": true
+    },
+    {
+      "pid": 269090,
+      "groupGone": true
+    }
+  ],
+  "usage": {
+    "inputTokens": 250807,
+    "cachedInputTokens": 218880,
+    "uncachedInputTokens": 31927,
+    "outputTokens": 4937,
+    "totalTokens": 255744
+  },
+  "providerResponses": 14,
+  "rawThreadUsage": {
+    "totalTokens": 255744,
+    "inputTokens": 250807,
+    "cachedInputTokens": 218880,
+    "cacheWriteInputTokens": 0,
+    "outputTokens": 4937,
+    "reasoningOutputTokens": 394
+  },
+  "compactionTokens": 0,
+  "genuineCompactions": 0,
+  "toolCalls": 11,
+  "retrievalCalls": 2,
+  "validation": {
+    "status": "passed",
+    "checks": [
+      {
+        "id": "async-api",
+        "status": "passed"
+      },
+      {
+        "id": "receipt-compatibility",
+        "status": "passed"
+      },
+      {
+        "id": "integer-pricing",
+        "status": "passed"
+      },
+      {
+        "id": "tenant-stock-isolation",
+        "status": "passed"
+      },
+      {
+        "id": "invalid-quantities",
+        "status": "passed"
+      },
+      {
+        "id": "empty-items",
+        "status": "passed"
+      },
+      {
+        "id": "unknown-sku-atomicity",
+        "status": "passed"
+      },
+      {
+        "id": "overbooking-atomicity",
+        "status": "passed"
+      },
+      {
+        "id": "repeated-sku",
+        "status": "passed"
+      },
+      {
+        "id": "durable-idempotency",
+        "status": "passed"
+      },
+      {
+        "id": "tenant-request-isolation",
+        "status": "passed"
+      },
+      {
+        "id": "cancel-once",
+        "status": "passed"
+      },
+      {
+        "id": "new-fee-policy",
+        "status": "passed"
+      },
+      {
+        "id": "legacy-receipt-stability",
+        "status": "passed"
+      },
+      {
+        "id": "schema-uniqueness",
+        "status": "passed"
+      },
+      {
+        "id": "rollback-preservation",
+        "status": "passed"
+      }
+    ],
+    "passed": 16,
+    "total": 16,
+    "behavioralCheckSuccessPercent": 100
+  },
+  "finalCommit": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+  "modifiedPaths": [
+    "migrations/002_reservations.sql",
+    "src/api.ts",
+    "src/catalog.ts",
+    "src/pricing.ts",
+    "src/service.ts",
+    "src/store.ts"
+  ],
+  "unrelatedModifications": [],
+  "behavioralSuccess": true,
+  "visibleValidation": "passed"
+}

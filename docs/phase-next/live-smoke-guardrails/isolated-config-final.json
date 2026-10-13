@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "codexVersion": "0.162.1",
+  "observed": {
+    "model": "gpt-5.6-luna",
+    "reasoning": "low",
+    "provider": "openai",
+    "features": {
+      "multi_agent_v2": false,
+      "goals": false,
+      "multi_agent": false,
+      "multi_agent_v2_dynamic_tools": false,
+      "unbounded_connection_retries": false
+    }
+  },
+  "classification": "real isolated host configuration read; no thread or inference started; effective thread response still required before generation",
+  "inferenceRequests": 0,
+  "trace": [
+    {
+      "direction": "client_to_server",
+      "method": "initialize",
+      "requestId": 1,
+      "timestamp": "2026-10-12T18:46:46.190Z"
+    },
+    {
+      "direction": "server_stderr",
+      "method": null,
+      "requestId": null,
+      "timestamp": "2026-10-12T18:46:46.202Z"
+    },
+    {
+      "direction": "server_to_client",
+      "method": null,
+      "requestId": 1,
+      "timestamp": "2026-10-12T18:46:46.357Z"
+    },
+    {
+      "direction": "client_to_server",
+      "method": "initialized",
+      "requestId": null,
+      "timestamp": "2026-10-12T18:46:46.357Z"
+    },
+    {
+      "direction": "client_to_server",
+      "method": "config/read",
+      "requestId": 2,
+      "timestamp": "2026-10-12T18:46:46.358Z"
+    },
+    {
+      "direction": "server_to_client",
+      "method": "remoteControl/status/changed",
+      "requestId": null,
+      "timestamp": "2026-10-12T18:46:46.358Z"
+    },
+    {
+      "direction": "server_to_client",
+      "method": null,
+      "requestId": 2,
+      "timestamp": "2026-10-12T18:46:46.365Z"
+    }
+  ]
+}

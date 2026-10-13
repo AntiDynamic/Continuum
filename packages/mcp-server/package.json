@@ -17,7 +17,6 @@
     "@continuum/database": "workspace:*",
     "@continuum/context-engine": "workspace:*",
     "@continuum/git-analyzer": "workspace:*",
-    "@continuum/repository-indexer": "workspace:*",
     "@continuum/shared": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.6.0",
     "zod": "^3.23.0"

@@ -93,6 +93,8 @@ const GeminiUsageEvent = z
     inputTokens: z.number().optional(),
     outputTokens: z.number().optional(),
     cachedInputTokens: z.number().optional(),
+    cacheCreationInputTokens: z.number().optional(),
+    cacheWriteTokens: z.number().optional(),
     totalTokens: z.number().optional(),
     reasoningTokens: z.number().optional(),
     model: z.string().optional(),
@@ -284,7 +286,10 @@ export function parseGeminiLine(
         data.inputTokens === undefined &&
         data.outputTokens === undefined &&
         data.reasoningTokens === undefined &&
-        data.cachedInputTokens === undefined
+        data.cachedInputTokens === undefined &&
+        data.cacheCreationInputTokens === undefined &&
+        data.cacheWriteTokens === undefined &&
+        data.totalTokens === undefined
       ) {
         const evt: UnknownAgentEvent = {
           ...makeHeader(ctx, "stdout", wasRedacted),
@@ -300,8 +305,10 @@ export function parseGeminiLine(
         model: data.model,
         inputTokens: data.inputTokens,
         cachedInputTokens: data.cachedInputTokens,
+        cacheCreationInputTokens: data.cacheCreationInputTokens ?? data.cacheWriteTokens,
         outputTokens: data.outputTokens,
         reasoningTokens: data.reasoningTokens,
+        totalTokens: data.totalTokens,
         measurement: "agent_reported",
       };
       return evt;

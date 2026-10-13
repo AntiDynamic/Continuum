@@ -1,0 +1,51 @@
+{
+  "configuration": {
+    "model": "gpt-5.6-luna",
+    "reasoningEffort": "low",
+    "approvalPolicy": "never",
+    "sandbox": "workspace-write",
+    "timeoutMs": 60000,
+    "maximumReportedTokens": 20000,
+    "persistentSession": true,
+    "contextEnabled": true,
+    "durableMemory": true,
+    "nativeCompactionPrompt": true,
+    "configOverrides": {
+      "model_provider": "openai",
+      "features.multi_agent": false,
+      "features.multi_agent_v2": false,
+      "features.multi_agent_v2_dynamic_tools": false,
+      "features.goals": false,
+      "features.unbounded_connection_retries": false
+    }
+  },
+  "hostRetries": {
+    "version": "0.162.1",
+    "verified": false,
+    "controlled": false,
+    "reason": "Codex 0.162.1 merge_configured_model_providers ignores overrides of built-in openai (entry.or_insert); default HTTP/stream retries and separate unauthorized recovery cannot be disabled through those overrides.",
+    "sources": [
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/model-provider-info/src/lib.rs#L699",
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/client.rs#L1795",
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/responses_retry.rs#L99"
+    ],
+    "acceptedForSingleExperiment": true
+  },
+  "watchdog": {
+    "executable": "/usr/bin/timeout",
+    "overallSeconds": 240,
+    "killGraceSeconds": 10,
+    "verified": true
+  },
+  "isolation": {
+    "mode": "bubblewrap",
+    "evaluatorRootHidden": true,
+    "hostTmpHidden": true,
+    "recorderDatabaseHidden": true,
+    "hostCodexHistoryHidden": true,
+    "credentialsCopied": true,
+    "appliedToAgentProcess": true
+  },
+  "startedAt": "2026-10-12T19:24:41.859Z",
+  "workspace": "/tmp/continuum-recovery-benchmark-E8B5eA/authentication-compatibility-C"
+}

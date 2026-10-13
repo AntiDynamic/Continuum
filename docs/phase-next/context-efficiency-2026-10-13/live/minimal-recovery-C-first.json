@@ -1,0 +1,138 @@
+{
+  "executionId": "99226a78-8a66-4788-8b30-268baf5c8829",
+  "sessionId": "23a9838a-c3b7-4676-a9d1-712f950cdedb",
+  "report": {
+    "schemaVersion": "continuum.shadow-flight-recorder.v2",
+    "execution": {
+      "executionId": "99226a78-8a66-4788-8b30-268baf5c8829",
+      "sessionId": "23a9838a-c3b7-4676-a9d1-712f950cdedb",
+      "repositoryId": "1",
+      "task": "For the later implementation, fix AuthService: reject empty and literal expired tokens in both validation and refresh; preserve signatures, TokenClaims subject and expiry, and return <token>-refreshed for valid tokens. This first turn is preparation only: acknowledge in one short sentence. Do not call tools or inspect or edit files yet.",
+      "snapshot": {
+        "snapshot_kind": "commit",
+        "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+        "worktree_hash": null,
+        "dirty": false
+      },
+      "finalSnapshot": {
+        "available": true,
+        "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+        "worktree_hash": null,
+        "error": null
+      },
+      "codexVersion": "0.162.1",
+      "model": "gpt-5.6-luna",
+      "status": "completed",
+      "durationMs": 4586
+    },
+    "prediction": {
+      "estimatedTokens": 0,
+      "items": [],
+      "mandatoryCoverage": [
+        {
+          "category": "implementation",
+          "state": "required",
+          "required": true,
+          "reason": "Security-sensitive implementation is required."
+        },
+        {
+          "category": "tests",
+          "state": "recommended",
+          "required": false,
+          "reason": "Security regression tests are required when applicable indexed evidence exists."
+        },
+        {
+          "category": "security_constraint",
+          "state": "required",
+          "required": true,
+          "reason": "Repository security constraints are required."
+        },
+        {
+          "category": "public_contract",
+          "state": "required",
+          "required": true,
+          "reason": "Public security contracts are required."
+        },
+        {
+          "category": "architecture",
+          "state": "recommended",
+          "required": false,
+          "reason": "Architecture boundaries may apply."
+        }
+      ]
+    },
+    "exploration": {
+      "directlyObservedReadPaths": [],
+      "commandInferredReadPaths": [],
+      "searchedPaths": [],
+      "searchedSymbols": [],
+      "editedPaths": [],
+      "diffPaths": [],
+      "testRelatedPaths": [],
+      "unknownReferencedPaths": [],
+      "observedActivityPaths": [],
+      "evidenceRecords": [],
+      "commands": [],
+      "tests": [],
+      "changedPaths": [],
+      "inferredPaths": [],
+      "directlyObservedPaths": []
+    },
+    "comparison": {
+      "predictedAndObserved": [],
+      "predictedNotObserved": [],
+      "observedNotPredicted": [],
+      "requiredPredictionsWithoutObservedActivity": [],
+      "mandatoryPredictionMisses": [],
+      "predictedActivityCoverage": null,
+      "predictionActivityPrecision": null,
+      "editPredictionCoverage": null,
+      "diffPredictionCoverage": null,
+      "requiredActivityObservationRate": null,
+      "observationRecall": null,
+      "predictionPrecision": null,
+      "overlapRecall": null,
+      "overlapPrecision": null
+    },
+    "usage": {
+      "accumulated": {
+        "id": "28474af2-6c60-4ae6-a737-b4f488a4d335",
+        "execution_id": "99226a78-8a66-4788-8b30-268baf5c8829",
+        "raw_sequence_number": 48,
+        "source": "codex.thread/tokenUsage/updated",
+        "input_tokens": 11473,
+        "cached_input_tokens": 0,
+        "output_tokens": 28,
+        "reasoning_tokens": 0,
+        "total_tokens": 11501,
+        "accumulation": "accumulated",
+        "measurement": "measured",
+        "timestamp": "2026-10-12T21:18:54.547Z",
+        "raw_provider_payload_json": "{\"total\":{\"totalTokens\":11501,\"inputTokens\":11473,\"cachedInputTokens\":0,\"cacheWriteInputTokens\":0,\"outputTokens\":28,\"reasoningOutputTokens\":0},\"last\":{\"totalTokens\":11501,\"inputTokens\":11473,\"cachedInputTokens\":0,\"cacheWriteInputTokens\":0,\"outputTokens\":28,\"reasoningOutputTokens\":0},\"modelContextWindow\":258400}"
+      },
+      "exactResponses": [],
+      "availability": "measured"
+    },
+    "compaction": {
+      "count": 0,
+      "events": []
+    },
+    "outcome": {
+      "turnStatus": "completed",
+      "testsObserved": false,
+      "testsPassed": null,
+      "diffCaptured": false,
+      "changedFileCount": 0
+    },
+    "evidenceWarnings": [
+      "Shadow mode did not restrict Codex or inject Continuum prediction content.",
+      "Command-inferred paths are not proof that a file was read — they are shell command arguments.",
+      "The Codex App Server schema does not expose direct file-read events; directlyObservedReadPaths will always be empty.",
+      "Absence from activity evidence does not prove that the model did not read or receive an item.",
+      "Observed-not-predicted paths are additional exploration, not automatically unnecessary.",
+      "Continuum packet tokens are estimated; no token-savings claim is made."
+    ]
+  },
+  "compatibilityWarning": "Codex 0.162.1 is outside the tested 0.133.x range; required capabilities will be probed at runtime.",
+  "authenticationMode": "chatgpt"
+}

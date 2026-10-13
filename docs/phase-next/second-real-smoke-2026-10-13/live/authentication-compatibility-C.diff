@@ -1,0 +1,19 @@
+diff --git i/src/auth-service.ts w/src/auth-service.ts
+index 28fc0e2..9f3519e 100644
+--- i/src/auth-service.ts
++++ w/src/auth-service.ts
+@@ -1,2 +1,13 @@
+ export interface TokenClaims { subject: string; expiresAt: number; }
+-export class AuthService { validateToken(token: [REDACTED] TokenClaims { if (!token) throw new Error("missing token"); return { subject: token, expiresAt: Date.now() + 1000 }; } refreshToken(token: [REDACTED] string { return this.validateToken(token).subject + "-refreshed"; } }
++export class AuthService {
++  validateToken(token: [REDACTED] TokenClaims {
++    if (!token) throw new Error("missing token");
++    if (token === "expired") throw new Error("expired token");
++
++    return { subject: token, expiresAt: Date.now() + 1000 };
++  }
++
++  refreshToken(token: [REDACTED] string {
++    return this.validateToken(token).subject + "-refreshed";
++  }
++}
