@@ -1,6 +1,7 @@
+import {assertRepositoryScope} from "./repository-scope.js";
 import { CONTINUUM_VERSION } from "@continuum/shared";
 import { existsSync } from "node:fs";
-import { isAbsolute, join, relative, resolve } from "node:path";
+import { join } from "node:path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -39,8 +40,8 @@ export class ContinuumMcpServer {
   private readonly server=new McpServer({name:"Continuum",version:CONTINUUM_VERSION});
   constructor(private readonly cwd:string){this.setupTools();}
   private async scopedEngine(requestedPath?:string):Promise<EngineScope>{
-    const repositoryRoot=await getRepositoryRoot(this.cwd),target=resolve(this.cwd,requestedPath??"."),fromRoot=relative(repositoryRoot,target);
-    if(isAbsolute(fromRoot)||fromRoot===".."||fromRoot.startsWith(".."+(process.platform==="win32"?"\\":"/")))throw new Error("Requested path is outside the configured repository root.");
+    const repositoryRoot=await getRepositoryRoot(this.cwd);
+    await assertRepositoryScope(repositoryRoot,this.cwd,requestedPath);
     const dbPath=join(repositoryRoot,".continuum","continuum.db");if(!existsSync(dbPath))throw new Error("Continuum is not initialised at "+repositoryRoot+".");
     const db=openDatabase(dbPath);migrate(db);const repository=new RepositoryRepository(db).findByPath(repositoryRoot);
     if(!repository){db.close();throw new Error("Repository is not registered in the Continuum database.");}
