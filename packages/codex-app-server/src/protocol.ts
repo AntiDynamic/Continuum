@@ -25,10 +25,10 @@ export interface CodexInitializeOptions {
 }
 export interface CodexServerInfo { userAgent: string; codexHome: string; platformFamily: string; platformOs: string }
 export interface CodexAccountState { authenticated: boolean; requiresOpenaiAuth: boolean; mode: "apiKey" | "chatgpt" | "amazonBedrock" | "none" }
-export interface CodexThreadOptions { cwd: string; model?: string; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode; dynamicTools?: CodexDynamicToolSpec[]; autoCompaction?: CodexAutoCompactionOptions }
-export interface CodexThread { id: string; model: string | null; modelProvider: string | null; cwd: string }
+export interface CodexThreadOptions { cwd: string; model?: string; reasoningEffort?:string; configOverrides?:Record<string,unknown>; approvalPolicy?: CodexApprovalPolicy; sandbox?: CodexSandboxMode; dynamicTools?: CodexDynamicToolSpec[]; autoCompaction?: CodexAutoCompactionOptions }
+export interface CodexThread { id: string; model: string | null; modelProvider: string | null; cwd: string; reasoningEffort?:string }
 export interface CodexTextInput { type: "text"; text: string; text_elements: [] }
-export interface CodexTurnOptions { threadId: string; task?: string; inputs?: CodexTextInput[]; model?: string }
+export interface CodexTurnOptions { threadId: string; task?: string; inputs?: CodexTextInput[]; model?: string; reasoningEffort?:string }
 export interface CodexTurn { id: string; threadId: string; status: string }
 
 export interface CodexRawMessage {
@@ -54,6 +54,9 @@ export interface CodexProcessOptions {
   env?: NodeJS.ProcessEnv;
   requestTimeoutMs?: number;
   shutdownTimeoutMs?: number;
+  /** Kill the isolated process group after a bounded graceful shutdown (POSIX only). */
+  terminateProcessGroup?: boolean;
+  maximumOutputBytes?: number;
   onRawMessage?: (message: CodexRawMessage) => void | Promise<void>;
   onNotification?: (method: string, params: unknown) => void | Promise<void>;
   onServerRequest?: (request: CodexServerRequestContext) => Promise<unknown>;
@@ -65,7 +68,7 @@ export interface CodexAppServerClient {
   initialize(options?: CodexInitializeOptions): Promise<CodexServerInfo>;
   readAccount(): Promise<CodexAccountState>;
   startThread(options: CodexThreadOptions): Promise<CodexThread>;
-  resumeThread(threadId: string): Promise<CodexThread>;
+  resumeThread(threadId: string,options?:Partial<CodexThreadOptions>): Promise<CodexThread>;
   startTurn(options: CodexTurnOptions): Promise<CodexTurn>;
   compactThread(threadId: string): Promise<unknown>;
   interruptTurn(threadId: string, turnId: string): Promise<void>;

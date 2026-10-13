@@ -1,0 +1,121 @@
+{
+  "budget": {
+    "deliveredItemEstimate": 1073,
+    "handoffLayerEstimate": 2806,
+    "fullHandoffEstimate": 2995,
+    "initialProfileCeiling": 1500
+  },
+  "tinyBudget": {
+    "requestedBudget": 1,
+    "deliveredItemEstimate": 0,
+    "deliveredItems": 0,
+    "handoffLayerEstimate": 2806,
+    "originalOmissionCount": 6,
+    "restoredOmissionCount": 0,
+    "originalIncomplete": true,
+    "restoredIncomplete": true
+  },
+  "dirtyAttribution": {
+    "expectedPath": "src/auth-service.ts",
+    "parsedPaths": [
+      "28fc0e26090a99068f6f8269b8ab97b46d74b85d src/auth-service.ts",
+      ".gitignore"
+    ],
+    "detectsDirtySource": false
+  },
+  "afterEditRequest": {
+    "accepted": false,
+    "error": "Repository state differs from the indexed session snapshot. Run `continuum index` and start a new context session."
+  },
+  "emptyCoverage": {
+    "complete": true,
+    "missing": [],
+    "evidence": [
+      {
+        "category": "implementation",
+        "state": "unavailable"
+      },
+      {
+        "category": "tests",
+        "state": "unavailable"
+      },
+      {
+        "category": "security_constraint",
+        "state": "unavailable"
+      },
+      {
+        "category": "public_contract",
+        "state": "unavailable"
+      },
+      {
+        "category": "architecture",
+        "state": "unavailable"
+      }
+    ]
+  },
+  "staleSearch": {
+    "returnedItems": 7,
+    "returnedOldContent": true
+  },
+  "rawStorage": {
+    "sharedRedactorWouldRemoveSentinel": true,
+    "sentinelPersistedUnchanged": true
+  },
+  "adapterException": {
+    "error": "AUDIT_ADAPTER_ERROR",
+    "persistedStatus": "running"
+  },
+  "compare": {
+    "accepted": false,
+    "error": "Continuum is not initialised at /tmp/continuum-compare-Kw4Dcb. Run 'continuum init' first."
+  },
+  "forgedPatch": {
+    "visible": "passed",
+    "hidden": "passed",
+    "wrongImplementation": "readCache always returns WRONG_STALE_VALUE",
+    "outcome": {
+      "patchValidated": true,
+      "visibleValidationPassed": true,
+      "hiddenValidationPassed": true,
+      "diffCheckPassed": true,
+      "agentFinishedWithinTimeout": true,
+      "timedOut": false,
+      "providerTimeout": false,
+      "providerFailure": false,
+      "failureCategory": null,
+      "verifiedTaskSuccess": true
+    }
+  },
+  "unpricedReport": {
+    "inputCost": null,
+    "reportedCost": {
+      "median": null,
+      "p90": null,
+      "measured": 0
+    },
+    "costPerVerifiedSuccess": null,
+    "preflightOnlyPairedRuns": 1,
+    "unpairedRuns": 2,
+    "hasPurePreflightComparison": false
+  },
+  "openCodeUsage": {
+    "expectedPerStepInputSum": 300,
+    "parsedInputTokens": 200
+  },
+  "emptyPricingProfile": {
+    "profileId": "fixture",
+    "currency": "USD",
+    "components": {
+      "input": 0,
+      "cachedInput": 0,
+      "output": 0,
+      "thinking": 0
+    },
+    "total": 0
+  },
+  "testCounts": {
+    "expectedPassedTests": 10,
+    "reportedPassedCount": 2,
+    "confidence": "high"
+  }
+}

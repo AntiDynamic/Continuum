@@ -115,10 +115,22 @@ export class GeminiAdapter implements AgentAdapter {
       telemetry: {
         reportsInputTokens: hasStreamJson,
         reportsCachedInputTokens: hasStreamJson,
+        reportsCacheCreationInputTokens: hasStreamJson,
         reportsOutputTokens: hasStreamJson,
         reportsReasoningTokens: false,
         reportsToolUsage: hasStreamJson,
         reportsModelIdentity: hasStreamJson,
+      },
+      contextDelivery: {
+        host: "gemini-cli",
+        preflightInjection: true,
+        targetedMcp: false,
+        stablePrefixReuse: false,
+        explicitPromptCache: false,
+        cachedInputTelemetry: hasStreamJson,
+        cacheCreationTelemetry: hasStreamJson,
+        nativeCompaction: false,
+        evidence: "declared",
       },
     };
   }

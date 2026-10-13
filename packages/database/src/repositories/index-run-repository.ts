@@ -19,7 +19,7 @@ export class IndexRunRepository {
 
   findLatestSuccessful(repositoryId: number): RepositoryIndexRun | undefined {
     return this.db.prepare(
-      `SELECT * FROM repository_index_runs WHERE repository_id = ? AND status = 'success' ORDER BY finished_at DESC, started_at DESC LIMIT 1`,
+      `SELECT * FROM repository_index_runs WHERE repository_id = ? AND status = 'success' ORDER BY finished_at DESC, started_at DESC, rowid DESC LIMIT 1`,
     ).get(repositoryId) as RepositoryIndexRun | undefined;
   }
 

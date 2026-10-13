@@ -1,0 +1,787 @@
+{
+  "executionId": "86e4012e-f804-4378-9065-af989f9587db",
+  "sessionId": "d1112fc5-bb3f-4598-b5c4-6418c17ec0d8",
+  "report": {
+    "schemaVersion": "continuum.shadow-flight-recorder.v2",
+    "execution": {
+      "executionId": "86e4012e-f804-4378-9065-af989f9587db",
+      "sessionId": "d1112fc5-bb3f-4598-b5c4-6418c17ec0d8",
+      "repositoryId": "1",
+      "task": "Repair this warehouse reservation service across API, service, pricing, catalog, persistence and SQL migration modules. Preserve createApi(db), reserve(db,input), cancel(db,tenantId,requestId), and existing receipt fields exactly: reservationId, totalCents, feeCents. Both API methods must return promises. Reservation IDs are r-<tenantId>-<requestId>.\nTenant and SKU isolation are mandatory. Quantities must be positive integers; reject empty items, invalid quantities, unknown SKUs and insufficient stock. Reservations must atomically debit every line or change nothing. Support multiple lines including repeated SKUs. Compute exact integer merchandise cents from quantities and inventory unit prices.\nIdempotency is durable per (tenantId,requestId): a retry returns the original stored receipt without further debit, even if prices change. Cancellation restores original quantities exactly once; return true only when an active reservation was cancelled, false for unknown/already cancelled requests. A tenant cannot cancel another tenant's request.\nMigration 002 must enforce tenant/request uniqueness. Its down section removes only reservation schema and preserves inventory data and indexes. Preserve migration markers and column names. Do not weaken the public test, rename public contracts or change build tooling. Additional tests are allowed. No dependencies are needed: use node --test tests/public.test.mjs. Finish implementation and validate it.\nFor this initial phase, charge a fixed 50-cent fee for every successful reservation.",
+      "snapshot": {
+        "snapshot_kind": "commit",
+        "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+        "worktree_hash": null,
+        "dirty": false
+      },
+      "finalSnapshot": {
+        "available": true,
+        "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+        "worktree_hash": "6cbc93b1a60c8317afb6081ec872ee84bf00907d7d24041a804813d0cda9eae3",
+        "error": null
+      },
+      "codexVersion": "0.162.1",
+      "model": "gpt-5.6-luna",
+      "status": "completed",
+      "durationMs": 40066
+    },
+    "prediction": {
+      "estimatedTokens": 423,
+      "items": [
+        {
+          "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+          "path": "src/service.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Expanded through a high- or medium-confidence repository relationship.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 337 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": "Expanded through a high- or medium-confidence repository relationship.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 234,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+          "path": "migrations/001_inventory.sql",
+          "symbol": "inventory",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: inventory",
+            "Exact title match: inventory",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: inventory",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 50,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+          "path": "migrations/002_reservations.sql",
+          "symbol": "reservations",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reservations",
+            "Exact title match: reservations",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 150 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reservations",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 62,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+          "path": "src/service.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 32,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+          "path": "src/api.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 110 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 18,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+          "path": "src/api.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 118 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 27,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        }
+      ],
+      "mandatoryCoverage": [
+        {
+          "category": "implementation",
+          "state": "required",
+          "required": true,
+          "reason": "Migration implementation is required."
+        },
+        {
+          "category": "database_schema",
+          "state": "required",
+          "required": true,
+          "reason": "Schema evidence is required."
+        },
+        {
+          "category": "rollback",
+          "state": "required",
+          "required": true,
+          "reason": "Rollback behavior is required."
+        },
+        {
+          "category": "tests",
+          "state": "required",
+          "required": true,
+          "reason": "Migration tests are required."
+        },
+        {
+          "category": "configuration",
+          "state": "recommended",
+          "required": false,
+          "reason": "Deployment configuration may apply."
+        },
+        {
+          "category": "architecture",
+          "state": "recommended",
+          "required": false,
+          "reason": "Architecture constraints may apply."
+        }
+      ]
+    },
+    "exploration": {
+      "directlyObservedReadPaths": [],
+      "commandInferredReadPaths": [
+        "tests/public.test.mjs"
+      ],
+      "searchedPaths": [],
+      "searchedSymbols": [],
+      "editedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+        "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/store.ts"
+      ],
+      "diffPaths": [
+        "migrations/002_reservations.sql",
+        "src/api.ts",
+        "src/catalog.ts",
+        "src/pricing.ts",
+        "src/service.ts",
+        "src/store.ts"
+      ],
+      "testRelatedPaths": [],
+      "unknownReferencedPaths": [],
+      "observedActivityPaths": [
+        "tests/public.test.mjs",
+        "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+        "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/store.ts",
+        "migrations/002_reservations.sql",
+        "src/api.ts",
+        "src/catalog.ts",
+        "src/pricing.ts",
+        "src/service.ts",
+        "src/store.ts"
+      ],
+      "evidenceRecords": [
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 138,
+          "normalizedEventId": "ff409cdb-1d32-4dad-af8d-5ccb9e2ae860",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 138,
+          "normalizedEventId": "ff409cdb-1d32-4dad-af8d-5ccb9e2ae860",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 138,
+          "normalizedEventId": "ff409cdb-1d32-4dad-af8d-5ccb9e2ae860",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 138,
+          "normalizedEventId": "ff409cdb-1d32-4dad-af8d-5ccb9e2ae860",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 138,
+          "normalizedEventId": "ff409cdb-1d32-4dad-af8d-5ccb9e2ae860",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/store.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 138,
+          "normalizedEventId": "ff409cdb-1d32-4dad-af8d-5ccb9e2ae860",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 139,
+          "normalizedEventId": "b3e6337b-a88f-4591-b5f4-5379df7d6eec",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 139,
+          "normalizedEventId": "b3e6337b-a88f-4591-b5f4-5379df7d6eec",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 139,
+          "normalizedEventId": "b3e6337b-a88f-4591-b5f4-5379df7d6eec",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 139,
+          "normalizedEventId": "b3e6337b-a88f-4591-b5f4-5379df7d6eec",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 139,
+          "normalizedEventId": "b3e6337b-a88f-4591-b5f4-5379df7d6eec",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/store.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 139,
+          "normalizedEventId": "b3e6337b-a88f-4591-b5f4-5379df7d6eec",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "migrations/002_reservations.sql",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 140,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "src/api.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 140,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "src/catalog.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 140,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 140,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "src/service.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 140,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "src/store.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 140,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 201,
+          "normalizedEventId": "9264bb2d-42e4-468c-ae81-f48a138c2f8e",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc 'node --test tests/public.test.mjs; git diff --check; git diff'"
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 213,
+          "normalizedEventId": "32b2f3e3-4011-4f7a-856c-7008bef35948",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc 'node --test tests/public.test.mjs; git diff --check; git diff'"
+        }
+      ],
+      "commands": [
+        {
+          "command": "/usr/bin/bash -lc \"rg --files && sed -n '1,200p' src/*.ts && sed -n '1,240p' tests/public.test.mjs && sed -n '1,200p' migrations/*.sql\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 62,
+          "normalizedEventId": "d2a2dbf4-0a65-4210-b4c8-8552f33e1671",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc \"rg --files && sed -n '1,200p' src/*.ts && sed -n '1,240p' tests/public.test.mjs && sed -n '1,200p' migrations/*.sql\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": 0,
+          "durationMs": 0,
+          "status": "completed",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 63,
+          "normalizedEventId": "dbec25c6-ff99-48d3-944d-59a7ebd32e34",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc 'npm test'",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 146,
+          "normalizedEventId": "5e3b6490-3fa2-4a0e-87e2-ea8ac425df02",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc 'npm test'",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": 127,
+          "durationMs": 0,
+          "status": "failed",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 147,
+          "normalizedEventId": "d7901173-9316-4a94-9005-2f2f62d4715d",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc 'node --test tests/public.test.mjs; git diff --check; git diff'",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 201,
+          "normalizedEventId": "84f1b0c6-81c4-4d8e-996d-b302e61001f7",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc 'node --test tests/public.test.mjs; git diff --check; git diff'",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": 0,
+          "durationMs": 232,
+          "status": "completed",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 213,
+          "normalizedEventId": "e65ae059-7309-44b5-be8f-7cd369320e6d",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        }
+      ],
+      "tests": [
+        {
+          "command": "/usr/bin/bash -lc 'npm test'",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": 127,
+          "durationMs": 0,
+          "framework": "npm",
+          "status": "failed",
+          "sourceEventSequence": 147,
+          "normalizedEventId": "ef1471e3-59cc-48b3-abe0-00bad910a918",
+          "evidenceType": "command-inferred",
+          "confidence": "medium"
+        }
+      ],
+      "changedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+        "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/store.ts"
+      ],
+      "inferredPaths": [
+        "tests/public.test.mjs"
+      ],
+      "directlyObservedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+        "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/store.ts"
+      ]
+    },
+    "comparison": {
+      "predictedAndObserved": [
+        {
+          "path": "src/service.ts",
+          "evidence": "diff_observed"
+        },
+        {
+          "path": "migrations/002_reservations.sql",
+          "evidence": "diff_observed"
+        },
+        {
+          "path": "src/api.ts",
+          "evidence": "diff_observed"
+        }
+      ],
+      "predictedNotObserved": [
+        {
+          "path": "migrations/001_inventory.sql",
+          "evidence": "prediction"
+        }
+      ],
+      "observedNotPredicted": [
+        {
+          "path": "tests/public.test.mjs",
+          "evidence": "command_inferred_read"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+          "evidence": "file_edit"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+          "evidence": "file_edit"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+          "evidence": "file_edit"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+          "evidence": "file_edit"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+          "evidence": "file_edit"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/store.ts",
+          "evidence": "file_edit"
+        },
+        {
+          "path": "src/catalog.ts",
+          "evidence": "diff_observed"
+        },
+        {
+          "path": "src/pricing.ts",
+          "evidence": "diff_observed"
+        },
+        {
+          "path": "src/store.ts",
+          "evidence": "diff_observed"
+        }
+      ],
+      "requiredPredictionsWithoutObservedActivity": [
+        {
+          "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+          "path": "migrations/001_inventory.sql",
+          "symbol": "inventory",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: inventory",
+            "Exact title match: inventory",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: inventory",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 50,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        }
+      ],
+      "mandatoryPredictionMisses": [
+        {
+          "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+          "path": "migrations/001_inventory.sql",
+          "symbol": "inventory",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: inventory",
+            "Exact title match: inventory",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: inventory",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 50,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        }
+      ],
+      "predictedActivityCoverage": 0.23076923076923078,
+      "predictionActivityPrecision": 0.75,
+      "editPredictionCoverage": 0,
+      "diffPredictionCoverage": 0.5,
+      "requiredActivityObservationRate": 0.8333333333333334,
+      "observationRecall": 0.23076923076923078,
+      "predictionPrecision": 0.75,
+      "overlapRecall": 0.23076923076923078,
+      "overlapPrecision": 0.75
+    },
+    "usage": {
+      "accumulated": {
+        "id": "3910049d-6ac7-415a-9b29-0742251a299d",
+        "execution_id": "86e4012e-f804-4378-9065-af989f9587db",
+        "raw_sequence_number": 372,
+        "source": "codex.thread/tokenUsage/updated",
+        "input_tokens": 113781,
+        "cached_input_tokens": 73472,
+        "output_tokens": 3536,
+        "reasoning_tokens": 259,
+        "total_tokens": 117317,
+        "accumulation": "accumulated",
+        "measurement": "measured",
+        "timestamp": "2026-10-13T14:01:53.855Z",
+        "raw_provider_payload_json": "{\"total\":{\"totalTokens\":117317,\"inputTokens\":113781,\"cachedInputTokens\":73472,\"cacheWriteInputTokens\":0,\"outputTokens\":3536,\"reasoningOutputTokens\":259},\"last\":{\"totalTokens\":20123,\"inputTokens\":19885,\"cachedInputTokens\":17152,\"cacheWriteInputTokens\":0,\"outputTokens\":238,\"reasoningOutputTokens\":81},\"modelContextWindow\":258400}"
+      },
+      "exactResponses": [],
+      "availability": "measured"
+    },
+    "compaction": {
+      "count": 0,
+      "events": []
+    },
+    "outcome": {
+      "turnStatus": "completed",
+      "testsObserved": true,
+      "testsPassed": false,
+      "diffCaptured": true,
+      "changedFileCount": 6
+    },
+    "evidenceWarnings": [
+      "Shadow mode did not restrict Codex or inject Continuum prediction content.",
+      "Command-inferred paths are not proof that a file was read — they are shell command arguments.",
+      "The Codex App Server schema does not expose direct file-read events; directlyObservedReadPaths will always be empty.",
+      "Absence from activity evidence does not prove that the model did not read or receive an item.",
+      "Observed-not-predicted paths are additional exploration, not automatically unnecessary.",
+      "Continuum packet tokens are estimated; no token-savings claim is made.",
+      "Repository state changed during execution; external concurrent changes cannot be excluded from App Server evidence alone."
+    ]
+  },
+  "compatibilityWarning": "Codex 0.162.1 is outside the tested 0.133.x range; required capabilities will be probed at runtime.",
+  "authenticationMode": "chatgpt"
+}

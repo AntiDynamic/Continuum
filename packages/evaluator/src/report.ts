@@ -292,6 +292,8 @@ export function buildReport(runId: string, db: Db): RunReport {
   const inputTokens = metricByName.get("input_tokens");
   const outputTokens = metricByName.get("output_tokens");
   const cachedTokens = metricByName.get("cached_input_tokens") ?? metricByName.get("cached_tokens");
+  const cacheCreationTokens = metricByName.get("cache_creation_input_tokens");
+  const totalTokens = metricByName.get("total_tokens");
   const toolCalls = metricByName.get("tool_calls");
 
   if (inputTokens) {
@@ -308,6 +310,14 @@ export function buildReport(runId: string, db: Db): RunReport {
     );
   } else {
     unavailableMetrics.push("Output tokens");
+  }
+
+  if (totalTokens) {
+    metrics.push(makeMetric("Total tokens", totalTokens.numeric_value, "exact", "tokens"));
+  }
+
+  if (cacheCreationTokens) {
+    metrics.push(makeMetric("Cache-creation tokens", cacheCreationTokens.numeric_value, "exact", "tokens"));
   }
 
   if (cachedTokens) {

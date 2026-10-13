@@ -1,0 +1,79 @@
+diff --git c/migrations/002_reservations.sql w/migrations/002_reservations.sql
+index 22bdddc..7f03f21 100644
+--- c/migrations/002_reservations.sql
++++ w/migrations/002_reservations.sql
+@@ -1,5 +1,4 @@
+ -- up
+-CREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL);
++CREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL,UNIQUE(tenant_id,request_id));
+ -- down
+ DROP TABLE reservations;
+-DROP TABLE inventory;
+diff --git c/src/api.ts w/src/api.ts
+index 832759d..3a6d1c3 100644
+--- c/src/api.ts
++++ w/src/api.ts
+@@ -2,5 +2,5 @@ import type {DatabaseSync} from 'node:sqlite';
+ import type {ReserveInput} from './types.ts';
+ import {reserve,cancel} from './service.ts';
+ export function createApi(db:DatabaseSync) {
+- return {reserve(input:ReserveInput){return reserve(db,input);},cancel(tenantId:string,requestId:string){return cancel(db,tenantId,requestId);}};
++ return {async reserve(input:ReserveInput){return reserve(db,input);},async cancel(tenantId:string,requestId:string){return cancel(db,tenantId,requestId);}};
+ }
+diff --git c/src/catalog.ts w/src/catalog.ts
+index b84dfb6..7149f30 100644
+--- c/src/catalog.ts
++++ w/src/catalog.ts
+@@ -1,7 +1,7 @@
+ import type {DatabaseSync} from 'node:sqlite';
+ export function lookup(db:DatabaseSync, tenantId:string, sku:string) {
+- return db.prepare('SELECT * FROM inventory WHERE sku=? LIMIT 1').get(sku) as {stock:number;unit_price_cents:number}|undefined;
++ return db.prepare('SELECT * FROM inventory WHERE tenant_id=? AND sku=?').get(tenantId,sku) as {stock:number;unit_price_cents:number}|undefined;
+ }
+ export function changeStock(db:DatabaseSync, tenantId:string, sku:string, delta:number) {
+- db.prepare('UPDATE inventory SET stock=stock+? WHERE sku=?').run(delta,sku);
++ db.prepare('UPDATE inventory SET stock=stock+? WHERE tenant_id=? AND sku=?').run(delta,tenantId,sku);
+ }
+diff --git c/src/pricing.ts w/src/pricing.ts
+index 80b9066..1c33e69 100644
+--- c/src/pricing.ts
++++ w/src/pricing.ts
+@@ -1,4 +1,4 @@
+ export function computeTotal(lines:Array<{quantity:number;unitPriceCents:number}>):number {
+- return lines.reduce((total,line)=>total+line.quantity,0);
++ return lines.reduce((total,line)=>total+line.quantity*line.unitPriceCents,0);
+ }
+-export function computeFee(totalCents:number):number {return 50;}
++export function computeFee(totalCents:number):number {return totalCents<10000?25:0;}
+diff --git c/src/service.ts w/src/service.ts
+index 326176d..b3c9bb4 100644
+--- c/src/service.ts
++++ w/src/service.ts
+@@ -6,8 +6,11 @@ import {find,save} from './store.ts';
+ export function reserve(db:DatabaseSync,input:ReserveInput):Receipt {
+  const existing=find(db,input.tenantId,input.requestId);
+  if(existing)return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};
+- const lines=input.items.map(item=>{const row=lookup(db,input.tenantId,item.sku);if(!row)throw new Error('UNKNOWN_SKU');changeStock(db,input.tenantId,item.sku,-item.quantity);return {quantity:item.quantity,unitPriceCents:row.unit_price_cents};});
++ if(!Array.isArray(input.items)||input.items.length===0)throw new Error('EMPTY_ITEMS');
++ const lines=input.items.map(item=>{if(!Number.isInteger(item.quantity)||item.quantity<=0)throw new Error('INVALID_QUANTITY');const row=lookup(db,input.tenantId,item.sku);if(!row)throw new Error('UNKNOWN_SKU');return {sku:item.sku,quantity:item.quantity,stock:row.stock,unitPriceCents:row.unit_price_cents};});
++ const requested=new Map<string,number>();for(const line of lines)requested.set(line.sku,(requested.get(line.sku)??0)+line.quantity);
++ for(const line of lines)if((requested.get(line.sku)??0)>line.stock)throw new Error('INSUFFICIENT_STOCK');
+  const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)};
+- save(db,input,receipt);return receipt;
++ db.exec('BEGIN');try{for(const [sku,quantity] of requested)changeStock(db,input.tenantId,sku,-quantity);save(db,input,receipt);db.exec('COMMIT');return receipt;}catch(error){db.exec('ROLLBACK');throw error;}
+ }
+-export function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean {return false;}
++export function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean {const row=find(db,tenantId,requestId);if(!row||row.status!=='active')return false;db.exec('BEGIN');try{for(const item of JSON.parse(row.items_json) as Array<{sku:string;quantity:number}>)changeStock(db,tenantId,item.sku,item.quantity);const result=db.prepare("UPDATE reservations SET status='cancelled' WHERE tenant_id=? AND request_id=? AND status='active'").run(tenantId,requestId);if(result.changes!==1){db.exec('ROLLBACK');return false;}db.exec('COMMIT');return true;}catch(error){db.exec('ROLLBACK');throw error;}}
+diff --git c/src/store.ts w/src/store.ts
+index fbadc82..92422e5 100644
+--- c/src/store.ts
++++ w/src/store.ts
+@@ -1,7 +1,7 @@
+ import type {DatabaseSync} from 'node:sqlite';
+ import type {ReserveInput,Receipt} from './types.ts';
+ export function find(db:DatabaseSync,tenantId:string,requestId:string) {
+- return db.prepare('SELECT * FROM reservations WHERE request_id=? LIMIT 1').get(requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;
++ return db.prepare('SELECT * FROM reservations WHERE tenant_id=? AND request_id=?').get(tenantId,requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;
+ }
+ export function save(db:DatabaseSync,input:ReserveInput,receipt:Receipt) {
+  db.prepare('INSERT INTO reservations(tenant_id,request_id,items_json,total_cents,fee_cents,status) VALUES(?,?,?,?,?,?)').run(input.tenantId,input.requestId,JSON.stringify(input.items),receipt.totalCents,receipt.feeCents,'active');

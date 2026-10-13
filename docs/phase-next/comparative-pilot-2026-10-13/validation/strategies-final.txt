@@ -1,0 +1,21 @@
+✔ initial_packet preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (8827.323689ms)
+✔ minimal_manifest preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (10391.757694ms)
+✔ on_demand preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (10840.570641ms)
+✔ adaptive preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (7588.175696ms)
+✔ configuration defaults remain baseline; invalid strategy fails (237.879568ms)
+✔ complete controlled compaction replay has ordered recovery receipt and same-thread continuation (3456.851484ms)
+✔ manifest preserves additional critical constraints, excludes superseded entries and marks stale evidence (1.036411ms)
+✔ manifest never advertises an unavailable durable tool (0.559577ms)
+✔ invalid shadow CLI strategy and disabled retrieval tools fail before inference (1392.773013ms)
+✔ resume receipt and execution snapshot use refreshed source identity after code changes (2332.44997ms)
+✔ adaptive failure queues bounded targeted retrieval once at next boundary (1902.378068ms)
+✔ adaptive remembered source version changes trigger fresh delivery, then deduplicate (2930.472919ms)
+✔ adaptive failure is not cleared by a passing unrelated test command (525.371672ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51480.281714

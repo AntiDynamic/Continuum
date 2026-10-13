@@ -1,0 +1,312 @@
+{
+  "schemaVersion": "continuum.recovery-smoke.postmortem.v1",
+  "classification": "One authorized real experiment; failed and stopped without restart. No comparative claim.",
+  "treatment": "C",
+  "configuration": {
+    "configuration": {
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "approvalPolicy": "never",
+      "sandbox": "workspace-write",
+      "timeoutMs": 60000,
+      "maximumReportedTokens": 20000,
+      "persistentSession": true,
+      "contextEnabled": true,
+      "durableMemory": true,
+      "nativeCompactionPrompt": true,
+      "configOverrides": {
+        "model_provider": "openai",
+        "features.multi_agent": false,
+        "features.multi_agent_v2": false,
+        "features.multi_agent_v2_dynamic_tools": false,
+        "features.goals": false,
+        "features.unbounded_connection_retries": false
+      }
+    },
+    "hostRetries": {
+      "version": "0.162.1",
+      "verified": false,
+      "controlled": false,
+      "reason": "Codex 0.162.1 merge_configured_model_providers ignores overrides of built-in openai (entry.or_insert); default HTTP/stream retries and separate unauthorized recovery cannot be disabled through those overrides.",
+      "sources": [
+        "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/model-provider-info/src/lib.rs#L699",
+        "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/client.rs#L1795",
+        "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/responses_retry.rs#L99"
+      ],
+      "acceptedForSingleExperiment": true
+    },
+    "watchdog": {
+      "executable": "/usr/bin/timeout",
+      "overallSeconds": 240,
+      "killGraceSeconds": 10,
+      "verified": true
+    },
+    "isolation": {
+      "mode": "bubblewrap",
+      "evaluatorRootHidden": true,
+      "hostTmpHidden": true,
+      "recorderDatabaseHidden": true,
+      "hostCodexHistoryHidden": true,
+      "credentialsCopied": true,
+      "appliedToAgentProcess": true
+    },
+    "startedAt": "2026-10-12T19:24:41.859Z",
+    "workspace": "/tmp/continuum-recovery-benchmark-E8B5eA/authentication-compatibility-C"
+  },
+  "effectiveHostConfiguration": {
+    "model": "gpt-5.6-luna",
+    "modelProvider": "openai",
+    "reasoningEffort": "low",
+    "id": "01a13193-0f1b-7432-be6f-0821ce0c5f43"
+  },
+  "sessionId": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+  "executionId": "32fbfe2b-2b5d-4785-8dba-40971dfb6bd0",
+  "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+  "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+  "firstGeneration": {
+    "requested": true,
+    "acknowledged": true,
+    "completed": false,
+    "completedNotificationObserved": false,
+    "status": "aborted after reported-token stop and unhandled cancellation rejection"
+  },
+  "genuineCompaction": {
+    "requests": 0,
+    "completionEvidence": [],
+    "performed": false
+  },
+  "recovery": {
+    "originalUserRequirementsPersisted": true,
+    "originalRequirementsInjectedInInitialTurn": true,
+    "initialDurableCheckpointCount": 1,
+    "postCompactionRecovery": false,
+    "sameThreadContinuation": false,
+    "secondGenerationRequested": false,
+    "agentRequirementCompliance": "not established; source unchanged and independent authentication validator fails"
+  },
+  "behavioralValidation": {
+    "classification": "offline post-failure validation of the preserved final fixture; no additional model inference",
+    "visible": {
+      "status": "failed",
+      "taskId": "small-security-token",
+      "checks": [
+        {
+          "name": "fixture-behavior",
+          "status": "failed",
+          "error": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Fixture cacheTimeoutTest must return true\n\nfalse !== true\n\n    at visit (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:65:129)\n    at async visit (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:63:34)\n    at async evaluate (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:69:5)\n    at async file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:132:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.20.0\n"
+        }
+      ],
+      "behavioral": true,
+      "validator": "executable-behavior-v1"
+    },
+    "hidden": {
+      "status": "failed",
+      "taskId": "small-security-token",
+      "checks": [
+        {
+          "name": "independent-behavior",
+          "status": "failed",
+          "error": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception.\n    at evaluate (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:82:12)\n    at async file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:132:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: undefined,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.20.0\n"
+        }
+      ],
+      "behavioral": true,
+      "validator": "executable-behavior-v1"
+    }
+  },
+  "usage": {
+    "measurement": "actual reported thread totals, confirmed by two native response-id token usage records; not a final billing statement",
+    "inputTokens": 25807,
+    "cachedInputTokens": 12032,
+    "outputTokens": 245,
+    "reasoningOutputTokens": 37,
+    "totalTokens": 26052,
+    "reportedSnapshots": [
+      {
+        "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 12961,
+            "inputTokens": 12784,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 177,
+            "reasoningOutputTokens": 15
+          },
+          "last": {
+            "totalTokens": 12961,
+            "inputTokens": 12784,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 177,
+            "reasoningOutputTokens": 15
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      {
+        "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 26052,
+            "inputTokens": 25807,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 245,
+            "reasoningOutputTokens": 37
+          },
+          "last": {
+            "totalTokens": 13091,
+            "inputTokens": 13023,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 68,
+            "reasoningOutputTokens": 22
+          },
+          "modelContextWindow": 258400
+        }
+      }
+    ],
+    "providerResponseRecords": [
+      {
+        "thread_id": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turn_id": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "session_id": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "root_turn_id": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "response_id": "resp_0950518042d8f067016acd3400f8d0819194da055de75b5338",
+        "usage": {
+          "input_tokens": 12784,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 177,
+          "reasoning_output_tokens": 15,
+          "total_tokens": 12961
+        },
+        "turn_token_usage": {
+          "input_tokens": 12784,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 177,
+          "reasoning_output_tokens": 15,
+          "total_tokens": 12961
+        },
+        "thread_token_usage": {
+          "input_tokens": 12784,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 177,
+          "reasoning_output_tokens": 15,
+          "total_tokens": 12961
+        }
+      },
+      {
+        "thread_id": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turn_id": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "session_id": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "root_turn_id": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "response_id": "resp_0950518042d8f067016acd3403df3c8191bf4ae4ef36c31ef9",
+        "usage": {
+          "input_tokens": 13023,
+          "cached_input_tokens": 12032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 68,
+          "reasoning_output_tokens": 22,
+          "total_tokens": 13091
+        },
+        "turn_token_usage": {
+          "input_tokens": 25807,
+          "cached_input_tokens": 12032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 245,
+          "reasoning_output_tokens": 37,
+          "total_tokens": 26052
+        },
+        "thread_token_usage": {
+          "input_tokens": 25807,
+          "cached_input_tokens": 12032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 245,
+          "reasoning_output_tokens": 37,
+          "total_tokens": 26052
+        }
+      }
+    ],
+    "reportedStopThreshold": 20000,
+    "thresholdExceeded": true,
+    "guaranteedBillingCap": false,
+    "finalBillableUsage": null,
+    "cost": null,
+    "billingInformation": "unavailable"
+  },
+  "counts": {
+    "modelDrivenExperiments": 1,
+    "logicalGenerationTurns": 1,
+    "explicitCompactions": 0,
+    "continuumControlledRetries": 0,
+    "observableCompletedModelResponseRecords": 2,
+    "observableProviderRetryNotifications": 0,
+    "internalProviderRetryTotal": null,
+    "observedToolHostLaunchFailures": 2,
+    "observedExecToolAttempts": 2,
+    "automaticBenchmarkRestarts": 0,
+    "parallelAgentExperiments": 0
+  },
+  "elapsed": {
+    "recordedLogIntervalSeconds": 21.02117,
+    "recordedExecutionIntervalSeconds": 11.471509,
+    "recordedGenerationIntervalSeconds": 7.559509,
+    "exactWholeProcessElapsedSeconds": null,
+    "measurementNote": "Intervals use filesystem log creation/final error write and protocol/configuration timestamps. Exact process exit wall time was not emitted by the crashed runner."
+  },
+  "failures": [
+    {
+      "kind": "isolated host runtime",
+      "detail": "codex-code-mode-host helper missing from isolated runtime; two exec tool host launches failed before any code observation or change",
+      "evidence": [
+        "2026-10-12T19:24:50.901970Z ERROR codex_core::tools::router: error=failed to spawn code-mode host /tmp/continuum-recovery-benchmark-E8B5eA/authentication-compatibility-C/.continuum/codex-host/codex-code-mode-host: No such file or directory (os error 2)",
+        "2026-10-12T19:24:53.260039Z ERROR codex_core::tools::router: error=failed to spawn code-mode host /tmp/continuum-recovery-benchmark-E8B5eA/authentication-compatibility-C/.continuum/codex-host/codex-code-mode-host: No such file or directory (os error 2)"
+      ]
+    },
+    {
+      "kind": "reported token stop",
+      "detail": "Second reported response brought thread usage to 26052, exceeding 20000; no subsequent logical turn or compaction was requested."
+    },
+    {
+      "kind": "cancellation/reporting defect",
+      "detail": "An internal pending interrupt request promise was rejected while its raw-event write was failing, causing an unhandled rejection. Node exited before normal report cleanup. Regression fix now handles that rejection immediately; no live rerun."
+    },
+    {
+      "kind": "database lifecycle",
+      "detail": "Original forensic execution remains running and session active because abrupt exit skipped lifecycle cleanup. Actual process ended; no matching isolated host processes were found. Original database preserved without rewriting history."
+    },
+    {
+      "kind": "visible validator scope",
+      "detail": "Visible validator also exercises an unrelated broken cache-timeout fixture test, so it is unsuitable as the sole authentication success gate. Independent hidden authentication assertions fail independently."
+    }
+  ],
+  "offlineFixValidation": {
+    "build": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "clientTestsPassed": 8,
+    "clientTestsFailed": 0,
+    "newRegression": "interruption after raw usage guard failure does not produce an unhandled pending request rejection"
+  },
+  "remainingUnproven": [
+    "Native compaction",
+    "Post-compaction recovery delivery",
+    "Same-thread agent continuation",
+    "Requirement compliance",
+    "Cost or token savings",
+    "Comparative performance"
+  ],
+  "runnerDidNotEmitNormalReport": true,
+  "postmortemReconstructedFromPreservedEvidence": true,
+  "noLiveRestart": true,
+  "credentialsCleanup": {
+    "copiedAuthFileRemoved": true,
+    "credentialsExported": false,
+    "checkedAt": "2026-10-12T19:33:35.311777+00:00"
+  }
+}

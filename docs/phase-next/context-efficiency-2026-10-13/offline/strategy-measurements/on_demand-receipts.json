@@ -1,0 +1,38 @@
+{
+  "mode": "offline fake protocol; no inference",
+  "receipts": [
+    {
+      "strategy": "on_demand",
+      "renderedBytes": 0,
+      "serializedBytes": 0,
+      "unicodeCharacters": 0,
+      "estimatedTokens": 0,
+      "tokenMeasurement": "locally_estimated",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources": [],
+      "omissions": [],
+      "repositoryBodiesPreloaded": false,
+      "coverage": "repository excerpts intentionally omitted; retrieval available",
+      "status": "prepared",
+      "executionId": "7ff3274b-84bd-4886-a529-28f05ae9fda1",
+      "threadId": "strategy-on_demand"
+    },
+    {
+      "strategy": "on_demand",
+      "renderedBytes": 0,
+      "serializedBytes": 0,
+      "unicodeCharacters": 0,
+      "estimatedTokens": 0,
+      "tokenMeasurement": "locally_estimated",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sources": [],
+      "omissions": [],
+      "repositoryBodiesPreloaded": false,
+      "coverage": "repository excerpts intentionally omitted; retrieval available",
+      "status": "acknowledged",
+      "executionId": "7ff3274b-84bd-4886-a529-28f05ae9fda1",
+      "threadId": "strategy-on_demand",
+      "turnId": "turn-fixture"
+    }
+  ]
+}

@@ -19,8 +19,6 @@ export const green = (t: string) => ansi("32", t);
 export const yellow = (t: string) => ansi("33", t);
 export const red = (t: string) => ansi("31", t);
 export const cyan = (t: string) => ansi("36", t);
-export const blue = (t: string) => ansi("34", t);
-export const magenta = (t: string) => ansi("35", t);
 
 export function line(text = ""): void {
   process.stdout.write(text + "\n");
@@ -76,8 +74,4 @@ export function unavailable(key: string): void {
 
 export function printError(message: string): void {
   process.stderr.write(red("Error: ") + message + "\n");
-}
-
-export function printWarning(message: string): void {
-  process.stderr.write(yellow("Warning: ") + message + "\n");
 }

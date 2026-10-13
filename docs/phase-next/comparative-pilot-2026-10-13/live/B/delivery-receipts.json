@@ -1,0 +1,184 @@
+[
+  {
+    "sessionPreparationMs": 191,
+    "recoveryCheckpointDurationMs": 40,
+    "strategy": "initial_packet",
+    "renderedBytes": 5089,
+    "serializedBytes": 5220,
+    "unicodeCharacters": 5089,
+    "estimatedTokens": 1697,
+    "tokenMeasurement": "locally_estimated",
+    "contentHash": "81819c0bb978faff76e37c98354719dd0fefa7a49d48c6abbcacc7ff59df2220",
+    "sources": [
+      {
+        "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+        "path": "src/service.ts",
+        "symbol": "reserve"
+      },
+      {
+        "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+        "path": "migrations/001_inventory.sql",
+        "symbol": "inventory"
+      },
+      {
+        "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+        "path": "migrations/002_reservations.sql",
+        "symbol": "reservations"
+      },
+      {
+        "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+        "path": "src/service.ts",
+        "symbol": "cancel"
+      },
+      {
+        "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+        "path": "src/api.ts",
+        "symbol": "reserve"
+      },
+      {
+        "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+        "path": "src/api.ts",
+        "symbol": "cancel"
+      }
+    ],
+    "omissions": [],
+    "repositoryBodiesPreloaded": true,
+    "coverage": "see packet coverage",
+    "snapshot": {
+      "snapshot_kind": "commit",
+      "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+      "worktree_hash": null,
+      "dirty": false
+    },
+    "memoryVersion": 7,
+    "maximumEstimatedTokens": 4000,
+    "incomplete": true,
+    "coverageRemaining": [
+      "rollback",
+      "tests"
+    ],
+    "status": "prepared",
+    "executionId": "86e4012e-f804-4378-9065-af989f9587db",
+    "threadId": "01a13591-4295-7212-a164-08efbfad7bef"
+  },
+  {
+    "sessionPreparationMs": 191,
+    "recoveryCheckpointDurationMs": 40,
+    "strategy": "initial_packet",
+    "renderedBytes": 5089,
+    "serializedBytes": 5220,
+    "unicodeCharacters": 5089,
+    "estimatedTokens": 1697,
+    "tokenMeasurement": "locally_estimated",
+    "contentHash": "81819c0bb978faff76e37c98354719dd0fefa7a49d48c6abbcacc7ff59df2220",
+    "sources": [
+      {
+        "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+        "path": "src/service.ts",
+        "symbol": "reserve"
+      },
+      {
+        "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+        "path": "migrations/001_inventory.sql",
+        "symbol": "inventory"
+      },
+      {
+        "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+        "path": "migrations/002_reservations.sql",
+        "symbol": "reservations"
+      },
+      {
+        "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+        "path": "src/service.ts",
+        "symbol": "cancel"
+      },
+      {
+        "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+        "path": "src/api.ts",
+        "symbol": "reserve"
+      },
+      {
+        "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+        "path": "src/api.ts",
+        "symbol": "cancel"
+      }
+    ],
+    "omissions": [],
+    "repositoryBodiesPreloaded": true,
+    "coverage": "see packet coverage",
+    "snapshot": {
+      "snapshot_kind": "commit",
+      "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+      "worktree_hash": null,
+      "dirty": false
+    },
+    "memoryVersion": 7,
+    "maximumEstimatedTokens": 4000,
+    "incomplete": true,
+    "coverageRemaining": [
+      "rollback",
+      "tests"
+    ],
+    "status": "acknowledged",
+    "executionId": "86e4012e-f804-4378-9065-af989f9587db",
+    "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+    "turnId": "01a13591-4e82-7352-bfba-827df8bb184f"
+  },
+  {
+    "sessionPreparationMs": 1008,
+    "recoveryCheckpointDurationMs": 40,
+    "strategy": "initial_packet",
+    "renderedBytes": 4470,
+    "serializedBytes": 4569,
+    "unicodeCharacters": 4470,
+    "estimatedTokens": 1490,
+    "tokenMeasurement": "locally_estimated",
+    "contentHash": "041c215a7f20145a6b1feeb04b2bf4677c17c9ba71ac5db84350f00c9eef34ba",
+    "sources": [],
+    "omissions": [],
+    "repositoryBodiesPreloaded": true,
+    "coverage": "see packet coverage",
+    "snapshot": {
+      "snapshot_kind": "worktree",
+      "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+      "worktree_hash": "6cbc93b1a60c8317afb6081ec872ee84bf00907d7d24041a804813d0cda9eae3",
+      "dirty": true
+    },
+    "memoryVersion": 20,
+    "maximumEstimatedTokens": 4000,
+    "incomplete": false,
+    "coverageRemaining": [],
+    "status": "prepared",
+    "executionId": "760452e9-cc5c-4d62-8367-049e15245262",
+    "threadId": "01a13591-4295-7212-a164-08efbfad7bef"
+  },
+  {
+    "sessionPreparationMs": 1008,
+    "recoveryCheckpointDurationMs": 40,
+    "strategy": "initial_packet",
+    "renderedBytes": 4470,
+    "serializedBytes": 4569,
+    "unicodeCharacters": 4470,
+    "estimatedTokens": 1490,
+    "tokenMeasurement": "locally_estimated",
+    "contentHash": "041c215a7f20145a6b1feeb04b2bf4677c17c9ba71ac5db84350f00c9eef34ba",
+    "sources": [],
+    "omissions": [],
+    "repositoryBodiesPreloaded": true,
+    "coverage": "see packet coverage",
+    "snapshot": {
+      "snapshot_kind": "worktree",
+      "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+      "worktree_hash": "6cbc93b1a60c8317afb6081ec872ee84bf00907d7d24041a804813d0cda9eae3",
+      "dirty": true
+    },
+    "memoryVersion": 20,
+    "maximumEstimatedTokens": 4000,
+    "incomplete": false,
+    "coverageRemaining": [],
+    "status": "acknowledged",
+    "executionId": "760452e9-cc5c-4d62-8367-049e15245262",
+    "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+    "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9"
+  }
+]

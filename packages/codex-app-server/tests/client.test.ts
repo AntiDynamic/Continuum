@@ -66,4 +66,14 @@ describe("Codex App Server JSONL client",()=>{
     await expect(client.initialize()).rejects.toThrow("ledger unavailable");expect(fatal?.message).toBe("ledger unavailable");
   });
 
+  it("handles interruption after a usage guard failure without an unhandled request rejection",async()=>{
+    const client=new StdioCodexAppServerClient();clients.push(client);
+    let resolveFatal!:(error:Error)=>void;const fatal=new Promise<Error>(resolve=>{resolveFatal=resolve;});
+    await client.start({executable:process.execPath,executableArgs:[fixture],env:{...process.env,FAKE_CODEX_SCENARIO:"normal"},requestTimeoutMs:2000,onRawMessage:message=>{if(message.method==="thread/tokenUsage/updated")throw new Error("reported token stop");},onFatalError:error=>{resolveFatal(error);}});
+    await client.initialize();const thread=await client.startThread({cwd:process.cwd()});await client.startTurn({threadId:thread.id,task:"offline guard regression"});
+    expect((await fatal).message).toBe("reported token stop");
+    await expect(client.interruptTurn(thread.id,"turn-fixture")).rejects.toThrow("reported token stop");
+    await client.close();
+  });
+
 });

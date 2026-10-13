@@ -1,0 +1,23 @@
+{
+  "ownedScratchExists": false,
+  "ownedWorkspaceProcessArguments": [],
+  "nativeAppServerExits": [
+    {
+      "code": 0,
+      "signal": null,
+      "expected": true
+    },
+    {
+      "code": 0,
+      "signal": null,
+      "expected": true
+    },
+    {
+      "code": 0,
+      "signal": null,
+      "expected": true
+    }
+  ],
+  "credentialsExported": false,
+  "exclusiveLockRetained": true
+}

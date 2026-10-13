@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-10-12T19:24:04.318638+00:00",
+  "approvedExperiments": 1,
+  "treatment": "C",
+  "model": "gpt-5.6-luna",
+  "reasoning": "low",
+  "acceptedInternalRetries": "Codex 0.162.1 only; user explicitly accepted uncontrolled internal retries for this single experiment",
+  "maxPlannedGenerationTurns": 2,
+  "maxExplicitCompactions": 1,
+  "reportedThreadTokenStop": 20000,
+  "watchdogSeconds": 240,
+  "watchdogKillGraceSeconds": 10,
+  "automaticRestarts": false,
+  "implementationSha256": {
+    "scripts/recovery-benchmark.mjs": "9419c85dd7628d93a95ce7a9ef323b0144d3fc1a7a6d2f0d9e42c87d990fdfda",
+    "scripts/recovery-safety.mjs": "9d795300ce633fa76a4b93e2955463db9c6a357122a87a08a7104aa696de9d90",
+    "scripts/recovery-isolation.mjs": "fb8e2d44d74423e3630e57ac09211bb9aeec5ac338573ddb3ad013436c4fe04b",
+    "packages/codex-app-server/src/assist-execution-service.ts": "a30d5b6eac889b92d151d878159963f888b28a552df88381c4a6bbfbd12c1233",
+    "packages/codex-app-server/src/client.ts": "b54ac98d2b4b56c0ea42bc4d31e383a8efe6813715cfcfc7b1432c3bf2bfd96d"
+  }
+}

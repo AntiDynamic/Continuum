@@ -1,0 +1,264 @@
+{
+  "treatment": "B",
+  "producer": "post-hoc deterministic analysis of unchanged frozen traces and SQLite; includes tool deliveries omitted from initial receipt-only audit",
+  "sources": [
+    {
+      "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+      "path": "src/service.ts",
+      "symbol": "reserve",
+      "contentHash": "00421fd65370357d3fde79563993ebeb6865fded3f766bbc36c5ab22486a49fb",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "initial",
+          "timestamp": "2026-10-13T14:01:17.695Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z"
+      ]
+    },
+    {
+      "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+      "path": "migrations/001_inventory.sql",
+      "symbol": "inventory",
+      "contentHash": "1cbb14d5164f958fa71ef985cb23629acd391a52aa841417302c31704e252ac4",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "initial",
+          "timestamp": "2026-10-13T14:01:17.695Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z"
+      ]
+    },
+    {
+      "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+      "path": "migrations/002_reservations.sql",
+      "symbol": "reservations",
+      "contentHash": "82150dd7fff755a34106fffb25642eb4376c8813a5af3e53efd461b39e7dea46",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "initial",
+          "timestamp": "2026-10-13T14:01:17.695Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z"
+      ]
+    },
+    {
+      "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+      "path": "src/service.ts",
+      "symbol": "cancel",
+      "contentHash": "aa6d434840efd3cc06e792b7c0b84385a503e0070b12ee64cb9234138b48413d",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "initial",
+          "timestamp": "2026-10-13T14:01:17.695Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z",
+        "2026-10-13T14:01:50.727Z"
+      ]
+    },
+    {
+      "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+      "path": "src/api.ts",
+      "symbol": "reserve",
+      "contentHash": "87d93f5a318db392eaf6895815723c01fc3541c9dd5075f7db7c0e2b573630f6",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "initial",
+          "timestamp": "2026-10-13T14:01:17.695Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z",
+        "2026-10-13T14:01:50.727Z"
+      ]
+    },
+    {
+      "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+      "path": "src/api.ts",
+      "symbol": "cancel",
+      "contentHash": "c3660a1a62c88ebe44f4fac89f101675a4d48d6661626824f579619b6205e532",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "initial",
+          "timestamp": "2026-10-13T14:01:17.695Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z",
+        "2026-10-13T14:01:50.727Z"
+      ]
+    },
+    {
+      "id": "f5029321-f9a2-47cb-b451-1fbc69b9273f",
+      "path": "package.json",
+      "symbol": "scripts.test",
+      "contentHash": "0d8b5f01f1e98f7dd421ffdd682953673e2628d24eb3c3666d1a4cf1acda714d",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:01:24.512Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": []
+    },
+    {
+      "id": "6b422645-9ca0-4a66-a212-164a65b72f87",
+      "path": "src/types.ts",
+      "symbol": "Item",
+      "contentHash": "16c8656b6073a860f95eab6c52a1377cc0fb3b21cca70118f2e85f5bf1760bcd",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:01:24.512Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z"
+      ]
+    },
+    {
+      "id": "8424e035-7ea2-469a-8494-b2da73fef0bc",
+      "path": "src/types.ts",
+      "symbol": "Receipt",
+      "contentHash": "d8eea4700e00dc76ef48fda1e0300d6d8171e5c7c749097304be76a99d99ab98",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:01:24.512Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z"
+      ]
+    },
+    {
+      "id": "064f0d79-1b4b-4ad5-9b9a-cde3279a013c",
+      "path": "src/types.ts",
+      "symbol": "ReserveInput",
+      "contentHash": "08ad62dd57ded6fb83954b684e2aa7b7d0fc55548a92bb8a41ef695aeedb71ab",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:01:24.512Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:01:26.796Z"
+      ]
+    },
+    {
+      "id": "bcbf5651-b72c-47df-801d-0263ab050cd4",
+      "path": "package.json",
+      "symbol": "scripts",
+      "contentHash": "88fa5b0942b60709456c6200b0d871b49aadad27c4000c9c577e499868534550",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:01:24.512Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": []
+    },
+    {
+      "id": "b56ee75c-1e86-45e2-a9c7-1898720b5b4d",
+      "path": "package.json",
+      "symbol": "type",
+      "contentHash": "405f5a8482254ab32f8c2b13f85e33620974db683eacb58cb7d97a4b089db09d",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:01:24.512Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": []
+    }
+  ],
+  "toolReplies": [
+    {
+      "tool": "continuum_request_context",
+      "arguments": {
+        "query": "Inspect all source modules, migrations, package.json, and tests/public.test.mjs; include database schema, transaction behavior, and rollback requirements."
+      },
+      "timestamp": "2026-10-13T14:01:24.512Z",
+      "success": true,
+      "body": "SESSION: d1112fc5-bb3f-4598-b5c4-6418c17ec0d8\n\npackage.json:1-1\n\"test\":\"node --test tests/public.test.mjs\"\n\nsrc/types.ts:1-1\nexport interface Item { sku: string; quantity: number }\n\nsrc/types.ts:3-3\nexport interface Receipt { reservationId: string; totalCents: number; feeCents: number }\n\nsrc/types.ts:2-2\nexport interface ReserveInput { tenantId: string; requestId: string; items: Item[] }\n\npackage.json:1-1\n\"scripts\":{\"test\":\"node --test tests/public.test.mjs\"}\n\npackage.json:1-1\n\"type\":\"module\"\n\nAlready delivered: migrations/002_reservations.sql#reservations\n\nAlready delivered: migrations/001_inventory.sql#inventory\n\nAlready delivered: src/service.ts#reserve\n\nAlready delivered: src/api.ts#reserve\n\nAlready delivered: src/api.ts#cancel\n\nAlready delivered: src/service.ts#cancel\n\nRequired context missing: rollback. Request targeted context before assuming completeness."
+    }
+  ],
+  "sourceFragmentsSupplied": 12,
+  "exactRepeatedSourceCount": 9,
+  "memory": {
+    "originalFullRequirementPreserved": true,
+    "activeCriticalRequirements": [
+      {
+        "kind": "objective",
+        "text": "Repair this warehouse reservation service across API, service, pricing, catalog, persistence and SQL migration modules. Preserve createApi(db), reserve(db,input), cancel(db,tenantId,requestId), and existing receipt fields exactly: reservationId, totalCents, feeCents. Both API methods must return promises. Reservation IDs are r-<tenantId>-<requestId>.\nTenant and SKU isolation are mandatory. Quantities must be positive integers; reject empty items, invalid quantities, unknown SKUs and insufficient stock. Reservations must atomically debit every line or change nothing. Support multiple lines including repeated SKUs. Compute exact integer merchandise cents from quantities and inventory unit prices.\nIdempotency is durable per (tenantId,requestId): a retry returns the original stored receipt without further debit, even if prices change. Cancellation restores original quantities exactly once; return true only when an active reservation was cancelled, false for unknown/already cancelled requests. A tenant cannot cancel another tenant's request.\nMigration 002 must enforce tenant/request uniqueness. Its down section removes only reservation schema and preserves inventory data and indexes. Preserve migration markers and column names. Do not weaken the public test, rename public contracts or change build tooling. Additional tests are allowed. No dependencies are needed: use node --test tests/public.test.mjs. Finish implementation and validate it.",
+        "evidence_id": "b948c746-3b9b-4a09-9a31-6d4b10eaa5d6"
+      },
+      {
+        "kind": "constraint",
+        "text": "Pricing correction: for NEW reservations, charge 25 cents when merchandise subtotal is below 10000 cents, and zero at or above 10000 cents. This supersedes the fixed 50-cent policy. Existing stored receipts must remain stable. Complete the original repair and validate it.",
+        "evidence_id": "930320e7-4852-4adb-8699-2db835f33fbc"
+      }
+    ],
+    "binding": [
+      {
+        "session_id": "d1112fc5-bb3f-4598-b5c4-6418c17ec0d8",
+        "thread_id": "01a13591-4295-7212-a164-08efbfad7bef",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low",
+        "approval_policy": "never",
+        "sandbox": "workspace-write",
+        "recovery_pending": 1,
+        "last_checkpoint_id": "b6589e4c-b23e-4dc3-a03a-032302736ef7",
+        "configuration_json": "{\"contextEnabled\":true,\"durableMemory\":true,\"nativeCompactionPrompt\":true,\"configOverrides\":{\"model_provider\":\"openai\",\"features.multi_agent\":false,\"features.multi_agent_v2\":false,\"features.multi_agent_v2_dynamic_tools\":false,\"features.goals\":false,\"features.unbounded_connection_retries\":false}}"
+      }
+    ],
+    "adaptiveFailureSignals": 0,
+    "continuationRecoveryActuallySent": true,
+    "supersededRecords": 2
+  },
+  "nativeUsageMatchesThreadCounter": true,
+  "sameNativeThread": true,
+  "turnTimeline": [
+    {
+      "timestamp": "2026-10-13T14:01:17.695Z",
+      "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+      "inputTextHashes": [
+        "08aeeb2f87a39c3e7c57fbbd70c827bd6e44434b10ac8cf27a67b63f4f8bfa75",
+        "81819c0bb978faff76e37c98354719dd0fefa7a49d48c6abbcacc7ff59df2220"
+      ]
+    },
+    {
+      "timestamp": "2026-10-13T14:01:56.141Z",
+      "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+      "inputTextHashes": [
+        "bf8d2cc6bc1146b81065cc03e0c7f3bb1250113bd3dfb8717cff68e738d60ef9",
+        "041c215a7f20145a6b1feeb04b2bf4677c17c9ba71ac5db84350f00c9eef34ba"
+      ]
+    }
+  ],
+  "limits": [
+    "Exact repetition is transmission, not attributed billing waste.",
+    "Historical source references are not proven stale-context errors.",
+    "No active occupancy or actual billing is available."
+  ]
+}

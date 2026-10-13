@@ -1,0 +1,16 @@
+{
+  "build": "PASS",
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "codexTestsPassed": 47,
+  "codexProviderTestsSkipped": 1,
+  "scriptTestsPassed": 102,
+  "combinedUniqueOfflinePassed": 338,
+  "combinedProviderSkipped": 4,
+  "failed": 0,
+  "actualFrozenCRequestReplay": "PASS: observed wrapped query invokes retrieval callback once",
+  "rawLiveManifestUnchanged": true,
+  "extraLiveRuns": 0,
+  "testedLiveSourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+  "repairsProven": "Argument normalization and complete transport-delivery measurement offline; no live efficiency or cost claim"
+}

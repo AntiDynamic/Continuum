@@ -1,0 +1,82 @@
+[
+  {
+    "id": "edccf828-dc3e-4999-81de-84cde328db7a",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Fix AuthService validation and refresh. Reject empty and literal expired tokens. Preserve method signatures and return <token>-refreshed for valid tokens.",
+    "authority": "user",
+    "snapshot_json": null,
+    "source_version_id": null,
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:41.971Z"
+  },
+  {
+    "id": "4168ffac-a682-42ce-abf1-7ae89a2fc79c",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source docs/authentication.md (Authentication)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "ab539298-c984-42e4-9728-8fe0886a88bc",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.151Z"
+  },
+  {
+    "id": "2e3c23ba-1eb2-4783-8d9f-e5146865c884",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source src/auth-service.ts (AuthService)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "ffe10c6c-dcec-4fde-9a43-00ff8a0875ee",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.152Z"
+  },
+  {
+    "id": "34c60d13-1cfb-4bd1-b821-9f7d510dbd34",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source SECURITY.md (Token trust policy)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "0782c308-664f-442a-b767-1bdf53fcac57",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.153Z"
+  },
+  {
+    "id": "5a6bfd75-5aed-4721-a8df-0b8e50da7404",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source src/auth-service.ts (TokenClaims)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "4711d5d5-ba4f-4bfe-8875-2a995673886a",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.154Z"
+  },
+  {
+    "id": "1450fcdb-ac80-4418-ac81-a5745699a32a",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source tests/auth-service.test.ts (rejectsEmptyTokenTest)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "89ee9641-b55c-4b58-928e-f87969980c7a",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.155Z"
+  },
+  {
+    "id": "a680e74f-b780-4ed6-a13d-525bcc04b044",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source tests/auth-service.test.ts (import ../src/auth-service)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "37f4fba8-2d31-4435-b6c7-03276bd93063",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.156Z"
+  },
+  {
+    "id": "cc244e45-8970-416d-870e-4245ebdde3e8",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "text": "Source README.md (Small service)",
+    "authority": "observed",
+    "snapshot_json": "{\"snapshot_kind\":\"commit\",\"base_commit_hash\":\"6654fa635e6599a17a7de450e2c48a2d41cc9975\",\"worktree_hash\":null,\"dirty\":false}",
+    "source_version_id": "c16785a2-ce62-4cde-a4cc-f865db557009",
+    "metadata_json": "{}",
+    "created_at": "2026-10-12T19:24:42.157Z"
+  }
+]

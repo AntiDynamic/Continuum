@@ -40,7 +40,7 @@ describe("deterministic retrieval benchmarks", () => {
           const item = repository.upsertContextItem(1, shaped.kind, label);
           const id = crypto.randomUUID();
           ids.set(label, id);
-          const source = relevant ? `${fixture.task}. ${label}. ${label.toLowerCase().includes("rollback") ? "ROLLBACK;" : ""}` : label;
+          const source = relevant ? `${label}. ${label.toLowerCase().includes("rollback") ? "ROLLBACK;" : ""}` : label;
           repository.insertContextItemVersion({ id, context_item_id: item.id, content: source, contextual_header: `Repository: benchmark\nFile: ${shaped.path}\nSymbol: ${label}`, compiled_content: `Repository: benchmark\n\n${source}`, title: label, source_path: shaped.path, source_start_line: 1, source_end_line: 2, symbol_name: label, language: shaped.language, content_hash: `${id}-hash`, source_blob_hash: `${id}-blob`, valid_from_commit: "fixture", valid_to_commit_exclusive: null, indexed_at: new Date().toISOString(), provenance_json: null, staleness_status: "current", staleness_reason: null, metadata_json: JSON.stringify(shaped.metadata) });
         }
       }

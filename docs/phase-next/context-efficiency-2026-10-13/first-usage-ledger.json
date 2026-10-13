@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "continuum.usage-ledger.v1",
+  "experimentId": "first",
+  "responses": [
+    {
+      "responseId": "resp_0950518042d8f067016acd3400f8d0819194da055de75b5338",
+      "logicalTurnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+      "sequence": 1,
+      "rawUsage": {
+        "input_tokens": 12784,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 177,
+        "reasoning_output_tokens": 15,
+        "total_tokens": 12961
+      },
+      "inputTokens": 12784,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 12784,
+      "outputTokens": 177,
+      "totalTokens": 12961,
+      "activeContextOccupancy": null,
+      "experimentId": "first",
+      "treatment": "C",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-12T19:24:50.893Z",
+      "evidenceSource": {
+        "file": "docs/phase-next/first-real-smoke-2026-10-13/native-rollouts/2026/10/13/rollout-2026-10-13T00-54-45-01a13193-0f1b-7432-be6f-0821ce0c5f43.jsonl",
+        "line": 14
+      },
+      "cumulativeUsage": {
+        "inputTokens": 12784,
+        "cachedInputTokens": 0,
+        "uncachedInputTokens": 12784,
+        "outputTokens": 177,
+        "totalTokens": 12961
+      }
+    },
+    {
+      "responseId": "resp_0950518042d8f067016acd3403df3c8191bf4ae4ef36c31ef9",
+      "logicalTurnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+      "sequence": 2,
+      "rawUsage": {
+        "input_tokens": 13023,
+        "cached_input_tokens": 12032,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 68,
+        "reasoning_output_tokens": 22,
+        "total_tokens": 13091
+      },
+      "inputTokens": 13023,
+      "cachedInputTokens": 12032,
+      "uncachedInputTokens": 991,
+      "outputTokens": 68,
+      "totalTokens": 13091,
+      "activeContextOccupancy": null,
+      "experimentId": "first",
+      "treatment": "C",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-12T19:24:53.320Z",
+      "evidenceSource": {
+        "file": "docs/phase-next/first-real-smoke-2026-10-13/native-rollouts/2026/10/13/rollout-2026-10-13T00-54-45-01a13193-0f1b-7432-be6f-0821ce0c5f43.jsonl",
+        "line": 20
+      },
+      "cumulativeUsage": {
+        "inputTokens": 25807,
+        "cachedInputTokens": 12032,
+        "uncachedInputTokens": 13775,
+        "outputTokens": 245,
+        "totalTokens": 26052
+      }
+    }
+  ],
+  "totals": {
+    "inputTokens": 25807,
+    "cachedInputTokens": 12032,
+    "uncachedInputTokens": 13775,
+    "outputTokens": 245,
+    "totalTokens": 26052
+  },
+  "rawUsageNotifications": [
+    {
+      "timestamp": "2026-10-12T19:24:50.909Z",
+      "raw": {
+        "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 12961,
+            "inputTokens": 12784,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 177,
+            "reasoningOutputTokens": 15
+          },
+          "last": {
+            "totalTokens": 12961,
+            "inputTokens": 12784,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 177,
+            "reasoningOutputTokens": 15
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-12T19:24:53.327Z",
+      "raw": {
+        "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 26052,
+            "inputTokens": 25807,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 245,
+            "reasoningOutputTokens": 37
+          },
+          "last": {
+            "totalTokens": 13091,
+            "inputTokens": 13023,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 68,
+            "reasoningOutputTokens": 22
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    }
+  ],
+  "uniqueUsageNotifications": [
+    {
+      "timestamp": "2026-10-12T19:24:50.909Z",
+      "raw": {
+        "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 12961,
+            "inputTokens": 12784,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 177,
+            "reasoningOutputTokens": 15
+          },
+          "last": {
+            "totalTokens": 12961,
+            "inputTokens": 12784,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 177,
+            "reasoningOutputTokens": 15
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-12T19:24:53.327Z",
+      "raw": {
+        "threadId": "01a13193-0f1b-7432-be6f-0821ce0c5f43",
+        "turnId": "01a13193-174f-7042-98c7-fe803b1daab3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 26052,
+            "inputTokens": 25807,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 245,
+            "reasoningOutputTokens": 37
+          },
+          "last": {
+            "totalTokens": 13091,
+            "inputTokens": 13023,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 68,
+            "reasoningOutputTokens": 22
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    }
+  ],
+  "duplicateNotifications": 0,
+  "activeContextOccupancy": null,
+  "toolEvents": [],
+  "compactionEvents": [],
+  "observableRetryEvents": [],
+  "inputHashes": [
+    {
+      "sha256": "d489b1c098ec37dbb84d8f4e4a9a2f3e5bada9be573d46cb19ba0a08af5bdb94",
+      "bytes": 154,
+      "characters": 154
+    },
+    {
+      "sha256": "6cb0eea069f4814ba2bf68f5b64025589eb1fbffcb4f538702398abd9103cfb8",
+      "bytes": 3360,
+      "characters": 3360
+    }
+  ],
+  "measurementLimits": [
+    "Model context capacity is not active occupancy.",
+    "Cumulative snapshots are not summed.",
+    "Cached input is a subset of input, not an additional charge.",
+    "No fragment billing attribution or actual credit cost is available."
+  ],
+  "apiEquivalentTextCost": {
+    "usd": 0.00328964,
+    "label": "API-equivalent text-token estimate at recorded current rates, not actual Codex credits or historical invoice",
+    "rates": {
+      "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "retrievedAt": "2026-10-12T21:12:53.461Z",
+      "uncachedInputPerMillion": 0.2,
+      "cachedInputPerMillion": 0.02,
+      "outputPerMillion": 1.2
+    },
+    "actualCodexCreditCost": null
+  }
+}

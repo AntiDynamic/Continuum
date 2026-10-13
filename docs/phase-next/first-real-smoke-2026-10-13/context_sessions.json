@@ -1,0 +1,23 @@
+[
+  {
+    "id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "repository_id": 1,
+    "run_id": "f9b90963-e905-47a4-8104-584bd0d7868a",
+    "task_text": "Fix AuthService validation and refresh. Reject empty and literal expired tokens. Preserve method signatures and return <token>-refreshed for valid tokens.",
+    "task_analysis_json": "{\"originalTask\":\"Fix AuthService validation and refresh. Reject empty and literal expired tokens. Preserve method signatures and return <token>-refreshed for valid tokens.\",\"normalizedTask\":\"Fix AuthService validation and refresh. Reject empty and literal expired tokens. Preserve method signatures and return <token>-refreshed for valid tokens.\",\"taskClass\":\"security_sensitive\",\"classificationReasons\":[\"Matched security or trust terminology.\"],\"mentionedPaths\":[],\"mentionedSymbols\":[\"Fix\",\"AuthService\",\"Reject\",\"Preserve\"],\"mentionedPackages\":[],\"keywords\":[\"fix\",\"auth\",\"service\",\"validation\",\"and\",\"refresh\",\"reject\",\"empty\",\"literal\",\"expired\",\"tokens\",\"preserve\",\"method\",\"signatures\",\"return\",\"token\",\"refreshed\",\"for\",\"valid\",\"signature\",\"fixauth\",\"authservice\",\"servicevalidation\",\"validationand\",\"andrefresh\",\"refreshreject\",\"rejectempty\",\"emptyand\",\"andliteral\",\"literalexpired\",\"expiredtokens\",\"tokenspreserve\",\"preservemethod\",\"methodsignatures\",\"signaturesand\",\"andreturn\",\"returntoken\",\"tokenrefreshed\",\"refreshedfor\",\"forvalid\",\"validtokens\",\"fixauthservicevalidationandrefreshrejectemptyandliteralexpiredtokenspreservemethodsignaturesandreturntokenrefreshedforvalidtokens\",\"validate\"],\"likelyLanguages\":[],\"requiredCoverage\":[{\"category\":\"implementation\",\"state\":\"required\",\"required\":true,\"reason\":\"Security-sensitive implementation is required.\"},{\"category\":\"tests\",\"state\":\"recommended\",\"required\":false,\"reason\":\"Security regression tests are required when applicable indexed evidence exists.\"},{\"category\":\"security_constraint\",\"state\":\"required\",\"required\":true,\"reason\":\"Repository security constraints are required.\"},{\"category\":\"public_contract\",\"state\":\"required\",\"required\":true,\"reason\":\"Public security contracts are required.\"},{\"category\":\"architecture\",\"state\":\"recommended\",\"required\":false,\"reason\":\"Architecture boundaries may apply.\"}],\"riskLevel\":\"critical\",\"riskReasons\":[\"Security, authentication, secret, permission, or trust behavior is in scope.\"],\"estimatedComplexity\":\"local\"}",
+    "snapshot_kind": "commit",
+    "base_commit_hash": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+    "worktree_hash": null,
+    "strategy_id": "minimum-safe-progressive-v1",
+    "strategy_version": "1",
+    "status": "active",
+    "maximum_estimated_tokens": 8000,
+    "delivered_estimated_tokens": 668,
+    "active_estimated_tokens": 668,
+    "remaining_estimated_tokens": 7332,
+    "created_at": "2026-10-12T19:24:41.969Z",
+    "updated_at": "2026-10-12T19:24:42.115Z",
+    "completed_at": null,
+    "epoch_number": 0
+  }
+]

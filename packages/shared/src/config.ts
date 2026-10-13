@@ -26,6 +26,7 @@ export const ContinuumConfigSchema = z.object({
       backend: z.literal("disabled").default("disabled"),
     }).default({ enabled: false, backend: "disabled" }),
   }).default({ semantic: { enabled: false, backend: "disabled" } }),
+  contextDelivery: z.object({strategy:z.enum(["initial_packet","minimal_manifest","on_demand","adaptive"]).default("initial_packet")}).default({strategy:"initial_packet"}),
   captureRawOutput: z.boolean().default(true),
 });
 
@@ -33,6 +34,7 @@ export type ContinuumConfig = z.infer<typeof ContinuumConfigSchema>;
 
 export const DEFAULT_CONFIG: ContinuumConfig = {
   version: 1,
+  contextDelivery: {strategy:"initial_packet"},
   defaultAgent: "gemini",
   testCommands: [],
   buildCommands: [],

@@ -1,0 +1,58 @@
+{
+  "requested": "GPT-5.6 Luna",
+  "matches": [
+    {
+      "id": "gpt-5.6-luna",
+      "model": "gpt-5.6-luna",
+      "displayName": "GPT-5.6-Luna",
+      "supportedReasoningEfforts": [
+        {
+          "reasoningEffort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "reasoningEffort": "medium",
+          "description": "Balances speed and reasoning depth for everyday tasks"
+        },
+        {
+          "reasoningEffort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "reasoningEffort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        },
+        {
+          "reasoningEffort": "max",
+          "description": "Maximum reasoning depth for the hardest problems"
+        }
+      ]
+    }
+  ],
+  "listedModels": [
+    "gpt-6.1-sol",
+    "gpt-6-astra",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-reserve",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "gpt-5.5",
+    "codex-auto-review"
+  ],
+  "nextCursor": null,
+  "error": null,
+  "codexHome": "/home/anti/.codex",
+  "configuredMcpServers": [],
+  "configMetadataAvailable": true,
+  "configError": null,
+  "authenticationMetadataAvailable": true,
+  "authenticated": true,
+  "requiresOpenaiAuth": true,
+  "authenticationMode": "chatgpt",
+  "accountError": null,
+  "inferenceRequests": 0,
+  "availability": "model/list metadata does not prove an inference will be accepted",
+  "inspectedAt": "2026-10-13T14:00:02.389Z"
+}

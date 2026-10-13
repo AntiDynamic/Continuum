@@ -1,0 +1,40 @@
+{
+  "build": "passed",
+  "typecheck": "passed",
+  "lint": "passed",
+  "frozenInstall": "passed",
+  "workspaceTests": {
+    "passed": 227,
+    "failed": 0,
+    "skipped": 4
+  },
+  "scriptTests": {
+    "passed": 39,
+    "failed": 0,
+    "skipped": 0
+  },
+  "totalPassed": 266,
+  "newMemoryRegressions": 23,
+  "newComparisonRegressions": 6,
+  "newMcpRegressions": 1,
+  "liveModelDrivenBenchmarkRuns": 0,
+  "providerInferenceUsage": null,
+  "attributableMonetaryTestingCost": null,
+  "nativeCompactionRecovery": "not live-tested",
+  "realAgentBehavior": "not tested",
+  "isolatedRealAppServerProbe": {
+    "version": "0.162.1",
+    "initialize": "passed",
+    "accountRead": "passed",
+    "credentialsCopied": false,
+    "inferenceRequests": 0
+  },
+  "commands": [
+    "pnpm build",
+    "pnpm typecheck",
+    "pnpm lint",
+    "pnpm test",
+    "pnpm install --frozen-lockfile --ignore-scripts"
+  ],
+  "limitations": "Mock behavior is infrastructure evidence. No effectiveness or savings claims."
+}

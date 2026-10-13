@@ -7,7 +7,7 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
-    "test": "pnpm -r --workspace-concurrency=1 test",
+    "test": "cross-env CONTINUUM_DISABLE_CODEX_LIVE=1 pnpm -r --workspace-concurrency=1 test && pnpm test:scripts",
     "test:acceptance": "pnpm --filter @continuum/context-engine build && pnpm --filter @continuum/mcp-server build && pnpm --filter @continuum/cli build && pnpm --filter @continuum/cli exec vitest run tests/standalone-acceptance.test.ts --testTimeout=120000 --hookTimeout=60000 && pnpm --filter @continuum/mcp-server exec vitest run tests/session-product.test.ts --testTimeout=120000 --hookTimeout=60000",
     "test:codex": "pnpm --filter @continuum/codex-app-server test",
     "test:codex-live": "pnpm --filter @continuum/codex-app-server test:live",
@@ -17,17 +17,22 @@
     "test:phase6-recovery": "pnpm --filter @continuum/context-engine build && pnpm --filter @continuum/mcp-server build && pnpm --filter @continuum/cli build && node scripts/phase6-recovery-smoke.mjs",
     "benchmark:phase6-pilot": "node scripts/phase6-pilot.mjs",
     "benchmark:phase6-report": "node scripts/phase6-report.mjs",
-    "clean": "pnpm -r clean"
+    "clean": "pnpm -r clean",
+    "test:scripts": "node scripts/run-tests.mjs",
+    "test:recovery": "pnpm build && node scripts/recovery-benchmark.mjs --offline",
+    "benchmark:recovery": "node scripts/recovery-benchmark.mjs",
+    "benchmark:comparative": "node scripts/comparative-pilot.mjs",
+    "test:comparative": "node --test scripts/comparative.test.mjs scripts/comparative-guard.test.mjs scripts/comparative-native.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^8.33.0",
-    "@typescript-eslint/parser": "^8.33.0",
     "cross-env": "^10.1.0",
     "eslint": "^9.28.0",
-    "eslint-plugin-vitest": "^0.5.4",
-    "globals": "^17.7.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.63.0"
-  }
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "packageManager": "pnpm@11.3.0"
 }

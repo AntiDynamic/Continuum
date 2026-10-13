@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "originalTraceAndDatabaseAbsent": true,
+  "exactRepeatedSourceCount": 5,
+  "initialContextBytes": 628,
+  "sourceRevision": "ce2d77c3089d954bf35dc021fa87b5ccd6b71a56",
+  "inferenceRequests": 0
+}

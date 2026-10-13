@@ -1,3 +1,4 @@
+import {isRecord} from "./json.js";
 import type { CodexServerRequestContext } from "./protocol.js";
 import type { DynamicToolCallResponse, DynamicToolCallParams } from "./protocol-adapters/0.133.0/dynamic-tools.js";
 
@@ -14,13 +15,18 @@ export class AssistToolRouter implements CodexRequestHandler {
     const params = request.params as DynamicToolCallParams;
     if (!params || params.tool !== "continuum_request_context") return null;
 
-    const args = params.arguments as { query?: string };
-    const query = args?.query?.trim();
+    const args = isRecord(params.arguments) ? params.arguments : {};
+    const wrapped=isRecord(args["args"])?args["args"]:{};
+    const direct=args["query"],nested=wrapped["query"];
+    // Real pilot C supplied one extra args wrapper. Normalize that exact shape;
+    // never coerce types or silently choose between conflicting queries.
+    const invalid=direct!==undefined&&typeof direct!=="string"||nested!==undefined&&typeof nested!=="string"||typeof direct==="string"&&typeof nested==="string"&&direct.trim()!==nested.trim();
+    const query=invalid?"":typeof direct==="string"?direct.trim():typeof nested==="string"?nested.trim():"";
     
     if (!query) {
       return {
         success: false,
-        contentItems: [{ type: "inputText", text: "Error: Missing query argument." }]
+        contentItems: [{ type: "inputText", text: 'Error: Expected a nonempty string query: {query: "path or symbol"}. A single args wrapper is accepted; conflicting queries are rejected.' }]
       };
     }
 

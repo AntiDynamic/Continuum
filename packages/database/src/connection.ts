@@ -23,6 +23,10 @@ export type Db = InstanceType<typeof DatabaseSync>;
 export function openDatabase(dbPath: string): Db {
   const db = new DatabaseSync(dbPath);
 
+  // Concurrent CLI processes may briefly hold the writer lock during startup.
+  // Set this before journal_mode, which can itself require that lock.
+  db.exec("PRAGMA busy_timeout = 5000");
+
   // Enable WAL for better concurrent read performance.
   db.exec("PRAGMA journal_mode = WAL");
   // Enforce foreign-key constraints — off by default in SQLite.

@@ -45,13 +45,11 @@ export class DeterministicContextCompiler implements ContextCompiler {
       const purpose = candidate.purpose ?? purposeFor(candidate.name, kind, candidate.content);
       const relatedTests = candidate.metadata?.["relatedTests"] as string[] | undefined;
       const provenance = { repositoryId: input.repositoryId, sourcePath: input.sourcePath, sourceStartLine: candidate.startLine, sourceEndLine: candidate.endLine, extractor: `${input.language}-compiler-api-v2`, snapshot: input.snapshot, confidence: "high" as const };
-      const snapshot = input.snapshot.snapshot_kind === "commit" ? `commit ${input.snapshot.base_commit_hash}` : `worktree ${input.snapshot.worktree_hash ?? "unknown"} on ${input.snapshot.base_commit_hash}`;
       const contextualHeader = [
         `Repository: ${input.repositoryMetadata.name}`, `Package: ${packageName}`, `File: ${input.sourcePath}`,
         `Symbol: ${candidate.name || "none"}`, `Kind: ${kind}`, `Parent: ${candidate.parentSymbol ?? "none"}`,
         `Purpose: ${purpose.text}`, `Related tests: ${relatedTests?.sort().join(", ") || "none verified"}`,
-        `Important imports: ${importantImports.join(", ") || "none"}`, `Snapshot: ${snapshot}`,
-        `Staleness: ${input.snapshot.dirty ? "uncommitted" : "current"}`, `Provenance: ${provenance.extractor}`,
+        `Important imports: ${importantImports.join(", ") || "none"}`, `Lines: ${candidate.startLine}-${candidate.endLine}`, `Provenance: ${provenance.extractor}`,
       ].join("\n");
       const compiledContent = `${contextualHeader}\n\n${candidate.content}`;
       return {

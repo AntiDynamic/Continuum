@@ -162,6 +162,8 @@ export async function printReport(report: RunReport): Promise<void> {
     kv("Measurement", report.usageEvidence.usage.measurement);
     kv("Provider", report.usageEvidence.provider ?? dim("unavailable"));
     kv("Model", report.usageEvidence.model ?? dim("unavailable"));
+    kv("Source event", report.usageEvidence.sourceEventId ?? dim("unavailable"));
+    kv("Source sequence", report.usageEvidence.sourceSequenceNumber?.toString() ?? dim("unavailable"));
     kv(
       "Provider-reported input tokens",
       report.usageEvidence.usage.inputTokens?.toString() ?? dim("unavailable"),
@@ -171,8 +173,16 @@ export async function printReport(report: RunReport): Promise<void> {
       report.usageEvidence.usage.cachedInputTokens?.toString() ?? dim("unavailable"),
     );
     kv(
+      "Provider-reported cache-creation tokens",
+      report.usageEvidence.usage.cacheCreationInputTokens?.toString() ?? dim("unavailable"),
+    );
+    kv(
       "Provider-reported output tokens",
       report.usageEvidence.usage.outputTokens?.toString() ?? dim("unavailable"),
+    );
+    kv(
+      "Provider-reported total tokens",
+      report.usageEvidence.usage.totalTokens?.toString() ?? dim("unavailable"),
     );
   } else {
     unavailable("Usage unavailable");
@@ -185,6 +195,13 @@ export async function printReport(report: RunReport): Promise<void> {
       report.costEvidence.totalCredits.toString(),
       report.costEvidence.measurement,
     );
+    if (report.costEvidence.cacheCreationInputCredits !== undefined) {
+      kv(
+        "Derived cache-creation credits",
+        report.costEvidence.cacheCreationInputCredits.toString(),
+        report.costEvidence.measurement,
+      );
+    }
   } else {
     unavailable("Total task cost unavailable");
   }

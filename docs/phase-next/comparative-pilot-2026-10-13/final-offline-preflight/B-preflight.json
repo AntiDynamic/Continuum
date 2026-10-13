@@ -1,0 +1,194 @@
+{
+  "passed": true,
+  "inferenceRequests": 0,
+  "environment": {
+    "HOME": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host",
+    "CODEX_HOME": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host",
+    "SHELL": "/bin/bash",
+    "PATH": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host/runtime/tools:/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host/runtime/codex-path:/usr/local/bin:/usr/bin:/bin"
+  },
+  "runtimeChecks": [
+    {
+      "program": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host/runtime/codex-path/rg",
+      "output": "ripgrep 15.2.0 (rev e89fff89ac)\n\nfeatures:+pcre2\nsimd(compile):+SSE2,-SSSE3,-AVX2\nsimd(runtime):+SSE2,+SSSE3,+AVX2\n\nPCRE2 10.45 is available (JIT is available)"
+    },
+    {
+      "program": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host/runtime/codex-resources/bwrap",
+      "output": "bubblewrap built for Codex"
+    },
+    {
+      "program": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host/runtime/codex-resources/zsh/bin/zsh",
+      "output": "zsh 5.9.0.3-test (x86_64-pc-linux-gnu)"
+    },
+    {
+      "program": "/tmp/continuum-comparative-7zAPZq/B/.continuum/codex-host/runtime/tools/node",
+      "output": "v24.20.0"
+    }
+  ],
+  "helperOperation": {
+    "output": "continuum-helper-ok:42",
+    "trace": [
+      {
+        "direction": "client_to_host",
+        "value": {
+          "type": "connection/hello",
+          "supportedVersions": [
+            1
+          ],
+          "requiredCapabilities": [],
+          "optionalCapabilities": []
+        }
+      },
+      {
+        "direction": "host_to_client",
+        "value": {
+          "type": "connection/ready",
+          "selectedVersion": 1,
+          "capabilities": []
+        }
+      },
+      {
+        "direction": "client_to_host",
+        "value": {
+          "type": "operation/request",
+          "id": 1,
+          "request": {
+            "method": "session/open",
+            "sessionId": "continuum-offline-preflight"
+          }
+        }
+      },
+      {
+        "direction": "host_to_client",
+        "value": {
+          "type": "operation/response",
+          "id": 1,
+          "result": {
+            "status": "ok",
+            "value": {
+              "type": "session/ready",
+              "sessionId": "continuum-offline-preflight"
+            }
+          }
+        }
+      },
+      {
+        "direction": "client_to_host",
+        "value": {
+          "type": "operation/request",
+          "id": 2,
+          "request": {
+            "method": "session/execute",
+            "sessionId": "continuum-offline-preflight",
+            "request": {
+              "tool_call_id": "continuum-offline-only",
+              "enabled_tools": [],
+              "source": "text('continuum-helper-ok:'+(6*7));",
+              "yield_time_ms": 1000,
+              "max_output_tokens": 256
+            }
+          }
+        }
+      },
+      {
+        "direction": "host_to_client",
+        "value": {
+          "type": "operation/response",
+          "id": 2,
+          "result": {
+            "status": "ok",
+            "value": {
+              "type": "execution/started",
+              "cellId": "1"
+            }
+          }
+        }
+      },
+      {
+        "direction": "host_to_client",
+        "value": {
+          "type": "execute/initialResponse",
+          "id": 2,
+          "result": {
+            "status": "ok",
+            "value": {
+              "Result": {
+                "cell_id": "1",
+                "content_items": [
+                  {
+                    "type": "input_text",
+                    "text": "continuum-helper-ok:42"
+                  }
+                ],
+                "error_text": null,
+                "code_mode_host_duration_ns": 6605146
+              }
+            }
+          }
+        }
+      },
+      {
+        "direction": "client_to_host",
+        "value": {
+          "type": "operation/request",
+          "id": 3,
+          "request": {
+            "method": "session/shutdown",
+            "sessionId": "continuum-offline-preflight"
+          }
+        }
+      },
+      {
+        "direction": "host_to_client",
+        "value": {
+          "type": "cell/closed",
+          "sessionId": "continuum-offline-preflight",
+          "cellId": "1"
+        }
+      },
+      {
+        "direction": "host_to_client",
+        "value": {
+          "type": "operation/response",
+          "id": 3,
+          "result": {
+            "status": "ok",
+            "value": {
+              "type": "session/closed",
+              "sessionId": "continuum-offline-preflight"
+            }
+          }
+        }
+      }
+    ],
+    "stderr": "",
+    "inferenceRequests": 0,
+    "cleanup": {
+      "exited": true,
+      "pid": 188735,
+      "groupGone": true
+    }
+  },
+  "networkDisabledDuringPreflight": true,
+  "configuration": {
+    "model": "gpt-5.6-luna",
+    "provider": "openai",
+    "reasoning": "low",
+    "features": {
+      "multi_agent": false,
+      "multi_agent_v2": false,
+      "multi_agent_v2_dynamic_tools": false,
+      "goals": false,
+      "unbounded_connection_retries": false
+    }
+  },
+  "sandboxCommand": {
+    "exitCode": 0,
+    "stdout": "continuum-command-ok:42\n",
+    "stderr": ""
+  },
+  "appServerCleanup": {
+    "pid": 188749,
+    "groupGone": true
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "initialEnvelope": {
+    "bytes": 3360,
+    "characters": 3360,
+    "estimatedTokens": 1120,
+    "measurement": "local character-ratio estimate; not provider consumption"
+  },
+  "initialEnvelopeSource": "captured/redacted transport artifact",
+  "recordedActualEnvelopeBytes": 3356,
+  "recordedSourceRole": "system",
+  "nativeEnvelope": {
+    "bytes": 3356,
+    "characters": 3356,
+    "estimatedTokens": 1119,
+    "measurement": "local character-ratio estimate; not provider consumption",
+    "agreesWithRecordedBytes": true
+  },
+  "serializedContextInputBytes": 3495,
+  "serializedWholeTurnParamsBytes": 3792,
+  "taskOccurrencesAcrossInitialInputs": 2,
+  "recoveryPrefix": {
+    "bytes": 1354,
+    "characters": 1354,
+    "estimatedTokens": 452,
+    "measurement": "local character-ratio estimate; not provider consumption"
+  },
+  "sources": [
+    {
+      "id": "040b283c-f79d-4879-975b-9448090bf482",
+      "path": "docs/authentication.md",
+      "symbol": "Authentication",
+      "contentHash": "ae0bc69cc430448b58b6214556dbb6040a784ee53a61e445052898c0666b5e04",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [],
+      "exactBodyRepeatedInToolOutput": []
+    },
+    {
+      "id": "d9a30e3a-0616-45f8-8c77-1e354423cdaf",
+      "path": "src/auth-service.ts",
+      "symbol": "AuthService",
+      "contentHash": "15d50a4c4ade3c36a8a016cebbb231e3216cdaa58fd0d2afdd96ad324d338603",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [
+        "2026-10-12T20:25:40.042Z",
+        "2026-10-12T20:25:44.968Z"
+      ],
+      "exactBodyRepeatedInToolOutput": [
+        "2026-10-12T20:25:40.042Z"
+      ]
+    },
+    {
+      "id": "0aae670e-3121-4509-bae5-0db1f142e79b",
+      "path": "SECURITY.md",
+      "symbol": "Token trust policy",
+      "contentHash": "07d9176485985c57c591c000056594c274dfc704ed93433ef5fdf52310dd10c2",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [],
+      "exactBodyRepeatedInToolOutput": []
+    },
+    {
+      "id": "69a6b702-b1b3-4ec6-82b5-f8edd0327b6e",
+      "path": "src/auth-service.ts",
+      "symbol": "TokenClaims",
+      "contentHash": "5464b765ae0f894ae40895036402114f4c9d6ae3e2e47b3ca8efdbb0fdc23a40",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [
+        "2026-10-12T20:25:40.042Z",
+        "2026-10-12T20:25:44.968Z"
+      ],
+      "exactBodyRepeatedInToolOutput": [
+        "2026-10-12T20:25:40.042Z"
+      ]
+    },
+    {
+      "id": "d46d6276-f84c-48a6-9d7c-031163ddbba6",
+      "path": "tests/auth-service.test.ts",
+      "symbol": "rejectsEmptyTokenTest",
+      "contentHash": "c970b91010e60de1db34ebda6ffbc26efe6db4612c00f7b7b1934bffea365605",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [
+        "2026-10-12T20:25:40.042Z"
+      ],
+      "exactBodyRepeatedInToolOutput": [
+        "2026-10-12T20:25:40.042Z"
+      ]
+    },
+    {
+      "id": "d4c11cad-fe85-4dbf-89a2-3ed6ef7f88aa",
+      "path": "tests/auth-service.test.ts",
+      "symbol": "import ../src/auth-service",
+      "contentHash": "d3f875cbd20e6694cd1b039b615d503f174b8bff4332c253b7cf4722e91e2077",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [
+        "2026-10-12T20:25:40.042Z"
+      ],
+      "exactBodyRepeatedInToolOutput": [
+        "2026-10-12T20:25:40.042Z"
+      ]
+    },
+    {
+      "id": "ba9ccbed-e99d-493d-a29c-90744f5b3699",
+      "path": "README.md",
+      "symbol": "Small service",
+      "contentHash": "817bef63f85358eaaa793bcb1fe7543eb6ba9721b2adaf43f54d27b26c25b035",
+      "exactBodyPresentInitially": true,
+      "commandPathOverlap": [],
+      "exactBodyRepeatedInToolOutput": []
+    }
+  ],
+  "commands": [
+    {
+      "timestamp": "2026-10-12T20:25:40.042Z",
+      "command": "/usr/bin/bash -lc \"sed -n '1,160p' src/auth-service.ts && sed -n '1,160p' tests/auth-service.test.ts && git status --short && rg -n \\\"expired|refresh|validateToken\\\" .\"",
+      "exitCode": 0,
+      "outputBytes": 1220
+    },
+    {
+      "timestamp": "2026-10-12T20:25:44.968Z",
+      "command": "/usr/bin/bash -lc \"rg --files -g 'package.json' -g 'tsconfig.json' -g 'vitest.config.*' -g 'jest.config.*' && git diff -- src/auth-service.ts\"",
+      "exitCode": 1,
+      "outputBytes": 0
+    }
+  ],
+  "exactRepeatedSourceCount": 4,
+  "pathOverlapSourceCount": 4,
+  "limits": [
+    "Shell command path overlap is an inferred read, not proof of full content consumption.",
+    "Exact version substring repetition is observed transmission, not attributable billable waste.",
+    "Prompt caching reported by provider cannot be assigned to individual fragments."
+  ]
+}

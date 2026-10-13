@@ -1,0 +1,35 @@
+{
+  "treatment": "A",
+  "packets": [
+    {
+      "logicalTurn": 1,
+      "taskBytes": 1543,
+      "modelVisibleContext": "",
+      "bytes": 0,
+      "serializedBytes": 2,
+      "estimatedTokens": 0,
+      "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receipt": null
+    },
+    {
+      "logicalTurn": 2,
+      "taskBytes": 272,
+      "modelVisibleContext": "",
+      "bytes": 0,
+      "serializedBytes": 2,
+      "estimatedTokens": 0,
+      "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receipt": null
+    }
+  ],
+  "sources": [],
+  "exactRepeatedSourceCount": 0,
+  "pathOverlapSourceCount": 0,
+  "limits": [
+    "Path mention is overlap, not proven full-file read.",
+    "Exact body repetition measures transmission, not attributable billing waste.",
+    "Provider caching cannot be attributed to Continuum fragments.",
+    "Host system/developer/tool context is not fully exposed; provider input cannot be wholly attributed to these packets.",
+    "Local estimates are not provider token usage or active occupancy."
+  ]
+}

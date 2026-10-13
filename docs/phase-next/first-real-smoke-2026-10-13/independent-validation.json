@@ -1,0 +1,29 @@
+{
+  "classification": "offline post-failure validation of the preserved final fixture; no additional model inference",
+  "visible": {
+    "status": "failed",
+    "taskId": "small-security-token",
+    "checks": [
+      {
+        "name": "fixture-behavior",
+        "status": "failed",
+        "error": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Fixture cacheTimeoutTest must return true\n\nfalse !== true\n\n    at visit (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:65:129)\n    at async visit (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:63:34)\n    at async evaluate (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:69:5)\n    at async file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:132:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.20.0\n"
+      }
+    ],
+    "behavioral": true,
+    "validator": "executable-behavior-v1"
+  },
+  "hidden": {
+    "status": "failed",
+    "taskId": "small-security-token",
+    "checks": [
+      {
+        "name": "independent-behavior",
+        "status": "failed",
+        "error": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception.\n    at evaluate (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:82:12)\n    at async file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:132:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: undefined,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.20.0\n"
+      }
+    ],
+    "behavioral": true,
+    "validator": "executable-behavior-v1"
+  }
+}

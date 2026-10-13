@@ -8,7 +8,7 @@ import {
 } from "@continuum/codex-app-server";
 import { blank, bold, kv, line, section } from "../display.js";
 
-export interface CodexRunOptions { cwd:string; repo?:string; mode:string; model?:string; approvalPolicy?:string; sandbox?:string; json?:boolean; report?:string; timeout?:string; experimentalRawUsage?:boolean; autoCompactTokens?:string; autoCompactScope?:string }
+export interface CodexRunOptions { cwd:string; repo?:string; mode:string; model?:string; approvalPolicy?:string; sandbox?:string; json?:boolean; report?:string; timeout?:string; experimentalRawUsage?:boolean; autoCompactTokens?:string; autoCompactScope?:string;durableMemory?:boolean;resumeSession?:string;reasoningEffort?:string;supersedesMemory?:string;contextStrategy?:string }
 export interface CodexReadOptions { cwd:string; repo?:string; json?:boolean; limit?:string }
 const approvals:CodexApprovalPolicy[]=["untrusted","on-failure","on-request","never"];
 const sandboxes:CodexSandboxMode[]=["read-only","workspace-write","danger-full-access"];
@@ -35,7 +35,9 @@ async function interactiveApproval(request:CodexServerRequestContext):Promise<Co
   const prompt=createInterface({input,output});try{const answer=(await prompt.question("Decision: ")).trim().toLowerCase();if(answer==="accept")return"accept";if(answer==="accept-session")return"acceptForSession";if(answer==="cancel")return"cancel";return"decline";}finally{prompt.close();}
 }
 export async function runCodexShadow(task:string,options:CodexRunOptions):Promise<void>{
+  if(options.contextStrategy&&(!["initial_packet","minimal_manifest","on_demand","adaptive"].includes(options.contextStrategy)||options.mode!=="assist"))throw new Error("Context strategy must be initial_packet, minimal_manifest on_demand or adaptive in assist mode.");
   if(options.mode!=="shadow" && options.mode!=="assist")throw new Error("Mode must be shadow or assist.");
+  if((options.durableMemory||options.resumeSession)&&(options.mode!=="assist"||options.model!=="gpt-5.6-luna"||options.reasoningEffort!=="low"))throw new Error("Durable CLI runs require --mode assist --model gpt-5.6-luna --reasoning-effort low.");
   if(options.approvalPolicy&&!approvals.includes(options.approvalPolicy as CodexApprovalPolicy))throw new Error("Unsupported approval policy: "+options.approvalPolicy);
   if(options.sandbox&&!sandboxes.includes(options.sandbox as CodexSandboxMode))throw new Error("Unsupported sandbox mode: "+options.sandbox);
   const interactive=Boolean(process.stdin.isTTY&&!options.json);
@@ -43,7 +45,7 @@ export async function runCodexShadow(task:string,options:CodexRunOptions):Promis
   const service=options.mode === "assist" ? new CodexAssistExecutionService() : new CodexExecutionService();
   try{
     const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
-    const runOptions = {cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,autoCompaction:autoCompaction(options.autoCompactTokens,options.autoCompactScope),approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
+    const runOptions = {contextStrategy:options.contextStrategy,supersedesMemoryId:options.supersedesMemory,durableMemory:options.durableMemory,resumeSessionId:options.resumeSession,reasoningEffort:options.reasoningEffort,cwd:options.cwd,repository:options.repo,task,mode:options.mode,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,autoCompaction:autoCompaction(options.autoCompactTokens,options.autoCompactScope),approvalHandler:interactive?interactiveApproval:undefined,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})};
     
     const result=options.mode === "assist" ? await (service as any).runAssist(runOptions) : await (service as any).runShadow(runOptions);
     
@@ -59,7 +61,7 @@ export async function runCodexCompare(task:string,options:CodexCompareCliOptions
   const service = new CodexComparisonService();
   try {
     const fixture=process.env["NODE_ENV"]==="test"?process.env["CONTINUUM_CODEX_TEST_APP_SERVER"]:undefined;
-    const result = await service.runComparison({cwd:options.cwd,repository:options.repo,task,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,autoCompaction:autoCompaction(options.autoCompactTokens,options.autoCompactScope),verifierCommand:options.verifier,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})});
+    const result = await service.runComparison({cwd:options.cwd,repository:options.repo,task,model:options.model,approvalPolicy:(options.approvalPolicy as CodexApprovalPolicy|undefined)??"on-request",sandbox:(options.sandbox as CodexSandboxMode|undefined)??"workspace-write",timeoutMs:duration(options.timeout),experimentalRawUsage:options.experimentalRawUsage,autoCompaction:autoCompaction(options.autoCompactTokens,options.autoCompactScope),verifierCommand:options.verifier,preparationCommand:(options as any).preparationCommand,...(fixture?{process:{executable:process.execPath,executableArgs:[fixture],env:process.env},codexVersionOverride:"fixture"}:{})});
     if(options.json)line(JSON.stringify(result,null,2));else{
       line(bold("CODEX COMPARISON RUN"));blank();
       kv("Shadow Execution", result.shadowExecutionId);

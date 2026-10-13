@@ -1,5 +1,6 @@
 import type { AgentEvent } from "./agent-events.js";
 import type { AgentTelemetryCapabilities } from "./context-efficiency.js";
+import type { ContextDeliveryCapabilities } from "./context-delivery.js";
 
 /**
  * Agent adapter interface — the vendor-neutral contract that all coding-agent
@@ -55,6 +56,8 @@ export interface AgentCapabilities {
   cancellation: boolean;
   /** Field-level provider-neutral telemetry evidence exposed by the adapter. */
   telemetry: AgentTelemetryCapabilities;
+  /** Host delivery features known by this adapter; omitted when not supported by the adapter itself. */
+  contextDelivery?: ContextDeliveryCapabilities;
 }
 
 export interface AgentExecutionPolicy {

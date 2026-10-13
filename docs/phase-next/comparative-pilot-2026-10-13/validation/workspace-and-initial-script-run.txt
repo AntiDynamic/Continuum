@@ -1,0 +1,395 @@
+$ cross-env CONTINUUM_DISABLE_CODEX_LIVE=1 pnpm -r --workspace-concurrency=1 test && pnpm test:scripts
+Scope: 11 of 12 workspace projects
+$ vitest run
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/shared
+
+stderr | tests/redaction.test.ts > redactString > skips invalid user patterns gracefully
+[continuum:redact] User redact pattern #0 is not a valid regex and will be skipped: [invalid(regex
+
+ ✓ tests/redaction.test.ts (12 tests) 33ms
+ ✓ tests/context-efficiency.test.ts (3 tests) 46ms
+ ✓ tests/config.test.ts (4 tests) 34ms
+ ✓ tests/utils.test.ts (13 tests) 16ms
+ ✓ tests/adapter-contract.test.ts (10 tests) 262ms
+
+ Test Files  5 passed (5)
+      Tests  42 passed (42)
+   Start at  19:12:43
+   Duration  1.84s (transform 1.81s, setup 0ms, collect 2.28s, tests 391ms, environment 3ms, prepare 2.13s)
+
+$ vitest run
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/database
+
+ ✓ tests/context-session.test.ts (2 tests) 295ms
+ ✓ tests/context-repository.test.ts (2 tests) 677ms
+   ✓ ContextRepository > upserts and retrieves context items  352ms
+   ✓ ContextRepository > inserts versions and searches them  309ms
+ ✓ tests/context-efficiency.test.ts (5 tests) 713ms
+   ✓ context efficiency repositories > applies the current schema and versions pricing profiles append-only  306ms
+ ✓ tests/database.test.ts (15 tests) 2022ms
+   ✓ RepositoryRepository > creates and retrieves a repository  371ms
+
+ Test Files  4 passed (4)
+      Tests  24 passed (24)
+   Start at  19:12:48
+   Duration  4.98s (transform 2.16s, setup 0ms, collect 5.95s, tests 3.71s, environment 2ms, prepare 1.58s)
+
+$ vitest run
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/gemini-adapter
+
+ ↓ tests/smoke-success.test.ts (1 test | 1 skipped)
+ ↓ tests/smoke-transport.test.ts (2 tests | 2 skipped)
+[2026-10-13T13:42:57.178Z] [INFO] [gemini-adapter] Starting Gemini CLI run {"runId":"run-concurrency","outputMode":"text","task":"test"}
+ ✓ tests/parser.test.ts (21 tests) 132ms
+ ✓ tests/concurrency.test.ts (1 test) 287ms
+
+ Test Files  2 passed | 2 skipped (4)
+      Tests  22 passed | 3 skipped (25)
+   Start at  19:12:54
+   Duration  2.73s (transform 1.38s, setup 0ms, collect 2.55s, tests 419ms, environment 3ms, prepare 1.84s)
+
+$ vitest run --testTimeout=20000 --hookTimeout=30000
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/git-analyzer
+
+ ✓ tests/git.test.ts (4 tests) 98ms
+ ✓ tests/snapshot.test.ts (4 tests) 1068ms
+   ✓ canonical worktree snapshot > is deterministic and changes for unstaged, staged, and untracked state  367ms
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  19:12:58
+   Duration  3.51s (transform 778ms, setup 0ms, collect 2.27s, tests 1.17s, environment 16ms, prepare 927ms)
+
+$ vitest run
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/agent-core
+
+ ✓ tests/fake-adapter.test.ts (6 tests) 502ms
+[2026-10-13T13:43:06.447Z] [INFO] [run-orchestrator] Orchestrating run {"runId":"fc64c9f5-5ef8-43d5-8e2b-0c73da04c4a6","task":"Do task with secret key"}
+[2026-10-13T13:43:06.764Z] [INFO] [run-orchestrator] Run complete {"runId":"fc64c9f5-5ef8-43d5-8e2b-0c73da04c4a6","status":"completed","exitCode":0,"toolCallCount":1,"hasTokenUsage":false,"fileChanges":2}
+[2026-10-13T13:43:06.765Z] [INFO] [run-orchestrator] Orchestrating run {"runId":"524a8e0a-a9b0-4890-9870-da00ee23dccd","task":"Do another task with secret key"}
+[2026-10-13T13:43:07.062Z] [INFO] [run-orchestrator] Run complete {"runId":"524a8e0a-a9b0-4890-9870-da00ee23dccd","status":"completed","exitCode":0,"toolCallCount":1,"hasTokenUsage":false,"fileChanges":2}
+ ✓ tests/privacy.test.ts (1 test) 776ms
+   ✓ End-to-End Database Privacy > should prevent CONTINUUM_TEST_SECRET_9f73a1 from persisting in any table  697ms
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  19:13:03
+   Duration  3.32s (transform 969ms, setup 0ms, collect 2.24s, tests 1.28s, environment 2ms, prepare 653ms)
+
+$ vitest run
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/evaluator
+
+ ✓ tests/report.test.ts (13 tests) 814ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  19:13:08
+   Duration  3.08s (transform 791ms, setup 0ms, collect 1.08s, tests 814ms, environment 1ms, prepare 334ms)
+
+$ vitest run
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/repository-indexer
+
+ ✓ tests/continuumignore.test.ts (6 tests) 37ms
+ ✓ tests/hashing.test.ts (3 tests) 18ms
+ ✓ tests/snapshot.test.ts (3 tests) 17ms
+ ✓ tests/discovery.test.ts (2 tests) 19ms
+ ✓ tests/context-compiler.test.ts (3 tests) 66ms
+
+ Test Files  5 passed (5)
+      Tests  17 passed (17)
+   Start at  19:13:12
+   Duration  2.78s (transform 1.10s, setup 0ms, collect 3.79s, tests 156ms, environment 3ms, prepare 1.56s)
+
+$ vitest run --testTimeout=30000 --hookTimeout=30000
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/context-engine
+
+ ✓ tests/retrieval-benchmark-format.test.ts (1 test) 61ms
+ ✓ tests/cache-plan.test.ts (2 tests) 42ms
+ ✓ tests/cache-delivery.test.ts (1 test) 70ms
+ ✓ tests/fixtures.test.ts (1 test) 35ms
+ ✓ tests/task-analyzer.test.ts (7 tests) 25ms
+ ✓ tests/engine.test.ts (5 tests) 461ms
+ ✓ tests/benchmark.test.ts (5 tests) 508ms
+ ✓ tests/phase3d-hardening.test.ts (7 tests) 727ms
+stdout | tests/session-controller.test.ts > DeterministicAdaptiveContextController > delivers minimum context, real deltas, persisted duplicates and signal escalation
+{
+  initialEstimatedTokens: 367,
+  initialItems: 4,
+  firstRequestNewItems: 2,
+  duplicateActiveReferences: 6,
+  estimatedDuplicateTokensAvoided: 250,
+  escalationNewItems: 1,
+  totalSessionTokens: 1060
+}
+
+ ✓ tests/session-controller.test.ts (3 tests) 1113ms
+   ✓ DeterministicAdaptiveContextController > delivers minimum context, real deltas, persisted duplicates and signal escalation  679ms
+
+ Test Files  9 passed (9)
+      Tests  32 passed (32)
+   Start at  19:13:16
+   Duration  4.05s (transform 1.51s, setup 0ms, collect 7.44s, tests 3.04s, environment 5ms, prepare 2.11s)
+
+$ vitest run --no-file-parallelism --testTimeout=30000 --hookTimeout=30000
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/codex-app-server
+
+ ✓ tests/cancellation.test.ts (5 tests) 6507ms
+   ✓ bounded offline Codex cancellation > the real assist timeout interrupts a fake stalled turn, records failure and never retries  5813ms
+   ✓ bounded offline Codex cancellation > kills a process that ignores EOF, interruption and SIGTERM  335ms
+ ✓ tests/client.test.ts (8 tests) 889ms
+ ✓ tests/flight-recorder-correctness.test.ts (13 tests) 576ms
+ ✓ tests/mixed-delivery-regression.test.ts (3 tests) 142ms
+ ✓ tests/search-parser.test.ts (12 tests) 14ms
+ ✓ tests/context-envelope.test.ts (1 test) 7ms
+stderr | tests/live-smoke.test.ts > installed Codex App Server live smoke > runs a genuine isolated shadow turn
+SKIP: CONTINUUM_DISABLE_CODEX_LIVE=1 explicitly disabled the genuine Codex smoke test.
+
+ ✓ tests/live-smoke.test.ts (1 test | 1 skipped) 8ms
+ ✓ tests/compaction-policy.test.ts (2 tests) 7ms
+
+ Test Files  8 passed (8)
+      Tests  44 passed | 1 skipped (45)
+   Start at  19:13:21
+   Duration  15.36s (transform 791ms, setup 0ms, collect 4.10s, tests 8.15s, environment 3ms, prepare 1.01s)
+
+$ pnpm --filter @continuum/context-engine build && pnpm build && pnpm --filter @continuum/cli build && vitest run --no-file-parallelism
+$ tsc --project tsconfig.json
+$ tsc --project tsconfig.json
+$ tsc --project tsconfig.json
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/packages/mcp-server
+
+stdout | tests/session-product.test.ts > CLI/MCP progressive context product > shares one persisted session through built CLI and actual MCP stdio
+{
+  firstRequestInterface: 'CLI',
+  secondRequestInterface: 'new MCP process',
+  firstRequestNewItems: 2,
+  secondRequestNewItems: 0,
+  secondRequestActiveReferences: 2,
+  repeatedFullContent: false,
+  estimatedDuplicateTokensAvoided: 250,
+  testFailureNewItems: 3,
+  missingCoverageNewItems: 0,
+  outOfScopeNewItems: 0,
+  reportActivity: {
+    deliveryCount: 6,
+    escalationCount: 5,
+    signalCount: 5,
+    newItemCount: 7,
+    activeReferenceCount: 20,
+    restoredItemCount: 0,
+    omittedItemCount: 0
+  },
+  reportContext: {
+    estimatedInitialTokens: 301,
+    estimatedEscalationTokens: 802,
+    estimatedDuplicateTokensAvoided: 2474,
+    utility: {
+      retrievedItemCount: 7,
+      newlyDeliveredItemCount: 7,
+      restoredItemCount: 0,
+      referencedItemCount: 20,
+      repeatedItemCount: 20,
+      omittedItemCount: 0,
+      actuallyUsedItemCount: null
+    }
+  },
+  reportCoverage: {
+    added: [ 'implementation', 'documentation', 'tests' ],
+    remaining: [ 'security_constraint', 'public_contract' ],
+    complete: false
+  }
+}
+
+ ✓ tests/session-product.test.ts (3 tests) 21016ms
+   ✓ CLI/MCP progressive context product > shares one persisted session through built CLI and actual MCP stdio  9294ms
+   ✓ CLI/MCP progressive context product > remediates snapshot mismatch and rejects malformed inputs  3463ms
+   ✓ CLI/MCP progressive context product > keeps partial source delivery usable and exposes incomplete memory recovery without duplicating source  3579ms
+ ✓ tests/mcp.test.ts (3 tests) 117ms
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  19:13:48
+   Duration  24.40s (transform 580ms, setup 0ms, collect 2.43s, tests 21.13s, environment 1ms, prepare 272ms)
+
+$ vitest run --no-file-parallelism --testTimeout=15000 --hookTimeout=30000
+
+ RUN  v3.2.7 /home/anti/Projects/Continuum/apps/cli
+
+ ✓ tests/cli.test.ts (12 tests) 50391ms
+   ✓ CLI Integration > should have tests for doctor  12083ms
+   ✓ CLI Integration > should have tests for init  1248ms
+   ✓ CLI Integration > should gracefully fail with an unknown agent  2418ms
+   ✓ CLI Integration > Successful Workflow with Fake Adapter > should complete a successful agent run  1527ms
+   ✓ CLI Integration > Successful Workflow with Fake Adapter > indexes, ledgers context, suppresses duplicates, and reports cost evidence  6013ms
+   ✓ CLI Integration > Successful Workflow with Fake Adapter > should report the successful run  1258ms
+   ✓ CLI Integration > Successful Workflow with Fake Adapter > should allow setting an outcome  1144ms
+   ✓ CLI Integration > Successful Workflow with Fake Adapter > should allow a failed agent run to compare  1472ms
+   ✓ CLI Integration > Successful Workflow with Fake Adapter > should compare the two runs  1187ms
+   ✓ CLI Integration > Error Path Coverage > should fail gracefully when report is run without initialized repo  1218ms
+   ✓ CLI Integration > Error Path Coverage > should fail gracefully when comparing non-existent runs  2400ms
+   ✓ CLI Integration > Progressive context session CLI > starts, reports, lists, idempotently delivers, and completes  12147ms
+stdout | tests/standalone-acceptance.test.ts > Phase 3C standalone acceptance > survives fresh processes and reconstructs all evidence
+{
+  sessionId: 'd079fab6-f4c9-4b0c-a464-d6b143916c00',
+  firstNew: 2,
+  repeatedNew: 0,
+  repeatedReferences: 2,
+  duplicateEstimate: 216,
+  deliveries: 4
+}
+
+ ✓ tests/standalone-acceptance.test.ts (2 tests) 51264ms
+   ✓ Phase 3C standalone acceptance > survives fresh processes and reconstructs all evidence  12532ms
+   ✓ Phase 3C standalone acceptance > handles adversarial repository, input, lifecycle, and concurrency cases  35278ms
+ ✓ tests/codex-shadow.test.ts (4 tests) 18864ms
+   ✓ Phase 4A full shadow integration > records a real-stdio fixture run without injecting prediction content  2852ms
+   ✓ Phase 4A full shadow integration > fails authentication actionably and closes the predicted session  3686ms
+   ✓ Phase 4A full shadow integration > retains partial evidence and a restart-safe report after unexpected exit  4857ms
+   ✓ Phase 4A full shadow integration > rejects an unsupported server request safely while preserving the run  3820ms
+
+ Test Files  3 passed (3)
+      Tests  18 passed (18)
+   Start at  19:14:13
+   Duration  122.50s (transform 373ms, setup 0ms, collect 795ms, tests 120.52s, environment 2ms, prepare 423ms)
+
+$ node scripts/run-tests.mjs
+✔ pilot guard forbids parallel, extra turns, compaction, drift and missing telemetry (6.519439ms)
+✔ native response accounting deduplicates notifications and includes compaction consumption (44.988999ms)
+✔ effective model/provider/reasoning and native-history ownership are locked before inference (2.778643ms)
+✔ medium fixture baseline fails, oracle passes all checks, negative controls fail independently (2414.830205ms)
+✔ short, long and controlled-compaction workloads have failing starts and passing independent references (5310.531222ms)
+✔ medium two-stage requirements fit bounded recovery for all Continuum pilot treatments (24360.299271ms)
+✔ actual recorder bytes stay separate from captured/redacted artifact sizes (59.829194ms)
+✔ delivery budget, restart receipts, edit refresh and compaction restoration (11360.180149ms)
+[2026-10-13T13:46:36.846Z] [INFO] [run-orchestrator] Orchestrating run {"runId":"da5912a8-f1ed-48d1-8adf-422f948354d5","task":"throwing adapter"}
+[2026-10-13T13:46:36.992Z] [INFO] [run-orchestrator] Run complete {"runId":"da5912a8-f1ed-48d1-8adf-422f948354d5","status":"failed","exitCode":1,"toolCallCount":0,"hasTokenUsage":false,"fileChanges":0}
+[2026-10-13T13:46:36.993Z] [INFO] [test-executor] Running test command {"command":"\"/home/anti/.config/nvm/versions/node/v24.20.0/bin/node\" \"/tmp/continuum-runtime-test-QUiba2/emit.cjs\"","phase":"final","cwd":"/tmp/continuum-runtime-test-QUiba2"}
+[2026-10-13T13:46:37.122Z] [INFO] [test-executor] Test command finished {"exitCode":0,"durationMs":127,"passedCount":10,"parseConfidence":"high"}
+✔ adapter exception closes its run; logs count tests and redact before persistence (6807.730092ms)
+✔ Codex raw storage redacts built-in/custom patterns and honors capture-disabled (6401.333189ms)
+✔ comparison initializes independent workspaces and retains reports after cleanup (21341.988766ms)
+✔ initial_packet preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (10068.316249ms)
+✔ minimal_manifest preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (8125.40767ms)
+✔ on_demand preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (7421.227494ms)
+✔ adaptive preserves evidence, allows retrieval and injects recovery into same thread across fresh service instances (6295.784199ms)
+✔ configuration defaults remain baseline; invalid strategy fails (131.920872ms)
+✔ complete controlled compaction replay has ordered recovery receipt and same-thread continuation (2827.120428ms)
+✔ manifest preserves additional critical constraints, excludes superseded entries and marks stale evidence (1.528375ms)
+✔ manifest never advertises an unavailable durable tool (0.866538ms)
+✔ invalid shadow CLI strategy and disabled retrieval tools fail before inference (1741.375813ms)
+✔ resume receipt and execution snapshot use refreshed source identity after code changes (2334.155359ms)
+✔ adaptive failure queues bounded targeted retrieval once at next boundary (1410.251211ms)
+✖ adaptive remembered source version changes trigger fresh delivery, then deduplicate (2703.986194ms)
+✔ original requirement survives a fresh CLI process (10956.849381ms)
+✔ provider usage is persisted even when an external observer rejects the event (1141.135496ms)
+✔ reported token stop interrupts and cleans up while preserving the final provider usage (1110.653695ms)
+✔ multiple independent critical constraints remain active (244.038485ms)
+✔ a correction supersedes explicitly without deleting original evidence (288.211646ms)
+✔ agent conclusions cannot supersede a user requirement (120.497187ms)
+✔ critical state survives simulated eviction (2310.247727ms)
+✔ essential overflow is explicit and actual rendered text is bounded (330.147126ms)
+✔ missing evidence returns not found without fabricated content (112.277986ms)
+✔ modified source makes earlier observations historical (211.349072ms)
+✔ failed validation remains failed; an agent claim cannot verify it (158.952052ms)
+✔ repeated recovery is idempotent without new records (249.262441ms)
+✔ fresh processes recover the selected session rather than the newest one (3516.817805ms)
+✔ concurrent checkpoint processes produce one atomic checkpoint (3114.099033ms)
+✔ an interrupted transaction leaves no partially captured evidence (238.417284ms)
+✔ original evidence and source versions remain traceable (178.205454ms)
+✔ requirements and metadata redact secrets before SQLite persistence (128.903516ms)
+✔ effective reasoning drift is rejected before a model turn (421.238659ms)
+✔ modern compaction lifecycle is recognized by the protocol client (198.358737ms)
+✔ checkpoint rejects a concurrently outdated memory projection (77.857421ms)
+✔ paid benchmark cannot start without approval or accept an unrecognized model override (1704.84324ms)
+✔ dry run prepares fair isolated cells without launching generation (37865.469603ms)
+✔ changed-requirement evaluator rejects the old value and accepts the corrected behavior (3037.258094ms)
+✔ independent validator rejects a synchronous rewrite despite a rewritten interface (2081.247171ms)
+✔ durable assist resumes its bound thread and injects memory before a new turn (2703.665329ms)
+✔ wrong implementation with matching comments fails both executable validators (9013.954206ms)
+✔ migration qualification executes SQL and rejects a data-losing rollback (6070.391733ms)
+✔ default pure-preflight pair is reported and unknown cost stays unknown (8.57ms)
+✔ usage sums per-step events and requires a complete matching price profile (3.480807ms)
+✔ OpenCode configuration uses direct named servers and preserves other servers (0.734234ms)
+phase6 outcome tests passed
+✔ /home/anti/Projects/Continuum/scripts/phase6-outcome.test.mjs (116.106435ms)
+✔ real native compaction record proves omitted usage and binds response to correct thread (70.522505ms)
+✔ included, excluded, ambiguous and missing accounting fail or reconcile correctly (2.447194ms)
+✔ attributable usage including compaction stops replay earlier; repeated accounting is idempotent (1.887381ms)
+✔ the preserved failed live report produces a nonzero benchmark status; negative mock behavior is not presented as agent success (10.149907ms)
+✔ real helper executes V1 JavaScript inside the actual isolated filesystem with no inference (3294.823002ms)
+✔ real metadata-only host preflight verifies environment, exact configuration and dependencies (2.721291ms)
+✔ hidden validators, previous reports, recorder data and other user histories remain inaccessible (436.498734ms)
+✔ real helper tool failure leaves no running process group (110.6738ms)
+✔ real stalled helper is cancelled and terminated without leaving processes (1092.306224ms)
+✔ missing helper rejects preflight before credentials or inference (222.889574ms)
+✔ non-executable helper rejects preflight before credentials or inference (163.017378ms)
+✔ an executable with a missing interpreter fails the real operation preflight (567.80702ms)
+✔ dry runs and mocks cannot become real behavior evidence (4.008234ms)
+✔ A B C comparisons preserve unknown usage and cost (1.592644ms)
+✔ different commits, models or permissions cannot be paired (1.619006ms)
+✔ duplicate cells and forged success labels fail explicitly (0.584627ms)
+✔ legacy pattern verification cannot qualify a recovery comparison (0.472828ms)
+✔ compaction comparisons require genuine host evidence (0.459634ms)
+✔ safe metadata transient retries once, then succeeds and logs attempts (7.866964ms)
+✔ retry exhaustion is four total metadata attempts with 2/4/8 second backoff (1.839334ms)
+✔ authentication, configuration, credit, validation and behavior failures never retry (1.939005ms)
+✔ rate limit respects provider permission and Retry-After without extending deadline (1.454458ms)
+✔ ambiguous completion or billing prevents retry, and inference methods cannot use retry loop (1.431688ms)
+✔ missing telemetry blocks compaction and further generation (2.987404ms)
+✔ effective model, provider, reasoning and thread drift are rejected (1.061486ms)
+✔ unexpected third turn and second compaction are blocked (1.285587ms)
+✔ concurrent operations and parallel experiment lock acquisition fail (51.957936ms)
+✔ compaction failure or simulated evidence stops continuation (2.345394ms)
+✔ recovery injection failure, missing originals and incomplete packet block second turn (1.435444ms)
+✔ reported 20000-token threshold stops before another operation; no billing cap claimed (1.236119ms)
+✔ raw usage stop preserves the callback pipeline for graceful interruption (1.361738ms)
+✔ installed provider retry limitation and unknown host versions fail closed (1.138009ms)
+✔ host multi-agent tools, goals and unbounded connection retries are explicitly disabled (0.333452ms)
+✔ compaction without reported usage cannot authorize continuation (0.468881ms)
+✔ raw protocol observer blocks omitted recovery before second request is written (0.704909ms)
+✔ saved real response usage separates cached input from uncached without estimates (40.052824ms)
+✔ response IDs deduplicate; conflicting evidence fails; cached is subset (5.602229ms)
+✔ both actual historical experiments total 52109 without adding cumulative notifications (83.65906ms)
+✔ API-equivalent estimates require cache-write evidence and never imply Codex billing (23.002461ms)
+✔ real compaction is included once even though app-server cumulative snapshots omit it (23.519911ms)
+✔ authentication validators reject baseline and counterfeit fixes but ignore unrelated cache failure (12934.315784ms)
+✔ independent authentication validator rejects expired claims for valid input (1924.821737ms)
+ℹ tests 96
+ℹ suites 0
+ℹ pass 95
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74248.702086
+
+✖ failing tests:
+
+test at scripts/context-strategy.test.mjs:66:1
+✖ adaptive remembered source version changes trigger fresh delivery, then deduplicate (2703.986194ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(receipts[4].sources.some(s=>s.path==='src/auth-service.ts'))
+  
+      at TestContext.<anonymous> (file:///home/anti/Projects/Continuum/scripts/context-strategy.test.mjs:73:68)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+[ELIFECYCLE] Command failed with exit code 1.
+[ELIFECYCLE] Test failed. See above for more details.

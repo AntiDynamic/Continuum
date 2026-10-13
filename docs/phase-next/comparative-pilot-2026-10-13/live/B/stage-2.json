@@ -1,0 +1,841 @@
+{
+  "executionId": "760452e9-cc5c-4d62-8367-049e15245262",
+  "sessionId": "d1112fc5-bb3f-4598-b5c4-6418c17ec0d8",
+  "report": {
+    "schemaVersion": "continuum.shadow-flight-recorder.v2",
+    "execution": {
+      "executionId": "760452e9-cc5c-4d62-8367-049e15245262",
+      "sessionId": "d1112fc5-bb3f-4598-b5c4-6418c17ec0d8",
+      "repositoryId": "1",
+      "task": "Pricing correction: for NEW reservations, charge 25 cents when merchandise subtotal is below 10000 cents, and zero at or above 10000 cents. This supersedes the fixed 50-cent policy. Existing stored receipts must remain stable. Complete the original repair and validate it.",
+      "snapshot": {
+        "snapshot_kind": "worktree",
+        "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+        "worktree_hash": "6cbc93b1a60c8317afb6081ec872ee84bf00907d7d24041a804813d0cda9eae3",
+        "dirty": true
+      },
+      "finalSnapshot": {
+        "available": true,
+        "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+        "worktree_hash": "2cb9bf9c22f3796b93a986b250b995b585a9a311ee4bd40209d2cca151832172",
+        "error": null
+      },
+      "codexVersion": "0.162.1",
+      "model": "gpt-5.6-luna",
+      "status": "completed",
+      "durationMs": 15351
+    },
+    "prediction": {
+      "estimatedTokens": 423,
+      "items": [
+        {
+          "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+          "path": "src/service.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Expanded through a high- or medium-confidence repository relationship.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 337 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": "Expanded through a high- or medium-confidence repository relationship.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 234,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+          "path": "migrations/001_inventory.sql",
+          "symbol": "inventory",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: inventory",
+            "Exact title match: inventory",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: inventory",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 50,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+          "path": "migrations/002_reservations.sql",
+          "symbol": "reservations",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reservations",
+            "Exact title match: reservations",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 150 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reservations",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 62,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+          "path": "src/service.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 32,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+          "path": "src/api.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 110 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 18,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+          "path": "src/api.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 118 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 27,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        }
+      ],
+      "mandatoryCoverage": [
+        {
+          "category": "implementation",
+          "state": "required",
+          "required": true,
+          "reason": "Migration implementation is required."
+        },
+        {
+          "category": "database_schema",
+          "state": "required",
+          "required": true,
+          "reason": "Schema evidence is required."
+        },
+        {
+          "category": "rollback",
+          "state": "required",
+          "required": true,
+          "reason": "Rollback behavior is required."
+        },
+        {
+          "category": "tests",
+          "state": "required",
+          "required": true,
+          "reason": "Migration tests are required."
+        },
+        {
+          "category": "configuration",
+          "state": "recommended",
+          "required": false,
+          "reason": "Deployment configuration may apply."
+        },
+        {
+          "category": "architecture",
+          "state": "recommended",
+          "required": false,
+          "reason": "Architecture constraints may apply."
+        }
+      ]
+    },
+    "exploration": {
+      "directlyObservedReadPaths": [],
+      "commandInferredReadPaths": [
+        "tests/public.test.mjs",
+        "src/pricing.ts"
+      ],
+      "searchedPaths": [],
+      "searchedSymbols": [],
+      "editedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts"
+      ],
+      "diffPaths": [
+        "src/pricing.ts"
+      ],
+      "testRelatedPaths": [],
+      "unknownReferencedPaths": [],
+      "observedActivityPaths": [
+        "tests/public.test.mjs",
+        "src/pricing.ts",
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts"
+      ],
+      "evidenceRecords": [
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 64,
+          "normalizedEventId": "538db40a-46df-47b6-ae58-c3ee09739a27",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 65,
+          "normalizedEventId": "1954d87f-8998-4194-b558-128eaf851e3f",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 66,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 70,
+          "normalizedEventId": "9f56f900-516b-4706-8c2a-0d17fe086cdd",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\""
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 70,
+          "normalizedEventId": "84b19768-2546-4f36-8bb1-9dd6ad3f7ebd",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\""
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 80,
+          "normalizedEventId": "f5c26c2f-1c31-406c-9200-751c8d64c791",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\""
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 80,
+          "normalizedEventId": "7c277f84-71a0-40d0-be75-9af09a0e2662",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\""
+        }
+      ],
+      "commands": [
+        {
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 70,
+          "normalizedEventId": "6ec3d5bc-4978-43a1-8623-dff3556f7c7f",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+          "exitCode": 0,
+          "durationMs": 351,
+          "status": "completed",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 80,
+          "normalizedEventId": "54422380-3441-4e13-837a-3302323441c2",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        }
+      ],
+      "tests": [],
+      "changedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts"
+      ],
+      "inferredPaths": [
+        "tests/public.test.mjs",
+        "src/pricing.ts"
+      ],
+      "directlyObservedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts"
+      ]
+    },
+    "comparison": {
+      "predictedAndObserved": [],
+      "predictedNotObserved": [
+        {
+          "path": "src/service.ts",
+          "evidence": "prediction"
+        },
+        {
+          "path": "migrations/001_inventory.sql",
+          "evidence": "prediction"
+        },
+        {
+          "path": "migrations/002_reservations.sql",
+          "evidence": "prediction"
+        },
+        {
+          "path": "src/api.ts",
+          "evidence": "prediction"
+        }
+      ],
+      "observedNotPredicted": [
+        {
+          "path": "tests/public.test.mjs",
+          "evidence": "command_inferred_read"
+        },
+        {
+          "path": "src/pricing.ts",
+          "evidence": "diff_observed"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+          "evidence": "file_edit"
+        }
+      ],
+      "requiredPredictionsWithoutObservedActivity": [
+        {
+          "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+          "path": "src/service.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Expanded through a high- or medium-confidence repository relationship.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 337 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": "Expanded through a high- or medium-confidence repository relationship.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 234,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+          "path": "migrations/001_inventory.sql",
+          "symbol": "inventory",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: inventory",
+            "Exact title match: inventory",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: inventory",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 50,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+          "path": "migrations/002_reservations.sql",
+          "symbol": "reservations",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reservations",
+            "Exact title match: reservations",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 150 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reservations",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 62,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+          "path": "src/service.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 32,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+          "path": "src/api.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 110 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 18,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+          "path": "src/api.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 118 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 27,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        }
+      ],
+      "mandatoryPredictionMisses": [
+        {
+          "id": "2debd8b3-d544-43fa-90f3-37b7ab025586",
+          "path": "src/service.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Expanded through a high- or medium-confidence repository relationship.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 337 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": "Expanded through a high- or medium-confidence repository relationship.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 234,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "2fd097b2-c8f1-4bd0-945d-40ee513f9c2e",
+          "path": "migrations/001_inventory.sql",
+          "symbol": "inventory",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: inventory",
+            "Exact title match: inventory",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: inventory",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 50,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "0982bfcb-78cb-4e89-ae84-4e56b8df1e98",
+          "path": "migrations/002_reservations.sql",
+          "symbol": "reservations",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reservations",
+            "Exact title match: reservations",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation, database_schema",
+            "Source path matches a task keyword.",
+            "Estimated cost: 150 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reservations",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation, database_schema",
+          "estimatedTokens": 62,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation",
+            "database_schema"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "c613b943-5e29-44df-a9c5-262cb22dd537",
+          "path": "src/service.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Source path matches a task keyword.",
+            "Estimated cost: 136 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": "Source path matches a task keyword.",
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 32,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "4b43c374-49db-4ad2-b4cf-69b32b0fb112",
+          "path": "src/api.ts",
+          "symbol": "reserve",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: reserve",
+            "Exact title match: reserve",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 110 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: reserve",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 18,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        },
+        {
+          "id": "a3fd3da2-10cd-4b7c-8ea5-faa46ff41292",
+          "path": "src/api.ts",
+          "symbol": "cancel",
+          "mandatory": true,
+          "requirementState": "required",
+          "packetSection": "exact_implementation",
+          "coverageCategories": [
+            "implementation"
+          ],
+          "selectionReasons": [
+            "Exact normalized symbol match: cancel",
+            "Exact title match: cancel",
+            "Lexical relevance via fts5.",
+            "Required coverage: implementation",
+            "Estimated cost: 118 tokens (character-ratio-v1).",
+            "Query normalization: deterministic-identifier-normalization-v1."
+          ],
+          "exactMatchReason": "Exact normalized symbol match: cancel",
+          "relationshipReason": null,
+          "coverageReason": "Required coverage: implementation",
+          "estimatedTokens": 27,
+          "deliveryId": "e80e8831-71f7-4137-8036-dcb413bfe133",
+          "deliveryRole": "new",
+          "coverageCategory": [
+            "implementation"
+          ],
+          "selectionReason": "new"
+        }
+      ],
+      "predictedActivityCoverage": 0,
+      "predictionActivityPrecision": 0,
+      "editPredictionCoverage": 0,
+      "diffPredictionCoverage": 0,
+      "requiredActivityObservationRate": 0,
+      "observationRecall": 0,
+      "predictionPrecision": 0,
+      "overlapRecall": 0,
+      "overlapPrecision": 0
+    },
+    "usage": {
+      "accumulated": {
+        "id": "2ddea045-27c0-4112-956b-7e41de366a85",
+        "execution_id": "760452e9-cc5c-4d62-8367-049e15245262",
+        "raw_sequence_number": 172,
+        "source": "codex.thread/tokenUsage/updated",
+        "input_tokens": 181727,
+        "cached_input_tokens": 137216,
+        "output_tokens": 3918,
+        "reasoning_tokens": 303,
+        "total_tokens": 185645,
+        "accumulation": "accumulated",
+        "measurement": "measured",
+        "timestamp": "2026-10-13T14:02:10.115Z",
+        "raw_provider_payload_json": "{\"total\":{\"totalTokens\":185645,\"inputTokens\":181727,\"cachedInputTokens\":137216,\"cacheWriteInputTokens\":0,\"outputTokens\":3918,\"reasoningOutputTokens\":303},\"last\":{\"totalTokens\":22943,\"inputTokens\":22853,\"cachedInputTokens\":22272,\"cacheWriteInputTokens\":0,\"outputTokens\":90,\"reasoningOutputTokens\":0},\"modelContextWindow\":258400}"
+      },
+      "exactResponses": [],
+      "availability": "measured"
+    },
+    "compaction": {
+      "count": 0,
+      "events": []
+    },
+    "outcome": {
+      "turnStatus": "completed",
+      "testsObserved": false,
+      "testsPassed": null,
+      "diffCaptured": true,
+      "changedFileCount": 1
+    },
+    "evidenceWarnings": [
+      "Shadow mode did not restrict Codex or inject Continuum prediction content.",
+      "Command-inferred paths are not proof that a file was read — they are shell command arguments.",
+      "The Codex App Server schema does not expose direct file-read events; directlyObservedReadPaths will always be empty.",
+      "Absence from activity evidence does not prove that the model did not read or receive an item.",
+      "Observed-not-predicted paths are additional exploration, not automatically unnecessary.",
+      "Continuum packet tokens are estimated; no token-savings claim is made.",
+      "Repository state changed during execution; external concurrent changes cannot be excluded from App Server evidence alone."
+    ]
+  },
+  "compatibilityWarning": "Codex 0.162.1 is outside the tested 0.133.x range; required capabilities will be probed at runtime.",
+  "authenticationMode": "chatgpt"
+}

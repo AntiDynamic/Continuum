@@ -1,0 +1,1239 @@
+{
+  "schemaVersion": "continuum.usage-ledger.v1",
+  "experimentId": "warehouse-medium-B",
+  "responses": [
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39b257f08191bcdb2b412bf179d9",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 1,
+      "rawUsage": {
+        "input_tokens": 13054,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 112,
+        "reasoning_output_tokens": 19,
+        "total_tokens": 13166
+      },
+      "inputTokens": 13054,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 13054,
+      "outputTokens": 112,
+      "totalTokens": 13166,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:24.399Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 14
+      },
+      "cumulativeUsage": {
+        "inputTokens": 13054,
+        "cachedInputTokens": 0,
+        "uncachedInputTokens": 13054,
+        "outputTokens": 112,
+        "totalTokens": 13166
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39b52b6081919e5c2629ec3c79ca",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 2,
+      "rawUsage": {
+        "input_tokens": 13632,
+        "cached_input_tokens": 12032,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 101,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 13733
+      },
+      "inputTokens": 13632,
+      "cachedInputTokens": 12032,
+      "uncachedInputTokens": 1600,
+      "outputTokens": 101,
+      "totalTokens": 13733,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:26.713Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 21
+      },
+      "cumulativeUsage": {
+        "inputTokens": 26686,
+        "cachedInputTokens": 12032,
+        "uncachedInputTokens": 14654,
+        "outputTokens": 213,
+        "totalTokens": 26899
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39b790ac8191bd15b2d0128dfd50",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 3,
+      "rawUsage": {
+        "input_tokens": 14868,
+        "cached_input_tokens": 13056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1613,
+        "reasoning_output_tokens": 108,
+        "total_tokens": 16481
+      },
+      "inputTokens": 14868,
+      "cachedInputTokens": 13056,
+      "uncachedInputTokens": 1812,
+      "outputTokens": 1613,
+      "totalTokens": 16481,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:37.567Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 30
+      },
+      "cumulativeUsage": {
+        "inputTokens": 41554,
+        "cachedInputTokens": 25088,
+        "uncachedInputTokens": 16466,
+        "outputTokens": 1826,
+        "totalTokens": 43380
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39c269e08191b8e8444f302544ae",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 4,
+      "rawUsage": {
+        "input_tokens": 16551,
+        "cached_input_tokens": 14080,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1268,
+        "reasoning_output_tokens": 36,
+        "total_tokens": 17819
+      },
+      "inputTokens": 16551,
+      "cachedInputTokens": 14080,
+      "uncachedInputTokens": 2471,
+      "outputTokens": 1268,
+      "totalTokens": 17819,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:45.386Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 36
+      },
+      "cumulativeUsage": {
+        "inputTokens": 58105,
+        "cachedInputTokens": 39168,
+        "uncachedInputTokens": 18937,
+        "outputTokens": 3094,
+        "totalTokens": 61199
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39ca4e508191915fb74c5dd05fb7",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 5,
+      "rawUsage": {
+        "input_tokens": 17843,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 68,
+        "reasoning_output_tokens": 7,
+        "total_tokens": 17911
+      },
+      "inputTokens": 17843,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 17843,
+      "outputTokens": 68,
+      "totalTokens": 17911,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:47.858Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 44
+      },
+      "cumulativeUsage": {
+        "inputTokens": 75948,
+        "cachedInputTokens": 39168,
+        "uncachedInputTokens": 36780,
+        "outputTokens": 3162,
+        "totalTokens": 79110
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39cccaac8191b72239e79e23a31f",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 6,
+      "rawUsage": {
+        "input_tokens": 17948,
+        "cached_input_tokens": 17152,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 136,
+        "reasoning_output_tokens": 8,
+        "total_tokens": 18084
+      },
+      "inputTokens": 17948,
+      "cachedInputTokens": 17152,
+      "uncachedInputTokens": 796,
+      "outputTokens": 136,
+      "totalTokens": 18084,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:50.355Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 52
+      },
+      "cumulativeUsage": {
+        "inputTokens": 93896,
+        "cachedInputTokens": 56320,
+        "uncachedInputTokens": 37576,
+        "outputTokens": 3298,
+        "totalTokens": 97194
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39cf41ec81919e94b833ba18ea02",
+      "logicalTurnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "sequence": 7,
+      "rawUsage": {
+        "input_tokens": 19885,
+        "cached_input_tokens": 17152,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 238,
+        "reasoning_output_tokens": 81,
+        "total_tokens": 20123
+      },
+      "inputTokens": 19885,
+      "cachedInputTokens": 17152,
+      "uncachedInputTokens": 2733,
+      "outputTokens": 238,
+      "totalTokens": 20123,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:01:53.849Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 60
+      },
+      "cumulativeUsage": {
+        "inputTokens": 113781,
+        "cachedInputTokens": 73472,
+        "uncachedInputTokens": 40309,
+        "outputTokens": 3536,
+        "totalTokens": 117317
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39dbd8588191a7ba33242e9d57c6",
+      "logicalTurnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "sequence": 8,
+      "rawUsage": {
+        "input_tokens": 22449,
+        "cached_input_tokens": 19200,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 171,
+        "reasoning_output_tokens": 44,
+        "total_tokens": 22620
+      },
+      "inputTokens": 22449,
+      "cachedInputTokens": 19200,
+      "uncachedInputTokens": 3249,
+      "outputTokens": 171,
+      "totalTokens": 22620,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:02:06.039Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 76
+      },
+      "cumulativeUsage": {
+        "inputTokens": 136230,
+        "cachedInputTokens": 92672,
+        "uncachedInputTokens": 43558,
+        "outputTokens": 3707,
+        "totalTokens": 139937
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39dea7d881918e3a72ef307a915b",
+      "logicalTurnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "sequence": 9,
+      "rawUsage": {
+        "input_tokens": 22644,
+        "cached_input_tokens": 22272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 121,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 22765
+      },
+      "inputTokens": 22644,
+      "cachedInputTokens": 22272,
+      "uncachedInputTokens": 372,
+      "outputTokens": 121,
+      "totalTokens": 22765,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:02:07.828Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 81
+      },
+      "cumulativeUsage": {
+        "inputTokens": 158874,
+        "cachedInputTokens": 114944,
+        "uncachedInputTokens": 43930,
+        "outputTokens": 3828,
+        "totalTokens": 162702
+      }
+    },
+    {
+      "responseId": "resp_0f0681bc26e52b36016ace39e0da68819183cdf7adecf4fa85",
+      "logicalTurnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "sequence": 10,
+      "rawUsage": {
+        "input_tokens": 22853,
+        "cached_input_tokens": 22272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 90,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 22943
+      },
+      "inputTokens": 22853,
+      "cachedInputTokens": 22272,
+      "uncachedInputTokens": 581,
+      "outputTokens": 90,
+      "totalTokens": 22943,
+      "activeContextOccupancy": null,
+      "operation": "generation",
+      "experimentId": "warehouse-medium-B",
+      "treatment": "B",
+      "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+      "contextStrategy": "initial_packet",
+      "model": "gpt-5.6-luna",
+      "provider": "openai",
+      "reasoning": "low",
+      "timestamp": "2026-10-13T14:02:10.087Z",
+      "evidenceSource": {
+        "file": "/home/anti/Projects/Continuum/docs/phase-next/comparative-pilot-2026-10-13/live/B/native-rollouts/2026/10/13/rollout-2026-10-13T19-31-17-01a13591-4295-7212-a164-08efbfad7bef.jsonl",
+        "line": 87
+      },
+      "cumulativeUsage": {
+        "inputTokens": 181727,
+        "cachedInputTokens": 137216,
+        "uncachedInputTokens": 44511,
+        "outputTokens": 3918,
+        "totalTokens": 185645
+      }
+    }
+  ],
+  "totals": {
+    "inputTokens": 181727,
+    "cachedInputTokens": 137216,
+    "uncachedInputTokens": 44511,
+    "outputTokens": 3918,
+    "totalTokens": 185645
+  },
+  "rawUsageNotifications": [
+    {
+      "timestamp": "2026-10-13T14:01:24.524Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 13166,
+            "inputTokens": 13054,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 112,
+            "reasoningOutputTokens": 19
+          },
+          "last": {
+            "totalTokens": 13166,
+            "inputTokens": 13054,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 112,
+            "reasoningOutputTokens": 19
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:26.832Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 26899,
+            "inputTokens": 26686,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 213,
+            "reasoningOutputTokens": 19
+          },
+          "last": {
+            "totalTokens": 13733,
+            "inputTokens": 13632,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 101,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:37.575Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 43380,
+            "inputTokens": 41554,
+            "cachedInputTokens": 25088,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1826,
+            "reasoningOutputTokens": 127
+          },
+          "last": {
+            "totalTokens": 16481,
+            "inputTokens": 14868,
+            "cachedInputTokens": 13056,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1613,
+            "reasoningOutputTokens": 108
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:45.730Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 61199,
+            "inputTokens": 58105,
+            "cachedInputTokens": 39168,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3094,
+            "reasoningOutputTokens": 163
+          },
+          "last": {
+            "totalTokens": 17819,
+            "inputTokens": 16551,
+            "cachedInputTokens": 14080,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1268,
+            "reasoningOutputTokens": 36
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:47.889Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 79110,
+            "inputTokens": 75948,
+            "cachedInputTokens": 39168,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3162,
+            "reasoningOutputTokens": 170
+          },
+          "last": {
+            "totalTokens": 17911,
+            "inputTokens": 17843,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 68,
+            "reasoningOutputTokens": 7
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:50.762Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 97194,
+            "inputTokens": 93896,
+            "cachedInputTokens": 56320,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3298,
+            "reasoningOutputTokens": 178
+          },
+          "last": {
+            "totalTokens": 18084,
+            "inputTokens": 17948,
+            "cachedInputTokens": 17152,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 136,
+            "reasoningOutputTokens": 8
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:53.855Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 117317,
+            "inputTokens": 113781,
+            "cachedInputTokens": 73472,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3536,
+            "reasoningOutputTokens": 259
+          },
+          "last": {
+            "totalTokens": 20123,
+            "inputTokens": 19885,
+            "cachedInputTokens": 17152,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 238,
+            "reasoningOutputTokens": 81
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:56.108Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 117317,
+            "inputTokens": 113781,
+            "cachedInputTokens": 73472,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3536,
+            "reasoningOutputTokens": 259
+          },
+          "last": {
+            "totalTokens": 20123,
+            "inputTokens": 19885,
+            "cachedInputTokens": 17152,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 238,
+            "reasoningOutputTokens": 81
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:02:06.172Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 139937,
+            "inputTokens": 136230,
+            "cachedInputTokens": 92672,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3707,
+            "reasoningOutputTokens": 303
+          },
+          "last": {
+            "totalTokens": 22620,
+            "inputTokens": 22449,
+            "cachedInputTokens": 19200,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 171,
+            "reasoningOutputTokens": 44
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:02:08.405Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 162702,
+            "inputTokens": 158874,
+            "cachedInputTokens": 114944,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3828,
+            "reasoningOutputTokens": 303
+          },
+          "last": {
+            "totalTokens": 22765,
+            "inputTokens": 22644,
+            "cachedInputTokens": 22272,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 121,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:02:10.115Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 185645,
+            "inputTokens": 181727,
+            "cachedInputTokens": 137216,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3918,
+            "reasoningOutputTokens": 303
+          },
+          "last": {
+            "totalTokens": 22943,
+            "inputTokens": 22853,
+            "cachedInputTokens": 22272,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 90,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    }
+  ],
+  "uniqueUsageNotifications": [
+    {
+      "timestamp": "2026-10-13T14:01:24.524Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 13166,
+            "inputTokens": 13054,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 112,
+            "reasoningOutputTokens": 19
+          },
+          "last": {
+            "totalTokens": 13166,
+            "inputTokens": 13054,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 112,
+            "reasoningOutputTokens": 19
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:26.832Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 26899,
+            "inputTokens": 26686,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 213,
+            "reasoningOutputTokens": 19
+          },
+          "last": {
+            "totalTokens": 13733,
+            "inputTokens": 13632,
+            "cachedInputTokens": 12032,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 101,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:37.575Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 43380,
+            "inputTokens": 41554,
+            "cachedInputTokens": 25088,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1826,
+            "reasoningOutputTokens": 127
+          },
+          "last": {
+            "totalTokens": 16481,
+            "inputTokens": 14868,
+            "cachedInputTokens": 13056,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1613,
+            "reasoningOutputTokens": 108
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:45.730Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 61199,
+            "inputTokens": 58105,
+            "cachedInputTokens": 39168,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3094,
+            "reasoningOutputTokens": 163
+          },
+          "last": {
+            "totalTokens": 17819,
+            "inputTokens": 16551,
+            "cachedInputTokens": 14080,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 1268,
+            "reasoningOutputTokens": 36
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:47.889Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 79110,
+            "inputTokens": 75948,
+            "cachedInputTokens": 39168,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3162,
+            "reasoningOutputTokens": 170
+          },
+          "last": {
+            "totalTokens": 17911,
+            "inputTokens": 17843,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 68,
+            "reasoningOutputTokens": 7
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:50.762Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 97194,
+            "inputTokens": 93896,
+            "cachedInputTokens": 56320,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3298,
+            "reasoningOutputTokens": 178
+          },
+          "last": {
+            "totalTokens": 18084,
+            "inputTokens": 17948,
+            "cachedInputTokens": 17152,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 136,
+            "reasoningOutputTokens": 8
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:01:56.108Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 117317,
+            "inputTokens": 113781,
+            "cachedInputTokens": 73472,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3536,
+            "reasoningOutputTokens": 259
+          },
+          "last": {
+            "totalTokens": 20123,
+            "inputTokens": 19885,
+            "cachedInputTokens": 17152,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 238,
+            "reasoningOutputTokens": 81
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:02:06.172Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 139937,
+            "inputTokens": 136230,
+            "cachedInputTokens": 92672,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3707,
+            "reasoningOutputTokens": 303
+          },
+          "last": {
+            "totalTokens": 22620,
+            "inputTokens": 22449,
+            "cachedInputTokens": 19200,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 171,
+            "reasoningOutputTokens": 44
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:02:08.405Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 162702,
+            "inputTokens": 158874,
+            "cachedInputTokens": 114944,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3828,
+            "reasoningOutputTokens": 303
+          },
+          "last": {
+            "totalTokens": 22765,
+            "inputTokens": 22644,
+            "cachedInputTokens": 22272,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 121,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    },
+    {
+      "timestamp": "2026-10-13T14:02:10.115Z",
+      "raw": {
+        "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+        "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 185645,
+            "inputTokens": 181727,
+            "cachedInputTokens": 137216,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 3918,
+            "reasoningOutputTokens": 303
+          },
+          "last": {
+            "totalTokens": 22943,
+            "inputTokens": 22853,
+            "cachedInputTokens": 22272,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 90,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "activeContextOccupancy": null,
+      "modelContextCapacity": 258400
+    }
+  ],
+  "duplicateNotifications": 1,
+  "activeContextOccupancy": null,
+  "toolEvents": [
+    {
+      "timestamp": "2026-10-13T14:01:24.515Z",
+      "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "item": {
+        "type": "dynamicToolCall",
+        "id": "exec-65666fef-820b-42b0-b9b9-47b758789a39",
+        "namespace": null,
+        "tool": "continuum_request_context",
+        "arguments": {
+          "query": "Inspect all source modules, migrations, package.json, and tests/public.test.mjs; include database schema, transaction behavior, and rollback requirements."
+        },
+        "status": "completed",
+        "contentItems": [
+          {
+            "type": "inputText",
+            "text": "SESSION: d1112fc5-bb3f-4598-b5c4-6418c17ec0d8\n\npackage.json:1-1\n\"test\":\"node --test tests/public.test.mjs\"\n\nsrc/types.ts:1-1\nexport interface Item { sku: string; quantity: number }\n\nsrc/types.ts:3-3\nexport interface Receipt { reservationId: string; totalCents: number; feeCents: number }\n\nsrc/types.ts:2-2\nexport interface ReserveInput { tenantId: string; requestId: string; items: Item[] }\n\npackage.json:1-1\n\"scripts\":{\"test\":\"node --test tests/public.test.mjs\"}\n\npackage.json:1-1\n\"type\":\"module\"\n\nAlready delivered: migrations/002_reservations.sql#reservations\n\nAlready delivered: migrations/001_inventory.sql#inventory\n\nAlready delivered: src/service.ts#reserve\n\nAlready delivered: src/api.ts#reserve\n\nAlready delivered: src/api.ts#cancel\n\nAlready delivered: src/service.ts#cancel\n\nRequired context missing: rollback. Request targeted context before assuming completeness."
+          }
+        ],
+        "success": true,
+        "durationMs": 142
+      }
+    },
+    {
+      "timestamp": "2026-10-13T14:01:26.796Z",
+      "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "item": {
+        "type": "commandExecution",
+        "id": "exec-f41cf4e5-7670-4770-b868-c9ef3768f80f",
+        "pluginId": null,
+        "scriptPath": null,
+        "command": "/usr/bin/bash -lc \"rg --files && sed -n '1,200p' src/*.ts && sed -n '1,240p' tests/public.test.mjs && sed -n '1,200p' migrations/*.sql\"",
+        "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+        "processId": "95715",
+        "source": "unifiedExecStartup",
+        "status": "completed",
+        "commandActions": [
+          {
+            "type": "unknown",
+            "command": "rg --files && sed -n '1,200p' src/*.ts && sed -n '1,240p' tests/public.test.mjs && sed -n '1,200p' migrations/*.sql"
+          }
+        ],
+        "aggregatedOutput": "README.md\nmigrations/001_inventory.sql\nmigrations/002_reservations.sql\npackage.json\ntests/public.test.mjs\nsrc/service.ts\nsrc/store.ts\nsrc/types.ts\nsrc/catalog.ts\nsrc/pricing.ts\nsrc/api.ts\nimport type {DatabaseSync} from 'node:sqlite';\nimport type {ReserveInput} from './types.ts';\nimport {reserve,cancel} from './service.ts';\nexport function createApi(db:DatabaseSync) {\n return {reserve(input:ReserveInput){return reserve(db,input);},cancel(tenantId:string,requestId:string){return cancel(db,tenantId,requestId);}};\n}\nimport type {DatabaseSync} from 'node:sqlite';\nexport function lookup(db:DatabaseSync, tenantId:string, sku:string) {\n return db.prepare('SELECT * FROM inventory WHERE sku=? LIMIT 1').get(sku) as {stock:number;unit_price_cents:number}|undefined;\n}\nexport function changeStock(db:DatabaseSync, tenantId:string, sku:string, delta:number) {\n db.prepare('UPDATE inventory SET stock=stock+? WHERE sku=?').run(delta,sku);\n}\nexport function computeTotal(lines:Array<{quantity:number;unitPriceCents:number}>):number {\n return lines.reduce((total,line)=>total+line.quantity,0);\n}\nexport function computeFee(totalCents:number):number {return 50;}\nimport type {DatabaseSync} from 'node:sqlite';\nimport type {ReserveInput,Receipt} from './types.ts';\nimport {lookup,changeStock} from './catalog.ts';\nimport {computeTotal,computeFee} from './pricing.ts';\nimport {find,save} from './store.ts';\nexport function reserve(db:DatabaseSync,input:ReserveInput):Receipt {\n const existing=find(db,input.tenantId,input.requestId);\n if(existing)return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};\n const lines=input.items.map(item=>{const row=lookup(db,input.tenantId,item.sku);if(!row)throw new Error('UNKNOWN_SKU');changeStock(db,input.tenantId,item.sku,-item.quantity);return {quantity:item.quantity,unitPriceCents:row.unit_price_cents};});\n const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)};\n save(db,input,receipt);return receipt;\n}\nexport function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean {return false;}\nimport type {DatabaseSync} from 'node:sqlite';\nimport type {ReserveInput,Receipt} from './types.ts';\nexport function find(db:DatabaseSync,tenantId:string,requestId:string) {\n return db.prepare('SELECT * FROM reservations WHERE request_id=? LIMIT 1').get(requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;\n}\nexport function save(db:DatabaseSync,input:ReserveInput,receipt:Receipt) {\n db.prepare('INSERT INTO reservations(tenant_id,request_id,items_json,total_cents,fee_cents,status) VALUES(?,?,?,?,?,?)').run(input.tenantId,input.requestId,JSON.stringify(input.items),receipt.totalCents,receipt.feeCents,'active');\n}\nexport interface Item { sku: string; quantity: number }\nexport interface ReserveInput { tenantId: string; requestId: string; items: Item[] }\nexport interface Receipt { reservationId: string; totalCents: number; feeCents: number }\nimport {test} from 'node:test';import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {readFileSync} from 'node:fs';import {createApi} from '../src/api.ts';\ntest('reservation receipt and stock contract',async()=>{const db=new DatabaseSync(':memory:');try{db.exec(readFileSync(new URL('../migrations/001_inventory.sql',import.meta.url),'utf8'));db.exec(readFileSync(new URL('../migrations/002_reservations.sql',import.meta.url),'utf8').split('-- down')[0].replace('-- up',''));db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('north','A',10,2000);const result=createApi(db).reserve({tenantId:'north',requestId:'p1',items:[{sku:'A',quantity:2}]});assert.equal(typeof result?.then,'function');const receipt=await result;assert.equal(receipt.totalCents,4000);assert.equal(db.prepare(\"SELECT stock FROM inventory WHERE tenant_id='north' AND sku='A'\").get().stock,8);}finally{db.close();}});\nCREATE TABLE inventory(tenant_id TEXT NOT NULL,sku TEXT NOT NULL,stock INTEGER NOT NULL,unit_price_cents INTEGER NOT NULL,PRIMARY KEY(tenant_id,sku));\nCREATE INDEX inventory_stock_idx ON inventory(tenant_id,sku,stock);\n-- up\nCREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL);\n-- down\nDROP TABLE reservations;\nDROP TABLE inventory;\n",
+        "exitCode": 0,
+        "durationMs": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-13T14:01:45.686Z",
+      "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "item": {
+        "type": "fileChange",
+        "id": "exec-8bd83462-6882-46f7-a422-a2fe79a38101",
+        "changes": [
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/migrations/002_reservations.sql",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -1,5 +1,4 @@\n -- up\n-CREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL);\n+CREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL,UNIQUE(tenant_id,request_id));\n -- down\n DROP TABLE reservations;\n-DROP TABLE inventory;\n"
+          },
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/src/api.ts",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -4,3 +4,3 @@\n export function createApi(db:DatabaseSync) {\n- return {reserve(input:ReserveInput){return reserve(db,input);},cancel(tenantId:string,requestId:string){return cancel(db,tenantId,requestId);}};\n+ return {reserve(input:ReserveInput){return Promise.resolve().then(()=>reserve(db,input));},cancel(tenantId:string,requestId:string){return Promise.resolve().then(()=>cancel(db,tenantId,requestId));}};\n }\n"
+          },
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/src/catalog.ts",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -2,6 +2,6 @@\n export function lookup(db:DatabaseSync, tenantId:string, sku:string) {\n- return db.prepare('SELECT * FROM inventory WHERE sku=? LIMIT 1').get(sku) as {stock:number;unit_price_cents:number}|undefined;\n+ return db.prepare('SELECT * FROM inventory WHERE tenant_id=? AND sku=?').get(tenantId,sku) as {stock:number;unit_price_cents:number}|undefined;\n }\n export function changeStock(db:DatabaseSync, tenantId:string, sku:string, delta:number) {\n- db.prepare('UPDATE inventory SET stock=stock+? WHERE sku=?').run(delta,sku);\n+ db.prepare('UPDATE inventory SET stock=stock+? WHERE tenant_id=? AND sku=?').run(delta,tenantId,sku);\n }\n"
+          },
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -1,3 +1,3 @@\n export function computeTotal(lines:Array<{quantity:number;unitPriceCents:number}>):number {\n- return lines.reduce((total,line)=>total+line.quantity,0);\n+ return lines.reduce((total,line)=>total+line.quantity*line.unitPriceCents,0);\n }\n"
+          },
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/src/service.ts",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -6,8 +6,12 @@\n export function reserve(db:DatabaseSync,input:ReserveInput):Receipt {\n- const existing=find(db,input.tenantId,input.requestId);\n- if(existing)return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};\n- const lines=input.items.map(item=>{const row=lookup(db,input.tenantId,item.sku);if(!row)throw new Error('UNKNOWN_SKU');changeStock(db,input.tenantId,item.sku,-item.quantity);return {quantity:item.quantity,unitPriceCents:row.unit_price_cents};});\n- const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)};\n- save(db,input,receipt);return receipt;\n+ if(!Array.isArray(input.items)||input.items.length===0)throw new Error('EMPTY_ITEMS');\n+ for(const item of input.items) if(!Number.isInteger(item.quantity)||item.quantity<=0)throw new Error('INVALID_QUANTITY');\n+ db.exec('BEGIN IMMEDIATE');\n+ try { const existing=find(db,input.tenantId,input.requestId); if(existing){db.exec('COMMIT');return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};}\n+  const quantities=new Map<string,number>(); for(const item of input.items) quantities.set(item.sku,(quantities.get(item.sku)||0)+item.quantity);\n+  const lines=[]; for(const [sku,quantity] of quantities){const row=lookup(db,input.tenantId,sku);if(!row)throw new Error('UNKNOWN_SKU');if(row.stock<quantity)throw new Error('INSUFFICIENT_STOCK');lines.push({sku,quantity,unitPriceCents:row.unit_price_cents});}\n+  for(const line of lines) changeStock(db,input.tenantId,line.sku,-line.quantity);\n+  const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)}; save(db,input,receipt);db.exec('COMMIT');return receipt;\n+ } catch(error){db.exec('ROLLBACK');throw error;}\n }\n-export function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean {return false;}\n+export function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean { db.exec('BEGIN IMMEDIATE'); try {const row=find(db,tenantId,requestId);if(!row||row.status!=='active'){db.exec('COMMIT');return false;} for(const item of JSON.parse(row.items_json)) changeStock(db,tenantId,item.sku,item.quantity); db.prepare('UPDATE reservations SET status=? WHERE tenant_id=? AND request_id=? AND status=?').run('cancelled',tenantId,requestId,'active');db.exec('COMMIT');return true;} catch(error){db.exec('ROLLBACK');throw error;} }\n"
+          },
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/src/store.ts",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -3,3 +3,3 @@\n export function find(db:DatabaseSync,tenantId:string,requestId:string) {\n- return db.prepare('SELECT * FROM reservations WHERE request_id=? LIMIT 1').get(requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;\n+ return db.prepare('SELECT * FROM reservations WHERE tenant_id=? AND request_id=?').get(tenantId,requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;\n }\n"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "timestamp": "2026-10-13T14:01:47.851Z",
+      "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "item": {
+        "type": "commandExecution",
+        "id": "exec-135790ed-a74b-4019-ada1-ace94cf58f3b",
+        "pluginId": null,
+        "scriptPath": null,
+        "command": "/usr/bin/bash -lc 'npm test'",
+        "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+        "processId": "98707",
+        "source": "unifiedExecStartup",
+        "status": "failed",
+        "commandActions": [
+          {
+            "type": "unknown",
+            "command": "npm test"
+          }
+        ],
+        "aggregatedOutput": "/usr/bin/bash: line 1: npm: command not found\n",
+        "exitCode": 127,
+        "durationMs": 0
+      }
+    },
+    {
+      "timestamp": "2026-10-13T14:01:50.727Z",
+      "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+      "item": {
+        "type": "commandExecution",
+        "id": "exec-4678a55b-a822-440f-aca3-1a5535b6d509",
+        "pluginId": null,
+        "scriptPath": null,
+        "command": "/usr/bin/bash -lc 'node --test tests/public.test.mjs; git diff --check; git diff'",
+        "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+        "processId": "91397",
+        "source": "unifiedExecStartup",
+        "status": "completed",
+        "commandActions": [
+          {
+            "type": "unknown",
+            "command": "node --test tests/public.test.mjs; git diff --check; git diff"
+          }
+        ],
+        "aggregatedOutput": "✔ tests/public.test.mjs (205.153347ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 224.182637\ndiff --git a/migrations/002_reservations.sql b/migrations/002_reservations.sql\nindex 22bdddc..7f03f21 100644\n--- a/migrations/002_reservations.sql\n+++ b/migrations/002_reservations.sql\n@@ -1,5 +1,4 @@\n -- up\n-CREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL);\n+CREATE TABLE reservations(tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,items_json TEXT NOT NULL,total_cents INTEGER NOT NULL,fee_cents INTEGER NOT NULL,status TEXT NOT NULL,UNIQUE(tenant_id,request_id));\n -- down\n DROP TABLE reservations;\n-DROP TABLE inventory;\ndiff --git a/src/api.ts b/src/api.ts\nindex 832759d..379c4b7 100644\n--- a/src/api.ts\n+++ b/src/api.ts\n@@ -2,5 +2,5 @@ import type {DatabaseSync} from 'node:sqlite';\n import type {ReserveInput} from './types.ts';\n import {reserve,cancel} from './service.ts';\n export function createApi(db:DatabaseSync) {\n- return {reserve(input:ReserveInput){return reserve(db,input);},cancel(tenantId:string,requestId:string){return cancel(db,tenantId,requestId);}};\n+ return {reserve(input:ReserveInput){return Promise.resolve().then(()=>reserve(db,input));},cancel(tenantId:string,requestId:string){return Promise.resolve().then(()=>cancel(db,tenantId,requestId));}};\n }\ndiff --git a/src/catalog.ts b/src/catalog.ts\nindex b84dfb6..7149f30 100644\n--- a/src/catalog.ts\n+++ b/src/catalog.ts\n@@ -1,7 +1,7 @@\n import type {DatabaseSync} from 'node:sqlite';\n export function lookup(db:DatabaseSync, tenantId:string, sku:string) {\n- return db.prepare('SELECT * FROM inventory WHERE sku=? LIMIT 1').get(sku) as {stock:number;unit_price_cents:number}|undefined;\n+ return db.prepare('SELECT * FROM inventory WHERE tenant_id=? AND sku=?').get(tenantId,sku) as {stock:number;unit_price_cents:number}|undefined;\n }\n export function changeStock(db:DatabaseSync, tenantId:string, sku:string, delta:number) {\n- db.prepare('UPDATE inventory SET stock=stock+? WHERE sku=?').run(delta,sku);\n+ db.prepare('UPDATE inventory SET stock=stock+? WHERE tenant_id=? AND sku=?').run(delta,tenantId,sku);\n }\ndiff --git a/src/pricing.ts b/src/pricing.ts\nindex 80b9066..e2bf0bc 100644\n--- a/src/pricing.ts\n+++ b/src/pricing.ts\n@@ -1,4 +1,4 @@\n export function computeTotal(lines:Array<{quantity:number;unitPriceCents:number}>):number {\n- return lines.reduce((total,line)=>total+line.quantity,0);\n+ return lines.reduce((total,line)=>total+line.quantity*line.unitPriceCents,0);\n }\n export function computeFee(totalCents:number):number {return 50;}\ndiff --git a/src/service.ts b/src/service.ts\nindex 326176d..e2ab97e 100644\n--- a/src/service.ts\n+++ b/src/service.ts\n@@ -4,10 +4,14 @@ import {lookup,changeStock} from './catalog.ts';\n import {computeTotal,computeFee} from './pricing.ts';\n import {find,save} from './store.ts';\n export function reserve(db:DatabaseSync,input:ReserveInput):Receipt {\n- const existing=find(db,input.tenantId,input.requestId);\n- if(existing)return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};\n- const lines=input.items.map(item=>{const row=lookup(db,input.tenantId,item.sku);if(!row)throw new Error('UNKNOWN_SKU');changeStock(db,input.tenantId,item.sku,-item.quantity);return {quantity:item.quantity,unitPriceCents:row.unit_price_cents};});\n- const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)};\n- save(db,input,receipt);return receipt;\n+ if(!Array.isArray(input.items)||input.items.length===0)throw new Error('EMPTY_ITEMS');\n+ for(const item of input.items) if(!Number.isInteger(item.quantity)||item.quantity<=0)throw new Error('INVALID_QUANTITY');\n+ db.exec('BEGIN IMMEDIATE');\n+ try { const existing=find(db,input.tenantId,input.requestId); if(existing){db.exec('COMMIT');return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};}\n+  const quantities=new Map<string,number>(); for(const item of input.items) quantities.set(item.sku,(quantities.get(item.sku)||0)+item.quantity);\n+  const lines=[]; for(const [sku,quantity] of quantities){const row=lookup(db,input.tenantId,sku);if(!row)throw new Error('UNKNOWN_SKU');if(row.stock<quantity)throw new Error('INSUFFICIENT_STOCK');lines.push({sku,quantity,unitPriceCents:row.unit_price_cents});}\n+  for(const line of lines) changeStock(db,input.tenantId,line.sku,-line.quantity);\n+  const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)}; save(db,input,receipt);db.exec('COMMIT');return receipt;\n+ } catch(error){db.exec('ROLLBACK');throw error;}\n }\n-export function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean {return false;}\n+export function cancel(db:DatabaseSync,tenantId:string,requestId:string):boolean { db.exec('BEGIN IMMEDIATE'); try {const row=find(db,tenantId,requestId);if(!row||row.status!=='active'){db.exec('COMMIT');return false;} for(const item of JSON.parse(row.items_json)) changeStock(db,tenantId,item.sku,item.quantity); db.prepare('UPDATE reservations SET status=? WHERE tenant_id=? AND request_id=? AND status=?').run('cancelled',tenantId,requestId,'active');db.exec('COMMIT');return true;} catch(error){db.exec('ROLLBACK');throw error;} }\ndiff --git a/src/store.ts b/src/store.ts\nindex fbadc82..92422e5 100644\n--- a/src/store.ts\n+++ b/src/store.ts\n@@ -1,7 +1,7 @@\n import type {DatabaseSync} from 'node:sqlite';\n import type {ReserveInput,Receipt} from './types.ts';\n export function find(db:DatabaseSync,tenantId:string,requestId:string) {\n- return db.prepare('SELECT * FROM reservations WHERE request_id=? LIMIT 1').get(requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;\n+ return db.prepare('SELECT * FROM reservations WHERE tenant_id=? AND request_id=?').get(tenantId,requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;\n }\n export function save(db:DatabaseSync,input:ReserveInput,receipt:Receipt) {\n  db.prepare('INSERT INTO reservations(tenant_id,request_id,items_json,total_cents,fee_cents,status) VALUES(?,?,?,?,?,?)').run(input.tenantId,input.requestId,JSON.stringify(input.items),receipt.totalCents,receipt.feeCents,'active');\n",
+        "exitCode": 0,
+        "durationMs": 232
+      }
+    },
+    {
+      "timestamp": "2026-10-13T14:02:06.132Z",
+      "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "item": {
+        "type": "fileChange",
+        "id": "exec-e99ced15-5be0-4918-ad37-5ff5259a707e",
+        "changes": [
+          {
+            "path": "/tmp/continuum-comparative-r0fMzv/B/src/pricing.ts",
+            "kind": {
+              "type": "update",
+              "move_path": null
+            },
+            "diff": "@@ -3,2 +3,2 @@\n }\n-export function computeFee(totalCents:number):number {return 50;}\n+export function computeFee(totalCents:number):number {return totalCents<10000?25:0;}\n"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "timestamp": "2026-10-13T14:02:08.368Z",
+      "turnId": "01a13591-e4b3-7021-afe7-7ad0c7a6c8f9",
+      "item": {
+        "type": "commandExecution",
+        "id": "exec-400a9b88-6e02-439f-9b98-382ff0dcb3d9",
+        "pluginId": null,
+        "scriptPath": null,
+        "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \\\"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)\"'!==25||computeFee(10000)!==0) throw new Error('\"'fee threshold failed')\\\"\"",
+        "cwd": "/tmp/continuum-comparative-r0fMzv/B",
+        "processId": "1554",
+        "source": "unifiedExecStartup",
+        "status": "completed",
+        "commandActions": [
+          {
+            "type": "unknown",
+            "command": "node --test tests/public.test.mjs && git diff --check && node --input-type=module -e \"import {computeFee} from './src/pricing.ts'; if(computeFee(9999)!==25||computeFee(10000)!==0) throw new Error('fee threshold failed')\""
+          }
+        ],
+        "aggregatedOutput": "✔ tests/public.test.mjs (202.743468ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 220.742581\n",
+        "exitCode": 0,
+        "durationMs": 351
+      }
+    }
+  ],
+  "toolRequests": [
+    {
+      "direction": "server_to_client",
+      "category": "server_request",
+      "raw": "{\"method\":\"item/tool/call\",\"id\":0,\"params\":{\"threadId\":\"01a13591-4295-7212-a164-08efbfad7bef\",\"turnId\":\"01a13591-4e82-7352-bfba-827df8bb184f\",\"callId\":\"exec-65666fef-820b-42b0-b9b9-47b758789a39\",\"namespace\":null,\"tool\":\"continuum_request_context\",\"arguments\":{\"query\":\"Inspect all source modules, migrations, package.json, and tests/public.test.mjs; include database schema, transaction behavior, and rollback requirements.\"}}}",
+      "parsed": {
+        "method": "item/tool/call",
+        "id": 0,
+        "params": {
+          "threadId": "01a13591-4295-7212-a164-08efbfad7bef",
+          "turnId": "01a13591-4e82-7352-bfba-827df8bb184f",
+          "callId": "exec-65666fef-820b-42b0-b9b9-47b758789a39",
+          "namespace": null,
+          "tool": "continuum_request_context",
+          "arguments": {
+            "query": "Inspect all source modules, migrations, package.json, and tests/public.test.mjs; include database schema, transaction behavior, and rollback requirements."
+          }
+        }
+      },
+      "method": "item/tool/call",
+      "requestId": 0,
+      "timestamp": "2026-10-13T14:01:24.372Z"
+    }
+  ],
+  "compactionEvents": [],
+  "observableRetryEvents": [],
+  "inputHashes": [
+    {
+      "sha256": "08aeeb2f87a39c3e7c57fbbd70c827bd6e44434b10ac8cf27a67b63f4f8bfa75",
+      "bytes": 1543,
+      "characters": 1543
+    },
+    {
+      "sha256": "81819c0bb978faff76e37c98354719dd0fefa7a49d48c6abbcacc7ff59df2220",
+      "bytes": 5089,
+      "characters": 5089
+    }
+  ],
+  "measurementLimits": [
+    "Model context capacity is not active occupancy.",
+    "Cumulative snapshots are not summed.",
+    "Cached input is a subset of input, not an additional charge.",
+    "No fragment billing attribution or actual credit cost is available."
+  ]
+}

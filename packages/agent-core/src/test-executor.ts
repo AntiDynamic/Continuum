@@ -11,10 +11,11 @@
  * - Support timeout and cancellation.
  */
 
+import { stripVTControlCharacters } from "node:util";
 import { execa } from "execa";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
-import { now, createLogger } from "@continuum/shared";
+import { now, createLogger, redactString } from "@continuum/shared";
 import type { TestPhase } from "@continuum/shared";
 
 const log = createLogger("test-executor");
@@ -46,35 +47,14 @@ function extractTestCounts(output: string): {
   failed?: number;
   confidence: "high" | "low" | "unknown";
 } {
-  // Vitest format: "X passed" / "X failed"
-  const vitestPassed = output.match(/(\d+)\s+passed/i);
-  const vitestFailed = output.match(/(\d+)\s+failed/i);
-
-  if (vitestPassed || vitestFailed) {
-    return {
-      passed: vitestPassed ? parseInt(vitestPassed[1] ?? "0", 10) : undefined,
-      failed: vitestFailed ? parseInt(vitestFailed[1] ?? "0", 10) : undefined,
-      confidence: "high",
-    };
+  const summary = stripVTControlCharacters(output).match(/^\s*Tests\s*:?\s+([^\r\n]+)/im)?.[1];
+  if (summary) {
+    const passed = summary.match(/(\d+)\s+passed/i);
+    const failed = summary.match(/(\d+)\s+failed/i);
+    if (passed || failed) return { passed: passed ? Number(passed[1]) : undefined, failed: failed ? Number(failed[1]) : undefined, confidence: "high" };
   }
-
-  // Jest format: "Tests: X failed, Y passed"
-  const jestMatch = output.match(/Tests:\s*(.*)/i);
-  if (jestMatch?.[1]) {
-    const passedInJest = jestMatch[1].match(/(\d+)\s+passed/i);
-    const failedInJest = jestMatch[1].match(/(\d+)\s+failed/i);
-    if (passedInJest || failedInJest) {
-      return {
-        passed: passedInJest
-          ? parseInt(passedInJest[1] ?? "0", 10)
-          : undefined,
-        failed: failedInJest
-          ? parseInt(failedInJest[1] ?? "0", 10)
-          : undefined,
-        confidence: "high",
-      };
-    }
-  }
+  const nodePassed = output.match(/^# pass (\d+)$/m), nodeFailed = output.match(/^# fail (\d+)$/m);
+  if (nodePassed && nodeFailed) return { passed: Number(nodePassed[1]), failed: Number(nodeFailed[1]), confidence: "high" };
 
   return { confidence: "unknown" };
 }
@@ -87,6 +67,8 @@ export interface RunTestOptions {
   signal?: AbortSignal;
   runsDir?: string;
   runId?: string;
+  redactPatterns?: string[];
+  captureRawOutput?: boolean;
 }
 
 export async function runTestCommand(
@@ -130,11 +112,15 @@ export async function runTestCommand(
   const finishedAt = now();
   const durationMs = Date.now() - startMs;
 
+  const counts = extractTestCounts(stdout + "\n" + stderr);
+  stdout = redactString(stdout, opts.redactPatterns);
+  stderr = redactString(stderr, opts.redactPatterns);
+
   // Save output to files when a runs directory is provided
   let stdoutPath: string | undefined;
   let stderrPath: string | undefined;
 
-  if (opts.runsDir && opts.runId) {
+  if (opts.captureRawOutput !== false && opts.runsDir && opts.runId) {
     const phaseDir = join(opts.runsDir, opts.runId, opts.phase);
     await mkdir(phaseDir, { recursive: true });
     stdoutPath = join(phaseDir, "stdout.txt");
@@ -143,8 +129,7 @@ export async function runTestCommand(
     await writeFile(stderrPath, stderr, "utf-8");
   }
 
-  const combined = stdout + "\n" + stderr;
-  const { passed, failed, confidence } = extractTestCounts(combined);
+  const { passed, failed, confidence } = counts;
 
   log.info("Test command finished", {
     exitCode,

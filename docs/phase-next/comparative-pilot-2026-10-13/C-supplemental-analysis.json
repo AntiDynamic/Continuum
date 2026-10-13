@@ -1,0 +1,180 @@
+{
+  "treatment": "C",
+  "producer": "post-hoc deterministic analysis of unchanged frozen traces and SQLite; includes tool deliveries omitted from initial receipt-only audit",
+  "sources": [
+    {
+      "id": "da310f09-2df4-4025-9ca9-c499efda07c6",
+      "path": "src/store.ts",
+      "symbol": "find",
+      "contentHash": "d2b445892153107a1b76b493369340863cbe6a00be4dab8cf897a045585b6da1",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:02:28.651Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:02:34.265Z"
+      ]
+    },
+    {
+      "id": "7b71001c-f3ed-420c-ad73-bf7ff6aae97b",
+      "path": "package.json",
+      "symbol": "scripts.test",
+      "contentHash": "4fe88e140641c7ba19bd0722c0c0a663f4caff9a3421c283f2ffa2d65b25c91b",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:02:28.651Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": []
+    },
+    {
+      "id": "56d6e66f-cfdd-4022-9680-0bb96fc0a857",
+      "path": "src/types.ts",
+      "symbol": "Item",
+      "contentHash": "e56515d79d74db80e9b25cbfe5a773f53a50cbeae2a8a5106b2e55b5878ffd9a",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:02:28.651Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:02:34.265Z"
+      ]
+    },
+    {
+      "id": "af52c304-b61a-4f4b-9d51-a1b42a508722",
+      "path": "src/types.ts",
+      "symbol": "Receipt",
+      "contentHash": "8b43a0cf3f28abee29bc0e1ff274f5a5120d303e5ba262e5760002b34db0ae6f",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:02:28.651Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:02:34.265Z"
+      ]
+    },
+    {
+      "id": "03449da8-dcc9-4458-9801-2030ad8b8efd",
+      "path": "src/types.ts",
+      "symbol": "ReserveInput",
+      "contentHash": "2a2497ad72d4e8528180d68674b2d148e5fe52809e7d20918cf487fdb614359a",
+      "historicalAtFinalSnapshot": false,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:02:28.651Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:02:34.265Z"
+      ]
+    },
+    {
+      "id": "8614197e-502d-4d5e-8761-c6fe927748af",
+      "path": "src/service.ts",
+      "symbol": "reserve",
+      "contentHash": "2ad6b10add48c6eee3e539e3a6e4a74bb43bd447d20eea2feba1c8b1d4a8e0bc",
+      "historicalAtFinalSnapshot": true,
+      "deliveries": [
+        {
+          "kind": "tool",
+          "timestamp": "2026-10-13T14:02:28.651Z"
+        }
+      ],
+      "exactLaterOutputRepetitions": [
+        "2026-10-13T14:02:34.265Z"
+      ]
+    }
+  ],
+  "toolReplies": [
+    {
+      "tool": "continuum_request_context",
+      "arguments": {
+        "args": {
+          "query": "Find API, service, pricing, catalog, persistence modules, SQL migrations, package/build files, and tests for the warehouse reservation service. Include relevant symbols and schemas."
+        }
+      },
+      "timestamp": "2026-10-13T14:02:25.373Z",
+      "success": false,
+      "body": "Error: Missing query argument."
+    },
+    {
+      "tool": "continuum_request_context",
+      "arguments": {
+        "query": "Find API, service, pricing, catalog, persistence modules, SQL migrations, package/build files, and tests for the warehouse reservation service. Include relevant symbols and schemas."
+      },
+      "timestamp": "2026-10-13T14:02:28.651Z",
+      "success": true,
+      "body": "SESSION: 9e2a8192-d4c6-43d0-863d-372ce65cbeb1\n\nsrc/store.ts:3-5\nexport function find(db:DatabaseSync,tenantId:string,requestId:string) {\n return db.prepare('SELECT * FROM reservations WHERE request_id=? LIMIT 1').get(requestId) as {tenant_id:string;request_id:string;items_json:string;total_cents:number;fee_cents:number;status:string}|undefined;\n}\n\npackage.json:1-1\n\"test\":\"node --test tests/public.test.mjs\"\n\nsrc/types.ts:1-1\nexport interface Item { sku: string; quantity: number }\n\nsrc/types.ts:3-3\nexport interface Receipt { reservationId: string; totalCents: number; feeCents: number }\n\nsrc/types.ts:2-2\nexport interface ReserveInput { tenantId: string; requestId: string; items: Item[] }\n\nsrc/service.ts:6-12\nexport function reserve(db:DatabaseSync,input:ReserveInput):Receipt {\n const existing=find(db,input.tenantId,input.requestId);\n if(existing)return {reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents:existing.total_cents,feeCents:existing.fee_cents};\n const lines=input.items.map(item=>{const row=lookup(db,input.tenantId,item.sku);if(!row)throw new Error('UNKNOWN_SKU');changeStock(db,input.tenantId,item.sku,-item.quantity);return {quantity:item.quantity,unitPriceCents:row.unit_price_cents};});\n const totalCents=computeTotal(lines),receipt={reservationId:`r-${input.tenantId}-${input.requestId}`,totalCents,feeCents:computeFee(totalCents)};\n save(db,input,receipt);return receipt;\n}\n\nRequired context missing: database_schema, rollback. Request targeted context before assuming completeness."
+    }
+  ],
+  "sourceFragmentsSupplied": 6,
+  "exactRepeatedSourceCount": 5,
+  "memory": {
+    "originalFullRequirementPreserved": true,
+    "activeCriticalRequirements": [
+      {
+        "kind": "objective",
+        "text": "Repair this warehouse reservation service across API, service, pricing, catalog, persistence and SQL migration modules. Preserve createApi(db), reserve(db,input), cancel(db,tenantId,requestId), and existing receipt fields exactly: reservationId, totalCents, feeCents. Both API methods must return promises. Reservation IDs are r-<tenantId>-<requestId>.\nTenant and SKU isolation are mandatory. Quantities must be positive integers; reject empty items, invalid quantities, unknown SKUs and insufficient stock. Reservations must atomically debit every line or change nothing. Support multiple lines including repeated SKUs. Compute exact integer merchandise cents from quantities and inventory unit prices.\nIdempotency is durable per (tenantId,requestId): a retry returns the original stored receipt without further debit, even if prices change. Cancellation restores original quantities exactly once; return true only when an active reservation was cancelled, false for unknown/already cancelled requests. A tenant cannot cancel another tenant's request.\nMigration 002 must enforce tenant/request uniqueness. Its down section removes only reservation schema and preserves inventory data and indexes. Preserve migration markers and column names. Do not weaken the public test, rename public contracts or change build tooling. Additional tests are allowed. No dependencies are needed: use node --test tests/public.test.mjs. Finish implementation and validate it.",
+        "evidence_id": "81a40baf-b90e-49c4-92ee-4971bb7e9ed7"
+      },
+      {
+        "kind": "constraint",
+        "text": "Pricing correction: for NEW reservations, charge 25 cents when merchandise subtotal is below 10000 cents, and zero at or above 10000 cents. This supersedes the fixed 50-cent policy. Existing stored receipts must remain stable. Complete the original repair and validate it.",
+        "evidence_id": "b2132489-3c13-4209-8d83-e9181911c656"
+      }
+    ],
+    "binding": [
+      {
+        "session_id": "9e2a8192-d4c6-43d0-863d-372ce65cbeb1",
+        "thread_id": "01a13592-2e0a-7ea0-85a1-4630227552e8",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low",
+        "approval_policy": "never",
+        "sandbox": "workspace-write",
+        "recovery_pending": 1,
+        "last_checkpoint_id": "6e167f3d-6f86-439e-a42f-27b006698ec5",
+        "configuration_json": "{\"contextEnabled\":true,\"durableMemory\":true,\"nativeCompactionPrompt\":true,\"configOverrides\":{\"model_provider\":\"openai\",\"features.multi_agent\":false,\"features.multi_agent_v2\":false,\"features.multi_agent_v2_dynamic_tools\":false,\"features.goals\":false,\"features.unbounded_connection_retries\":false},\"contextStrategy\":\"minimal_manifest\"}"
+      }
+    ],
+    "adaptiveFailureSignals": 0,
+    "continuationRecoveryActuallySent": true,
+    "supersededRecords": 2
+  },
+  "nativeUsageMatchesThreadCounter": true,
+  "sameNativeThread": true,
+  "turnTimeline": [
+    {
+      "timestamp": "2026-10-13T14:02:17.167Z",
+      "threadId": "01a13592-2e0a-7ea0-85a1-4630227552e8",
+      "inputTextHashes": [
+        "08aeeb2f87a39c3e7c57fbbd70c827bd6e44434b10ac8cf27a67b63f4f8bfa75",
+        "335b649343477143fd9fb58d3c98cd04059426b7ab16254d6141f12b2ee659cc"
+      ]
+    },
+    {
+      "timestamp": "2026-10-13T14:03:59.410Z",
+      "threadId": "01a13592-2e0a-7ea0-85a1-4630227552e8",
+      "inputTextHashes": [
+        "bf8d2cc6bc1146b81065cc03e0c7f3bb1250113bd3dfb8717cff68e738d60ef9",
+        "da532469c48f9fe12753e427cd8159f7fe86ea84faa776a1c5cf1b8f1a11108f"
+      ]
+    }
+  ],
+  "limits": [
+    "Exact repetition is transmission, not attributed billing waste.",
+    "Historical source references are not proven stale-context errors.",
+    "No active occupancy or actual billing is available."
+  ]
+}

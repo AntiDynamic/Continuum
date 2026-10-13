@@ -1,5 +1,17 @@
 # Continuum Observer Architecture
 
+## Current context recovery extension
+
+The original observer design below remains the telemetry foundation. Current
+context indexing and delivery live in `repository-indexer` and
+`context-engine`; CLI and MCP use their shared session service. Migration 14
+adds original evidence, versioned memory, recovery checkpoints, and Codex
+thread bindings to the same SQLite database. The existing Codex assist service
+assembles bounded recovery at native continuation boundaries. Evaluation
+scripts create isolated fixture repositories; the git analyzer itself remains
+an observation library. See [phase-next implementation](phase-next/implementation.md)
+for supported host capabilities, provenance, validation, and limitations.
+
 Continuum sits *around* coding agents, not between them and the language model. It acts as an observer, capturing telemetry from the agent's output and the developer's repository.
 
 ## Components

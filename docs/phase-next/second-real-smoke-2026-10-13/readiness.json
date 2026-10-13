@@ -1,0 +1,20 @@
+{
+  "helperRuntime": "PASS",
+  "effectiveOfflineConfiguration": "PASS gpt-5.6-luna/openai/low",
+  "isolation": "PASS",
+  "retryGuards": "PASS; accepted Codex 0.162.1 internal retry limitation",
+  "cancellation": "PASS",
+  "usageMonitoring": "PASS offline",
+  "validatorScope": "PASS baseline fails, valid implementation passes, counterfeit fails",
+  "build": "PASS",
+  "typecheck": "PASS",
+  "lint": "PASS",
+  "offlineRequirements": {
+    "sessionId": "9c8bc407-db68-47b6-87f2-a1342384d11f",
+    "originalEvidencePreserved": true,
+    "recoverable": true,
+    "incomplete": false
+  },
+  "previousLockOwnerExited": true,
+  "newApprovalLock": "approved-recovery-smoke-second-real-smoke-2026-10-13.lock"
+}

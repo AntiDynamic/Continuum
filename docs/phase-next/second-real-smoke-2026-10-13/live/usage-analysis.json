@@ -1,0 +1,59 @@
+{
+  "classification": "Analysis of preserved evidence; no inference requested",
+  "inferenceRequests": 0,
+  "providerReportedResponses": [
+    {
+      "responseId": "resp_0017410dd52e94e0016acd42416e6c819198366200cbef47ab",
+      "turnId": "01a131ca-c6f7-76a1-9f17-52d2e2b2951e",
+      "inputTokens": 12481,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 12481,
+      "outputTokens": 155,
+      "totalTokens": 12636
+    },
+    {
+      "responseId": "resp_0017410dd52e94e0016acd4245a6c48191b7422e3e5c74c275",
+      "turnId": "01a131ca-c6f7-76a1-9f17-52d2e2b2951e",
+      "inputTokens": 12939,
+      "cachedInputTokens": 12032,
+      "uncachedInputTokens": 907,
+      "outputTokens": 482,
+      "totalTokens": 13421
+    }
+  ],
+  "totals": {
+    "inputTokens": 25420,
+    "cachedInputTokens": 12032,
+    "uncachedInputTokens": 13388,
+    "outputTokens": 637,
+    "totalTokens": 26057
+  },
+  "visibleContext": {
+    "measurement": "observed Unicode character counts, not tokens or billing",
+    "hostBaseInstructions": 17730,
+    "nativeDeveloperMessages": [
+      4170
+    ],
+    "nativeUserMessages": [
+      1236,
+      3510,
+      226
+    ],
+    "continuumTurnInputs": [
+      154,
+      3360
+    ],
+    "dynamicToolMetadataSerialized": 994,
+    "toolFailureOutputs": [
+      2,
+      3
+    ]
+  },
+  "interpretation": [
+    "26057 is summed across 2 response records in 1 logical turn(s), not a single input context size.",
+    "Cached input is a subset of input. Uncached input is computed from reported input minus reported cached input.",
+    "Host base/developer instructions are observable separately from Continuum rendered input. Exact provider tokens per fragment and full serialized provider requests are unavailable.",
+    "Tool error outputs and repeated input do not establish provider transport retries.",
+    "Provider billing rates, final attributable cost and remote cancellation accounting are unavailable."
+  ]
+}

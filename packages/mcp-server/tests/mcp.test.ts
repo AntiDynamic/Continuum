@@ -44,4 +44,25 @@ describe("ContinuumMcpServer", () => {
     
     await client.close();
   });
+
+  it("supports a minimal targeted tool surface for preflight", async () => {
+    const previous = process.env.CONTINUUM_MCP_TARGETED;
+    process.env.CONTINUUM_MCP_TARGETED = "1";
+    try {
+      const srv = new ContinuumMcpServer(resolve(__dirname, "../../.."));
+      const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+      await srv.connect(serverTransport);
+      const client = new Client(
+        { name: "TargetedClient", version: "1.0.0" },
+        { capabilities: {} },
+      );
+      await client.connect(clientTransport);
+      const tools = await client.listTools();
+      expect(tools.tools.map((tool) => tool.name)).toEqual(["continuum_request_context"]);
+      await client.close();
+    } finally {
+      if (previous === undefined) delete process.env.CONTINUUM_MCP_TARGETED;
+      else process.env.CONTINUUM_MCP_TARGETED = previous;
+    }
+  });
 });

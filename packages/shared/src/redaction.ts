@@ -32,7 +32,7 @@ const BUILT_IN_PATTERNS: RedactionPattern[] = [
   },
   {
     label: "openai-api-key",
-    pattern: /\bsk-[A-Za-z0-9]{20,}\b/g,
+    pattern: /\bsk-(?:(?:proj|svcacct)-)?[A-Za-z0-9_-]{20,}\b/g,
     replacement: "[REDACTED:OPENAI_KEY]",
   },
   {

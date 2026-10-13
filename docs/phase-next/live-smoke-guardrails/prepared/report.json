@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "continuum.recovery-benchmark.v1",
+  "records": [
+    {
+      "caseId": "authentication-compatibility",
+      "repetition": 1,
+      "treatment": "C",
+      "initialCommit": "6654fa635e6599a17a7de450e2c48a2d41cc9975",
+      "task": "Fix AuthService validation and refresh. Reject empty and literal expired tokens. Preserve method signatures and return <token>-refreshed for valid tokens.",
+      "continuation": "Complete the authentication fix and validate the original compatibility and security requirements.",
+      "configuration": {
+        "model": "gpt-5.6-luna",
+        "reasoningEffort": "low",
+        "approvalPolicy": "never",
+        "sandbox": "workspace-write",
+        "timeoutMs": 60000,
+        "maximumReportedTokens": 20000,
+        "persistentSession": true,
+        "contextEnabled": true,
+        "durableMemory": true,
+        "nativeCompactionPrompt": true,
+        "configOverrides": {
+          "model_provider": "openai",
+          "features.multi_agent": false,
+          "features.multi_agent_v2": false,
+          "features.multi_agent_v2_dynamic_tools": false,
+          "features.goals": false,
+          "features.unbounded_connection_retries": false
+        }
+      },
+      "transition": "compaction",
+      "mode": "dry-run",
+      "baseline": {
+        "status": "failed",
+        "taskId": "small-security-token",
+        "checks": [
+          {
+            "name": "independent-behavior",
+            "status": "failed",
+            "error": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Missing expected exception.\n    at evaluate (file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:82:12)\n    at async file:///home/anti/Projects/Continuum/scripts/phase6-behavior.mjs:132:39 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: undefined,\n  operator: 'throws',\n  diff: 'simple'\n}\n\nNode.js v24.20.0\n"
+          }
+        ],
+        "behavioral": true,
+        "validator": "executable-behavior-v1"
+      },
+      "setupVerified": true,
+      "setupDurationMs": 3346,
+      "behavioralSuccess": null,
+      "agentCompleted": null,
+      "criticalRequirementRetention": null,
+      "exactEvidenceRecovery": null,
+      "retrievalMisses": null,
+      "staleContextErrors": null,
+      "repeatedExploration": null,
+      "modelCalls": null,
+      "inputTokens": null,
+      "cachedInputTokens": null,
+      "outputTokens": null,
+      "recoveryEstimatedTokens": null,
+      "totalAttributableCost": null,
+      "costMeasurement": "unavailable",
+      "genuineCompactions": 0,
+      "simulatedCompactions": 0,
+      "compactionEvidence": [],
+      "generationTurnRequests": 0,
+      "compactionRequests": 0,
+      "usageIncludesCompaction": null,
+      "hiddenValidatorIsolation": {
+        "mode": "bubblewrap",
+        "evaluatorRootHidden": true,
+        "hostTmpHidden": true,
+        "recorderDatabaseHidden": true,
+        "hostCodexHistoryHidden": true,
+        "credentialsCopied": false,
+        "appliedToAgentProcess": false
+      },
+      "decisionReady": false,
+      "codexVersion": "0.162.1",
+      "hostRetries": {
+        "version": "0.162.1",
+        "verified": false,
+        "controlled": false,
+        "reason": "Codex 0.162.1 merge_configured_model_providers ignores overrides of built-in openai (entry.or_insert); default HTTP/stream retries and separate unauthorized recovery cannot be disabled through those overrides.",
+        "sources": [
+          "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/model-provider-info/src/lib.rs#L699",
+          "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/client.rs#L1795",
+          "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/responses_retry.rs#L99"
+        ]
+      },
+      "offlineRequirements": {
+        "sessionId": "fb5217b6-fceb-4e06-bdf7-112f1319e304",
+        "originalEvidencePreserved": true,
+        "recoverable": true,
+        "incomplete": false
+      }
+    }
+  ],
+  "liveTreatmentRuns": 0,
+  "paidInferenceUsage": "no paid inference requested",
+  "decisionReady": false
+}

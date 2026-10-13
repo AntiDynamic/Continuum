@@ -1,0 +1,10 @@
+✔ native control uses one user input and no Continuum tools, resumes identical thread (264.428033ms)
+✔ native control timeout requests interruption and terminates stalled child (199.3841ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1367.315395

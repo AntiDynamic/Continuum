@@ -17,12 +17,12 @@
  */
 
 import {
+  redactString,
   generateRunId,
   now,
   createLogger,
   calculateRunCostEvidence,
   normalisePath,
-  AgentRunError,
 } from "@continuum/shared";
 import type {
   AgentAdapter,
@@ -41,6 +41,7 @@ import {
   GitSnapshotRepository,
   FileChangeRepository,
   UsageEvidenceRepository,
+  UsageSnapshotRepository,
   PricingProfileRepository,
   CostEvidenceRepository,
   TestRunRepository,
@@ -91,7 +92,7 @@ export async function orchestrateRun(
   const runId = generateRunId();
   const repositoryPath = normalisePath(opts.repositoryPath);
 
-  log.info("Orchestrating run", { runId, task: opts.task.slice(0, 80) });
+  log.info("Orchestrating run", { runId, task: redactString(opts.task.slice(0, 80),opts.config.redactPatterns) });
 
   // Resolve and record the repository
   const repoRoot = await getRepositoryRoot(repositoryPath);
@@ -105,6 +106,7 @@ export async function orchestrateRun(
   const testRunRepo = new TestRunRepository(opts.db);
   const usageRepo = new UsageMetricRepository(opts.db);
   const usageEvidenceRepo = new UsageEvidenceRepository(opts.db);
+  const usageSnapshotRepo = new UsageSnapshotRepository(opts.db);
   const pricingRepo = new PricingProfileRepository(opts.db);
   const costRepo = new CostEvidenceRepository(opts.db);
 
@@ -121,7 +123,7 @@ export async function orchestrateRun(
     id: runId,
     repositoryId: repositoryRecord.id,
     agentId: opts.adapter.id,
-    task: opts.task,
+    task: redactString(opts.task,opts.config.redactPatterns),
     branch: branch ?? undefined,
     startingCommit: startingCommit ?? undefined,
   });
@@ -147,6 +149,8 @@ export async function orchestrateRun(
         signal: opts.signal,
         runsDir: opts.runsDir,
         runId,
+        redactPatterns: opts.config.redactPatterns,
+        captureRawOutput: opts.config.captureRawOutput,
       });
       testRunRepo.insert({
         runId,
@@ -195,6 +199,8 @@ export async function orchestrateRun(
   let usageEvidence: AgentUsageEvidence = { measurement: "unavailable" };
   let usageProvider: string | undefined;
   let usageModel: string | undefined;
+  let usageSourceEventId: string | undefined;
+  let usageSourceSequenceNumber: number | undefined;
 
   let terminalEventReceived = false;
 
@@ -232,9 +238,21 @@ export async function orchestrateRun(
         usageEvidence = {
           inputTokens: payload.inputTokens,
           cachedInputTokens: payload.cachedTokens,
+          cacheCreationInputTokens: payload.cacheCreationInputTokens,
           outputTokens: payload.outputTokens,
+          totalTokens: payload.totalTokens,
           measurement: "agent_reported",
         };
+        usageSourceEventId = event.eventId;
+        usageSourceSequenceNumber = event.sequenceNumber;
+        usageSnapshotRepo.append({
+          runId,
+          sourceEventId: event.eventId,
+          sequenceNumber: event.sequenceNumber,
+          observedAt: event.timestamp,
+          usage: usageEvidence,
+          rawProviderPayload: JSON.stringify(event),
+        });
       }
 
       if (event.eventType === "agent_usage") {
@@ -242,17 +260,33 @@ export async function orchestrateRun(
           event.inputTokens !== undefined ||
           event.cachedInputTokens !== undefined ||
           event.outputTokens !== undefined ||
-          event.reasoningTokens !== undefined;
+          event.reasoningTokens !== undefined ||
+          event.cacheCreationInputTokens !== undefined ||
+          event.totalTokens !== undefined;
         usageProvider = event.provider;
         usageModel = event.model;
         usageEvidence = {
           inputTokens: event.inputTokens,
           cachedInputTokens: event.cachedInputTokens,
+          cacheCreationInputTokens: event.cacheCreationInputTokens,
           outputTokens: event.outputTokens,
           reasoningTokens: event.reasoningTokens,
+          totalTokens: event.totalTokens,
           toolCalls: event.toolCalls,
           measurement: event.measurement,
         };
+        usageSourceEventId = event.eventId;
+        usageSourceSequenceNumber = event.sequenceNumber;
+        usageSnapshotRepo.append({
+          runId,
+          sourceEventId: event.eventId,
+          sequenceNumber: event.sequenceNumber,
+          observedAt: event.timestamp,
+          provider: event.provider,
+          model: event.model,
+          usage: usageEvidence,
+          rawProviderPayload: JSON.stringify(event),
+        });
       }
 
       if (event.eventType === "run_completed") {
@@ -280,11 +314,8 @@ export async function orchestrateRun(
   } catch (err) {
     errorSummary =
       err instanceof Error ? err.message : "Unknown orchestration error";
-    throw new AgentRunError(
-      errorSummary,
-      runId,
-      err,
-    );
+    finalStatus = opts.signal?.aborted ? "cancelled" : "failed";
+    exitCode = 1;
   }
 
   const normalizedUsage: AgentUsageEvidence = {
@@ -301,13 +332,17 @@ export async function orchestrateRun(
     provider: usageProvider,
     model: usageModel,
     usage: normalizedUsage,
+    sourceEventId: usageSourceEventId,
+    sourceSequenceNumber: usageSourceSequenceNumber,
   });
 
   const normalizedMetrics = [
     ["input_tokens", normalizedUsage.inputTokens, "tokens"],
     ["cached_input_tokens", normalizedUsage.cachedInputTokens, "tokens"],
+    ["cache_creation_input_tokens", normalizedUsage.cacheCreationInputTokens, "tokens"],
     ["output_tokens", normalizedUsage.outputTokens, "tokens"],
     ["reasoning_tokens", normalizedUsage.reasoningTokens, "tokens"],
+    ["total_tokens", normalizedUsage.totalTokens, "tokens"],
     ["tool_calls", normalizedUsage.toolCalls, "count"],
   ] as const;
   for (const [metricName, numericValue, unit] of normalizedMetrics) {
@@ -394,6 +429,8 @@ export async function orchestrateRun(
         signal: opts.signal,
         runsDir: opts.runsDir,
         runId,
+        redactPatterns: opts.config.redactPatterns,
+        captureRawOutput: opts.config.captureRawOutput,
       });
       testRunRepo.insert({
         runId,

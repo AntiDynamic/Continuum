@@ -1,0 +1,50 @@
+{
+  "configuration": {
+    "model": "gpt-5.6-luna",
+    "reasoningEffort": "low",
+    "contextStrategy": "minimal_manifest",
+    "approvalPolicy": "never",
+    "sandbox": "workspace-write",
+    "timeoutMs": 180000,
+    "maximumReportedTokens": 350000,
+    "persistentSession": true,
+    "contextEnabled": true,
+    "durableMemory": true,
+    "nativeCompactionPrompt": true,
+    "configOverrides": {
+      "model_provider": "openai",
+      "features.multi_agent": false,
+      "features.multi_agent_v2": false,
+      "features.multi_agent_v2_dynamic_tools": false,
+      "features.goals": false,
+      "features.unbounded_connection_retries": false
+    }
+  },
+  "treatment": "C",
+  "sourceRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+  "fixtureCommit": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+  "watchdog": {
+    "verified": true,
+    "seconds": 600
+  },
+  "hostRetries": {
+    "version": "0.162.1",
+    "verified": false,
+    "controlled": false,
+    "reason": "Codex 0.162.1 merge_configured_model_providers ignores overrides of built-in openai (entry.or_insert); default HTTP/stream retries and separate unauthorized recovery cannot be disabled through those overrides.",
+    "sources": [
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/model-provider-info/src/lib.rs#L699",
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/client.rs#L1795",
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/responses_retry.rs#L99"
+    ]
+  },
+  "isolation": {
+    "mode": "bubblewrap",
+    "evaluatorRootHidden": true,
+    "hostTmpHidden": true,
+    "recorderDatabaseHidden": true,
+    "hostCodexHistoryHidden": true,
+    "otherUserAgentHistoriesHidden": true,
+    "credentialsCopied": true
+  }
+}

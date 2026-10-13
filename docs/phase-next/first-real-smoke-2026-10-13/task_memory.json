@@ -1,0 +1,98 @@
+[
+  {
+    "id": "928f4578-3d1e-4bc2-b0b6-dc3b1e84c498",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 1,
+    "kind": "objective",
+    "text": "Fix AuthService validation and refresh. Reject empty and literal expired tokens. Preserve method signatures and return <token>-refreshed for valid tokens.",
+    "authority": "user",
+    "critical": 1,
+    "evidence_id": "edccf828-dc3e-4999-81de-84cde328db7a",
+    "supersedes": null,
+    "operation_key": "initial-task"
+  },
+  {
+    "id": "036965a8-832c-434a-8bb6-e2d73f138819",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 2,
+    "kind": "source",
+    "text": "Source docs/authentication.md (Authentication)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "4168ffac-a682-42ce-abf1-7ae89a2fc79c",
+    "supersedes": null,
+    "operation_key": "source-version:ab539298-c984-42e4-9728-8fe0886a88bc"
+  },
+  {
+    "id": "5abedf4d-ab3a-42fa-bd93-05b885fae8ba",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 3,
+    "kind": "source",
+    "text": "Source src/auth-service.ts (AuthService)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "2e3c23ba-1eb2-4783-8d9f-e5146865c884",
+    "supersedes": null,
+    "operation_key": "source-version:ffe10c6c-dcec-4fde-9a43-00ff8a0875ee"
+  },
+  {
+    "id": "41b6af8f-38de-41d6-bd91-8f5931f64d55",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 4,
+    "kind": "source",
+    "text": "Source SECURITY.md (Token trust policy)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "34c60d13-1cfb-4bd1-b821-9f7d510dbd34",
+    "supersedes": null,
+    "operation_key": "source-version:0782c308-664f-442a-b767-1bdf53fcac57"
+  },
+  {
+    "id": "b0af5999-ee37-4235-a747-0d043d1256c8",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 5,
+    "kind": "source",
+    "text": "Source src/auth-service.ts (TokenClaims)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "5a6bfd75-5aed-4721-a8df-0b8e50da7404",
+    "supersedes": null,
+    "operation_key": "source-version:4711d5d5-ba4f-4bfe-8875-2a995673886a"
+  },
+  {
+    "id": "422f3fd0-c24f-4651-82e9-2768756c11a5",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 6,
+    "kind": "source",
+    "text": "Source tests/auth-service.test.ts (rejectsEmptyTokenTest)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "1450fcdb-ac80-4418-ac81-a5745699a32a",
+    "supersedes": null,
+    "operation_key": "source-version:89ee9641-b55c-4b58-928e-f87969980c7a"
+  },
+  {
+    "id": "54baedef-16dd-431f-ad39-4ec7e2161d5a",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 7,
+    "kind": "source",
+    "text": "Source tests/auth-service.test.ts (import ../src/auth-service)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "a680e74f-b780-4ed6-a13d-525bcc04b044",
+    "supersedes": null,
+    "operation_key": "source-version:37f4fba8-2d31-4435-b6c7-03276bd93063"
+  },
+  {
+    "id": "31e0099c-61d5-4b7b-8842-91b596616b3a",
+    "session_id": "4854dbdb-ba5e-4a4d-9176-2e1e6e69409c",
+    "version": 8,
+    "kind": "source",
+    "text": "Source README.md (Small service)",
+    "authority": "observed",
+    "critical": 0,
+    "evidence_id": "cc244e45-8970-416d-870e-4245ebdde3e8",
+    "supersedes": null,
+    "operation_key": "source-version:c16785a2-ce62-4cde-a4cc-f865db557009"
+  }
+]

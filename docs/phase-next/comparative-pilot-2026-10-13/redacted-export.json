@@ -1,0 +1,12 @@
+{
+  "policy": "Only account email redacted; original local traces/databases untouched and excluded from Git. Provider usage, task evidence, protocol identities and validation unchanged.",
+  "files": {
+    "live/A/A-redacted-trace.jsonl": "3528809504a19e6f3d7e0040482e19415949e0d79a9864dbf692beb6e3f1b1c5",
+    "live/B/B-redacted-trace.jsonl": "e4793cbfe65416074d7afc569955201ea325f7a7fa6c468887d295197398a978",
+    "live/B/redacted-memory.db": "fdf70033b17cacb1d839a780ab397126707d331eb8739d648536f488cd5a9cc5",
+    "live/C/C-redacted-trace.jsonl": "a8cbb669eeb2dcd108102380688e03078b18d3f13de947fcd55c304b64ff27d7",
+    "live/C/redacted-memory.db": "1c67051a06b2dea362a52834731336b6f511334301711e3f53cf98714b224252",
+    "live/D/D-redacted-trace.jsonl": "153602325b558dbcfc8fb0ecfb530ec93a0be483bd70c2ad99e6c46cb8ca50f1",
+    "live/D/redacted-memory.db": "1ae7c44001d18b2c63a31aa03f116d5cad1196c0568d08277d3d1f3276d4ff21"
+  }
+}

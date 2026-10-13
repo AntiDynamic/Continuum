@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "continuum.context-efficiency-readiness.v1",
+  "checks": {
+    "initialPacketMeasurement": "PASS offline",
+    "contextStrategies": "PASS offline",
+    "usageLedger": "PASS offline",
+    "compactionProtocolOffline": "PASS offline",
+    "recoveryInjectionOffline": "PASS offline",
+    "validatorIntegrity": "PASS offline",
+    "modelLock": "PASS offline",
+    "retrySafeguards": "PASS offline",
+    "cancellation": "PASS offline",
+    "benchmarkIsolation": "PASS offline",
+    "proposedUsageBudget": "PASS offline",
+    "operationEnforcement": "PASS offline"
+  },
+  "selectedStrategy": "on_demand",
+  "selectedCase": "minimal-recovery",
+  "model": "gpt-5.6-luna",
+  "provider": "openai",
+  "reasoning": "low",
+  "reportedUsageThreshold": 85000,
+  "planningRange": [
+    50544,
+    80526
+  ],
+  "budgetEvidence": "6 * largest historical response 13421 = 80526; fixed 85000 planning allowance, not hard cap",
+  "contextOccupancy": null,
+  "hostInternalRetryLimitationAccepted": true,
+  "externalWatchdog": "GNU timeout TERM 240s, KILL grace 10s",
+  "fullSuite": {
+    "passed": 310,
+    "failed": 0,
+    "skipped": 4
+  },
+  "latestCancellationTests": 5,
+  "finalGateTests": 38,
+  "liveRunsSoFarThisStage": 0,
+  "protocolOnlyOfflineEvidence": true,
+  "nativeCompactionStillUnverified": true
+}

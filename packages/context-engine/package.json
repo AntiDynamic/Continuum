@@ -21,7 +21,8 @@
   "dependencies": {
     "@continuum/database": "workspace:*",
     "@continuum/shared": "workspace:*",
-    "@continuum/git-analyzer": "workspace:*"
+    "@continuum/git-analyzer": "workspace:*",
+    "@continuum/repository-indexer": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",

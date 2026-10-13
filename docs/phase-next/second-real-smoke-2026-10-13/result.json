@@ -1,0 +1,62 @@
+{
+  "infrastructure": {
+    "launch": true,
+    "toolRuntime": true,
+    "gracefulCancellation": true,
+    "genuineCompaction": false,
+    "resume": false
+  },
+  "recovery": {
+    "originalEvidencePersisted": true,
+    "initialPacketReceived": true,
+    "postCompactionRecovery": "not reached"
+  },
+  "behavior": {
+    "visible": {
+      "status": "passed",
+      "taskId": "small-security-token",
+      "checks": [
+        {
+          "name": "fixture-behavior",
+          "status": "passed"
+        }
+      ],
+      "behavioral": true,
+      "validator": "executable-behavior-v1",
+      "output": "Executable behavior passed"
+    },
+    "hidden": {
+      "status": "passed",
+      "taskId": "small-security-token",
+      "checks": [
+        {
+          "name": "independent-behavior",
+          "status": "passed"
+        }
+      ],
+      "behavioral": true,
+      "validator": "executable-behavior-v1",
+      "output": "Executable behavior passed"
+    },
+    "scope": "Final interrupted-task code passes authentication validators; recovered continuation behavior untested"
+  },
+  "logicalGenerationTurns": 1,
+  "completedLogicalTurns": 0,
+  "completedProviderResponses": 2,
+  "explicitCompactions": 0,
+  "continuumRetries": 0,
+  "observableHostRetryEvents": 0,
+  "actualHostRetryCount": null,
+  "usage": {
+    "inputTokens": 25420,
+    "cachedInputTokens": 12032,
+    "uncachedInputTokens": 13388,
+    "outputTokens": 637,
+    "totalTokens": 26057
+  },
+  "executionDurationMs": 12464,
+  "armDurationMs": 18623,
+  "cost": null,
+  "stopReason": "Error: Reported token ceiling reached; stopping this execution.",
+  "timeout": false
+}

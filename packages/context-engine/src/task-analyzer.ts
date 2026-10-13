@@ -22,9 +22,9 @@ export class DeterministicTaskAnalyzer implements TaskAnalyzer {
     const lower = normalizedTask.toLowerCase();
     const reasons: string[] = [];
     let taskClass: TaskClass = "unknown";
-    if (/migration|schema|rollback/.test(lower)) { taskClass = "database_migration"; reasons.push("Matched migration, schema, or rollback terminology."); }
-    else if (/auth|token|secret|permission|trust|security|privacy/.test(lower)) { taskClass = "security_sensitive"; reasons.push("Matched security or trust terminology."); }
-    else if (/rename|extract|move|refactor/.test(lower)) { taskClass = "refactor"; reasons.push("Matched structural refactoring terminology."); }
+    if (/\b(migration|schema|rollback)\b/.test(lower)) { taskClass = "database_migration"; reasons.push("Matched migration, schema, or rollback terminology."); }
+    else if (/\b(auth(?:entication)?|secret(?:s)?|permission(?:s)?|trust|security|privacy)\b|(?:access|refresh|expired|bearer)\s*[-_ ]?token|token\s*(?:validation|verification)|refreshToken|validateToken/i.test(lower)) { taskClass = "security_sensitive"; reasons.push("Matched security or trust terminology."); }
+    else if (/\b(rename|extract|move|refactor)\b/.test(lower)) { taskClass = "refactor"; reasons.push("Matched structural refactoring terminology."); }
     else if (/dependency|upgrade|version bump/.test(lower)) { taskClass = "dependency_update"; reasons.push("Matched dependency update terminology."); }
     else if (/config|configuration|yaml|json/.test(lower)) { taskClass = "configuration"; reasons.push("Matched configuration terminology."); }
     else if (/documentation|readme|docs?\b/.test(lower)) { taskClass = "documentation"; reasons.push("Matched documentation terminology."); }

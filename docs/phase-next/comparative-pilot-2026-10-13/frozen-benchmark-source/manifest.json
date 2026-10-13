@@ -1,0 +1,24 @@
+{
+  "originalRevision": "e592458ee369b7b1dc82bb197537e1817f200f0f",
+  "files": {
+    "package.json": "e784fb450ddfa707bdbba62013c20acd676b6f9f28eb127539b6efe923f010ec",
+    "packages/codex-app-server/src/assist-execution-service.ts": "f610a10616d19313ff150e8f15d2341a9808a5b73eb90a220634c002f8c288d7",
+    "packages/codex-app-server/src/assist-tool-router.ts": "d84e8c3404db4d4294e97922584445d7b0a8859285cf804bab4f07446f058cbf",
+    "packages/codex-app-server/src/context-delivery-strategy.ts": "e49267b79463425b2281b7bc5fbdcc3b2784e8fb316197a0dd67705c0e4c55fe",
+    "packages/shared/src/config.ts": "be351fbc653995bdaedceea62ebba7fddf5f10254018bb07e408c8cc7964e71e",
+    "scripts/codex-model-inspect.mjs": "1cc2988caafb53a2065b498754415c261b70012eed39bc15fbc398f919949ecc",
+    "scripts/comparative-pilot.mjs": "442c7b77e6837aac8f5ef00ba4a45ebc3e5bc94b061d3a63627910a691bd9859",
+    "scripts/comparative/context-audit.mjs": "a6c3ecae3ea2434fc224abe5f8c47059377670b8b74728c687e84758018116a1",
+    "scripts/comparative/guard.mjs": "45eda26aaf6e724d1950de6fb20679067906e62b62334a973f90c2743d3fd4d0",
+    "scripts/comparative/native-turn.mjs": "23301c210733b5060d5d81237a6d5b7821847a8bb0941141d6fb13cf48515a79",
+    "scripts/comparative/reference.mjs": "1a83d2ff5ae0ed25f9fadea1894c83d15e6a6a4cdbc9252b58b6cf60f7dba95b",
+    "scripts/comparative/tasks.mjs": "3b824706822533ecdc3c2b539bfff3812b52db0ff8964bd03da23819e29a0660",
+    "scripts/comparative/validator.mjs": "d06cb25cd3cbec9daef7ef4833893102bb99c882ca677eff58422c99aa549150",
+    "scripts/comparative/workloads.mjs": "88a7e4316d1a6bc51bf4b761f9b632a2d0f4bbc42cd647b80373f5e1e8cf6a16",
+    "scripts/recovery-helper-preflight.mjs": "d05b457187f23ed6dabd1e77447bc2fdc1d4f8c2d54b2d0e77b908ccea888e7b",
+    "scripts/recovery-isolation.mjs": "1801c87ef89ca9bc795a1ccaa30d32927aa1fa5a029156ba4a765c1db2c14b37",
+    "scripts/recovery-safety.mjs": "0e7a945d327e953bbbfefdbee525dd2826ca60705190401dead7c27bd9733f0e",
+    "scripts/recovery-usage-ledger.mjs": "69eeddd6a6be725f57a19e5d44b8370f6d0dcfb54010fdf6af394acd5d4fa3ee"
+  },
+  "purpose": "Exact frozen source snapshots preserve study traceability without publishing private historical Git objects."
+}

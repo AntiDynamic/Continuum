@@ -1,0 +1,14 @@
+{
+  "accountMetadataRedacted": [
+    "docs/phase-next/context-efficiency-2026-10-13/live/minimal-recovery-C-trace.jsonl",
+    "docs/phase-next/first-real-smoke-2026-10-13/authentication-compatibility-C-trace.jsonl",
+    "docs/phase-next/second-real-smoke-2026-10-13/live/authentication-compatibility-C-trace.jsonl",
+    "docs/phase-next/second-real-smoke-2026-10-13/live/authentication-compatibility-C.db",
+    "docs/phase-next/context-efficiency-2026-10-13/live/minimal-recovery-C.db",
+    "docs/phase-next/first-real-smoke-2026-10-13/database-original/continuum.db",
+    "docs/phase-next/first-real-smoke-2026-10-13/authentication-compatibility-C.db"
+  ],
+  "originalCopies": ".continuum/pre-publication-evidence",
+  "originalHistoryRetainedLocally": true,
+  "providerUsageAndTaskDataUnchanged": true
+}

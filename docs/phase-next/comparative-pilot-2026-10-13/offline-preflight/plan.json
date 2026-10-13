@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "continuum.comparative-pilot.v1",
+  "sourceRevision": "8bba103940eea6973e6fdcf2597cff58c6be2efc",
+  "baselineRevision": "8bba103940eea6973e6fdcf2597cff58c6be2efc",
+  "fixtureCommit": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+  "baselineHashes": {
+    ".gitignore": "24af790867cb10c996e544c41ebc5c1dd8eab11a8e267a13f988d7abe889e162",
+    "README.md": "366f2d51572c8608d9cc2590339fd49ffd520ecf11fbc9fc936954cb4cee4878",
+    "migrations/001_inventory.sql": "a3630a90cf65c9b6387ca0de698423e35f43062cc8dfc8df25cf7ffe2287dbb0",
+    "migrations/002_reservations.sql": "b6b14cec3bb829df701b99643db28ed8c11d5290857cc883130416ed6a69638a",
+    "package.json": "8679061bc32355c48ab18327120803c622d1fb10708fb81672d5e4e583d2c5d1",
+    "src/api.ts": "91c1d30fa047e95abfcb9924c5b91e04219376b8fe11607b3d442f6094ef3e8f",
+    "src/catalog.ts": "93e124f727de665c88385cd53151f465d991906fd0fe818f4a00725e0b2f2989",
+    "src/pricing.ts": "727f1a6680b098c75e4eca37ea97082e86074790aa04f9375d0a0736e5989892",
+    "src/service.ts": "8901e5fe322f780eedbc3aac53aa998bb10badc21f96cb600900dadb3e2fad75",
+    "src/store.ts": "78caf56d24b3ed373839f787484170696041d62cd91d429066b28f5e2187e33f",
+    "src/types.ts": "3ef693d4a69f3b373f5e009338d1f36f64ae349a67a6045419c1a36698aabe21",
+    "tests/public.test.mjs": "c9e80a4ba2dd968047c8f29eb6124809db95a24ea7266d76dd706af0d07b1cf3"
+  },
+  "fileHashes": {
+    "scripts/comparative-pilot.mjs": "279c85a9d07fe2b46168967cce64488a20f8e8cf56ae8afe138482f11e81804d",
+    "scripts/comparative/tasks.mjs": "b2c4dab4114c0acc92a4fe6f18fb15707c6f3e80c0e791faab490b9a6902b145",
+    "scripts/comparative/validator.mjs": "a5f18ccf1acf09b7d3d6efe0ed49b64842a6a345c81865dd14aeb09a8639aabc",
+    "scripts/comparative/reference.mjs": "1a83d2ff5ae0ed25f9fadea1894c83d15e6a6a4cdbc9252b58b6cf60f7dba95b",
+    "scripts/comparative/guard.mjs": "34b26f00ea21ed29634a1ec3d3c0cc065ff1d56109f4f6abbbf39d9079bf50e4",
+    "scripts/recovery-isolation.mjs": "1801c87ef89ca9bc795a1ccaa30d32927aa1fa5a029156ba4a765c1db2c14b37",
+    "scripts/recovery-usage-ledger.mjs": "d68892bdc3d2a6b78689ba4d30d6f6f57d89f8112ebce58b52462ee66d0c589e"
+  },
+  "task": {
+    "id": "warehouse-medium-natural",
+    "category": "natural",
+    "complexity": "medium",
+    "fixture": "packages/context-engine/benchmarks/v2/reservations",
+    "stages": [
+      "Repair this warehouse reservation service across API, service, pricing, catalog, persistence and SQL migration modules. Preserve createApi(db), reserve(db,input), cancel(db,tenantId,requestId), and existing receipt fields exactly: reservationId, totalCents, feeCents. Both API methods must return promises. Reservation IDs are r-<tenantId>-<requestId>.\nTenant and SKU isolation are mandatory. Quantities must be positive integers; reject empty items, invalid quantities, unknown SKUs and insufficient stock. Reservations must atomically debit every line or change nothing. Support multiple lines including repeated SKUs. Compute exact integer merchandise cents from quantities and inventory unit prices.\nIdempotency is durable per (tenantId,requestId): a retry returns the original stored receipt without further debit, even if prices change. Cancellation restores original quantities exactly once; return true only when an active reservation was cancelled, false for unknown/already cancelled requests. A tenant cannot cancel another tenant's request.\nMigration 002 must enforce tenant/request uniqueness. Its down section removes only reservation schema and preserves inventory data and indexes. Preserve migration markers and column names. Do not weaken the public test, rename public contracts or change build tooling. Additional tests are allowed. No dependencies are needed: use node --test tests/public.test.mjs. Finish implementation and validate it.\nFor this initial phase, charge a fixed 50-cent fee for every successful reservation.",
+      "Pricing correction: for NEW reservations, charge 25 cents when merchandise subtotal is below 10000 cents, and zero at or above 10000 cents. This supersedes the fixed 50-cent policy. Existing stored receipts must remain stable. Complete the original repair and validate it."
+    ],
+    "allowedPaths": [
+      "src/",
+      "migrations/002_reservations.sql",
+      "tests/"
+    ],
+    "prohibitedPaths": [
+      "tests/public.test.mjs",
+      "package.json",
+      "migrations/001_inventory.sql",
+      "src/types.ts"
+    ],
+    "turns": 2,
+    "maxLogicalTurns": 4,
+    "maxExplicitCompactions": 0,
+    "reportedTokenThreshold": 350000,
+    "turnTimeoutMs": 180000,
+    "overallTimeoutSeconds": 600
+  },
+  "order": [
+    "B",
+    "D",
+    "C",
+    "A"
+  ],
+  "model": "gpt-5.6-luna",
+  "provider": "openai",
+  "reasoning": "low",
+  "codexVersion": "0.162.1",
+  "repetitions": 1,
+  "mode": "dry-run",
+  "createdAt": "2026-10-13T13:37:07.277Z",
+  "limits": {
+    "generationTurns": 2,
+    "logicalCeiling": 4,
+    "explicitCompactions": 0,
+    "reportedTokens": 350000,
+    "turnTimeoutMs": 180000,
+    "watchdogSeconds": 600,
+    "killGraceSeconds": 10,
+    "hardBillingCeiling": null
+  },
+  "budgetEvidence": {
+    "historicalRecoveryTokens": 104642,
+    "historicalProviderResponses": 8,
+    "estimatedMediumResponses": [
+      12,
+      20
+    ],
+    "estimatedPerArmTokens": [
+      180000,
+      350000
+    ],
+    "fourArmEstimatedExposure": [
+      720000,
+      1400000
+    ],
+    "uncertainty": "Planning range, not guaranteed billing or occupancy. Longer history/tool responses may exceed it. All treatments have identical fixed limits; no in-run increase."
+  },
+  "isolation": "Independent complete clones before any inference; no shared Git object store, reference solutions or other histories. Evaluator and recorder masked."
+}

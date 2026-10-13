@@ -1,0 +1,24 @@
+$ pnpm -r lint
+Scope: 11 of 12 workspace projects
+packages/shared lint$ eslint src tests
+packages/shared lint: Done
+packages/database lint$ eslint src tests
+packages/gemini-adapter lint$ eslint src tests
+packages/git-analyzer lint$ eslint src tests
+packages/git-analyzer lint: Done
+packages/gemini-adapter lint: Done
+packages/database lint: Done
+packages/agent-core lint$ eslint src tests
+packages/evaluator lint$ eslint src tests
+packages/repository-indexer lint$ eslint src
+packages/agent-core lint: Done
+packages/repository-indexer lint: Done
+packages/evaluator lint: Done
+packages/context-engine lint$ eslint src tests
+packages/context-engine lint: Done
+packages/codex-app-server lint$ eslint src tests
+packages/mcp-server lint$ eslint src tests
+packages/mcp-server lint: Done
+packages/codex-app-server lint: Done
+apps/cli lint$ eslint src
+apps/cli lint: Done

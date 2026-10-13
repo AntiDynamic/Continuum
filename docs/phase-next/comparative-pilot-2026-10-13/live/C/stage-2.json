@@ -1,0 +1,397 @@
+{
+  "executionId": "804be332-3933-45e0-a8d9-d6517bfbea15",
+  "sessionId": "9e2a8192-d4c6-43d0-863d-372ce65cbeb1",
+  "report": {
+    "schemaVersion": "continuum.shadow-flight-recorder.v2",
+    "execution": {
+      "executionId": "804be332-3933-45e0-a8d9-d6517bfbea15",
+      "sessionId": "9e2a8192-d4c6-43d0-863d-372ce65cbeb1",
+      "repositoryId": "1",
+      "task": "Pricing correction: for NEW reservations, charge 25 cents when merchandise subtotal is below 10000 cents, and zero at or above 10000 cents. This supersedes the fixed 50-cent policy. Existing stored receipts must remain stable. Complete the original repair and validate it.",
+      "snapshot": {
+        "snapshot_kind": "worktree",
+        "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+        "worktree_hash": "71472cd246784553c6fc851b187ec6e3ae1cc3560333535276f8e0e12dc33ed6",
+        "dirty": true
+      },
+      "finalSnapshot": {
+        "available": true,
+        "base_commit_hash": "4aa7f181c50e3109ff6f8c4dba229b51b2929f24",
+        "worktree_hash": "01d78ae72aa74bd0ece0b7c1e8a96e0370b5e3c37d488d56865327ef154c4459",
+        "error": null
+      },
+      "codexVersion": "0.162.1",
+      "model": "gpt-5.6-luna",
+      "status": "completed",
+      "durationMs": 16058
+    },
+    "prediction": {
+      "estimatedTokens": 0,
+      "items": [],
+      "mandatoryCoverage": [
+        {
+          "category": "implementation",
+          "state": "required",
+          "required": true,
+          "reason": "Migration implementation is required."
+        },
+        {
+          "category": "database_schema",
+          "state": "required",
+          "required": true,
+          "reason": "Schema evidence is required."
+        },
+        {
+          "category": "rollback",
+          "state": "required",
+          "required": true,
+          "reason": "Rollback behavior is required."
+        },
+        {
+          "category": "tests",
+          "state": "required",
+          "required": true,
+          "reason": "Migration tests are required."
+        },
+        {
+          "category": "configuration",
+          "state": "recommended",
+          "required": false,
+          "reason": "Deployment configuration may apply."
+        },
+        {
+          "category": "architecture",
+          "state": "recommended",
+          "required": false,
+          "reason": "Architecture constraints may apply."
+        }
+      ]
+    },
+    "exploration": {
+      "directlyObservedReadPaths": [],
+      "commandInferredReadPaths": [
+        "src/pricing.ts",
+        "src/service.ts",
+        "tests/public.test.mjs",
+        "migrations/001_inventory.sql",
+        "migrations/002_reservations.sql"
+      ],
+      "searchedPaths": [],
+      "searchedSymbols": [],
+      "editedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts"
+      ],
+      "diffPaths": [
+        "src/pricing.ts"
+      ],
+      "testRelatedPaths": [],
+      "unknownReferencedPaths": [],
+      "observedActivityPaths": [
+        "src/pricing.ts",
+        "src/service.ts",
+        "tests/public.test.mjs",
+        "migrations/001_inventory.sql",
+        "migrations/002_reservations.sql",
+        "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts"
+      ],
+      "evidenceRecords": [
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 67,
+          "normalizedEventId": "4e13da61-1849-4370-b032-d8b21b23f0cf",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "file_edit",
+          "rawEventSequence": 68,
+          "normalizedEventId": "d8c0d5cd-5b43-4161-94a2-6e67f03eca3d",
+          "confidence": "high",
+          "sourceMethod": "fileChange_item",
+          "command": null
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "diff_observed",
+          "rawEventSequence": 69,
+          "normalizedEventId": null,
+          "confidence": "high",
+          "sourceMethod": "persisted_turn_diff",
+          "command": null
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 63,
+          "normalizedEventId": "56887117-5d68-45e7-988d-c581e2e4c8d9",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"sed -n '1,80p' src/pricing.ts && sed -n '1,180p' src/service.ts\""
+        },
+        {
+          "path": "src/service.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 63,
+          "normalizedEventId": "acc753a4-45b0-428e-9820-c0de82a3e950",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"sed -n '1,80p' src/pricing.ts && sed -n '1,180p' src/service.ts\""
+        },
+        {
+          "path": "src/pricing.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 64,
+          "normalizedEventId": "bf364ee4-7f31-49f4-aa04-f81ce7a2389e",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"sed -n '1,80p' src/pricing.ts && sed -n '1,180p' src/service.ts\""
+        },
+        {
+          "path": "src/service.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 64,
+          "normalizedEventId": "05a837c9-a8d3-4c2c-b4c5-d77186ccc7ad",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"sed -n '1,80p' src/pricing.ts && sed -n '1,180p' src/service.ts\""
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 75,
+          "normalizedEventId": "abe6fee2-8834-4669-a323-5e28f4349a8d",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "src/service.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 75,
+          "normalizedEventId": "f0f3f0bf-73ca-425a-8ade-f38c71f21cdf",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "migrations/001_inventory.sql",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 75,
+          "normalizedEventId": "6a5887c4-164a-455c-aba2-3b5413aff8d4",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "migrations/002_reservations.sql",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 75,
+          "normalizedEventId": "2c080b41-3ee9-480b-b0bf-e6135d0c43e2",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 86,
+          "normalizedEventId": "3f198497-63ef-4791-a982-868cf93463f1",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "src/service.ts",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 86,
+          "normalizedEventId": "8743c561-34c7-43bd-93b0-b5620d04d28f",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "migrations/001_inventory.sql",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 86,
+          "normalizedEventId": "5a0eeef4-1d1e-46d8-997a-bfa8cfdacf17",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        },
+        {
+          "path": "migrations/002_reservations.sql",
+          "symbol": null,
+          "evidenceType": "command_inferred_read",
+          "rawEventSequence": 86,
+          "normalizedEventId": "61272211-d0d1-46c8-b63c-9c427d3241d9",
+          "confidence": "medium",
+          "sourceMethod": "command_argument_inference",
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\""
+        }
+      ],
+      "commands": [
+        {
+          "command": "/usr/bin/bash -lc \"sed -n '1,80p' src/pricing.ts && sed -n '1,180p' src/service.ts\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/C",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 63,
+          "normalizedEventId": "94f9b7fe-d446-4b50-a844-6cf11f072bcb",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc \"sed -n '1,80p' src/pricing.ts && sed -n '1,180p' src/service.ts\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/C",
+          "exitCode": 0,
+          "durationMs": 0,
+          "status": "completed",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 64,
+          "normalizedEventId": "41213452-88f1-4491-bd80-15e19ecbbcfd",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/C",
+          "exitCode": null,
+          "durationMs": null,
+          "status": "inProgress",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 75,
+          "normalizedEventId": "89333194-3b3f-46ab-8245-db3b231b13fa",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        },
+        {
+          "command": "/usr/bin/bash -lc \"node --test tests/public.test.mjs && node --input-type=module <<'EOF'\nimport {DatabaseSync} from 'node:sqlite'; import {readFileSync} from 'node:fs'; import {reserve} from './src/service.ts';\nconst db=new DatabaseSync(':memory:'); db.exec(readFileSync('./migrations/001_inventory.sql','utf8')); db.exec(readFileSync('./migrations/002_reservations.sql','utf8').split('-- down')[0].replace('-- up',''));\ndb.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','low',10,999); db.prepare('INSERT INTO inventory VALUES(?,?,?,?)').run('t','edge',10,10000);\nconst low=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:1}]}); if(low.totalCents\"'!==999||low.feeCents!==25) throw Error('\"'low threshold');\nconst edge=reserve(db,{tenantId:'t',requestId:'edge',items:[{sku:'edge',quantity:1}]}); if(edge.totalCents\"'!==10000||edge.feeCents!==0) throw Error('\"'edge threshold');\nconst retry=reserve(db,{tenantId:'t',requestId:'low',items:[{sku:'low',quantity:99}]}); if(retry.feeCents\"'!==25||retry.totalCents!==999) throw Error('\"'stored receipt changed');\nconsole.log('pricing checks passed');\nEOF\ngit diff --check\"",
+          "cwd": "/tmp/continuum-comparative-r0fMzv/C",
+          "exitCode": 0,
+          "durationMs": 573,
+          "status": "completed",
+          "source": "unifiedExecStartup",
+          "sourceEventSequence": 86,
+          "normalizedEventId": "85ad8680-fe37-42de-941f-187d1c036403",
+          "evidenceType": "directly observed",
+          "confidence": "high"
+        }
+      ],
+      "tests": [],
+      "changedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts"
+      ],
+      "inferredPaths": [
+        "src/pricing.ts",
+        "src/service.ts",
+        "tests/public.test.mjs",
+        "migrations/001_inventory.sql",
+        "migrations/002_reservations.sql"
+      ],
+      "directlyObservedPaths": [
+        "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts"
+      ]
+    },
+    "comparison": {
+      "predictedAndObserved": [],
+      "predictedNotObserved": [],
+      "observedNotPredicted": [
+        {
+          "path": "src/pricing.ts",
+          "evidence": "diff_observed"
+        },
+        {
+          "path": "src/service.ts",
+          "evidence": "command_inferred_read"
+        },
+        {
+          "path": "tests/public.test.mjs",
+          "evidence": "command_inferred_read"
+        },
+        {
+          "path": "migrations/001_inventory.sql",
+          "evidence": "command_inferred_read"
+        },
+        {
+          "path": "migrations/002_reservations.sql",
+          "evidence": "command_inferred_read"
+        },
+        {
+          "path": "/tmp/continuum-comparative-r0fMzv/C/src/pricing.ts",
+          "evidence": "file_edit"
+        }
+      ],
+      "requiredPredictionsWithoutObservedActivity": [],
+      "mandatoryPredictionMisses": [],
+      "predictedActivityCoverage": 0,
+      "predictionActivityPrecision": null,
+      "editPredictionCoverage": 0,
+      "diffPredictionCoverage": 0,
+      "requiredActivityObservationRate": null,
+      "observationRecall": 0,
+      "predictionPrecision": null,
+      "overlapRecall": 0,
+      "overlapPrecision": null
+    },
+    "usage": {
+      "accumulated": {
+        "id": "09e58e85-e3f3-414f-9a90-0d27638efea4",
+        "execution_id": "804be332-3933-45e0-a8d9-d6517bfbea15",
+        "raw_sequence_number": 170,
+        "source": "codex.thread/tokenUsage/updated",
+        "input_tokens": 250807,
+        "cached_input_tokens": 218880,
+        "output_tokens": 4937,
+        "reasoning_tokens": 394,
+        "total_tokens": 255744,
+        "accumulation": "accumulated",
+        "measurement": "measured",
+        "timestamp": "2026-10-13T14:04:14.387Z",
+        "raw_provider_payload_json": "{\"total\":{\"totalTokens\":255744,\"inputTokens\":250807,\"cachedInputTokens\":218880,\"cacheWriteInputTokens\":0,\"outputTokens\":4937,\"reasoningOutputTokens\":394},\"last\":{\"totalTokens\":23879,\"inputTokens\":23797,\"cachedInputTokens\":22272,\"cacheWriteInputTokens\":0,\"outputTokens\":82,\"reasoningOutputTokens\":0},\"modelContextWindow\":258400}"
+      },
+      "exactResponses": [],
+      "availability": "measured"
+    },
+    "compaction": {
+      "count": 0,
+      "events": []
+    },
+    "outcome": {
+      "turnStatus": "completed",
+      "testsObserved": false,
+      "testsPassed": null,
+      "diffCaptured": true,
+      "changedFileCount": 1
+    },
+    "evidenceWarnings": [
+      "Shadow mode did not restrict Codex or inject Continuum prediction content.",
+      "Command-inferred paths are not proof that a file was read — they are shell command arguments.",
+      "The Codex App Server schema does not expose direct file-read events; directlyObservedReadPaths will always be empty.",
+      "Absence from activity evidence does not prove that the model did not read or receive an item.",
+      "Observed-not-predicted paths are additional exploration, not automatically unnecessary.",
+      "Continuum packet tokens are estimated; no token-savings claim is made.",
+      "Repository state changed during execution; external concurrent changes cannot be excluded from App Server evidence alone."
+    ]
+  },
+  "compatibilityWarning": "Codex 0.162.1 is outside the tested 0.133.x range; required capabilities will be probed at runtime.",
+  "authenticationMode": "chatgpt"
+}

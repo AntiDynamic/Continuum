@@ -1,3 +1,5 @@
+import { observeContextActivity } from "./context-observation.js";
+import { capturePolicyFor } from "@continuum/shared";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { CodexExecutionRepository, RunRepository, migrate, openDatabase, type Db } from "@continuum/database";
@@ -41,7 +43,7 @@ export class CodexExecutionService {
     const sessions=await RepositoryContextSessionService.open(options.cwd,options.repository);let db:Db|null=null;let client:StdioCodexAppServerClient|null=null;let executionId="";let sessionId="";let runId="";
     try{
       const started=await sessions.start({task:options.task,createInitialContext:true,maximumEstimatedTokens:8000});sessionId=started.session.id;
-      const opened=await openCodexDatabase(options.cwd,options.repository);db=opened.db;const executions=new CodexExecutionRepository(db);
+      const opened=await openCodexDatabase(options.cwd,options.repository);db=opened.db;const executions=new CodexExecutionRepository(db, capturePolicyFor(sessions.repositoryRoot));
       const executable=options.process?.executable??resolveCodexExecutable();const version=options.codexVersionOverride??(options.process?.executable?"fixture":detectCodexVersion(executable));const compatibility=version==="fixture"?{tested:true,warning:null}:compatibilityFor(version);
       runId=crypto.randomUUID();new RunRepository(db).create({id:runId,repositoryId:sessions.repository.id,agentId:"codex-shadow",agentVersion:version,task:options.task,startingCommit:started.session.snapshot.base_commit_hash});await sessions.linkRun(sessionId,runId);executionId=crypto.randomUUID();executions.create({id:executionId,session_id:sessionId,repository_id:sessions.repository.id,run_id:runId,task_text:options.task,codex_version:version,model:options.model??null,mode:"shadow",approval_configuration:options.approvalPolicy??"on-request",sandbox_configuration:options.sandbox??"workspace-write",base_commit_hash:started.session.snapshot.base_commit_hash,worktree_hash:started.session.snapshot.worktree_hash});
       let completionResolve:(value:{status:string;params:unknown})=>void=()=>undefined;let completionReject:(error:Error)=>void=()=>undefined;
@@ -59,7 +61,8 @@ export class CodexExecutionService {
       };
       client=new StdioCodexAppServerClient();
       await client.start({...options.process,...(options.process?.executable?{executable}:{}),cwd:opened.root,onRawMessage:recordRaw,onServerRequest:approval,onFatalError:(error)=>completionReject(error),onNotification:async(method,params)=>{
-        if(method==="turn/completed"){
+        await observeContextActivity(sessions,sessionId,method,params,executionId);
+        if(method==="thread/compacted"){await sessions.checkpoint(sessionId);}else if(method==="turn/completed"){
           const turn=isRecord(params)&&isRecord(params.turn)?params.turn:{};completionResolve({status:String(turn.status??"completed"),params});
         }else if(method==="process/exited"&&!(isRecord(params)&&params.expected===true))completionReject(new CodexIntegrationError("UNEXPECTED_PROCESS_EXIT","Codex App Server exited before turn completion."));
       }});
@@ -78,14 +81,14 @@ export class CodexExecutionService {
       return{executionId,sessionId,report:buildShadowReport(db,executionId,opened.root),compatibilityWarning:compatibility.warning,authenticationMode:account.mode};
     }catch(error){
       if(client)await client.close().catch(()=>undefined);
-      if(db&&executionId){const executions=new CodexExecutionRepository(db);const integration=error instanceof CodexIntegrationError?error:new CodexIntegrationError("TURN_FAILURE",error instanceof Error?error.message:String(error));let finalSnapshot:{base_commit_hash:string;worktree_hash:string|null};try{finalSnapshot=await resolveSnapshotIdentity(sessions.repositoryRoot);}catch{// Snapshot resolution failed — use the starting snapshot preserved in the session, never fabricate a commit hash from a database ID
+      if(db&&executionId){const executions=new CodexExecutionRepository(db, capturePolicyFor(sessions.repositoryRoot));const integration=error instanceof CodexIntegrationError?error:new CodexIntegrationError("TURN_FAILURE",error instanceof Error?error.message:String(error));let finalSnapshot:{base_commit_hash:string;worktree_hash:string|null};try{finalSnapshot=await resolveSnapshotIdentity(sessions.repositoryRoot);}catch{// Snapshot resolution failed — use the starting snapshot preserved in the session, never fabricate a commit hash from a database ID
         const sessionRow=db.prepare("SELECT base_commit_hash,worktree_hash FROM context_sessions WHERE id=?").get(sessionId) as {base_commit_hash:string;worktree_hash:string|null}|undefined;finalSnapshot={base_commit_hash:sessionRow?.base_commit_hash??"SNAPSHOT_UNAVAILABLE",worktree_hash:sessionRow?.worktree_hash??null};}executions.finish(executionId,"failed",finalSnapshot,{code:integration.code,message:integration.message});if(runId)new RunRepository(db).finish({id:runId,status:"failed",endingCommit:finalSnapshot.base_commit_hash,exitCode:1,errorSummary:integration.message});}
       if(sessionId)await sessions.complete(sessionId,{status:"failed"}).catch(()=>undefined);
       throw error;
     }finally{db?.close();sessions.close();}
   }
 
-  async report(cwd:string,executionId:string,repository?:string):Promise<ShadowFlightRecorderReport>{const opened=await openCodexDatabase(cwd,repository);try{return buildShadowReport(opened.db,executionId,opened.root);}finally{opened.db.close();}}
+  async report(cwd:string,executionId:string,repository?:string):Promise<ShadowFlightRecorderReport>{const opened=await openCodexDatabase(cwd,repository);try{const external=opened.db.prepare("SELECT report_json FROM codex_external_reports WHERE execution_id=?").get(executionId) as {report_json:string}|undefined;return external?JSON.parse(external.report_json) as ShadowFlightRecorderReport:buildShadowReport(opened.db,executionId,opened.root);}finally{opened.db.close();}}
   async status(cwd:string,executionId:string,repository?:string):Promise<unknown>{const opened=await openCodexDatabase(cwd,repository);try{return new CodexExecutionRepository(opened.db).findRequired(executionId);}finally{opened.db.close();}}
   async list(cwd:string,repository?:string,limit=20):Promise<unknown>{const opened=await openCodexDatabase(cwd,repository);try{return new CodexExecutionRepository(opened.db).list(undefined,limit);}finally{opened.db.close();}}
 }

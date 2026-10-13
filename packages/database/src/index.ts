@@ -33,8 +33,10 @@ export {
   UsageEvidenceRepository,
   CostEvidenceRepository,
   ContextLedgerRepository,
+  UsageSnapshotRepository,
 } from "./context-efficiency-repository.js";
-export type { StoredUsageEvidence } from "./context-efficiency-repository.js";
+export type { StoredUsageEvidence, UsageSnapshot } from "./context-efficiency-repository.js";
 
 export * from "./repositories/context-session-repository.js";
 export * from "./repositories/codex-execution-repository.js";
+export * from "./repositories/task-memory-repository.js";

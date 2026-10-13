@@ -1,0 +1,195 @@
+{
+  "status": "blocked-before-live-inference",
+  "recordedAt": "2026-10-12T18:47:52.025120+00:00",
+  "repositoryCommit": "d5b104453302a33148be7b117ec2613b26aba2ed",
+  "codexVersion": "0.162.1",
+  "configuration": {
+    "model": "gpt-5.6-luna",
+    "reasoningEffort": "low",
+    "approvalPolicy": "never",
+    "sandbox": "workspace-write",
+    "timeoutMs": 60000,
+    "maximumReportedTokens": 20000,
+    "persistentSession": true,
+    "contextEnabled": true,
+    "durableMemory": true,
+    "nativeCompactionPrompt": true,
+    "configOverrides": {
+      "model_provider": "openai",
+      "features.multi_agent": false,
+      "features.multi_agent_v2": false,
+      "features.multi_agent_v2_dynamic_tools": false,
+      "features.goals": false,
+      "features.unbounded_connection_retries": false
+    }
+  },
+  "nativeHostConfigurationRead": {
+    "passed": true,
+    "codexVersion": "0.162.1",
+    "observed": {
+      "model": "gpt-5.6-luna",
+      "reasoning": "low",
+      "provider": "openai",
+      "features": {
+        "multi_agent_v2": false,
+        "goals": false,
+        "multi_agent": false,
+        "multi_agent_v2_dynamic_tools": false,
+        "unbounded_connection_retries": false
+      }
+    },
+    "classification": "real isolated host configuration read; no thread or inference started; effective thread response still required before generation",
+    "inferenceRequests": 0,
+    "trace": [
+      {
+        "direction": "client_to_server",
+        "method": "initialize",
+        "requestId": 1,
+        "timestamp": "2026-10-12T18:46:46.190Z"
+      },
+      {
+        "direction": "server_stderr",
+        "method": null,
+        "requestId": null,
+        "timestamp": "2026-10-12T18:46:46.202Z"
+      },
+      {
+        "direction": "server_to_client",
+        "method": null,
+        "requestId": 1,
+        "timestamp": "2026-10-12T18:46:46.357Z"
+      },
+      {
+        "direction": "client_to_server",
+        "method": "initialized",
+        "requestId": null,
+        "timestamp": "2026-10-12T18:46:46.357Z"
+      },
+      {
+        "direction": "client_to_server",
+        "method": "config/read",
+        "requestId": 2,
+        "timestamp": "2026-10-12T18:46:46.358Z"
+      },
+      {
+        "direction": "server_to_client",
+        "method": "remoteControl/status/changed",
+        "requestId": null,
+        "timestamp": "2026-10-12T18:46:46.358Z"
+      },
+      {
+        "direction": "server_to_client",
+        "method": null,
+        "requestId": 2,
+        "timestamp": "2026-10-12T18:46:46.365Z"
+      }
+    ]
+  },
+  "hostRetries": {
+    "version": "0.162.1",
+    "verified": false,
+    "controlled": false,
+    "reason": "Codex 0.162.1 merge_configured_model_providers ignores overrides of built-in openai (entry.or_insert); default HTTP/stream retries and separate unauthorized recovery cannot be disabled through those overrides.",
+    "sources": [
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/model-provider-info/src/lib.rs#L699",
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/client.rs#L1795",
+      "https://github.com/openai/codex/blob/rust-v0.162.1/codex-rs/core/src/responses_retry.rs#L99"
+    ]
+  },
+  "safeguards": {
+    "modelLock": {
+      "status": "PASS",
+      "scope": "offline drift guards and real isolated config/read; no effective inference thread started"
+    },
+    "continuumRetryPolicy": {
+      "status": "PASS",
+      "scope": "four-attempt pre-inference helper, explicit safe nonbilling proof required; inference request replay prohibited"
+    },
+    "hostRetries": {
+      "status": "FAIL",
+      "scope": "built-in openai ignores retry overrides; default streaming retry budget exceeds policy; separate auth recovery and transport fallback remain"
+    },
+    "cancellation": {
+      "status": "PASS",
+      "scope": "actual assist service with mocked stalled turn; graceful interrupt and OS process kill escalation tested"
+    },
+    "telemetry": {
+      "status": "PASS",
+      "scope": "offline missing-data, regression, threshold and post-compaction usage checks; live delivery untested"
+    },
+    "isolation": {
+      "status": "PASS",
+      "scope": "real bubblewrap evaluator, recorder, history and host-temp probes; no credentials exported"
+    },
+    "turnLimits": {
+      "status": "PASS",
+      "scope": "two turns, one compaction, serial operation guards and persistent exclusive experiment lock; live execution blocked"
+    }
+  },
+  "validation": {
+    "build": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "fullSuiteWorkspacePassed": 230,
+    "fullSuiteScriptPassed": 53,
+    "updatedCodexPackagePassed": 42,
+    "updatedCodexPackageSkipped": 1,
+    "updatedScriptsPassed": 54,
+    "latestSafetyTestsPassed": 16,
+    "distinctTestsPassed": 286,
+    "failedFinalTests": 0,
+    "skippedTests": 4,
+    "newRegressionTests": 20,
+    "countMethod": "Full workspace suite 230, replace previous 41-test Codex result with updated 42-test result = 231. Updated scripts 54 included 15 safety tests; latest safety subset has 16 = 55. Total 286.",
+    "initialTestDefects": [
+      "New timeout fixture was initially missing continuum init/index; fixed fixture setup.",
+      "Targeted test runner default 5-second timeout and overly short startup RPC deadline caused failures; test now has a bounded 15-second allowance and 2-second generation/startup limit. Final package rerun passes.",
+      "First isolated config/read reported provider null because default provider was implicit. Prepared config now explicitly sets model_provider=openai; subsequent real configuration read passes."
+    ]
+  },
+  "offlineOriginalRequirements": {
+    "sessionId": "fb5217b6-fceb-4e06-bdf7-112f1319e304",
+    "originalEvidencePreserved": true,
+    "recoverable": true,
+    "incomplete": false
+  },
+  "baselineValidation": "failed",
+  "baselineMeaning": "Expected negative control; the unmodified fixture fails independent authentication behavior validation. Not a final agent success.",
+  "live": {
+    "modelDrivenBenchmarkExecutions": 0,
+    "logicalGenerationTurns": 0,
+    "explicitCompactions": 0,
+    "automaticRetries": 0,
+    "initialGeneration": "not executed",
+    "nativeCompaction": "not attempted",
+    "recoveredAgentContinuation": "not executed",
+    "effectiveInferenceModel": null,
+    "effectiveInferenceReasoning": null,
+    "effectiveInferenceProvider": null,
+    "behavioralValidation": "not executed on agent result",
+    "inputTokens": null,
+    "cachedInputTokens": null,
+    "outputTokens": null,
+    "elapsedMs": null,
+    "knownCost": null,
+    "billingInformation": "unavailable; no paid benchmark inference requested; overall development-session credit usage unavailable"
+  },
+  "limitations": [
+    "No hard provider output-token cap verified. Local 64 MiB transport output limit protects the recorder, not provider billing.",
+    "20000 reported thread tokens is a reactive stopping threshold, not a guaranteed billing ceiling.",
+    "No proof of live agent understanding, native compaction recovery, cost savings or superiority.",
+    "Prepared SQLite is an evidence artifact with original canonical repository paths, not a portable resume database. Fresh live preparation must initialize its isolated workspace.",
+    "The host retry gate intentionally rejects unreviewed host versions; setting config retry values or upgrading blindly does not remove it."
+  ],
+  "sourceVersions": {
+    "scripts/recovery-safety.mjs": "775d1365b9bde916d9c11437262cf5fd6b9b56c09454aa872ff328c5dd043c70",
+    "scripts/recovery-safety.test.mjs": "4d09d8b2a8fad9740f11b30baa4a9c599675b980627b6fb99fe1d132a6c13c53",
+    "scripts/recovery-benchmark.mjs": "b7625d202ffa1abefdea598463e8fee429c56f3b50757de4617548c0138aedd2",
+    "scripts/recovery-isolation.mjs": "fb8e2d44d74423e3630e57ac09211bb9aeec5ac338573ddb3ad013436c4fe04b",
+    "packages/codex-app-server/src/client.ts": "b54ac98d2b4b56c0ea42bc4d31e383a8efe6813715cfcfc7b1432c3bf2bfd96d",
+    "packages/codex-app-server/src/protocol.ts": "b610d43561beb2590a620a3d80a89633f81b8e49f3eab22ac018d748e5579bcd",
+    "packages/codex-app-server/src/assist-execution-service.ts": "a30d5b6eac889b92d151d878159963f888b28a552df88381c4a6bbfbd12c1233",
+    "packages/codex-app-server/tests/cancellation.test.ts": "e5ee67fc416f4a9b3e66562d2cf7f3530ce5a1d83cf7dee0b9909453700f2de9",
+    "packages/codex-app-server/tests/fixtures/fake-app-server.mjs": "c494b4068f864c3d0a525393b1a910e6d68223e279ed0f2a80f5a664f64b30d1"
+  }
+}
