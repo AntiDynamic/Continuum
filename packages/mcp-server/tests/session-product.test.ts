@@ -70,7 +70,7 @@ describe("CLI/MCP progressive context product",()=>{
   transport=new StdioClientTransport({command:process.execPath,args:[cli,"mcp"],cwd:repository,env:{...process.env,CONTINUUM_MCP_AUDIT:"0"} as Record<string,string>,stderr:"pipe"});
   client=new Client({name:"memory-budget-test",version:"1.0.0"},{capabilities:{}});await client.connect(transport);
   const packet=await client.callTool({name:"continuum_get_context_packet",arguments:{query:"Add a database migration with safe rollback"}});
-  expect(packet.isError).not.toBe(true);expect(packet.structuredContent).toBeUndefined();
+  expect(packet.isError,JSON.stringify(packet)).not.toBe(true);expect(packet.structuredContent).toBeUndefined();
   const started=structured<any>(await client.callTool({name:"continuum_start_context_session",arguments:{task:"Preserve the original compatibility constraint"}}));
   const recovery=await client.callTool({name:"continuum_recover_task_memory",arguments:{sessionId:started.session.id,budgetTokens:1}});
   expect(recovery.isError).toBe(true);expect((recovery.structuredContent as any).incomplete).toBe(true);expect((recovery.structuredContent as any).renderedContent).toBeUndefined();

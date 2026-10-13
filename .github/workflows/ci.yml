@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONTINUUM_DISABLE_CODEX_LIVE: '1'
-      # These eight real helper tests require the reviewed local Codex package.
+      # These runtime-dependent helper/preflight tests require the reviewed local Codex package.
       # They passed on the development host; skip explicitly rather than simulate it.
       CONTINUUM_SKIP_LOCAL_CODEX_RUNTIME: '1'
     steps:
